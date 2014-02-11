@@ -17,7 +17,7 @@
 #import <UIKit/UIApplication.h>
 //#import <UIKit/UIBarButtonItem.h>
 //#import <UIKit/UIBarItem.h>
-//#import <UIKit/UIBezierPath.h>
+#import <UIKit/UIBezierPath.h>
 #import <UIKit/UIButton.h>
 //#import <UIKit/UICollectionView.h>
 //#import <UIKit/UICollectionViewCell.h>
@@ -77,7 +77,7 @@
 #import <UIKit/UIScreen.h>
 //#import <UIKit/UIScreenEdgePanGestureRecognizer.h>
 //#import <UIKit/UIScreenMode.h>
-//#import <UIKit/UIScrollView.h>
+#import <UIKit/UIScrollView.h>
 //#import <UIKit/UISearchBar.h>
 //#import <UIKit/UISearchDisplayController.h>
 //#import <UIKit/UISegmentedControl.h>
