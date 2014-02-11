@@ -9,6 +9,7 @@
 #import "UIWindow.h"
 #import "UIScreen.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIViewController.h"
 
 @implementation UIWindow
 - (id)initWithFrame:(CGRect)theFrame
@@ -51,14 +52,12 @@
 
 - (void)setRootViewController:(UIViewController *)rootViewController
 {
-    NS_UNIMPLEMENTED_LOG;
-//    if (rootViewController != _rootViewController) {
-//        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-//        [_rootViewController release];
-//        _rootViewController = [rootViewController retain];
-//        _rootViewController.view.frame = self.bounds;    // unsure about this
-//        [self addSubview:_rootViewController.view];
-//    }
+    if (rootViewController != _rootViewController) {
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        _rootViewController = rootViewController;
+        _rootViewController.view.frame = self.bounds;    // unsure about this
+        [self addSubview:_rootViewController.view];
+    }
 }
 
 

@@ -107,7 +107,7 @@
 #import <UIKit/UITouch.h>
 //#import <UIKit/UIVideoEditorController.h>
 #import <UIKit/UIView.h>
-//#import <UIKit/UIViewController.h>
+#import <UIKit/UIViewController.h>
 //#import <UIKit/UIWebView.h>
 #import <UIKit/UIWindow.h>
 //#import <UIKit/NSAttributedString.h>
