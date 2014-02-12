@@ -86,6 +86,9 @@
 		43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA8018AB7087005DDD8D /* UINavigationBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA8318AB7087005DDD8D /* UINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA8118AB7087005DDD8D /* UINavigationBar.m */; };
 		43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA8418AB7115005DDD8D /* UIBarCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA8818AB831A005DDD8D /* UIBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA8918AB831A005DDD8D /* UIBarItem.m */; };
+		43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA8C18AB8353005DDD8D /* UIAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43ECCF0E1851CA9A0076535C /* UIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF0C1851CA9A0076535C /* UIView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43ECCF0F1851CA9A0076535C /* UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF0D1851CA9A0076535C /* UIView.m */; };
 		43ECCF121851CAA80076535C /* UIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF101851CAA80076535C /* UIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -189,6 +192,9 @@
 		43EBAA8018AB7087005DDD8D /* UINavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationBar.h; sourceTree = "<group>"; };
 		43EBAA8118AB7087005DDD8D /* UINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationBar.m; sourceTree = "<group>"; };
 		43EBAA8418AB7115005DDD8D /* UIBarCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBarCommon.h; sourceTree = "<group>"; };
+		43EBAA8818AB831A005DDD8D /* UIBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBarItem.h; sourceTree = "<group>"; };
+		43EBAA8918AB831A005DDD8D /* UIBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBarItem.m; sourceTree = "<group>"; };
+		43EBAA8C18AB8353005DDD8D /* UIAppearance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIAppearance.h; sourceTree = "<group>"; };
 		43ECCF0C1851CA9A0076535C /* UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
 		43ECCF0D1851CA9A0076535C /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		43ECCF101851CAA80076535C /* UIWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIWindow.h; sourceTree = "<group>"; };
@@ -363,6 +369,9 @@
 				43EBAA7C18AB67C2005DDD8D /* UIInterface.h */,
 				43EBAA7D18AB67C2005DDD8D /* UIInterface.m */,
 				43EBAA8418AB7115005DDD8D /* UIBarCommon.h */,
+				43EBAA8818AB831A005DDD8D /* UIBarItem.h */,
+				43EBAA8918AB831A005DDD8D /* UIBarItem.m */,
+				43EBAA8C18AB8353005DDD8D /* UIAppearance.h */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -466,6 +475,8 @@
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
 				43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */,
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
+				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
+				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
@@ -608,6 +619,7 @@
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
 				43846303188B1ED9006DA1AA /* UIColor.m in Sources */,
+				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
 				43718EA518517FBA00850F08 /* UIApplication.m in Sources */,
 				43718EA118517F0500850F08 /* UIResponder.m in Sources */,

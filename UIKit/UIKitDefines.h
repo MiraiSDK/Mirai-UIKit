@@ -27,3 +27,7 @@
 
 #define NS_UNIMPLEMENTED_LOG NSLog(@"Unimplemented method: %s",__PRETTY_FUNCTION__)
 
+#ifndef NS_REQUIRES_NIL_TERMINATION
+#define NS_REQUIRES_NIL_TERMINATION __attribute__((sentinel(0,1)))
+#endif
+
