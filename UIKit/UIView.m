@@ -688,6 +688,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 //        }
 //        
 //    }
+    theLayer.backgroundColor = self.backgroundColor.CGColor;
 }
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
