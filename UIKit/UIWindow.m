@@ -53,7 +53,9 @@
 - (void)setRootViewController:(UIViewController *)rootViewController
 {
     if (rootViewController != _rootViewController) {
-        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        if (_rootViewController) {
+            [_rootViewController.view removeFromSuperview];
+        }
         _rootViewController = rootViewController;
         _rootViewController.view.frame = self.bounds;    // unsure about this
         [self addSubview:_rootViewController.view];
