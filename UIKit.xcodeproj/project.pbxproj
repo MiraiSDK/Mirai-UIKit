@@ -81,8 +81,11 @@
 		43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA6F18AA5923005DDD8D /* UIBezierPath.m */; };
 		43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA7818AB6744005DDD8D /* UINavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA7918AB6744005DDD8D /* UINavigationController.m */; };
-		43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA7C18AB67C2005DDD8D /* UIInterface.h */; };
+		43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA7C18AB67C2005DDD8D /* UIInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA7F18AB67C2005DDD8D /* UIInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA7D18AB67C2005DDD8D /* UIInterface.m */; };
+		43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA8018AB7087005DDD8D /* UINavigationBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EBAA8318AB7087005DDD8D /* UINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA8118AB7087005DDD8D /* UINavigationBar.m */; };
+		43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA8418AB7115005DDD8D /* UIBarCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43ECCF0E1851CA9A0076535C /* UIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF0C1851CA9A0076535C /* UIView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43ECCF0F1851CA9A0076535C /* UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF0D1851CA9A0076535C /* UIView.m */; };
 		43ECCF121851CAA80076535C /* UIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF101851CAA80076535C /* UIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -183,6 +186,9 @@
 		43EBAA7918AB6744005DDD8D /* UINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationController.m; sourceTree = "<group>"; };
 		43EBAA7C18AB67C2005DDD8D /* UIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
 		43EBAA7D18AB67C2005DDD8D /* UIInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInterface.m; sourceTree = "<group>"; };
+		43EBAA8018AB7087005DDD8D /* UINavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationBar.h; sourceTree = "<group>"; };
+		43EBAA8118AB7087005DDD8D /* UINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationBar.m; sourceTree = "<group>"; };
+		43EBAA8418AB7115005DDD8D /* UIBarCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBarCommon.h; sourceTree = "<group>"; };
 		43ECCF0C1851CA9A0076535C /* UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
 		43ECCF0D1851CA9A0076535C /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		43ECCF101851CAA80076535C /* UIWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIWindow.h; sourceTree = "<group>"; };
@@ -356,6 +362,7 @@
 				43EBAA6F18AA5923005DDD8D /* UIBezierPath.m */,
 				43EBAA7C18AB67C2005DDD8D /* UIInterface.h */,
 				43EBAA7D18AB67C2005DDD8D /* UIInterface.m */,
+				43EBAA8418AB7115005DDD8D /* UIBarCommon.h */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -405,6 +412,8 @@
 				4384632E188B4025006DA1AA /* UIImageView.m */,
 				43846333188B417F006DA1AA /* UIButton.h */,
 				43846334188B417F006DA1AA /* UIButton.m */,
+				43EBAA8018AB7087005DDD8D /* UINavigationBar.h */,
+				43EBAA8118AB7087005DDD8D /* UINavigationBar.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -452,8 +461,10 @@
 				43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */,
 				4384632F188B4025006DA1AA /* UIImageView.h in Headers */,
 				43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */,
+				43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */,
 				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
+				43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */,
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
@@ -587,6 +598,7 @@
 				43ECCF0F1851CA9A0076535C /* UIView.m in Sources */,
 				43EBAA6918AA5639005DDD8D /* UIScrollView.m in Sources */,
 				4384634E188C636C006DA1AA /* UIDevice.m in Sources */,
+				43EBAA8318AB7087005DDD8D /* UINavigationBar.m in Sources */,
 				43846321188B3D5B006DA1AA /* UIControl.m in Sources */,
 				43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
