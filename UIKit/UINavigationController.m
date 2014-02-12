@@ -14,13 +14,14 @@
 
 @implementation UINavigationController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    return nil;
+}
+
+- (id)initWithRootViewController:(UIViewController *)rootViewController
+{
+    return nil;
 }
 
 - (void)viewDidLoad
@@ -29,10 +30,113 @@
 	// Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning
+- (void)setViewControllers:(NSArray *)viewControllers
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self setViewControllers:viewControllers animated:NO];
+}
+
+- (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated
+{
+    
+}
+
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    
+}
+
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+- (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+- (NSArray *)popToRootViewControllerAnimated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+- (void)setNavigationBarHidden:(BOOL)navigationBarHidden
+{
+    [self setNavigationBarHidden:navigationBarHidden animated:NO];
+}
+
+- (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+
+- (void)setToolbarItems:(NSArray *)toolbarItems
+{
+    [self setToolbarItems:toolbarItems animated:NO];
+}
+
+- (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+
+- (void)setToolbarHidden:(BOOL)toolbarHidden
+{
+    [self setToolbarHidden:toolbarHidden animated:NO];
+}
+
+- (void)setToolbarHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+@end
+
+@implementation UIViewController (UINavigationControllerItem)
+
+- (UINavigationItem *)navigationItem
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+- (BOOL)hidesBottomBarWhenPushed
+{
+    NS_UNIMPLEMENTED_LOG;
+    return NO;
+}
+
+- (void)setHidesBottomBarWhenPushed:(BOOL)hidesBottomBarWhenPushed
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+
+- (UINavigationController *)navigationController
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+@end
+
+@implementation UIViewController (UINavigationControllerContextualToolbarItems)
+
+- (NSArray *)toolbarItems
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+- (void)setToolbarItems:(NSArray *)toolbarItems
+{
+    [self setToolbarItems:toolbarItems animated:NO];
+}
+
+- (void)setToolbarItems:(NSArray *)toolbarItems animated:(BOOL)animated
+{
+    NS_UNIMPLEMENTED_LOG;
 }
 
 @end
