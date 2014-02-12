@@ -79,6 +79,8 @@
 		43EBAA6D18AA588F005DDD8D /* UIScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA6B18AA588F005DDD8D /* UIScroller.m */; };
 		43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA6E18AA5923005DDD8D /* UIBezierPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA6F18AA5923005DDD8D /* UIBezierPath.m */; };
+		43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA7818AB6744005DDD8D /* UINavigationController.h */; };
+		43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA7918AB6744005DDD8D /* UINavigationController.m */; };
 		43ECCF0E1851CA9A0076535C /* UIView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF0C1851CA9A0076535C /* UIView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43ECCF0F1851CA9A0076535C /* UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF0D1851CA9A0076535C /* UIView.m */; };
 		43ECCF121851CAA80076535C /* UIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF101851CAA80076535C /* UIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -175,6 +177,8 @@
 		43EBAA6B18AA588F005DDD8D /* UIScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScroller.m; sourceTree = "<group>"; };
 		43EBAA6E18AA5923005DDD8D /* UIBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBezierPath.h; sourceTree = "<group>"; };
 		43EBAA6F18AA5923005DDD8D /* UIBezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBezierPath.m; sourceTree = "<group>"; };
+		43EBAA7818AB6744005DDD8D /* UINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationController.h; sourceTree = "<group>"; };
+		43EBAA7918AB6744005DDD8D /* UINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationController.m; sourceTree = "<group>"; };
 		43ECCF0C1851CA9A0076535C /* UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
 		43ECCF0D1851CA9A0076535C /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		43ECCF101851CAA80076535C /* UIWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIWindow.h; sourceTree = "<group>"; };
@@ -404,6 +408,8 @@
 			children = (
 				43EBAA1818A9F11C005DDD8D /* UIViewController.h */,
 				43EBAA1918A9F11C005DDD8D /* UIViewController.m */,
+				43EBAA7818AB6744005DDD8D /* UINavigationController.h */,
+				43EBAA7918AB6744005DDD8D /* UINavigationController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -419,6 +425,7 @@
 				43ECCF121851CAA80076535C /* UIWindow.h in Headers */,
 				432FF08718544D3A005486C5 /* UILabel.h in Headers */,
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,
+				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
 				4384631C188B3D52006DA1AA /* UIControlAction.h in Headers */,
 				432FF08B18544D7A005486C5 /* UIStringDrawing.h in Headers */,
 				43718EC518518FB400850F08 /* UIKitDefines.h in Headers */,
@@ -574,6 +581,7 @@
 				43EBAA6918AA5639005DDD8D /* UIScrollView.m in Sources */,
 				4384634E188C636C006DA1AA /* UIDevice.m in Sources */,
 				43846321188B3D5B006DA1AA /* UIControl.m in Sources */,
+				43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
 				432FF08C18544D7A005486C5 /* UIStringDrawing.m in Sources */,
