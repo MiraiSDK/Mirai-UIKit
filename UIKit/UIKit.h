@@ -42,7 +42,7 @@
 //#import <UIKit/UIImagePickerController.h>
 #import <UIKit/UIImageView.h>
 //#import <UIKit/UIInputView.h>
-//#import <UIKit/UIInterface.h>
+#import <UIKit/UIInterface.h>
 #import <UIKit/UILabel.h>
 //#import <UIKit/UILocalNotification.h>
 //#import <UIKit/UILocalizedIndexedCollation.h>
