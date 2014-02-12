@@ -76,10 +76,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
         _showsTouchWhenHighlighted = NO;
         
         self.opaque = NO;
-        //FIXME: uncomment here
-//        _titleLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
-//        _titleLabel.backgroundColor = [UIColor clearColor];
-//        _titleLabel.textAlignment = UITextAlignmentLeft;
+        
+        _titleLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
+        _titleLabel.backgroundColor = [UIColor clearColor];
+        _titleLabel.textAlignment = UITextAlignmentLeft;
         _titleLabel.shadowOffset = CGSizeZero;
         [self addSubview:_backgroundImageView];
         [self addSubview:_imageView];
