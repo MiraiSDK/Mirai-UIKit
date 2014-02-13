@@ -39,6 +39,8 @@
 #import "UIBarButtonItem.h"
 #import "UIButton.h"
 
+#import <dispatch/dispatch.h>
+
 static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
@@ -243,10 +245,9 @@ typedef enum {
         CGRect rightFrame = CGRectZero;
         
         if (backItem) {
-#warning needs Fix
-//            _leftView = [isa _backButtonWithBarButtonItem:backItem.backBarButtonItem];
+            _leftView = [[self class] _backButtonWithBarButtonItem:backItem.backBarButtonItem];
         } else {
-//            _leftView = [isa _viewWithBarButtonItems:topItem.leftBarButtonItems];
+            _leftView = [[self class] _viewWithBarButtonItems:topItem.leftBarButtonItems];
         }
         
         if (_leftView) {
@@ -256,8 +257,7 @@ typedef enum {
             [self addSubview:_leftView];
         }
         
-#warning needs Fix
-//        _rightView = [isa _viewWithBarButtonItems:topItem.rightBarButtonItems];
+        _rightView = [[self class] _viewWithBarButtonItems:topItem.rightBarButtonItems];
         
         if (_rightView) {
             _rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -495,6 +495,167 @@ typedef enum {
     if (self) {
         NS_UNIMPLEMENTED_LOG;
     }
+    return self;
+}
+@end
+
+static void * const UINavigationItemContext = "UINavigationItemContext";
+
+@implementation UINavigationItem {
+    UINavigationBar *_navigationBar;
+}
+
++ (NSSet *)_keyPathsTriggeringUIUpdates
+{
+    static NSSet * __keyPaths = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        __keyPaths = [[NSSet alloc] initWithObjects:@"title", @"prompt", @"backBarButtonItem", @"leftBarButtonItem", @"rightBarButtonItem",@"leftBarButtonItems", @"rightBarButtonItems", @"titleView", @"hidesBackButton", nil];
+    });
+    return __keyPaths;
+}
+
+- (id)initWithTitle:(NSString *)title
+{
+    self = [super init];
+    if (self) {
+        _title = title;
+    }
+    return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context != UINavigationItemContext) {
+        if ([[self superclass] instancesRespondToSelector:_cmd])
+            [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    
+    [[self _navigationBar] _updateNavigationItem:self animated:NO];
+}
+
+- (void)_setNavigationBar:(UINavigationBar *)navigationBar
+{
+    // weak reference
+    if (_navigationBar == navigationBar)
+        return;
+    
+    if (_navigationBar != nil && navigationBar == nil) {
+        // remove observation
+        for (NSString * keyPath in [[self class] _keyPathsTriggeringUIUpdates]) {
+            [self removeObserver:self forKeyPath:keyPath];
+        }
+    }
+    else if (navigationBar != nil) {
+        // observe property changes to notify UI element
+        for (NSString * keyPath in [[self class] _keyPathsTriggeringUIUpdates]) {
+            [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:UINavigationItemContext];
+        }
+    }
+    
+    _navigationBar = navigationBar;
+}
+
+- (UINavigationBar *)_navigationBar
+{
+    return _navigationBar;
+}
+
+- (UIBarButtonItem *)leftBarButtonItem
+{
+    if (self.leftBarButtonItems.count == 0) {
+        return nil;
+    }
+    return [self.leftBarButtonItems objectAtIndex:0];
+}
+
+- (void)setLeftBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
+{
+    [self setLeftBarButtonItems:@[item] animated:animated];
+}
+
+- (void)setLeftBarButtonItem:(UIBarButtonItem *)item
+{
+    [self setLeftBarButtonItem:item animated:NO];
+}
+
+- (UIBarButtonItem *)rightBarButtonItem
+{
+    if (self.rightBarButtonItems.count == 0) {
+        return nil;
+    }
+    return [self.rightBarButtonItems objectAtIndex:0];
+}
+
+- (void)setRightBarButtonItem:(UIBarButtonItem *)item animated:(BOOL)animated
+{
+    [self setRightBarButtonItems:@[item] animated:animated];
+}
+
+- (void)setRightBarButtonItem:(UIBarButtonItem *)item
+{
+    [self setRightBarButtonItem:item animated:NO];
+}
+
+- (void)setRightBarButtonItems:(NSArray *)items animated:(BOOL)animated
+{
+    if (items != _rightBarButtonItems) {
+        [self willChangeValueForKey:@"rightBarButtonItems"];
+        _rightBarButtonItems = items;
+        [self didChangeValueForKey:@"rightBarButtonItems"];
+    }
+}
+
+- (void)setRightBarButtonItems:(NSArray *)rightBarButtonItems
+{
+    [self setRightBarButtonItems:rightBarButtonItems animated:NO];
+}
+
+- (void)setLeftBarButtonItems:(NSArray *)items animated:(BOOL)animated
+{
+    if (items != _leftBarButtonItems) {
+        [self willChangeValueForKey:@"leftBarButtonItems"];
+        _leftBarButtonItems = items;
+        [self didChangeValueForKey:@"leftBarButtonItems"];
+    }
+}
+
+- (void)setLeftBarButtonItems:(NSArray *)leftBarButtonItems
+{
+    [self setLeftBarButtonItems:leftBarButtonItems animated:NO];
+}
+
+- (void)setHidesBackButton:(BOOL)hidesBackButton animated:(BOOL)animated
+{
+    [self willChangeValueForKey: @"hidesBackButton"];
+    _hidesBackButton = hidesBackButton;
+    [self didChangeValueForKey: @"hidesBackButton"];
+}
+
+- (void)setHidesBackButton:(BOOL)hidesBackButton
+{
+    [self setHidesBackButton:hidesBackButton animated:NO];
+}
+
+- (UIBarButtonItem *)backBarButtonItem
+{
+    if (_backBarButtonItem) {
+        return _backBarButtonItem;
+    } else {
+        return [[UIBarButtonItem alloc] initWithTitle:(self.title ?: @"Back") style:UIBarButtonItemStylePlain target:nil action:nil];
+    }
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    NS_UNIMPLEMENTED_LOG;
+    self = [super init];
     return self;
 }
 @end

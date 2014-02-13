@@ -20,6 +20,7 @@
     if (self) {
 //        _contentSizeForViewInPopover = CGSizeMake(320,1100);
 //        _hidesBottomBarWhenPushed = NO;
+        _navigationItem = nil;
     }
     return self;
 }
@@ -103,14 +104,5 @@
 {
     return (UIInterfaceOrientation)UIDeviceOrientationPortrait;
 }
-
-//- (UINavigationItem *)navigationItem
-//{
-//    if (!_navigationItem) {
-//        _navigationItem = [[UINavigationItem alloc] initWithTitle:self.title];
-//    }
-//    return _navigationItem;
-//}
-
 
 @end

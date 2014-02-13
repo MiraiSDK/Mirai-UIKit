@@ -43,6 +43,10 @@ typedef NS_ENUM(NSInteger, UIModalPresentationStyle) {
 
 
 @interface UIViewController : UIResponder <NSCoding> //, UIAppearanceContainer>
+{
+    @package
+    UINavigationItem *_navigationItem;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 @property(nonatomic,retain) UIView *view;
