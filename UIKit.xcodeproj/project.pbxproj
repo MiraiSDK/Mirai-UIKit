@@ -71,6 +71,8 @@
 		4384634E188C636C006DA1AA /* UIDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4384634C188C636C006DA1AA /* UIDevice.m */; };
 		439487E71893B2A4004F8636 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439487E61893B2A4004F8636 /* OpenGLES.framework */; };
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
+		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
 		43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA1818A9F11C005DDD8D /* UIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA1918A9F11C005DDD8D /* UIViewController.m */; };
 		43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA6618AA5639005DDD8D /* UIScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -179,6 +181,8 @@
 		4384634C188C636C006DA1AA /* UIDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDevice.m; sourceTree = "<group>"; };
 		439487E61893B2A4004F8636 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
+		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
 		43EBAA1818A9F11C005DDD8D /* UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewController.h; sourceTree = "<group>"; };
 		43EBAA1918A9F11C005DDD8D /* UIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewController.m; sourceTree = "<group>"; };
 		43EBAA6618AA5639005DDD8D /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
@@ -429,6 +433,8 @@
 				43846334188B417F006DA1AA /* UIButton.m */,
 				43EBAA8018AB7087005DDD8D /* UINavigationBar.h */,
 				43EBAA8118AB7087005DDD8D /* UINavigationBar.m */,
+				43E2AC9B18ACD9370029EE86 /* UIToolbar.h */,
+				43E2AC9C18ACD9370029EE86 /* UIToolbar.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -484,6 +490,7 @@
 				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
 				43EBAA9018AB85FB005DDD8D /* UIBarButtonItem.h in Headers */,
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
+				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
@@ -611,6 +618,7 @@
 				43846330188B4025006DA1AA /* UIImageView.m in Sources */,
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
 				43EBAA6D18AA588F005DDD8D /* UIScroller.m in Sources */,
+				43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */,
 				43846341188C540F006DA1AA /* NSParagraphStyle.m in Sources */,
 				43846349188C5977006DA1AA /* UIFontDescriptor.m in Sources */,
 				43ECCF0F1851CA9A0076535C /* UIView.m in Sources */,
