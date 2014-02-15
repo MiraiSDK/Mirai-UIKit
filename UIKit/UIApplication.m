@@ -13,6 +13,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIScreenPrivate.h"
 #import "UIGraphics.h"
+#import "UIEvent.h"
+#import "UITouch.h"
+#import "UIEvent+Android.h"
+#import "UITouch+Android.h"
 
 #include <string.h>
 #include <jni.h>
@@ -41,6 +45,8 @@
     BOOL _isRunning;
     EAGLContext *_context;
     CARenderer *_renderer;
+    
+    UIEvent *_currentEvent;
 }
 
 static UIApplication *_app;
@@ -60,7 +66,8 @@ static UIApplication *_app;
     }
     self = [super init];
     if (self) {
-        
+        _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
+        [_currentEvent _setTouch:[[UITouch alloc] init]];
     }
     return self;
 }
@@ -264,27 +271,77 @@ static void engine_term_display(struct engine* engine) {
     _app->_context = nil;
 }
 
+- (void)handleAEvent:(AInputEvent *)aEvent
+{
+    int32_t aType = AInputEvent_getType(aEvent);
+    if (aType == AINPUT_EVENT_TYPE_MOTION) {
+        UITouch *touch = [[_currentEvent allTouches] anyObject];
+        
+        int64_t eventTime = AMotionEvent_getEventTime(aEvent);
+        const NSTimeInterval timestamp = eventTime/1000000000.0f; // convert nanoSeconds to Seconds
+        
+        int32_t action = AMotionEvent_getAction(aEvent);
+        int32_t trueAction = action & AMOTION_EVENT_ACTION_MASK;
+        int32_t pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+        float x = AMotionEvent_getX(aEvent, pointerIndex);
+        float y = AMotionEvent_getY(aEvent, pointerIndex);
 
-static int32_t handle_input(struct android_app* app, AInputEvent* event) {
-    /* app->userData is available here */
-    
-    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        app_has_focus = true;
-        int32_t action = AMotionEvent_getAction(event);
-        if (action ==AMOTION_EVENT_ACTION_UP) {
-            NSLog(@"touc screen up");
-            UIWindow *window = _app.keyWindow;
-//            [window.layer setNeedsDisplay];
+        const CGPoint screenLocation = CGPointMake(x, y);
+        UITouchPhase phase = UITouchPhaseCancelled;
+        switch (trueAction) {
+            case AMOTION_EVENT_ACTION_DOWN:
+                phase = UITouchPhaseBegan;
+                break;
+            case AMOTION_EVENT_ACTION_UP:
+                phase = UITouchPhaseEnded;
+                break;
+            case AMOTION_EVENT_ACTION_MOVE:
+                phase = UITouchPhaseMoved;
+                break;
+            case AMOTION_EVENT_ACTION_CANCEL:
+                phase = UITouchPhaseCancelled;
+                break;
+            case AMOTION_EVENT_ACTION_OUTSIDE:
+                phase = UITouchPhaseCancelled;
+                break;
+            case AMOTION_EVENT_ACTION_POINTER_DOWN:
+                //FIXME: what?
+                phase = UITouchPhaseStationary;
+                break;
+            case AMOTION_EVENT_ACTION_POINTER_UP:
+                phase = UITouchPhaseStationary;
+                break;
+            default:
+                phase = UITouchPhaseCancelled;
+                break;
         }
-        return 1;
-    } else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY) {
-        NSLog(@"Key event: action=%d keyCode=%d metaState=0x%x",
-             AKeyEvent_getAction(event),
-             AKeyEvent_getKeyCode(event),
-             AKeyEvent_getMetaState(event));
+        [touch _updatePhase:phase screenLocation:screenLocation timestamp:timestamp];
+
+        //update touche.view
+//        UIView *previousView = touch.view;
+//        [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+        
+        [self sendEvent:_currentEvent];
+
+        
     }
     
-    return 0;
+}
+
+static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
+    /* app->userData is available here */
+    
+    [_app handleAEvent:aEvent];
+    return 1;
+//    
+//    UIEvent *ui_Event = [[UIEvent alloc] initWithAInputEvent:aEvent];
+//    
+//    if (ui_Event) {
+//        [_app sendEvent:ui_Event];
+//        return 1;
+//    }
+//    
+//    return 0;
 }
 
 static void handle_app_command(struct android_app* app, int32_t cmd) {
@@ -440,7 +497,9 @@ static void draw_frame_cgcontext(ANativeWindow_Buffer *buffer) {
 
 - (void)sendEvent:(UIEvent *)event
 {
-    NS_UNIMPLEMENTED_LOG;
+    for (UITouch *touch in [event allTouches]) {
+        [touch.window sendEvent:event];
+    }
 }
 
 - (BOOL)sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event

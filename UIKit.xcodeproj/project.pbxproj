@@ -183,6 +183,8 @@
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
+		43E2ACA118AF4B6A0029EE86 /* UIEvent+Android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIEvent+Android.h"; sourceTree = "<group>"; };
+		43E2ACA218AF59AD0029EE86 /* UITouch+Android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITouch+Android.h"; sourceTree = "<group>"; };
 		43EBAA1818A9F11C005DDD8D /* UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewController.h; sourceTree = "<group>"; };
 		43EBAA1918A9F11C005DDD8D /* UIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewController.m; sourceTree = "<group>"; };
 		43EBAA6618AA5639005DDD8D /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
@@ -390,8 +392,10 @@
 			isa = PBXGroup;
 			children = (
 				43846311188B39EE006DA1AA /* UITouch.h */,
+				43E2ACA218AF59AD0029EE86 /* UITouch+Android.h */,
 				43846312188B39EE006DA1AA /* UITouch.m */,
 				43846315188B3B74006DA1AA /* UIEvent.h */,
+				43E2ACA118AF4B6A0029EE86 /* UIEvent+Android.h */,
 				43846316188B3B74006DA1AA /* UIEvent.m */,
 			);
 			name = Event;

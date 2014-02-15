@@ -16,6 +16,8 @@ typedef NS_ENUM(NSInteger, UIEventType) {
     UIEventTypeTouches,
     UIEventTypeMotion,
     UIEventTypeRemoteControl,
+
+    UIEventTypeKeyPress = 0x100,
 };
 
 typedef NS_ENUM(NSInteger, UIEventSubtype) {
