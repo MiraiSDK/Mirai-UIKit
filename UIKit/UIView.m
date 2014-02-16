@@ -11,6 +11,8 @@
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "UIGeometry.h"
+#import "UIWindow.h"
+
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
@@ -310,16 +312,53 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     return CGRectContainsPoint(self.bounds, point);
 }
 
-- (CGPoint)convertPoint:(CGPoint)point toView:(UIView *)view
+- (CGPoint)convertPoint:(CGPoint)toConvert toView:(UIView *)toView
 {
+    // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires toView and self to
+    // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
+    // all the implications of a change to something so "low level".
     
-    return CGPointZero;
+    // See note in convertPoint:fromView: for some explaination about why this is done... :/
+    if (toView && (self.window.screen == toView.window.screen)) {
+        return [self.layer convertPoint:toConvert toLayer:toView.layer];
+    } else {
+        // Convert to our window's coordinate space.
+        toConvert = [self.layer convertPoint:toConvert toLayer:self.window.layer];
+        
+        if (toView) {
+            // Convert from one window's coordinate space to another.
+            toConvert = [self.window convertPoint:toConvert toWindow:toView.window];
+            
+            // Convert from toView's window down to toView's coordinate space.
+            toConvert = [toView.window.layer convertPoint:toConvert toLayer:toView.layer];
+        }
+        
+        return toConvert;
+    }
 }
 
-- (CGPoint)convertPoint:(CGPoint)point fromView:(UIView *)view
+- (CGPoint)convertPoint:(CGPoint)toConvert fromView:(UIView *)fromView
 {
+    // NOTE: this is a lot more complex than it needs to be - I just noticed the docs say this method requires fromView and self to
+    // belong to the same UIWindow! arg! leaving this for now because, well, it's neat.. but also I'm too tired to really ponder
+    // all the implications of a change to something so "low level".
     
-    return CGPointZero;
+    if (fromView) {
+        // If the screens are the same, then we know they share a common parent CALayer, so we can convert directly with the layer's
+        // conversion method. If not, though, we need to do something a bit more complicated.
+        if (fromView && (self.window.screen == fromView.window.screen)) {
+            return [fromView.layer convertPoint:toConvert toLayer:self.layer];
+        } else {
+            // Convert coordinate to fromView's window base coordinates.
+            toConvert = [fromView.layer convertPoint:toConvert toLayer:fromView.window.layer];
+            
+            // Now convert from fromView's window to our own window.
+            toConvert = [fromView.window convertPoint:toConvert toWindow:self.window];
+        }
+    }
+    
+    // Convert from our window coordinate space into our own coordinate space.
+    return [self.window.layer convertPoint:toConvert toLayer:self.layer];
 }
 
 - (CGRect)convertRect:(CGRect)toConvert fromView:(UIView *)fromView
@@ -383,14 +422,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 
 - (UIWindow *)window
 {
-    return _window;
-}
-
-- (void)setWindow:(UIWindow *)aWindow
-{
-    if (_window != aWindow) {
-        _window = aWindow;
-    }
+    return _superview.window;
 }
 
 - (void)removeFromSuperview

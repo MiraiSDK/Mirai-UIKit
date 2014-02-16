@@ -12,6 +12,11 @@
 #import "UIViewController.h"
 #import "UIEvent.h"
 #import "UITouch.h"
+#import "UIApplication+UIPrivate.h"
+#import "UIScreenPrivate.h"
+
+NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
+NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
 
 @implementation UIWindow
 - (id)initWithFrame:(CGRect)theFrame
@@ -67,23 +72,22 @@
 
 - (void)setScreen:(UIScreen *)theScreen
 {
-    NS_UNIMPLEMENTED_LOG;
-//    if (theScreen != _screen) {
-//        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIScreenModeDidChangeNotification object:_screen];
-//        
-//        const BOOL wasHidden = self.hidden;
-//        [self _makeHidden];
-//        
+    if (theScreen != _screen) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIScreenModeDidChangeNotification object:_screen];
+        
+        const BOOL wasHidden = self.hidden;
+        [self _makeHidden];
+        
 //        [self.layer removeFromSuperlayer];
-//        _screen = theScreen;
+        _screen = theScreen;
 //        [[_screen _layer] addSublayer:self.layer];
-//        
-//        if (!wasHidden) {
-//            [self _makeVisible];
-//        }
-//        
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_screenModeChangedNotification:) name:UIScreenModeDidChangeNotification object:_screen];
-//    }
+        
+        if (!wasHidden) {
+            [self _makeVisible];
+        }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_screenModeChangedNotification:) name:UIScreenModeDidChangeNotification object:_screen];
+    }
 }
 
 - (void)_screenModeChangedNotification:(NSNotification *)note
@@ -100,7 +104,7 @@
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow
 {
     NS_UNIMPLEMENTED_LOG;
-    return CGPointZero;
+    return toConvert;
 //    if (toWindow == self) {
 //        return toConvert;
 //    } else {
@@ -124,7 +128,7 @@
 - (CGPoint)convertPoint:(CGPoint)toConvert fromWindow:(UIWindow *)fromWindow
 {
     NS_UNIMPLEMENTED_LOG;
-    return CGPointZero;
+    return toConvert;
 //    if (fromWindow == self) {
 //        return toConvert;
 //    } else {
@@ -168,12 +172,11 @@
 
 - (void)makeKeyWindow
 {
-    NS_UNIMPLEMENTED_LOG;
-//    if (!self.isKeyWindow) {
-//        [[UIApplication sharedApplication].keyWindow resignKeyWindow];
-//        [[UIApplication sharedApplication] _setKeyWindow:self];
-//        [self becomeKeyWindow];
-//    }
+    if (!self.isKeyWindow) {
+        [[UIApplication sharedApplication].keyWindow resignKeyWindow];
+        [[UIApplication sharedApplication] _setKeyWindow:self];
+        [self becomeKeyWindow];
+    }
 }
 
 - (BOOL)isKeyWindow
@@ -192,24 +195,24 @@
 
 - (void)_makeHidden
 {
-//    if (!self.hidden) {
-//        [super setHidden:YES];
-//        if (self.screen) {
-//            [[UIApplication sharedApplication] _windowDidBecomeHidden:self];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:self];
-//        }
-//    }
+    if (!self.hidden) {
+        [super setHidden:YES];
+        if (self.screen) {
+            [[UIApplication sharedApplication] _windowDidBecomeHidden:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:self];
+        }
+    }
 }
 
 - (void)_makeVisible
 {
-//    if (self.hidden) {
-//        [super setHidden:NO];
-//        if (self.screen) {
-//            [[UIApplication sharedApplication] _windowDidBecomeVisible:self];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeVisibleNotification object:self];
-//        }
-//    }
+    if (self.hidden) {
+        [super setHidden:NO];
+        if (self.screen) {
+            [[UIApplication sharedApplication] _windowDidBecomeVisible:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeVisibleNotification object:self];
+        }
+    }
 }
 
 - (void)setHidden:(BOOL)hide
@@ -237,8 +240,19 @@
     return self.layer.zPosition;
 }
 
+- (UIResponder *)_firstResponder
+{
+    return _firstResponder;
+}
+
+- (void)_setFirstResponder:(UIResponder *)newFirstResponder
+{
+    _firstResponder = newFirstResponder;
+}
+
 - (void)sendEvent:(UIEvent *)event
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
 //        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];

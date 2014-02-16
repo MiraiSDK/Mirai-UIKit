@@ -47,6 +47,8 @@
     CARenderer *_renderer;
     
     UIEvent *_currentEvent;
+    NSMutableSet *_visibleWindows;
+
 }
 
 static UIApplication *_app;
@@ -68,13 +70,9 @@ static UIApplication *_app;
     if (self) {
         _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
         [_currentEvent _setTouch:[[UITouch alloc] init]];
+        _visibleWindows = [[NSMutableSet alloc] init];
     }
     return self;
-}
-
-- (UIWindow *)keyWindow
-{
-    return [self.delegate window];
 }
 
 - (void)finishLaunching
@@ -251,8 +249,9 @@ static void engine_term_display(struct engine* engine) {
         [touch _updatePhase:phase screenLocation:screenLocation timestamp:timestamp];
 
         //update touche.view
-//        UIView *previousView = touch.view;
-//        [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+        UIView *previousView = touch.view;
+        UIScreen *theScreen = [UIScreen mainScreen];
+        [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
         
         [self sendEvent:_currentEvent];
 
@@ -324,6 +323,38 @@ void android_main(struct android_app* state)
     [TNAndroidLauncher launchWithArgc:argc argv:argv];
 }
 
+#pragma mark -
+- (void)_setKeyWindow:(UIWindow *)newKeyWindow
+{
+    _keyWindow = newKeyWindow;
+}
+
+- (void)_windowDidBecomeVisible:(UIWindow *)theWindow
+{
+    [_visibleWindows addObject:[NSValue valueWithNonretainedObject:theWindow]];
+}
+
+- (void)_windowDidBecomeHidden:(UIWindow *)theWindow
+{
+    if (theWindow == _keyWindow) [self _setKeyWindow:nil];
+    [_visibleWindows removeObject:[NSValue valueWithNonretainedObject:theWindow]];
+}
+
+- (NSArray *)windows
+{
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"windowLevel" ascending:YES];
+    
+    //FIXME: valueForKey crashed in Android
+//    return [[_visibleWindows valueForKey:@"nonretainedObjectValue"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
+    NSMutableArray *windows = [NSMutableArray array];
+    for (NSValue *wValue in _visibleWindows) {
+        UIWindow *window = [wValue nonretainedObjectValue];
+        [windows addObject:window];
+    }
+    return [windows sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
+}
+
+
 #pragma mark - 
 - (void)beginIgnoringInteractionEvents
 {
@@ -353,6 +384,7 @@ void android_main(struct android_app* state)
 
 - (void)sendEvent:(UIEvent *)event
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     for (UITouch *touch in [event allTouches]) {
         [touch.window sendEvent:event];
     }
