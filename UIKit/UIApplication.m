@@ -100,11 +100,6 @@ struct engine {
     struct android_app* app;
     
     int animating;
-    EGLDisplay display;
-    EGLSurface surface;
-    EGLContext context;
-    int32_t width;
-    int32_t height;
 };
 
 - (void)_run
@@ -145,6 +140,7 @@ struct engine {
                 struct android_poll_source* source;
 //                int pollTimeout = engine.animating ? 0 : -1;
                 int pollTimeout = 0;
+                
                 while ((ident=ALooper_pollAll(pollTimeout, NULL, &events, (void**)&source)) >= 0) {
                     NSLog(@"handle event");
                     // Process this event.
@@ -160,14 +156,17 @@ struct engine {
                     }
                 }
                 
-                @autoreleasepool {
-                    _renderer.layer = _app.keyWindow.layer;
-                    [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-                    [_renderer render];
-                    [_renderer endFrame];
+                EGLDisplay display = eglGetCurrentDisplay();
+                if (display != EGL_NO_DISPLAY) {
+                    @autoreleasepool {
+                        _renderer.layer = _app.keyWindow.layer;
+                        [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
+                        [_renderer render];
+                        [_renderer endFrame];
+                        eglSwapBuffers(eglGetCurrentDisplay(), eglGetCurrentSurface(EGL_DRAW));
+                    }
                 }
-
-                eglSwapBuffers(engine.display, engine.surface);
+                
                 
             }
         } while (_isRunning);
@@ -184,61 +183,8 @@ struct engine {
 static int engine_init_display(struct engine* engine) {
     // initialize OpenGL ES and EGL
     
-    /*
-     * Here specify the attributes of the desired configuration.
-     * Below, we select an EGLConfig with at least 8 bits per color
-     * component compatible with on-screen windows
-     */
-    const EGLint attribs[] = {
-        EGL_CONFORMANT, EGL_OPENGL_ES2_BIT,
-        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-        EGL_BLUE_SIZE, 8,
-        EGL_GREEN_SIZE, 8,
-        EGL_RED_SIZE, 8,
-        EGL_NONE
-    };
-    EGLint w, h, dummy, format;
-    EGLint numConfigs;
-    EGLConfig config;
-    EGLSurface surface;
-    EGLContext context;
+    [UIScreen androidSetupMainScreenWith:engine->app];
     
-    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-    
-    eglInitialize(display, 0, 0);
-    
-    /* Here, the application chooses the configuration it desires. In this
-     * sample, we have a very simplified selection process, where we pick
-     * the first EGLConfig that matches our criteria */
-    eglChooseConfig(display, attribs, &config, 1, &numConfigs);
-    
-    /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-     * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-     * As soon as we picked a EGLConfig, we can safely reconfigure the
-     * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-    eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
-    
-    ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
-    
-    surface = eglCreateWindowSurface(display, config, engine->app->window, NULL);
-    context = eglCreateContext(display, config, NULL, NULL);
-    
-    if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-        NSLog(@"Unable to eglMakeCurrent");
-        return -1;
-    }
-    
-    eglQuerySurface(display, surface, EGL_WIDTH, &w);
-    eglQuerySurface(display, surface, EGL_HEIGHT, &h);
-    
-    engine->display = display;
-    engine->context = context;
-    engine->surface = surface;
-    engine->width = w;
-    engine->height = h;
-    
-    NSLog(@"surface width:%d height:%d",w,h);
     // Initialize GL state.
     
     EAGLContext *ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -252,23 +198,10 @@ static int engine_init_display(struct engine* engine) {
  * Tear down the EGL context currently associated with the display.
  */
 static void engine_term_display(struct engine* engine) {
-    if (engine->display != EGL_NO_DISPLAY) {
-        eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        if (engine->context != EGL_NO_CONTEXT) {
-            eglDestroyContext(engine->display, engine->context);
-        }
-        if (engine->surface != EGL_NO_SURFACE) {
-            eglDestroySurface(engine->display, engine->surface);
-        }
-        eglTerminate(engine->display);
-    }
-    engine->animating = 0;
-    engine->display = EGL_NO_DISPLAY;
-    engine->context = EGL_NO_CONTEXT;
-    engine->surface = EGL_NO_SURFACE;
-    
     _app->_renderer = nil;
     _app->_context = nil;
+
+    [UIScreen androidTeardownMainScreen];
 }
 
 - (void)handleAEvent:(AInputEvent *)aEvent
@@ -389,83 +322,6 @@ void android_main(struct android_app* state)
     NSLog(@"on android_main");
 
     [TNAndroidLauncher launchWithArgc:argc argv:argv];
-}
-
-static void draw_frame_cgcontext(ANativeWindow_Buffer *buffer) {
-    UIWindow *window = _app.keyWindow;
-    if (window.layer.needsDisplay) {
-        CGSize windowSize = CGSizeMake(buffer->width, buffer->height);
-        CGRect bounds = CGRectMake(0, 0, windowSize.width, windowSize.height);
-//        NSLog(@"windowSize: width:%.2f, height:%.2f",windowSize.width,windowSize.height);
-        
-        // context options
-        //    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-        if (colorSpace == NULL) {NSLog(@"color space is NULL!!!");}
-        
-        switch (buffer ->format) {
-            case WINDOW_FORMAT_RGBA_8888:
-                NSLog(@"WINDOW_FORMAT_RGBA_8888");
-                break;
-            case WINDOW_FORMAT_RGBX_8888:
-                NSLog(@"WINDOW_FORMAT_RGBX_8888");
-                break;
-            case WINDOW_FORMAT_RGB_565:
-                NSLog(@"WINDOW_FORMAT_RGB_565");
-                break;
-                
-            default:
-                break;
-        }
-
-        int32_t bitsPerComponent = 8;
-        int32_t bytesPerRow = buffer->stride * bitsPerComponent / 2 ;
-        CGBitmapInfo info = kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst;
-    
-        CGContextRef ctx = CGBitmapContextCreate(buffer->bits,
-                                                 buffer->width,
-                                                 buffer->height,
-                                                 bitsPerComponent,
-                                                 bytesPerRow,
-                                                 colorSpace,
-                                                 info);
-        CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, buffer->height));
-
-        UIGraphicsPushContext(ctx);
-        memset (buffer->bits,
-                0, bytesPerRow * buffer->height);
-
-        [window.layer displayIfNeeded];
-        
-        if (window.layer.contents) {
-            CGContextDrawImage(ctx, window.bounds, window.layer.contents);
-        }
-        
-#if BYTEORDER == LITTLEENDIAN
-        //
-        // WORKAROUND:
-        // cairo use ARGB layout, means Alpha at upper bits, Blue at lowest bits
-        // Android's RGBA, means Alpha at upper bits, Red at lowest bits
-        // needs swap Red and Blue
-        //
-        NSLog(@"swap bits");
-        if (buffer->format == WINDOW_FORMAT_RGBA_8888 ||
-            buffer->format == WINDOW_FORMAT_RGBX_8888
-            )
-        {
-            for (char * p = (char*)buffer->bits; p != (char*)buffer->bits+(4*buffer->stride*buffer->height); p+=4) {
-                char x = p[0];
-                p[0] = p[2];
-                p[2] = x;
-            }
-        }
-#endif
-
-        UIGraphicsPopContext();
-        CGContextRelease(ctx);
-        
-    }
-    
 }
 
 #pragma mark - 
@@ -661,9 +517,9 @@ int UIApplicationMain(int argc, char *argv[], NSString *principalClassName, NSSt
     NSLog(@"enter UIApplicationMain");
     id<UIApplicationDelegate>delegate = nil;
     @autoreleasepool {
-        if (![UIScreen mainScreen]) {
-            UIScreen *screen = [[UIScreen alloc] initWithAndroidNativeWindow:app_state->window];
-        }
+//        if (![UIScreen mainScreen]) {
+//            UIScreen *screen = [[UIScreen alloc] initWithAndroidNativeWindow:app_state->window];
+//        }
         
         Class class = principalClassName ? NSClassFromString(principalClassName) : nil;
         if (!class) {}// TODO: load principalClassName from plist

@@ -8,11 +8,15 @@
 
 #import "UIScreen.h"
 #import "UIScreenPrivate.h"
+#import "UIApplication.h"
+#import "UIWindow.h"
+#import "UIGeometry.h"
 
 #import "android_native_app_glue.h"
 #import <android/native_activity.h>
+#import <EGL/egl.h>
 
-static NSMutableArray *screens;
+static NSMutableArray *_allScreens;
 @implementation UIScreen {
     id _display;
     CGRect _bounds;
@@ -21,42 +25,115 @@ static NSMutableArray *screens;
     
 }
 
+static UIScreen *_mainScreen = nil;
+
 + (void)initialize
 {
-    screens = [NSMutableArray array];
+    if (self == [UIScreen class]) {
+        _allScreens = [NSMutableArray array];
+        _mainScreen = [[UIScreen alloc] init];
+
+    }
 }
 
-static UIScreen *_mainScreen = nil;
-- (instancetype)initWithAndroidNativeWindow:(ANativeWindow *)window
-{
-    self = [super init];
-    if (self) {
-        _display = (__bridge_transfer id)(window);
-        
-        
-        //
-        // NEEDFIX:
-        // Can't access ANativeWindow before ALoop calls
-        //
-        _bounds = CGRectZero;
-//        _bounds = CGRectMake(0,
-//                             0,
-//                             ANativeWindow_getWidth(window),
-//                             ANativeWindow_getHeight(window));
+static EGLDisplay _mainDisplay = EGL_NO_DISPLAY;
+static EGLContext _mainContext = EGL_NO_CONTEXT;
+static EGLSurface _mainSurface = EGL_NO_SURFACE;
+static CGRect _mainDisplayBounds;
 
-        _applicationFrame = _bounds;
-        
-        NSLog(@"assign mainscreen");
-        _mainScreen = self;
-        NSLog(@"add screen");
-        [screens addObject:self];
++ (BOOL)androidSetupMainScreenWith:(struct android_app *)androidApp
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    // initialize OpenGL ES and EGL
+    
+    /*
+     * Here specify the attributes of the desired configuration.
+     * Below, we select an EGLConfig with at least 8 bits per color
+     * component compatible with on-screen windows
+     */
+    const EGLint attribs[] = {
+        EGL_CONFORMANT, EGL_OPENGL_ES2_BIT,
+        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+        EGL_BLUE_SIZE, 8,
+        EGL_GREEN_SIZE, 8,
+        EGL_RED_SIZE, 8,
+        EGL_NONE
+    };
+
+    EGLint w, h, dummy, format;
+    EGLint numConfigs;
+    EGLConfig config;
+    EGLSurface surface;
+    EGLContext context;
+
+    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    eglInitialize(display, 0, 0);
+    
+    /* Here, the application chooses the configuration it desires. In this
+     * sample, we have a very simplified selection process, where we pick
+     * the first EGLConfig that matches our criteria */
+    eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+
+    /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
+     * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
+     * As soon as we picked a EGLConfig, we can safely reconfigure the
+     * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
+    eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+
+//    ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
+
+    surface = eglCreateWindowSurface(display, config, androidApp->window, NULL);
+    context = eglCreateContext(display, config, NULL, NULL);
+    
+    if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
+        NSLog(@"Unable to eglMakeCurrent");
+        return NO;
     }
-    return self;
+    
+    eglQuerySurface(display, surface, EGL_WIDTH, &w);
+    eglQuerySurface(display, surface, EGL_HEIGHT, &h);
+    
+    _mainDisplay = display;
+    _mainContext = context;
+    _mainSurface = surface;
+    _mainDisplayBounds = CGRectMake(0, 0, w, h);
+    
+    _mainScreen->_bounds = _mainDisplayBounds;
+    
+    return YES;
+}
+
++ (void)androidTeardownMainScreen
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    
+    if (_mainDisplay != EGL_NO_DISPLAY) {
+        NSLog(@"[UIScreen] will clean context");
+        eglMakeCurrent(_mainDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        if (_mainContext != EGL_NO_CONTEXT) {
+            NSLog(@"[UIScreen] will destory context");
+            eglDestroyContext(_mainDisplay, _mainContext);
+        }
+        
+        if (_mainSurface != EGL_NO_SURFACE) {
+            NSLog(@"[UIScreen] will destory surface");
+            eglDestroySurface(_mainDisplay, _mainSurface);
+        }
+        
+        NSLog(@"[UIScreen] will terminate display");
+        eglTerminate(_mainDisplay);
+    }
+    
+    _mainDisplay = EGL_NO_DISPLAY;
+    _mainContext = EGL_NO_CONTEXT;
+    _mainSurface = EGL_NO_SURFACE;
+    _mainDisplayBounds = CGRectZero;
 }
 
 + (NSArray *)screens
 {
-    return screens;
+    return _allScreens;
 }
 
 + (UIScreen *)mainScreen
@@ -86,6 +163,25 @@ static UIScreen *_mainScreen = nil;
 }
 
 
+- (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent
+{
+    for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
+        if (window.screen == self) {
+            CGPoint windowPoint = [window convertPoint:clickPoint fromWindow:nil];
+            UIView *clickedView = [window hitTest:windowPoint withEvent:theEvent];
+            if (clickedView) {
+                return clickedView;
+            }
+        }
+    }
+    
+    return nil;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p; bounds = %@; mode = %@>", [self className], self, NSStringFromCGRect(self.bounds), self.currentMode];
+}
 @end
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";

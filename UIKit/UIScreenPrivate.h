@@ -8,8 +8,11 @@
 
 #import <UIKit/UIScreen.h>
 #include <android/native_window.h>
+#import "android_native_app_glue.h"
 
 @interface UIScreen ()
-- (instancetype)initWithAndroidNativeWindow:(ANativeWindow *)window;
++ (BOOL)androidSetupMainScreenWith:(struct android_app *)androidApp;
++ (void)androidTeardownMainScreen;
+
 @end
 
