@@ -309,18 +309,106 @@ static void _NSLog_android_log_handler (NSString *message)
     __android_log_write(ANDROID_LOG_INFO,"NSLog",[message UTF8String]);
 }
 
+#define BUFSIZ 1024
+
+static void _prepareAsset(NSString *path)
+{
+    //
+    // FIXME: should only check files after the apk file changed
+    //
+    
+    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
+    NSString *mainBundlePath = path;
+    
+    if (! [[NSFileManager defaultManager] fileExistsAtPath:mainBundlePath]) {
+        NSLog(@"create folder:%@",mainBundlePath);
+        NSError *creationError = nil;
+        BOOL createSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:mainBundlePath withIntermediateDirectories:YES attributes:nil error:&creationError];
+        if (!createSuccess) {
+            NSLog(@"%@",creationError);
+        }
+    }
+
+    AAssetManager *mgr = app_state->activity->assetManager;
+    AAssetDir *assetDir = AAssetManager_openDir(mgr, "");
+    const char * filename = NULL;
+    while ((filename = AAssetDir_getNextFileName(assetDir)) != NULL) {
+        NSString *NS_filename = [NSString stringWithUTF8String:filename];
+        const char *destion = [[mainBundlePath stringByAppendingPathComponent:NS_filename] UTF8String];
+        FILE *isExist = fopen(destion, "r");
+        if (isExist) {
+            //FIXME: what if the file is updated?
+            NSLog(@"skip exist file:%s",destion);
+            fclose(isExist);
+            continue;
+        }
+        
+        NSLog(@"extract bundle file: %s",destion);
+        AAsset *asset = AAssetManager_open(mgr, filename, AASSET_MODE_STREAMING);
+        char buf[BUFSIZ];
+        int nb_read = 0;
+        FILE *out = fopen(destion, "w");
+        while ((nb_read = AAsset_read(asset, buf, BUFSIZ)) > 0) {
+            fwrite(buf, nb_read, 1, out);
+        }
+        fclose(out);
+        AAsset_close(asset);
+    }
+    AAssetDir_close(assetDir);
+    
+//    NSLog(@"main resourcePath: %@",[[NSBundle mainBundle] resourcePath]);
+//    NSLog(@"main bundlePath: %@",[[NSBundle mainBundle] bundlePath]);
+//    NSLog(@"main executablePath: %@",[[NSBundle mainBundle] executablePath]);
+
+}
+
+static void constructExecutablePath(char *result, struct android_app* state)
+{
+    char buffer[1024];
+    char basePath[1024];
+
+    // externalDataPath: /storage/emulated/0/Android/data/org.tiny4.BasicCairo/files
+    const char * externalDataPath = app_state->activity->externalDataPath;
+    
+    // remove last component
+    char *lastSlash = strrchr(externalDataPath, '/');
+    strncpy(basePath, externalDataPath, lastSlash - externalDataPath);
+    
+    // get last component
+    char activityName[1024];
+    memset(activityName, 0, 1024);
+    lastSlash = strrchr(basePath, '/');
+    strcpy(activityName, lastSlash+1);
+    
+    // construct path
+    memset(buffer, 0, 1024);
+    sprintf(buffer, "%s/%s.app/UIKitApp",basePath,activityName);
+
+    strcpy(result, buffer);
+}
+
 //int main(int argc, char * argv[]);
 void android_main(struct android_app* state)
 {
     _NSLog_printf_handler = *_NSLog_android_log_handler;
     
     app_state = state;
+    
+    char buffer[1024];
+    constructExecutablePath(buffer, state);
+
     int argc = 1;
-    char * argv[] = {"/data/local/fileName"};
+    char * argv[] = {buffer};
     [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
     NSLog(@"on android_main");
 
-    [TNAndroidLauncher launchWithArgc:argc argv:argv];
+    @autoreleasepool {
+        NSString *bundlePath = [NSString stringWithUTF8String:buffer];
+        bundlePath = [bundlePath stringByDeletingLastPathComponent];
+        _prepareAsset(bundlePath);
+        [TNAndroidLauncher launchWithArgc:argc argv:argv];
+    }
+    
 }
 
 #pragma mark -
