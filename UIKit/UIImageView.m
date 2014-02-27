@@ -175,7 +175,8 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 
 //    UIImageRep *bestRepresentation = [displayImage _bestRepresentationForProposedScale:scale];
 //    theLayer.contents = (__bridge id)bestRepresentation.CGImage;
-//    
+    theLayer.contents = self.image.CGImage;
+//
 //    if ([theLayer respondsToSelector:@selector(setContentsScale:)]) {
 //        [theLayer setContentsScale:bestRepresentation.scale];
 //    }

@@ -231,4 +231,24 @@ NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
     return data;
 }
 
+@implementation UIImage (UIImageDeprecated)
 
+- (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
+{
+    NS_UNIMPLEMENTED_LOG;
+    return nil;
+}
+
+- (NSInteger)leftCapWidth
+{
+    NS_UNIMPLEMENTED_LOG;
+    return 0;
+}
+
+- (NSInteger)topCapHeight
+{
+    NS_UNIMPLEMENTED_LOG;
+    return 0;
+}
+
+@end
