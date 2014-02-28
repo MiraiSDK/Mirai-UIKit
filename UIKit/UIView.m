@@ -16,6 +16,11 @@
 #import "UIViewLayoutManager.h"
 #import "UIApplication+UIPrivate.h"
 
+//Animation
+#import "UIViewAnimationGroup.h"
+#import "UIViewBlockAnimationDelegate.h"
+#import <dispatch/dispatch.h>
+
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
 NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
@@ -938,37 +943,41 @@ static BOOL _animationsEnabled = YES;
 
 + (void)beginAnimations:(NSString *)animationID context:(void *)context
 {
-    NS_UNIMPLEMENTED_LOG;
+    [_animationGroups addObject:[UIViewAnimationGroup animationGroupWithName:animationID context:context]];
 }
 
 + (void)commitAnimations
 {
-    NS_UNIMPLEMENTED_LOG;
+    if ([_animationGroups count] > 0) {
+        UIViewAnimationGroup *group = [_animationGroups lastObject];
+        [_animationGroups removeLastObject];
+        [group commit];
+    }
 }
 
 + (void)setAnimationDelegate:(id)delegate
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationDelegate:delegate];
 }
 
 + (void)setAnimationWillStartSelector:(SEL)selector
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationWillStartSelector:selector];
 }
 
 + (void)setAnimationDidStopSelector:(SEL)selector
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationDidStopSelector:selector];
 }
 
 + (void)setAnimationDuration:(NSTimeInterval)duration
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationDuration:duration];
 }
 
 + (void)setAnimationDelay:(NSTimeInterval)delay
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationDelay:delay];
 }
 
 + (void)setAnimationStartDate:(NSDate *)startDate
@@ -978,26 +987,27 @@ static BOOL _animationsEnabled = YES;
 
 + (void)setAnimationCurve:(UIViewAnimationCurve)curve
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationCurve:curve];
 }
 
 + (void)setAnimationRepeatCount:(float)repeatCount
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationRepeatCount:repeatCount];
 }
 
 + (void)setAnimationRepeatAutoreverses:(BOOL)repeatAutoreverses
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationRepeatAutoreverses:repeatAutoreverses];
 }
+
 + (void)setAnimationBeginsFromCurrentState:(BOOL)fromCurrentState
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationBeginsFromCurrentState:fromCurrentState];
 }
 
 + (void)setAnimationTransition:(UIViewAnimationTransition)transition forView:(UIView *)view cache:(BOOL)cache
 {
-    NS_UNIMPLEMENTED_LOG;
+    [[_animationGroups lastObject] setAnimationTransition:transition forView:view cache:cache];
 }
 
 + (void)setAnimationsEnabled:(BOOL)enabled
@@ -1019,17 +1029,58 @@ static BOOL _animationsEnabled = YES;
 @implementation UIView (UIViewAnimationWithBlocks)
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    NS_UNIMPLEMENTED_LOG;
+    const BOOL ignoreInteractionEvents = !((options & UIViewAnimationOptionAllowUserInteraction) == UIViewAnimationOptionAllowUserInteraction);
+    const BOOL repeatAnimation = ((options & UIViewAnimationOptionRepeat) == UIViewAnimationOptionRepeat);
+    const BOOL autoreverseRepeat = ((options & UIViewAnimationOptionAutoreverse) == UIViewAnimationOptionAutoreverse);
+    const BOOL beginFromCurrentState = ((options & UIViewAnimationOptionBeginFromCurrentState) == UIViewAnimationOptionBeginFromCurrentState);
+    UIViewAnimationCurve animationCurve;
+    
+    if ((options & UIViewAnimationOptionCurveEaseInOut) == UIViewAnimationOptionCurveEaseInOut) {
+        animationCurve = UIViewAnimationCurveEaseInOut;
+    } else if ((options & UIViewAnimationOptionCurveEaseIn) == UIViewAnimationOptionCurveEaseIn) {
+        animationCurve = UIViewAnimationCurveEaseIn;
+    } else if ((options & UIViewAnimationOptionCurveEaseOut) == UIViewAnimationOptionCurveEaseOut) {
+        animationCurve = UIViewAnimationCurveEaseOut;
+    } else {
+        animationCurve = UIViewAnimationCurveLinear;
+    }
+    
+    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
+    if (ignoreInteractionEvents) {
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    }
+    
+    UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
+    delegate.completion = completion;
+    delegate.ignoreInteractionEvents = ignoreInteractionEvents;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationCurve:animationCurve];
+    [UIView setAnimationDelay:delay];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationBeginsFromCurrentState:beginFromCurrentState];
+    [UIView setAnimationDelegate:delegate];	// this is retained here
+    [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:)];
+    [UIView setAnimationRepeatCount:(repeatAnimation? FLT_MAX : 0)];
+    [UIView setAnimationRepeatAutoreverses:autoreverseRepeat];
+    
+    animations();
+    
+    [UIView commitAnimations];
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    NS_UNIMPLEMENTED_LOG;
+    [self animateWithDuration:duration
+                        delay:0
+                      options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
+                   animations:animations
+                   completion:completion];
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations
 {
-    NS_UNIMPLEMENTED_LOG;
+    [self animateWithDuration:duration animations:animations completion:NULL];
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
@@ -1040,11 +1091,23 @@ static BOOL _animationsEnabled = YES;
 + (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
     NS_UNIMPLEMENTED_LOG;
+//    //FIXME: Needs Imp
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (completion) {
+//            completion(YES);
+//        }
+//    });
 }
 
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion
 {
     NS_UNIMPLEMENTED_LOG;
+//    //FIXME: Needs Imp
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (completion) {
+//            completion(YES);
+//        }
+//    });
 }
 
 + (void)performSystemAnimation:(UISystemAnimation)animation onViews:(NSArray *)views options:(UIViewAnimationOptions)options animations:(void (^)(void))parallelAnimations completion:(void (^)(BOOL finished))completion

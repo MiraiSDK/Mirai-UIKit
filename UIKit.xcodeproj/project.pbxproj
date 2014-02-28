@@ -10,6 +10,10 @@
 		431412D318C0A5A4001AF732 /* UIViewLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 431412D118C0A5A4001AF732 /* UIViewLayoutManager.h */; };
 		431412D418C0A5A4001AF732 /* UIViewLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 431412D218C0A5A4001AF732 /* UIViewLayoutManager.m */; };
 		431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 431412D518C0AA77001AF732 /* UIView+UIPrivate.h */; };
+		431412D918C0B814001AF732 /* UIViewAnimationGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 431412D718C0B814001AF732 /* UIViewAnimationGroup.h */; };
+		431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 431412D818C0B814001AF732 /* UIViewAnimationGroup.m */; };
+		431412DD18C0B958001AF732 /* UIViewBlockAnimationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 431412DB18C0B958001AF732 /* UIViewBlockAnimationDelegate.h */; };
+		431412DE18C0B958001AF732 /* UIViewBlockAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 431412DC18C0B958001AF732 /* UIViewBlockAnimationDelegate.m */; };
 		4315799A18B0E3CF00AE4256 /* UIApplication+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4315799918B0E3CF00AE4256 /* UIApplication+UIPrivate.h */; };
 		4315799C18B0EC3200AE4256 /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4315799B18B0EC3200AE4256 /* UIWindow+UIPrivate.h */; };
 		432FF05F185338BD005486C5 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 432FF05D185338BD005486C5 /* UIScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -118,6 +122,10 @@
 		431412D118C0A5A4001AF732 /* UIViewLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewLayoutManager.h; sourceTree = "<group>"; };
 		431412D218C0A5A4001AF732 /* UIViewLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewLayoutManager.m; sourceTree = "<group>"; };
 		431412D518C0AA77001AF732 /* UIView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIPrivate.h"; sourceTree = "<group>"; };
+		431412D718C0B814001AF732 /* UIViewAnimationGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewAnimationGroup.h; sourceTree = "<group>"; };
+		431412D818C0B814001AF732 /* UIViewAnimationGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewAnimationGroup.m; sourceTree = "<group>"; };
+		431412DB18C0B958001AF732 /* UIViewBlockAnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewBlockAnimationDelegate.h; sourceTree = "<group>"; };
+		431412DC18C0B958001AF732 /* UIViewBlockAnimationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewBlockAnimationDelegate.m; sourceTree = "<group>"; };
 		4315799918B0E3CF00AE4256 /* UIApplication+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+UIPrivate.h"; sourceTree = "<group>"; };
 		4315799B18B0EC3200AE4256 /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
 		432FF05D185338BD005486C5 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScreen.h; sourceTree = "<group>"; };
@@ -415,6 +423,10 @@
 		43846319188B3D3A006DA1AA /* Private Classes */ = {
 			isa = PBXGroup;
 			children = (
+				431412DB18C0B958001AF732 /* UIViewBlockAnimationDelegate.h */,
+				431412DC18C0B958001AF732 /* UIViewBlockAnimationDelegate.m */,
+				431412D718C0B814001AF732 /* UIViewAnimationGroup.h */,
+				431412D818C0B814001AF732 /* UIViewAnimationGroup.m */,
 				431412D118C0A5A4001AF732 /* UIViewLayoutManager.h */,
 				431412D218C0A5A4001AF732 /* UIViewLayoutManager.m */,
 				43846337188B41D2006DA1AA /* UIRoundedRectButton.h */,
@@ -494,6 +506,7 @@
 				431412D318C0A5A4001AF732 /* UIViewLayoutManager.h in Headers */,
 				43EBAA6C18AA588F005DDD8D /* UIScroller.h in Headers */,
 				432FF093185452EC005486C5 /* NSStringDrawing.h in Headers */,
+				431412D918C0B814001AF732 /* UIViewAnimationGroup.h in Headers */,
 				43846344188C58F9006DA1AA /* UIFont.h in Headers */,
 				43846335188B417F006DA1AA /* UIButton.h in Headers */,
 				4384630F188B2BCD006DA1AA /* UIImage.h in Headers */,
@@ -515,6 +528,7 @@
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
+				431412DD18C0B958001AF732 /* UIViewBlockAnimationDelegate.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
 				43846313188B39EE006DA1AA /* UITouch.h in Headers */,
@@ -639,7 +653,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				43846330188B4025006DA1AA /* UIImageView.m in Sources */,
+				431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */,
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
+				431412DE18C0B958001AF732 /* UIViewBlockAnimationDelegate.m in Sources */,
 				43EBAA6D18AA588F005DDD8D /* UIScroller.m in Sources */,
 				43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */,
 				43846341188C540F006DA1AA /* NSParagraphStyle.m in Sources */,
