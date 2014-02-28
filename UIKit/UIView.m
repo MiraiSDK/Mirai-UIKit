@@ -14,6 +14,7 @@
 #import "UIWindow.h"
 #import "UIViewController.h"
 #import "UIViewLayoutManager.h"
+#import "UIApplication+UIPrivate.h"
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
@@ -441,8 +442,34 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 
 - (void)removeFromSuperview
 {
-    
-} //removeFromSuperview
+    if (_superview) {
+        [[UIApplication sharedApplication] _removeViewFromTouches:self];
+        
+        UIWindow *oldWindow = self.window;
+        
+        if (_needsDidAppearOrDisappear && [self _viewController]) {
+            [[self _viewController] viewWillDisappear:NO];
+        }
+        
+        [_superview willRemoveSubview:self];
+        [self _willMoveFromWindow:oldWindow toWindow:nil];
+        [self willMoveToSuperview:nil];
+        
+        [self willChangeValueForKey:@"superview"];
+        [_layer removeFromSuperlayer];
+        [_superview->_subviews removeObject:self];
+        _superview = nil;
+        [self didChangeValueForKey:@"superview"];
+        
+        [self _didMoveFromWindow:oldWindow toWindow:nil];
+        [self didMoveToSuperview];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:self];
+        
+        if (_needsDidAppearOrDisappear && [self _viewController]) {
+            [[self _viewController] viewDidDisappear:NO];
+        }
+    }
+}
 
 - (void)_willMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
 {

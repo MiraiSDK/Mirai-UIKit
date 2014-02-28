@@ -553,6 +553,33 @@ void android_main(struct android_app* state)
     NS_UNIMPLEMENTED_LOG;
 }
 
+// this sets the touches view property to nil (while retaining the window property setting)
+// this is used when a view is removed from its superview while it may have been the origin
+// of an active touch. after a view is removed, we don't want to deliver any more touch events
+// to it, but we still may need to route the touch itself for the sake of gesture recognizers
+// so we need to retain the touch's original window setting so that events can still be routed.
+//
+// note that the touch itself is not being cancelled here so its phase remains unchanged.
+// I'm not entirely certain if that's the correct thing to do, but I think it makes sense. The
+// touch itself has not gone anywhere - just the view that it first touched. That breaks the
+// delivery of the touch events themselves as far as the usual responder chain delivery is
+// concerned, but that appears to be what happens in the real UIKit when you remove a view out
+// from under an active touch.
+//
+// this whole thing is necessary because otherwise a gesture which may have been initiated over
+// some specific view would end up getting cancelled/failing if the view under it happens to be
+// removed. this is more common than you might expect. a UITableView that is not reusing rows
+// does exactly this as it scrolls - which coincidentally is how I found this bug in the first
+// place. :P
+- (void)_removeViewFromTouches:(UIView *)aView
+{
+    for (UITouch *touch in [_currentEvent allTouches]) {
+        if (touch.view == aView) {
+            [touch _removeFromView];
+        }
+    }
+}
+
 @end
 
 @implementation UIApplication (UIRemoteNotifications)
