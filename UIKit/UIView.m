@@ -43,6 +43,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     
     BOOL _autoresizesSubviews;
     BOOL _needsDidAppearOrDisappear;
+    UIViewAutoresizing _autoresizingMask;
 
     
     struct {
@@ -146,6 +147,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
         self.alpha = 1;
         self.opaque = YES;
         
+        [self setNeedsLayout];
         [self setNeedsDisplay];
     }
     return self;
@@ -206,6 +208,95 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     return _viewFlags.autoresizeMask;
 }
 
+- (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize
+{
+    if (_autoresizingMask != UIViewAutoresizingNone) {
+        CGRect frame = self.frame;
+        const CGSize delta = CGSizeMake(newSize.width-oldSize.width, newSize.height-oldSize.height);
+        
+#define hasAutoresizingFor(x) ((_autoresizingMask & (x)) == (x))
+        
+        /*
+         
+         top + bottom + height      => y = floor(y + (y / HEIGHT * delta)); height = floor(height + (height / HEIGHT * delta))
+         top + height               => t = y + height; y = floor(y + (y / t * delta); height = floor(height + (height / t * delta);
+         bottom + height            => height = floor(height + (height / (HEIGHT - y) * delta))
+         top + bottom               => y = floor(y + (delta / 2))
+         height                     => height = floor(height + delta)
+         top                        => y = floor(y + delta)
+         bottom                     => y = floor(y)
+         
+         */
+        
+        if (oldSize.height == 0) {
+            frame.size.height = newSize.height;
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin)) {
+            frame.origin.y = floorf(frame.origin.y + (frame.origin.y / oldSize.height * delta.height));
+            frame.size.height = floorf(frame.size.height + (frame.size.height / oldSize.height * delta.height));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight)) {
+            const CGFloat t = frame.origin.y + frame.size.height;
+            frame.origin.y = floorf(frame.origin.y + (frame.origin.y / t * delta.height));
+            frame.size.height = floorf(frame.size.height + (frame.size.height / t * delta.height));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight)) {
+            frame.size.height = floorf(frame.size.height + (frame.size.height / (oldSize.height - frame.origin.y) * delta.height));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin)) {
+            frame.origin.y = floorf(frame.origin.y + (delta.height / 2.f));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleHeight)) {
+            frame.size.height = floorf(frame.size.height + delta.height);
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleTopMargin)) {
+            frame.origin.y = floorf(frame.origin.y + delta.height);
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleBottomMargin)) {
+            frame.origin.y = floorf(frame.origin.y);
+        }
+        
+        if (oldSize.width == 0) {
+            frame.size.width = newSize.width;
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin)) {
+            frame.origin.x = floorf(frame.origin.x + (frame.origin.x / oldSize.width * delta.width));
+            frame.size.width = floorf(frame.size.width + (frame.size.width / oldSize.width * delta.width));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth)) {
+            const CGFloat t = frame.origin.x + frame.size.width;
+            frame.origin.x = floorf(frame.origin.x + (frame.origin.x / t * delta.width));
+            frame.size.width = floorf(frame.size.width + (frame.size.width / t * delta.width));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)) {
+            frame.size.width = floorf(frame.size.width + (frame.size.width / (oldSize.width - frame.origin.x) * delta.width));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin)) {
+            frame.origin.x = floorf(frame.origin.x + (delta.width / 2.f));
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleWidth)) {
+            frame.size.width = floorf(frame.size.width + delta.width);
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleLeftMargin)) {
+            frame.origin.x = floorf(frame.origin.x + delta.width);
+        } else if (hasAutoresizingFor(UIViewAutoresizingFlexibleRightMargin)) {
+            frame.origin.x = floorf(frame.origin.x);
+        }
+        
+        self.frame = frame;
+    }
+}
+
+- (void)_boundsDidChangeFrom:(CGRect)oldBounds to:(CGRect)newBounds
+{
+    if (!CGRectEqualToRect(oldBounds, newBounds)) {
+        // setNeedsLayout doesn't seem like it should be necessary, however there was a rendering bug in a table in Flamingo that
+        // went away when this was placed here. There must be some strange ordering issue with how that layout manager stuff works.
+        // I never quite narrowed it down. This was an easy fix, if perhaps not ideal.
+        [self setNeedsLayout];
+        
+        if (!CGSizeEqualToSize(oldBounds.size, newBounds.size)) {
+            if (_autoresizesSubviews) {
+                for (UIView *subview in [_subviews allObjects]) {
+                    [subview _superviewSizeDidChangeFrom:oldBounds.size to:newBounds.size];
+                }
+            }
+        }
+    }
+}
+
++ (NSSet *)keyPathsForValuesAffectingFrame
+{
+    return [NSSet setWithObject:@"center"];
+}
+
 - (CGRect)frame
 {
     return _layer.frame;
@@ -220,8 +311,8 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
         _layer.bounds = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
         _layer.position = CGPointMake(newFrame.origin.x+newFrame.size.width/2, newFrame.origin.y+newFrame.size.height/2);
         
-        //        [self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
-        //        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
+        [self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
     }
 }
 
@@ -235,8 +326,8 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     if (!CGRectEqualToRect(aBounds,_layer.bounds)) {
         CGRect oldBounds = _layer.bounds;
         _layer.bounds = aBounds;
-//        [self _boundsDidChangeFrom:oldBounds to:newBounds];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewBoundsDidChangeNotification object:self];
+        [self _boundsDidChangeFrom:oldBounds to:aBounds];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewBoundsDidChangeNotification object:self];
     }
 }
 
