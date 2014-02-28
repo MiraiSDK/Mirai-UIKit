@@ -158,6 +158,7 @@ struct engine {
                 if (display != EGL_NO_DISPLAY) {
                     @autoreleasepool {
                         _renderer.layer = _app.keyWindow.layer;
+                        [_renderer.layer layoutIfNeeded];
                         [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
                         [_renderer render];
                         [_renderer endFrame];

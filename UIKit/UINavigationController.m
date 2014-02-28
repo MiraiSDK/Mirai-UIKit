@@ -116,6 +116,7 @@ typedef enum {
 
 - (void)_setVisibleViewControllerNeedsUpdate
 {
+    NSLog(@"[%@] %s",NSStringFromClass([self class]),__PRETTY_FUNCTION__);
 	// schedules a deferred method to run
 	if (!_visibleViewControllerNeedsUpdate) {
 		_visibleViewControllerNeedsUpdate = YES;
@@ -225,6 +226,9 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (!self.topViewController.isViewLoaded) {
+        [self _setVisibleViewControllerNeedsUpdate];
+    }
     [self.visibleViewController viewWillAppear:animated];
 }
 
@@ -310,7 +314,9 @@ typedef enum {
 		[self.view insertSubview:viewController.view atIndex:0];
 	}
     
-	[self _setVisibleViewControllerNeedsUpdate];
+    if (self.view.superview) {
+        [self _setVisibleViewControllerNeedsUpdate];
+    }
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
@@ -368,7 +374,9 @@ typedef enum {
 		[self.view insertSubview:topController.view atIndex:0];
 	}
     
-	[self _setVisibleViewControllerNeedsUpdate];
+    if (self.view.superview) {
+        [self _setVisibleViewControllerNeedsUpdate];
+    }
     
 	return formerTopViewController;
 }
