@@ -153,6 +153,10 @@
     return nil;
 }
 
+- (void)_setParentViewController:(UIViewController *)parentController
+{
+    _parentViewController = parentController;
+}
 
 #pragma mark -
 

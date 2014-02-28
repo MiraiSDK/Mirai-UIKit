@@ -46,6 +46,8 @@ typedef NS_ENUM(NSInteger, UIModalPresentationStyle) {
 {
     @package
     UINavigationItem *_navigationItem;
+    __weak UIViewController *_parentViewController; // Nonretained
+
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;

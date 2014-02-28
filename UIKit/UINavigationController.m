@@ -90,6 +90,8 @@ typedef enum {
 - (CGRect)_controllerFrameForTransition:(_UINavigationControllerVisibleControllerTransition)transition
 {
     CGRect controllerFrame = self.view.bounds;
+    NSLog(@"%s: navi bounds: %@",__PRETTY_FUNCTION__,NSStringFromCGRect(controllerFrame));
+
     
     // adjust for the nav bar
     if (!self.navigationBarHidden) {
@@ -108,6 +110,7 @@ typedef enum {
         controllerFrame = CGRectOffset(controllerFrame, -controllerFrame.size.width, 0);
     }
     
+    NSLog(@"%s: %@",__PRETTY_FUNCTION__,NSStringFromCGRect(controllerFrame));
     return controllerFrame;
 }
 
@@ -124,14 +127,18 @@ typedef enum {
 
 - (void)_updateVisibleViewController
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
 	// do some bookkeeping
 	_visibleViewControllerNeedsUpdate = NO;
     UIViewController *topViewController = self.topViewController;
+    NSLog(@"topViewController:%@",topViewController);
     
 	// make sure the new top view is both loaded and set to appear in the correct place
 	topViewController.view.frame = [self _controllerFrameForTransition:_visibleViewControllerTransition];
+    NSLog(@"set topViewController frame:%@",NSStringFromCGRect(topViewController.view.frame));
     
 	if (_visibleViewControllerTransition == _UINavigationControllerVisibleControllerTransitionNone) {
+        NSLog(@"_UINavigationControllerVisibleControllerTransitionNone");
 		[_visibleViewController viewWillDisappear:NO];
 		[topViewController viewWillAppear:NO];
         
@@ -173,16 +180,22 @@ typedef enum {
                          }];
 	}
     
+    NSLog(@"set visible ViewController");
 	_visibleViewController = topViewController;
 }
 
 - (void)loadView
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     self.view = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)];
     self.view.clipsToBounds = YES;
     
     UIViewController *viewController = self.visibleViewController;
+    NSLog(@"visibleViewController:%@",viewController);
+    
     viewController.view.frame = [self _controllerFrameForTransition:_UINavigationControllerVisibleControllerTransitionNone];
+    NSLog(@"set frame:%@",NSStringFromCGRect(viewController.view.frame));
+    
     viewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:viewController.view];
     
@@ -202,6 +215,7 @@ typedef enum {
 
 - (void)viewDidLoad
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 }
@@ -264,6 +278,7 @@ typedef enum {
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
 //    assert(![viewController isKindOfClass:[UITabBarController class]]);
     assert(![_viewControllers containsObject:viewController]);
     
@@ -276,6 +291,7 @@ typedef enum {
     
     // take ownership responsibility
 //    [viewController _setParentViewController:self];
+    viewController->_parentViewController = self;
     
 	// if animated and on screen, begin part of the transition immediately, specifically, get the new view
     // on screen asap and tell the new controller it's about to be made visible in an animated fashion
@@ -322,6 +338,7 @@ typedef enum {
     
     // give up ownership of the view controller
 //    [formerTopViewController _setParentViewController:nil];
+    formerTopViewController->_parentViewController = nil;
     
 	// if animated, begin part of the transition immediately, specifically, get the new top view on screen asap
 	// and tell the old visible controller it's about to be disappeared in an animated fashion
@@ -463,10 +480,20 @@ typedef enum {
     NS_UNIMPLEMENTED_LOG;
 }
 
+- (id)_nearestParentViewControllerThatIsKindOf:(Class)c
+{
+    UIViewController *controller = [self parentViewController];
+    
+    while (controller && ![controller isKindOfClass:c]) {
+        controller = [controller parentViewController];
+    }
+    
+    return controller;
+}
+
 - (UINavigationController *)navigationController
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return [self _nearestParentViewControllerThatIsKindOf:[UINavigationController class]];
 }
 
 @end
