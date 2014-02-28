@@ -54,14 +54,43 @@
     return self;
 }
 
+static CGFloat HueToRgb(float p, float q, float t)
+{
+    if (t < 0.0f) t += 1.0f;
+    if (t > 1.0f) t -= 1.0f;
+    if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
+    if (t < 1.0f / 2.0f) return q;
+    if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
+    return p;
+}
+
+static void rgbaFromHSL(CGFloat hue, CGFloat saturation, CGFloat brightness, CGFloat alpha,
+                        CGFloat *red, CGFloat *green, CGFloat *blue, CGFloat *outAlpha)
+{
+    CGFloat r, g, b;
+    
+    if (saturation == 0.0f) {
+        r = g = b = brightness;
+    } else {
+        CGFloat q = brightness< 0.5f ? brightness * (1.0f + saturation) : brightness + saturation - brightness * saturation;
+        CGFloat p = 2.0f * brightness - q;
+        r = HueToRgb(p, q, hue + 1.0f / 3.0f);
+        g = HueToRgb(p, q, hue);
+        b = HueToRgb(p, q, hue - 1.0f / 3.0f);
+    }
+    
+    *red = r;
+    *green = g;
+    *blue = b;
+    *outAlpha = alpha;
+}
+
 - (UIColor *)initWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha
 {
-    self = [super init];
-    if (self) {
-        NSLog(@"unimplemented methods %s",__PRETTY_FUNCTION__);
-        _color = CGColorCreateGenericGray(0, 1);
-    }
-    return self;
+    CGFloat red,green,blue,a;
+    rgbaFromHSL(hue, saturation, brightness, alpha,&red,&green,&blue,&a);
+    
+    return [self initWithRed:red green:green blue:blue alpha:a];
 }
 
 - (UIColor *)initWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha
