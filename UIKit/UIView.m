@@ -12,7 +12,8 @@
 #import "UIColor.h"
 #import "UIGeometry.h"
 #import "UIWindow.h"
-
+#import "UIViewController.h"
+#import "UIViewLayoutManager.h"
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
@@ -32,8 +33,11 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     
     UIView *_superview;
     UIWindow *_window;
+    __weak UIViewController *_viewController;
     
     BOOL _autoresizesSubviews;
+    BOOL _needsDidAppearOrDisappear;
+
     
     struct {
         unsigned int userInteractionDisabled:1;
@@ -127,7 +131,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
         
         _layer = [[[class layerClass] alloc] init];
         _layer.delegate = self;
-//        _layer.layoutManager = ???
+        _layer.layoutManager = [UIViewLayoutManager layoutManager];
         
         self.contentMode = UIViewContentModeScaleToFill;
         self.contentScaleFactor = 0;
@@ -420,6 +424,16 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     return subviews;
 }
 
+- (void)_setViewController:(UIViewController *)theViewController
+{
+    _viewController = theViewController;
+}
+
+- (UIViewController *)_viewController
+{
+    return _viewController;
+}
+
 - (UIWindow *)window
 {
     return _superview.window;
@@ -429,6 +443,37 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 {
     
 } //removeFromSuperview
+
+- (void)_willMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
+{
+    if (fromWindow != toWindow) {
+        
+        // need to manage the responder chain. apparently UIKit (at least by version 4.2) seems to make sure that if a view was first responder
+        // and it or it's parent views are disconnected from their window, the first responder gets reset to nil. Honestly, I don't think this
+        // was always true - but it's certainly a much better and less-crashy design. Hopefully this check here replicates the behavior properly.
+        if ([self isFirstResponder]) {
+            [self resignFirstResponder];
+        }
+        
+//        [self _setAppearanceNeedsUpdate];
+        [self willMoveToWindow:toWindow];
+        
+        for (UIView *subview in self.subviews) {
+            [subview _willMoveFromWindow:fromWindow toWindow:toWindow];
+        }
+    }
+}
+
+- (void)_didMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
+{
+    if (fromWindow != toWindow) {
+        [self didMoveToWindow];
+        
+        for (UIView *subview in self.subviews) {
+            [subview _didMoveFromWindow:fromWindow toWindow:toWindow];
+        }
+    }
+}
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
 {
@@ -441,6 +486,21 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     
 } //exchangeSubviewAtIndex:withSubviewAtIndex:
 
+- (BOOL)_subviewControllersNeedAppearAndDisappear
+{
+    UIView *view = self;
+    
+    while (view) {
+        if ([view _viewController] != nil) {
+            return NO;
+        } else {
+            view = [view superview];
+        }
+    }
+    
+    return YES;
+}
+
 - (void)addSubview:(UIView *)subview
 {
     NSAssert((!subview || [subview isKindOfClass:[UIView class]]), @"the subview must be a UIView");
@@ -449,14 +509,14 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
         UIWindow *oldWindow = subview.window;
         UIWindow *newWindow = self.window;
         
-//        subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
+        subview->_needsDidAppearOrDisappear = [self _subviewControllersNeedAppearAndDisappear];
         
-//        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-//            [[subview _viewController] viewWillAppear:NO];
-//        }
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+            [[subview _viewController] viewWillAppear:NO];
+        }
         
-//        [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
-//        [subview willMoveToSuperview:self];
+        [subview _willMoveFromWindow:oldWindow toWindow:newWindow];
+        [subview willMoveToSuperview:self];
         
         {
             if (subview.superview) {
@@ -475,16 +535,16 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 //            [subview _didMoveToScreen];
 //        }
         
-//        [subview _didMoveFromWindow:oldWindow toWindow:newWindow];
-//        [subview didMoveToSuperview];
+        [subview _didMoveFromWindow:oldWindow toWindow:newWindow];
+        [subview didMoveToSuperview];
         
-//        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewDidMoveToSuperviewNotification object:subview];
         
         [self didAddSubview:subview];
         
-//        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
-//            [[subview _viewController] viewDidAppear:NO];
-//        }
+        if ([subview _viewController] && subview->_needsDidAppearOrDisappear) {
+            [[subview _viewController] viewDidAppear:NO];
+        }
     }
 }
 
@@ -559,9 +619,9 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 - (void)_layoutSubviews
 {
 //    [self _updateAppearanceIfNeeded];
-//    [[self _viewController] viewWillLayoutSubviews];
+    [[self _viewController] viewWillLayoutSubviews];
     [self layoutSubviews];
-//    [[self _viewController] viewDidLayoutSubviews];
+    [[self _viewController] viewDidLayoutSubviews];
 }
 
 #pragma mark Overriding point
