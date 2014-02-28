@@ -286,6 +286,7 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
             // better way to fix this without it having to have this hacky-feeling retain here, that'd be cool, but be
             // aware that this is here for a reason and that the problem it prevents is very rare and somewhat contrived.
             UIView *view = touch.view;
+            NSLog(@"touched view:%@",view);
             
             const UITouchPhase phase = touch.phase;
 //            const _UITouchGesture gesture = [touch _gesture];
@@ -298,6 +299,8 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
                 [view touchesEnded:touches withEvent:event];
             } else if (phase == UITouchPhaseCancelled) {
                 [view touchesCancelled:touches withEvent:event];
+            } else {
+                NSLog(@"Unknow touch phase:%d",phase);
             }
         }
     }

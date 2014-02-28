@@ -119,7 +119,7 @@
 
 - (void)sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
 {
-//    [[UIApplication sharedApplication] sendAction:action to:target from:self forEvent:event];
+    [[UIApplication sharedApplication] sendAction:action to:target from:self forEvent:event];
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
