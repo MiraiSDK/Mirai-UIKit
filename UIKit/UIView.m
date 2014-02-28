@@ -736,12 +736,13 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 
 - (void)setContentStretch:(CGRect)contentStretch
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 
 - (CGRect)contentStretch
 {
+    NS_UNIMPLEMENTED_LOG;
     return CGRectZero;
 }
 
@@ -870,27 +871,29 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 #pragma mark iOS 7
 - (void)setTintAdjustmentMode:(UIViewTintAdjustmentMode)tintAdjustmentMode
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 - (UIViewTintAdjustmentMode)tintAdjustmentMode
 {
+    NS_UNIMPLEMENTED_LOG;
     return UIViewTintAdjustmentModeAutomatic;
 }
 
 - (void)setTintColor:(UIColor *)tintColor
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 - (UIColor *)tintColor
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 - (void)tintColorDidChange
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 @end
@@ -908,66 +911,66 @@ static BOOL _animationsEnabled = YES;
 
 + (void)beginAnimations:(NSString *)animationID context:(void *)context
 {
-
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)commitAnimations
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationDelegate:(id)delegate
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationWillStartSelector:(SEL)selector
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationDidStopSelector:(SEL)selector
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationDuration:(NSTimeInterval)duration
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationDelay:(NSTimeInterval)delay
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationStartDate:(NSDate *)startDate
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationCurve:(UIViewAnimationCurve)curve
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationRepeatCount:(float)repeatCount
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationRepeatAutoreverses:(BOOL)repeatAutoreverses
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 + (void)setAnimationBeginsFromCurrentState:(BOOL)fromCurrentState
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationTransition:(UIViewAnimationTransition)transition forView:(UIView *)view cache:(BOOL)cache
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)setAnimationsEnabled:(BOOL)enabled
@@ -982,44 +985,44 @@ static BOOL _animationsEnabled = YES;
 
 + (void)performWithoutAnimation:(void (^)(void))actionsWithoutAnimation
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 @end
 
 @implementation UIView (UIViewAnimationWithBlocks)
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)performSystemAnimation:(UISystemAnimation)animation onViews:(NSArray *)views options:(UIViewAnimationOptions)options animations:(void (^)(void))parallelAnimations completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 @end
 
@@ -1027,12 +1030,12 @@ static BOOL _animationsEnabled = YES;
 
 + (void)animateKeyframesWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewKeyframeAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 + (void)addKeyframeWithRelativeStartTime:(double)frameStartTime relativeDuration:(double)frameDuration animations:(void (^)(void))animations
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 @end
@@ -1041,26 +1044,28 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setGestureRecognizers:(NSArray *)gestureRecognizers
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 - (NSArray *)gestureRecognizers
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 - (void)addGestureRecognizer:(UIGestureRecognizer*)gestureRecognizer
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer*)gestureRecognizer
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    NS_UNIMPLEMENTED_LOG;
     return NO;
 }
 
