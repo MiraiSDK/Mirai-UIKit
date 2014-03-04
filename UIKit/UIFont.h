@@ -11,7 +11,11 @@
 #import <UIKit/UIKitDefines.h>
 #import <UIKit/UIFontDescriptor.h>
 
-@interface UIFont : NSObject <NSCopying>
+#import <CoreText/CoreText.h> // FIXME: remove this import
+@interface UIFont : NSObject <NSCopying> {
+    @package
+    CTFontRef _font;
+}
 + (UIFont *)preferredFontForTextStyle:(NSString *)style;
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize;
