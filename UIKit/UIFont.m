@@ -11,11 +11,13 @@
 @implementation UIFont
 + (UIFont *)preferredFontForTextStyle:(NSString *)style
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
@@ -26,21 +28,25 @@
 
 + (NSArray *)fontNamesForFamilyName:(NSString *)familyName
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 + (UIFont *)italicSystemFontOfSize:(CGFloat)fontSize
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
@@ -51,16 +57,19 @@
 
 + (UIFont *)fontWithDescriptor:(UIFontDescriptor *)descriptor size:(CGFloat)pointSize
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 - (UIFontDescriptor *)fontDescriptor
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 
 - (id)copyWithZone:(NSZone *)zone
 {
+    NS_UNIMPLEMENTED_LOG;
     return nil;
 }
 @end

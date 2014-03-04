@@ -17,12 +17,13 @@
 @implementation NSString(NSStringDrawing)
 - (CGSize)sizeWithAttributes:(NSDictionary *)attrs
 {
+    NS_UNIMPLEMENTED_LOG;
     return CGSizeZero;
 }
 
 - (void)drawAtPoint:(CGPoint)point withAttributes:(NSDictionary *)attrs
 {
-    
+    NS_UNIMPLEMENTED_LOG;
 }
 
 - (void)drawInRect:(CGRect)rect withAttributes:(NSDictionary *)attrs
@@ -59,13 +60,6 @@
     
     CGPathRelease(path);
     NSLog(@"releasePath");
-    
-
-    
-    
-    
-    
-
 }
 @end
 
