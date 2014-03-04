@@ -264,9 +264,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 - (CGSize)_titleSizeForState:(UIControlState)state
 {
     NSString *title = [self titleForState:state];
-    //FIXME: uncomment here
-//    return ([title length] > 0)? [title sizeWithFont:_titleLabel.font constrainedToSize:CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX)] : CGSizeZero;
-    return CGSizeZero;
+    return ([title length] > 0)? [title sizeWithFont:_titleLabel.font constrainedToSize:CGSizeMake(CGFLOAT_MAX,CGFLOAT_MAX)] : CGSizeZero;
 }
 
 - (CGSize)_imageSizeForState:(UIControlState)state
@@ -356,6 +354,13 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     _backgroundImageView.frame = [self backgroundRectForBounds:bounds];
     _titleLabel.frame = [self titleRectForContentRect:contentRect];
     _imageView.frame = [self imageRectForContentRect:contentRect];
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    
+    NSLog(@"bounds:%@",NSStringFromCGRect(bounds));
+    NSLog(@"contentRect: %@",NSStringFromCGRect(contentRect));
+    NSLog(@"backgroundFrame: %@",NSStringFromCGRect(_backgroundImageView.frame));
+    NSLog(@"titleLabelFrame: %@",NSStringFromCGRect(_titleLabel.frame));
+    NSLog(@"imageViewFrame: %@",NSStringFromCGRect(_imageView.frame));
 }
 
 - (void)_stateDidChange
