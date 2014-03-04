@@ -7,10 +7,12 @@
 //
 
 #import "UIViewController.h"
+#import "UIView+UIPrivate.h"
 
 @implementation UIViewController {
     NSMutableArray *_childViewControllers;
 }
+@synthesize view = _view;
 
 - (id)init
 {
@@ -46,6 +48,15 @@
         [self loadView];
         [self viewDidLoad];
         return _view;
+    }
+}
+
+- (void)setView:(UIView *)view
+{
+    if (view != _view) {
+        [_view _setViewController:nil];
+        _view = view;
+        [_view _setViewController:self];
     }
 }
 
