@@ -916,6 +916,8 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     NSLog(@"bounds:{%.2f,%.2f,%.2f,%.2f}",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
     UIGraphicsPushContext(ctx);
     CGContextSaveGState(ctx);
+    CGContextScaleCTM(ctx, 1, -1);
+    CGContextTranslateCTM(ctx, 0, -layer.bounds.size.height);
     [self drawRect:layer.bounds];
     CGContextRestoreGState(ctx);
     UIGraphicsPopContext();
