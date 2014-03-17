@@ -43,7 +43,6 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     
     BOOL _autoresizesSubviews;
     BOOL _needsDidAppearOrDisappear;
-    UIViewAutoresizing _autoresizingMask;
 
     
     struct {
@@ -210,11 +209,11 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 
 - (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize
 {
-    if (_autoresizingMask != UIViewAutoresizingNone) {
+    if (_viewFlags.autoresizeMask != UIViewAutoresizingNone) {
         CGRect frame = self.frame;
         const CGSize delta = CGSizeMake(newSize.width-oldSize.width, newSize.height-oldSize.height);
         
-#define hasAutoresizingFor(x) ((_autoresizingMask & (x)) == (x))
+#define hasAutoresizingFor(x) ((_viewFlags.autoresizeMask & (x)) == (x))
         
         /*
          
