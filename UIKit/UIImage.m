@@ -193,24 +193,22 @@
     NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
 }
 
-
-
 - (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets
 {
     NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return nil;
+    return self;
 }
 
 - (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets resizingMode:(UIImageResizingMode)resizingMode
 {
     NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return nil;
+    return self;
 }
 
 - (UIImage *)imageWithAlignmentRectInsets:(UIEdgeInsets)alignmentInsets
 {
     NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return nil;
+    return self;
 }
 
 - (UIImage *)imageWithRenderingMode:(UIImageRenderingMode)renderingMode
@@ -268,7 +266,7 @@ NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
     NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return self;
 }
 
 - (NSInteger)leftCapWidth
