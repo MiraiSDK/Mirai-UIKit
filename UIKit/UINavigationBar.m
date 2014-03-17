@@ -35,7 +35,7 @@
 //#import "UINavigationItem.h"
 //#import "UINavigationItem+UIPrivate.h"
 #import "UIFont.h"
-//#import "UIImage+UIPrivate.h"
+#import "UIImage+UIPrivate.h"
 #import "UIBarButtonItem.h"
 #import "UIButton.h"
 
@@ -81,9 +81,8 @@ typedef enum {
     if (!item) return nil;
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-#warning needs Fix
-//    [backButton setBackgroundImage:[UIImage _backButtonImage] forState:UIControlStateNormal];
-//    [backButton setBackgroundImage:[UIImage _highlightedBackButtonImage] forState:UIControlStateHighlighted];
+    [backButton setBackgroundImage:[UIImage _backButtonImage] forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage _highlightedBackButtonImage] forState:UIControlStateHighlighted];
     [backButton setTitle:item.title forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont systemFontOfSize:11];
     backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
@@ -101,9 +100,8 @@ typedef enum {
         return item.customView;
     } else {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-#warning needs Fix
-//        [button setBackgroundImage:[UIImage _toolbarButtonImage] forState:UIControlStateNormal];
-//        [button setBackgroundImage:[UIImage _highlightedToolbarButtonImage] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[UIImage _toolbarButtonImage] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage _highlightedToolbarButtonImage] forState:UIControlStateHighlighted];
         [button setTitle:item.title forState:UIControlStateNormal];
         [button setImage:item.image forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:11];
@@ -447,8 +445,7 @@ typedef enum {
     // for now hardcoding stuff works well enough.
     
     [_tintColor setFill];
-#warning needs Fix
-//    UIRectFill(bounds);
+    UIRectFill(bounds);
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage forBarMetrics:(UIBarMetrics)barMetrics
