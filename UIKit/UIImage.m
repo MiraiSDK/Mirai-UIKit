@@ -180,7 +180,7 @@
 
 - (void)drawInRect:(CGRect)rect
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), rect, self.CGImage);
 }
 
 - (void)drawInRect:(CGRect)rect blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
