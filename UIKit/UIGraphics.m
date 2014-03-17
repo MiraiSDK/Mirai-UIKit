@@ -82,3 +82,36 @@ void     UIGraphicsEndImageContext(void)
     }
 }
 
+void UIRectClip(CGRect rect)
+{
+    CGContextClipToRect(UIGraphicsGetCurrentContext(), rect);
+}
+
+void UIRectFill(CGRect rect)
+{
+    UIRectFillUsingBlendMode(rect, kCGBlendModeCopy);
+}
+
+void UIRectFillUsingBlendMode(CGRect rect, CGBlendMode blendMode)
+{
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(c);
+    CGContextSetBlendMode(c, blendMode);
+    CGContextFillRect(c, rect);
+    CGContextRestoreGState(c);
+}
+
+void UIRectFrame(CGRect rect)
+{
+    CGContextStrokeRect(UIGraphicsGetCurrentContext(), rect);
+}
+
+void UIRectFrameUsingBlendMode(CGRect rect, CGBlendMode blendMode)
+{
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(c);
+    CGContextSetBlendMode(c, blendMode);
+    UIRectFrame(rect);
+    CGContextRestoreGState(c);
+}
+
