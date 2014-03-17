@@ -920,9 +920,6 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     [self drawRect:layer.bounds];
     CGContextRestoreGState(ctx);
     UIGraphicsPopContext();
-    
-    CGImageRef image = CGBitmapContextCreateImage(ctx);
-    layer.contents = image;
 }
 
 - (void)drawRect:(CGRect)rect
