@@ -312,30 +312,27 @@ static void _NSLog_android_log_handler (NSString *message)
 
 #define BUFSIZ 1024
 
-static void _prepareAsset(NSString *path)
+static void _extractFolder(NSString *folder, NSString *path)
 {
-    //
-    // FIXME: should only check files after the apk file changed
-    //
-    
     // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
-    NSString *mainBundlePath = path;
-    
-    if (! [[NSFileManager defaultManager] fileExistsAtPath:mainBundlePath]) {
-        NSLog(@"create folder:%@",mainBundlePath);
+    NSString *destPath = [path stringByAppendingPathComponent:folder];
+    if (! [[NSFileManager defaultManager] fileExistsAtPath:destPath]) {
+        NSLog(@"create folder:%@",destPath);
         NSError *creationError = nil;
-        BOOL createSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:mainBundlePath withIntermediateDirectories:YES attributes:nil error:&creationError];
+        BOOL createSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:destPath withIntermediateDirectories:YES attributes:nil error:&creationError];
         if (!createSuccess) {
             NSLog(@"%@",creationError);
         }
     }
-
+    
     AAssetManager *mgr = app_state->activity->assetManager;
-    AAssetDir *assetDir = AAssetManager_openDir(mgr, "");
+    NSLog(@"open dir:%@",folder);
+    AAssetDir *assetDir = AAssetManager_openDir(mgr, [folder UTF8String]);
     const char * filename = NULL;
     while ((filename = AAssetDir_getNextFileName(assetDir)) != NULL) {
+        NSLog(@"process filename:%s",filename);
         NSString *NS_filename = [NSString stringWithUTF8String:filename];
-        const char *destion = [[mainBundlePath stringByAppendingPathComponent:NS_filename] UTF8String];
+        const char *destion = [[destPath stringByAppendingPathComponent:NS_filename] UTF8String];
         FILE *isExist = fopen(destion, "r");
         if (isExist) {
             //FIXME: what if the file is updated?
@@ -344,8 +341,11 @@ static void _prepareAsset(NSString *path)
             continue;
         }
         
+        NSString *relativePath = [folder stringByAppendingPathComponent:NS_filename];
+        NSLog(@"relativePath:%@",relativePath);
         NSLog(@"extract bundle file: %s",destion);
-        AAsset *asset = AAssetManager_open(mgr, filename, AASSET_MODE_STREAMING);
+        AAsset *asset = AAssetManager_open(mgr, [relativePath UTF8String], AASSET_MODE_STREAMING);
+        NSLog(@"asset:<%p>",asset);
         char buf[BUFSIZ];
         int nb_read = 0;
         FILE *out = fopen(destion, "w");
@@ -356,7 +356,21 @@ static void _prepareAsset(NSString *path)
         AAsset_close(asset);
     }
     AAssetDir_close(assetDir);
+
+}
+
+static void _prepareAsset(NSString *path)
+{
+    //
+    // FIXME: should only check files after the apk file changed
+    //
     
+    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
+    // FIXME: workaround, should enumerate subfolders.
+    _extractFolder(@"",path);
+    _extractFolder(@"Resources",path);
+    _extractFolder(@"Resources/UIKit.bundle",path);
+
 //    NSLog(@"main resourcePath: %@",[[NSBundle mainBundle] resourcePath]);
 //    NSLog(@"main bundlePath: %@",[[NSBundle mainBundle] bundlePath]);
 //    NSLog(@"main executablePath: %@",[[NSBundle mainBundle] executablePath]);
