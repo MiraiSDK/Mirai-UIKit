@@ -28,18 +28,21 @@
  */
 
 #import "UINavigationBar.h"
-//#import "UINavigationBar+UIPrivate.h"
+#import "UINavigationBar+UIPrivate.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
 #import "UILabel.h"
-//#import "UINavigationItem.h"
-//#import "UINavigationItem+UIPrivate.h"
 #import "UIFont.h"
 #import "UIImage+UIPrivate.h"
 #import "UIBarButtonItem.h"
 #import "UIButton.h"
 
 #import <dispatch/dispatch.h>
+
+@interface UINavigationItem (UIPrivate)
+- (void)_setNavigationBar:(UINavigationBar *)navigationBar;
+- (UINavigationBar *)_navigationBar;
+@end
 
 static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
 static const CGFloat kMinButtonWidth = 30;
@@ -62,7 +65,19 @@ typedef enum {
     UIView *_leftView;
     UIView *_centerView;
     UIView *_rightView;
-
+    
+    struct {
+        unsigned shouldPushItem : 1;
+        unsigned didPushItem : 1;
+        unsigned shouldPopItem : 1;
+        unsigned didPopItem : 1;
+    } _delegateHas;
+    
+    // ideally this should share the same memory as the above flags structure...
+    struct {
+        unsigned reloadItem : 1;
+        unsigned __RESERVED__ : 31;
+    } _navigationBarFlags;
 }
 @synthesize barPosition = _barPosition;
 
@@ -154,18 +169,17 @@ typedef enum {
 
 - (void)dealloc
 {
-#warning needs Fix
-//    [self.topItem _setNavigationBar: nil];
+    [self.topItem _setNavigationBar: nil];
 }
 
 - (void)setDelegate:(id)newDelegate
 {
     _delegate = newDelegate;
-#warning needs Fix
-//    _delegateHas.shouldPushItem = [_delegate respondsToSelector:@selector(navigationBar:shouldPushItem:)];
-//    _delegateHas.didPushItem = [_delegate respondsToSelector:@selector(navigationBar:didPushItem:)];
-//    _delegateHas.shouldPopItem = [_delegate respondsToSelector:@selector(navigationBar:shouldPopItem:)];
-//    _delegateHas.didPopItem = [_delegate respondsToSelector:@selector(navigationBar:didPopItem:)];
+    
+    _delegateHas.shouldPushItem = [_delegate respondsToSelector:@selector(navigationBar:shouldPushItem:)];
+    _delegateHas.didPushItem = [_delegate respondsToSelector:@selector(navigationBar:didPushItem:)];
+    _delegateHas.shouldPopItem = [_delegate respondsToSelector:@selector(navigationBar:shouldPopItem:)];
+    _delegateHas.didPopItem = [_delegate respondsToSelector:@selector(navigationBar:didPopItem:)];
 }
 
 - (UINavigationItem *)topItem
@@ -235,9 +249,8 @@ typedef enum {
         UINavigationItem *backItem = self.backItem;
         
         // update weak references
-#warning needs Fix
-//        [backItem _setNavigationBar: nil];
-//        [topItem _setNavigationBar: self];
+        [backItem _setNavigationBar: nil];
+        [topItem _setNavigationBar: self];
         
         CGRect leftFrame = CGRectZero;
         CGRect rightFrame = CGRectZero;
@@ -360,19 +373,17 @@ typedef enum {
 {
     BOOL shouldPush = YES;
     
-#warning needs Fix
-//    if (_delegateHas.shouldPushItem) {
-//        shouldPush = [_delegate navigationBar:self shouldPushItem:item];
-//    }
+    if (_delegateHas.shouldPushItem) {
+        shouldPush = [_delegate navigationBar:self shouldPushItem:item];
+    }
     
     if (shouldPush) {
         [_navStack addObject:item];
         [self _setViewsWithTransition:_UINavigationBarTransitionPush animated:animated];
         
-#warning needs Fix
-//        if (_delegateHas.didPushItem) {
-//            [_delegate navigationBar:self didPushItem:item];
-//        }
+        if (_delegateHas.didPushItem) {
+            [_delegate navigationBar:self didPushItem:item];
+        }
     }
 }
 
@@ -383,19 +394,17 @@ typedef enum {
     if (previousItem) {
         BOOL shouldPop = YES;
         
-#warning needs Fix
-//        if (_delegateHas.shouldPopItem) {
-//            shouldPop = [_delegate navigationBar:self shouldPopItem:previousItem];
-//        }
+        if (_delegateHas.shouldPopItem) {
+            shouldPop = [_delegate navigationBar:self shouldPopItem:previousItem];
+        }
         
         if (shouldPop) {
             [_navStack removeObject:previousItem];
             [self _setViewsWithTransition:_UINavigationBarTransitionPop animated:animated];
             
-#warning needs Fix
-//            if (_delegateHas.didPopItem) {
-//                [_delegate navigationBar:self didPopItem:previousItem];
-//            }
+            if (_delegateHas.didPopItem) {
+                [_delegate navigationBar:self didPopItem:previousItem];
+            }
             
             return previousItem;
         }
@@ -408,8 +417,7 @@ typedef enum {
 {
     // let's sanity-check that the item is supposed to be talking to us
     if (item != self.topItem) {
-#warning needs Fix
-//        [item _setNavigationBar:nil];
+        [item _setNavigationBar:nil];
         return;
     }
     
@@ -418,22 +426,20 @@ typedef enum {
     //  such that it won't perform any coordinate translations, only fade in/out
     
     // don't just fire the damned thing-- set a flag & mark as needing layout
-#warning needs Fix
-//    if (_navigationBarFlags.reloadItem == 0) {
-//        _navigationBarFlags.reloadItem = 1;
-//        [self setNeedsLayout];
-//    }
+    if (_navigationBarFlags.reloadItem == 0) {
+        _navigationBarFlags.reloadItem = 1;
+        [self setNeedsLayout];
+    }
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     
-#warning needs Fix
-//    if (_navigationBarFlags.reloadItem) {
-//        _navigationBarFlags.reloadItem = 0;
-//        [self _setViewsWithTransition:_UINavigationBarTransitionReload animated:NO];
-//    }
+    if (_navigationBarFlags.reloadItem) {
+        _navigationBarFlags.reloadItem = 0;
+        [self _setViewsWithTransition:_UINavigationBarTransitionReload animated:NO];
+    }
 }
 
 - (void)drawRect:(CGRect)rect
@@ -445,6 +451,10 @@ typedef enum {
     // for now hardcoding stuff works well enough.
     
     [_tintColor setFill];
+    UIRectFill(bounds);
+    
+    // FIXME: should correct draw background
+    [[UIColor whiteColor] setFill];
     UIRectFill(bounds);
 }
 

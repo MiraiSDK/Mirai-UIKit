@@ -81,6 +81,7 @@
 		4384634D188C636C006DA1AA /* UIDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4384634B188C636C006DA1AA /* UIDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4384634E188C636C006DA1AA /* UIDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4384634C188C636C006DA1AA /* UIDevice.m */; };
 		439487E71893B2A4004F8636 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439487E61893B2A4004F8636 /* OpenGLES.framework */; };
+		43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */; };
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
 		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
@@ -202,6 +203,7 @@
 		4384634B188C636C006DA1AA /* UIDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDevice.h; sourceTree = "<group>"; };
 		4384634C188C636C006DA1AA /* UIDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDevice.m; sourceTree = "<group>"; };
 		439487E61893B2A4004F8636 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 		43846319188B3D3A006DA1AA /* Private Classes */ = {
 			isa = PBXGroup;
 			children = (
+				43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */,
 				434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */,
 				434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */,
 				431412DB18C0B958001AF732 /* UIViewBlockAnimationDelegate.h */,
@@ -542,6 +545,7 @@
 				43846317188B3B74006DA1AA /* UIEvent.h in Headers */,
 				432FF05F185338BD005486C5 /* UIScreen.h in Headers */,
 				43718EA418517FBA00850F08 /* UIApplication.h in Headers */,
+				43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */,
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
 				432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */,
 			);
