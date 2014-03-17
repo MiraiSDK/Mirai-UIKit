@@ -7,6 +7,7 @@
 //
 
 #import "UIImage.h"
+#import "UIGraphics.h"
 @interface UIImage ()
 @property (nonatomic, strong) CGImageRef imageRef;
 
@@ -59,14 +60,45 @@
 }
 
 #pragma mark - Initializers
+- (CGImageRef)createImageNamed:(NSString *)name type:(NSString *)type
+{
+    NSString *imagePath = [[NSBundle mainBundle] pathForResource:name ofType:type];
+    CGImageRef image = NULL;
+    if (imagePath) {
+        NSString *lowercaseType = [type lowercaseString];
+        CGDataProviderRef source = CGDataProviderCreateWithFilename([imagePath UTF8String]);
+        if ([lowercaseType isEqualToString:@"png"]) {
+            image = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
+        } else if ([lowercaseType isEqualToString:@"jpg"]) {
+            image = CGImageCreateWithJPEGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
+        } else {
+            NSLog(@"unsupported image type:%@",type);
+        }
+        
+    } else {
+        NSLog(@"[WARNING]Can't find file: %@.%@",name,type);
+    }
+    return image;
+}
 
 - (id)initWithContentsOfFile:(NSString *)path
 {
-    self = [super init];
-    if (self) {
-        NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+    CGImageRef imageRef = NULL;
+    CGDataProviderRef source = CGDataProviderCreateWithFilename([path UTF8String]);
+    
+    NSString *lowercasePathExtension = [[path pathExtension] lowercaseString];
+    if ([lowercasePathExtension isEqualToString:@"png"]) {
+        imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
+    } else if ([lowercasePathExtension isEqualToString:@"jpg"]) {
+        imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
+    } else {
+        NSLog(@"method: %s, unsupported image type:%@",__PRETTY_FUNCTION__,lowercasePathExtension);
     }
-    return self;
+    if (imageRef) {
+        return [self initWithCGImage:imageRef];
+    }
+    
+    return nil;
 }
 
 - (id)initWithData:(NSData *)data
