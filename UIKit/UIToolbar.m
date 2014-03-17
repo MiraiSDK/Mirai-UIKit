@@ -259,10 +259,10 @@
     UIColor *color = _tintColor ?: [UIColor colorWithRed:21/255.f green:21/255.f blue:25/255.f alpha:1];
     
     [color setFill];
-//    UIRectFill(bounds);
+    UIRectFill(bounds);
     
     [[UIColor blackColor] setFill];
-//    UIRectFill(CGRectMake(0,0,bounds.size.width,1));
+    UIRectFill(CGRectMake(0,0,bounds.size.width,1));
 }
 
 - (NSString *)description
