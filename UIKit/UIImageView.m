@@ -163,7 +163,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
             alpha = 0.5;
         } else if (_drawMode == _UIImageViewDrawModeHighlighted) {
             [[[UIColor blackColor] colorWithAlphaComponent:0.4] setFill];
-//            UIRectFill(imageBounds);
+            UIRectFill(imageBounds);
             blendMode = kCGBlendModeDestinationAtop;
         }
         
