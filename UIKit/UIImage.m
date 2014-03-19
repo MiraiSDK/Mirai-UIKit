@@ -8,6 +8,14 @@
 
 #import "UIImage.h"
 #import "UIGraphics.h"
+#import "UIGraphics+UIPrivate.h"
+#import "UIImage+UIPrivate.h"
+#import "UIThreePartImage.h"
+#import "UINinePartImage.h"
+//#import "UIPhotosAlbum.h"
+#import "UIImageRep.h"
+
+
 @interface UIImage ()
 @property (nonatomic, strong) CGImageRef imageRef;
 
@@ -15,6 +23,7 @@
 @end
 
 @implementation UIImage
+
 @synthesize size = _size;
 @synthesize scale = _scale;
 @synthesize imageOrientation = _imageOrientation;
@@ -28,10 +37,34 @@
 @synthesize alignmentRectInsets = _alignmentRectInsets;
 @synthesize renderingMode = _renderingMode;
 
++ (UIImage *)_imageNamed:(NSString *)name
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *path = [[bundle resourcePath] stringByAppendingPathComponent:name];
+    UIImage *img = [self imageWithContentsOfFile:path];
+    
+    if (!img) {
+        // if nothing is found, try again after replacing any underscores in the name with dashes.
+        // I don't know why, but UIKit does something similar. it probably has a good reason and it might not be this simplistic, but
+        // for now this little hack makes Ramp Champ work. :)
+        path = [[[bundle resourcePath] stringByAppendingPathComponent:[[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@"-"]] stringByAppendingPathExtension:[name pathExtension]];
+        img = [self imageWithContentsOfFile:path];
+    }
+    
+    return img;
+}
+
 + (UIImage *)imageNamed:(NSString *)name
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return nil;
+    UIImage *img = [self _cachedImageForName:name];
+    
+    if (!img) {
+        // as per the iOS docs, if it fails to find a match with the bare name, it re-tries by appending a png file extension
+        img = [self _imageNamed:name] ?: [self _imageNamed:[name stringByAppendingPathExtension:@"png"]];
+        [self _cacheImage:img forName:name];
+    }
+    
+    return img;
 }
 
 + (UIImage *)imageWithContentsOfFile:(NSString *)path
@@ -83,40 +116,18 @@
 
 - (id)initWithContentsOfFile:(NSString *)path
 {
-    CGImageRef imageRef = NULL;
-    CGDataProviderRef source = CGDataProviderCreateWithFilename([path UTF8String]);
-    
-    NSString *lowercasePathExtension = [[path pathExtension] lowercaseString];
-    if ([lowercasePathExtension isEqualToString:@"png"]) {
-        imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
-    } else if ([lowercasePathExtension isEqualToString:@"jpg"]) {
-        imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
-    } else {
-        NSLog(@"method: %s, unsupported image type:%@",__PRETTY_FUNCTION__,lowercasePathExtension);
-    }
-    if (imageRef) {
-        return [self initWithCGImage:imageRef];
-    }
-    
-    return nil;
+    return [self _initWithRepresentations:[UIImageRep imageRepsWithContentsOfFile:path]];
 }
 
 - (id)initWithData:(NSData *)data
 {
-    self = [super init];
-    if (self) {
-        NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    }
-    return self;
+    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[UIImageRep alloc] initWithData:data], nil]];
 }
 
 - (id)initWithData:(NSData *)data scale:(CGFloat)scale
 {
-    self = [super init];
-    if (self) {
-        NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    }
-    return self;
+    // FIXME: needs correct scale
+    return [self initWithData:data];
 }
 
 - (id)initWithCGImage:(CGImageRef)cgImage
@@ -126,13 +137,7 @@
 
 - (id)initWithCGImage:(CGImageRef)cgImage scale:(CGFloat)scale orientation:(UIImageOrientation)orientation
 {
-    self = [super init];
-    if (self) {
-        _imageRef = cgImage;
-        _scale = scale;
-        _imageOrientation = orientation;
-    }
-    return self;
+    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[UIImageRep alloc] initWithCGImage:cgImage scale:scale], nil]];
 }
 
 - (CGImageRef)CGImage
@@ -170,22 +175,31 @@
 #pragma mark - Drawing
 - (void)drawAtPoint:(CGPoint)point
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+    [self drawInRect:(CGRect){point, self.size}];
 }
 
 - (void)drawAtPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+    [self drawInRect:(CGRect){point, self.size} blendMode:blendMode alpha:alpha];
 }
 
 - (void)drawInRect:(CGRect)rect
 {
-    CGContextDrawImage(UIGraphicsGetCurrentContext(), rect, self.CGImage);
+    if (rect.size.height > 0 && rect.size.width > 0) {
+        [self _drawRepresentation:[self _bestRepresentationForProposedScale:_UIGraphicsGetContextScaleFactor(UIGraphicsGetCurrentContext())] inRect:rect];
+    }
 }
 
 - (void)drawInRect:(CGRect)rect blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    CGContextSetBlendMode(ctx, blendMode);
+    CGContextSetAlpha(ctx, alpha);
+    
+    [self drawInRect:rect];
+    
+    CGContextRestoreGState(ctx);
 }
 
 - (void)drawAsPatternInRect:(CGRect)rect
@@ -195,14 +209,13 @@
 
 - (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return self;
+    return [self resizableImageWithCapInsets:capInsets resizingMode:UIImageResizingModeStretch];
 }
 
 - (UIImage *)resizableImageWithCapInsets:(UIEdgeInsets)capInsets resizingMode:(UIImageResizingMode)resizingMode
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return self;
+    //FIXME: needs correct process cap insets
+    return [self stretchableImageWithLeftCapWidth:capInsets.left topCapHeight:capInsets.top];
 }
 
 - (UIImage *)imageWithAlignmentRectInsets:(UIEdgeInsets)alignmentInsets
@@ -215,6 +228,22 @@
 {
     NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
     return nil;
+}
+
+- (CGSize)size
+{
+    CGSize size = CGSizeZero;
+    UIImageRep *rep = [_representations lastObject];
+    const CGSize repSize = rep.imageSize;
+    const CGFloat scale = rep.scale;
+    size.width = repSize.width / scale;
+    size.height = repSize.height / scale;
+    return size;
+}
+
+- (CGFloat)scale
+{
+    return [self _bestRepresentationForProposedScale:2].scale;
 }
 
 #pragma mark - NSCoding
@@ -265,19 +294,26 @@ NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
 
 - (UIImage *)stretchableImageWithLeftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
-    NS_UNIMPLEMENTED_LOG;
-    return self;
+    const CGSize size = self.size;
+    
+    if ((leftCapWidth == 0 && topCapHeight == 0) || (leftCapWidth >= size.width && topCapHeight >= size.height)) {
+        return self;
+    } else if (leftCapWidth <= 0 || leftCapWidth >= size.width) {
+        return [[UIThreePartImage alloc] initWithRepresentations:[self _representations] capSize:MIN(topCapHeight,size.height) vertical:YES];
+    } else if (topCapHeight <= 0 || topCapHeight >= size.height) {
+        return [[UIThreePartImage alloc] initWithRepresentations:[self _representations] capSize:MIN(leftCapWidth,size.width) vertical:NO];
+    } else {
+        return [[UINinePartImage alloc] initWithRepresentations:[self _representations] leftCapWidth:leftCapWidth topCapHeight:topCapHeight];
+    }
 }
 
 - (NSInteger)leftCapWidth
 {
-    NS_UNIMPLEMENTED_LOG;
     return 0;
 }
 
 - (NSInteger)topCapHeight
 {
-    NS_UNIMPLEMENTED_LOG;
     return 0;
 }
 

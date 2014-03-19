@@ -7,6 +7,7 @@
 //
 
 #import "UIGraphics.h"
+#import "UIGraphics+UIPrivate.h"
 
 static NSMutableArray* contextStack()
 {
@@ -72,6 +73,14 @@ UIImage* UIGraphicsGetImageFromCurrentImageContext(void)
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
     return cgImage;
+}
+
+CGFloat _UIGraphicsGetContextScaleFactor(CGContextRef ctx)
+{
+    const CGRect rect = CGContextGetClipBoundingBox(ctx);
+    const CGRect deviceRect = CGContextConvertRectToDeviceSpace(ctx, rect);
+    const CGFloat scale = deviceRect.size.height / rect.size.height;
+    return scale;
 }
 
 void     UIGraphicsEndImageContext(void)

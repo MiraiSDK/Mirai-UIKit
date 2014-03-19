@@ -82,6 +82,12 @@
 		4384634E188C636C006DA1AA /* UIDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4384634C188C636C006DA1AA /* UIDevice.m */; };
 		439487E71893B2A4004F8636 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439487E61893B2A4004F8636 /* OpenGLES.framework */; };
 		43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */; };
+		43C0115618D82DD500168E9D /* UIImageRep.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C0115418D82DD500168E9D /* UIImageRep.h */; };
+		43C0115718D82DD500168E9D /* UIImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C0115518D82DD500168E9D /* UIImageRep.m */; };
+		43C0115A18D82DFA00168E9D /* UIThreePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C0115818D82DFA00168E9D /* UIThreePartImage.h */; };
+		43C0115B18D82DFA00168E9D /* UIThreePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C0115918D82DFA00168E9D /* UIThreePartImage.m */; };
+		43C0115E18D82E0500168E9D /* UINinePartImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C0115C18D82E0500168E9D /* UINinePartImage.h */; };
+		43C0115F18D82E0500168E9D /* UINinePartImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C0115D18D82E0500168E9D /* UINinePartImage.m */; };
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
 		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
@@ -204,6 +210,13 @@
 		4384634C188C636C006DA1AA /* UIDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDevice.m; sourceTree = "<group>"; };
 		439487E61893B2A4004F8636 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
+		43C0115418D82DD500168E9D /* UIImageRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageRep.h; sourceTree = "<group>"; };
+		43C0115518D82DD500168E9D /* UIImageRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageRep.m; sourceTree = "<group>"; };
+		43C0115818D82DFA00168E9D /* UIThreePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIThreePartImage.h; sourceTree = "<group>"; };
+		43C0115918D82DFA00168E9D /* UIThreePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIThreePartImage.m; sourceTree = "<group>"; };
+		43C0115C18D82E0500168E9D /* UINinePartImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINinePartImage.h; sourceTree = "<group>"; };
+		43C0115D18D82E0500168E9D /* UINinePartImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINinePartImage.m; sourceTree = "<group>"; };
+		43C0116018D8307A00168E9D /* UIGraphics+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIGraphics+UIPrivate.h"; sourceTree = "<group>"; };
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
@@ -429,11 +442,18 @@
 		43846319188B3D3A006DA1AA /* Private Classes */ = {
 			isa = PBXGroup;
 			children = (
+				43C0115418D82DD500168E9D /* UIImageRep.h */,
+				43C0115518D82DD500168E9D /* UIImageRep.m */,
+				43C0115C18D82E0500168E9D /* UINinePartImage.h */,
+				43C0115D18D82E0500168E9D /* UINinePartImage.m */,
+				43C0115818D82DFA00168E9D /* UIThreePartImage.h */,
+				43C0115918D82DFA00168E9D /* UIThreePartImage.m */,
 				43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */,
 				434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */,
 				434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */,
 				431412DB18C0B958001AF732 /* UIViewBlockAnimationDelegate.h */,
 				431412DC18C0B958001AF732 /* UIViewBlockAnimationDelegate.m */,
+				43C0116018D8307A00168E9D /* UIGraphics+UIPrivate.h */,
 				431412D718C0B814001AF732 /* UIViewAnimationGroup.h */,
 				431412D818C0B814001AF732 /* UIViewAnimationGroup.m */,
 				431412D118C0A5A4001AF732 /* UIViewLayoutManager.h */,
@@ -499,13 +519,16 @@
 			files = (
 				43718EC418518FA800850F08 /* UIKit.h in Headers */,
 				4315799C18B0EC3200AE4256 /* UIWindow+UIPrivate.h in Headers */,
+				43C0115618D82DD500168E9D /* UIImageRep.h in Headers */,
 				434BC9CA18D58A4300BECD47 /* UIImage+UIPrivate.h in Headers */,
 				43ECCF121851CAA80076535C /* UIWindow.h in Headers */,
+				43C0115E18D82E0500168E9D /* UINinePartImage.h in Headers */,
 				432FF08718544D3A005486C5 /* UILabel.h in Headers */,
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,
 				4384631C188B3D52006DA1AA /* UIControlAction.h in Headers */,
 				432FF08B18544D7A005486C5 /* UIStringDrawing.h in Headers */,
 				43718EC518518FB400850F08 /* UIKitDefines.h in Headers */,
+				43C0115A18D82DFA00168E9D /* UIThreePartImage.h in Headers */,
 				43846302188B1ED9006DA1AA /* UIColor.h in Headers */,
 				43846326188B3D7C006DA1AA /* UIAction.h in Headers */,
 				43ECCF0E1851CA9A0076535C /* UIView.h in Headers */,
@@ -663,6 +686,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43C0115718D82DD500168E9D /* UIImageRep.m in Sources */,
 				43846330188B4025006DA1AA /* UIImageView.m in Sources */,
 				431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */,
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
@@ -673,12 +697,14 @@
 				43846349188C5977006DA1AA /* UIFontDescriptor.m in Sources */,
 				43ECCF0F1851CA9A0076535C /* UIView.m in Sources */,
 				43EBAA6918AA5639005DDD8D /* UIScrollView.m in Sources */,
+				43C0115F18D82E0500168E9D /* UINinePartImage.m in Sources */,
 				4384634E188C636C006DA1AA /* UIDevice.m in Sources */,
 				43EBAA8318AB7087005DDD8D /* UINavigationBar.m in Sources */,
 				43846321188B3D5B006DA1AA /* UIControl.m in Sources */,
 				43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
+				43C0115B18D82DFA00168E9D /* UIThreePartImage.m in Sources */,
 				432FF08C18544D7A005486C5 /* UIStringDrawing.m in Sources */,
 				43846345188C58F9006DA1AA /* UIFont.m in Sources */,
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,

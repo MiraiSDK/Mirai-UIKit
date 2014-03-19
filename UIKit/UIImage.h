@@ -36,7 +36,11 @@ typedef NS_ENUM(NSInteger, UIImageRenderingMode) {
     UIImageRenderingModeAlwaysTemplate,     // Always draw the image as a template image, ignoring its color information
 };// NS_ENUM_AVAILABLE_IOS(7_0);
 
-@interface UIImage : NSObject <NSCoding>
+@interface UIImage : NSObject <NSCoding> {
+    @private
+    NSArray *_representations;
+}
+
 + (UIImage *)imageNamed:(NSString *)name;      // load from main bundle
 
 + (UIImage *)imageWithContentsOfFile:(NSString *)path;
