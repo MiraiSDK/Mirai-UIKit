@@ -88,6 +88,22 @@
 		43B819D318E27D550020624F /* UIScrollViewAnimationScroll.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819CD18E27D550020624F /* UIScrollViewAnimationScroll.h */; };
 		43B819D418E27D550020624F /* UIScrollViewAnimationScroll.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819CE18E27D550020624F /* UIScrollViewAnimationScroll.m */; };
 		43B819D618E27D710020624F /* UIScrollView+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819D518E27D710020624F /* UIScrollView+UIPrivate.h */; };
+		43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819D918E2AA870020624F /* UIGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819DA18E2AA870020624F /* UIGestureRecognizer.m */; };
+		43B819EA18E2AA870020624F /* UIGestureRecognizerSubclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819DB18E2AA870020624F /* UIGestureRecognizerSubclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819EB18E2AA870020624F /* UILongPressGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819DC18E2AA870020624F /* UILongPressGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819DD18E2AA870020624F /* UILongPressGestureRecognizer.m */; };
+		43B819ED18E2AA870020624F /* UIPanGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819DE18E2AA870020624F /* UIPanGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819EE18E2AA870020624F /* UIPanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819DF18E2AA870020624F /* UIPanGestureRecognizer.m */; };
+		43B819EF18E2AA870020624F /* UIPinchGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819E018E2AA870020624F /* UIPinchGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819E118E2AA870020624F /* UIPinchGestureRecognizer.m */; };
+		43B819F118E2AA870020624F /* UIRotationGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819E218E2AA870020624F /* UIRotationGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819F218E2AA870020624F /* UIRotationGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819E318E2AA870020624F /* UIRotationGestureRecognizer.m */; };
+		43B819F318E2AA870020624F /* UISwipeGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819E418E2AA870020624F /* UISwipeGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819F418E2AA870020624F /* UISwipeGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819E518E2AA870020624F /* UISwipeGestureRecognizer.m */; };
+		43B819F518E2AA870020624F /* UITapGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819E618E2AA870020624F /* UITapGestureRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B819F618E2AA870020624F /* UITapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819E718E2AA870020624F /* UITapGestureRecognizer.m */; };
+		43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819F718E2AA960020624F /* UIGestureRecognizer+UIPrivate.h */; };
 		43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */; };
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
 		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -217,12 +233,28 @@
 		43B819CD18E27D550020624F /* UIScrollViewAnimationScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimationScroll.h; sourceTree = "<group>"; };
 		43B819CE18E27D550020624F /* UIScrollViewAnimationScroll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewAnimationScroll.m; sourceTree = "<group>"; };
 		43B819D518E27D710020624F /* UIScrollView+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UIPrivate.h"; sourceTree = "<group>"; };
+		43B819D918E2AA870020624F /* UIGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819DA18E2AA870020624F /* UIGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819DB18E2AA870020624F /* UIGestureRecognizerSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerSubclass.h; sourceTree = "<group>"; };
+		43B819DC18E2AA870020624F /* UILongPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILongPressGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819DD18E2AA870020624F /* UILongPressGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILongPressGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819DE18E2AA870020624F /* UIPanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPanGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819DF18E2AA870020624F /* UIPanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPanGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819E018E2AA870020624F /* UIPinchGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPinchGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819E118E2AA870020624F /* UIPinchGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPinchGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819E218E2AA870020624F /* UIRotationGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRotationGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819E318E2AA870020624F /* UIRotationGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRotationGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819E418E2AA870020624F /* UISwipeGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISwipeGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819E518E2AA870020624F /* UISwipeGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISwipeGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819E618E2AA870020624F /* UITapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITapGestureRecognizer.h; sourceTree = "<group>"; };
+		43B819E718E2AA870020624F /* UITapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITapGestureRecognizer.m; sourceTree = "<group>"; };
+		43B819F718E2AA960020624F /* UIGestureRecognizer+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+UIPrivate.h"; sourceTree = "<group>"; };
 		43C0114618D6EF9E00168E9D /* UINavigationBar+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+UIPrivate.h"; sourceTree = "<group>"; };
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
 		43E2ACA118AF4B6A0029EE86 /* UIEvent+Android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIEvent+Android.h"; sourceTree = "<group>"; };
-		43E2ACA218AF59AD0029EE86 /* UITouch+Android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITouch+Android.h"; sourceTree = "<group>"; };
+		43E2ACA218AF59AD0029EE86 /* UITouch+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITouch+Private.h"; sourceTree = "<group>"; };
 		43EBAA1818A9F11C005DDD8D /* UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewController.h; sourceTree = "<group>"; };
 		43EBAA1918A9F11C005DDD8D /* UIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewController.m; sourceTree = "<group>"; };
 		43EBAA6618AA5639005DDD8D /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
@@ -329,6 +361,22 @@
 				4384632C188B3F7A006DA1AA /* View */,
 				43718E9E18517F0500850F08 /* UIResponder.h */,
 				43718E9F18517F0500850F08 /* UIResponder.m */,
+				43B819D918E2AA870020624F /* UIGestureRecognizer.h */,
+				43B819DA18E2AA870020624F /* UIGestureRecognizer.m */,
+				43B819DB18E2AA870020624F /* UIGestureRecognizerSubclass.h */,
+				43B819DC18E2AA870020624F /* UILongPressGestureRecognizer.h */,
+				43B819DD18E2AA870020624F /* UILongPressGestureRecognizer.m */,
+				43B819DE18E2AA870020624F /* UIPanGestureRecognizer.h */,
+				43B819DF18E2AA870020624F /* UIPanGestureRecognizer.m */,
+				43B819E018E2AA870020624F /* UIPinchGestureRecognizer.h */,
+				43B819E118E2AA870020624F /* UIPinchGestureRecognizer.m */,
+				43B819E218E2AA870020624F /* UIRotationGestureRecognizer.h */,
+				43B819E318E2AA870020624F /* UIRotationGestureRecognizer.m */,
+				43B819E418E2AA870020624F /* UISwipeGestureRecognizer.h */,
+				43B819E518E2AA870020624F /* UISwipeGestureRecognizer.m */,
+				43B819E618E2AA870020624F /* UITapGestureRecognizer.h */,
+				43B819E718E2AA870020624F /* UITapGestureRecognizer.m */,
+				43B819F718E2AA960020624F /* UIGestureRecognizer+UIPrivate.h */,
 				43EBAA1718A9F0E2005DDD8D /* ViewControllers */,
 				4384634B188C636C006DA1AA /* UIDevice.h */,
 				4384634C188C636C006DA1AA /* UIDevice.m */,
@@ -431,7 +479,7 @@
 			isa = PBXGroup;
 			children = (
 				43846311188B39EE006DA1AA /* UITouch.h */,
-				43E2ACA218AF59AD0029EE86 /* UITouch+Android.h */,
+				43E2ACA218AF59AD0029EE86 /* UITouch+Private.h */,
 				43846312188B39EE006DA1AA /* UITouch.m */,
 				43846315188B3B74006DA1AA /* UIEvent.h */,
 				43E2ACA118AF4B6A0029EE86 /* UIEvent+Android.h */,
@@ -547,11 +595,19 @@
 				43846348188C5977006DA1AA /* UIFontDescriptor.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
 				43846340188C540F006DA1AA /* NSParagraphStyle.h in Headers */,
+				43B819F318E2AA870020624F /* UISwipeGestureRecognizer.h in Headers */,
+				43B819EA18E2AA870020624F /* UIGestureRecognizerSubclass.h in Headers */,
+				43B819EF18E2AA870020624F /* UIPinchGestureRecognizer.h in Headers */,
+				43B819F518E2AA870020624F /* UITapGestureRecognizer.h in Headers */,
 				4384634D188C636C006DA1AA /* UIDevice.h in Headers */,
 				43846332188B4031006DA1AA /* UIImageView+UIPrivate.h in Headers */,
 				43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */,
 				4384632F188B4025006DA1AA /* UIImageView.h in Headers */,
 				43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */,
+				43B819EB18E2AA870020624F /* UILongPressGestureRecognizer.h in Headers */,
+				43B819ED18E2AA870020624F /* UIPanGestureRecognizer.h in Headers */,
+				43B819F118E2AA870020624F /* UIRotationGestureRecognizer.h in Headers */,
+				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
 				43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */,
 				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
@@ -559,6 +615,7 @@
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
 				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
 				43EBAA9018AB85FB005DDD8D /* UIBarButtonItem.h in Headers */,
+				43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */,
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
@@ -690,6 +747,7 @@
 			files = (
 				43846330188B4025006DA1AA /* UIImageView.m in Sources */,
 				431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */,
+				43B819F418E2AA870020624F /* UISwipeGestureRecognizer.m in Sources */,
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
 				431412DE18C0B958001AF732 /* UIViewBlockAnimationDelegate.m in Sources */,
 				43EBAA6D18AA588F005DDD8D /* UIScroller.m in Sources */,
@@ -705,15 +763,19 @@
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
 				432FF08C18544D7A005486C5 /* UIStringDrawing.m in Sources */,
+				43B819EE18E2AA870020624F /* UIPanGestureRecognizer.m in Sources */,
 				43846345188C58F9006DA1AA /* UIFont.m in Sources */,
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
 				43846303188B1ED9006DA1AA /* UIColor.m in Sources */,
 				43EBAA9118AB85FB005DDD8D /* UIBarButtonItem.m in Sources */,
 				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
+				43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
+				43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */,
 				43718EA518517FBA00850F08 /* UIApplication.m in Sources */,
 				43B819D418E27D550020624F /* UIScrollViewAnimationScroll.m in Sources */,
+				43B819F218E2AA870020624F /* UIRotationGestureRecognizer.m in Sources */,
 				43718EA118517F0500850F08 /* UIResponder.m in Sources */,
 				43718EC018518AB200850F08 /* android_native_app_glue.c in Sources */,
 				434BC9CB18D58A4300BECD47 /* UIImage+UIPrivate.m in Sources */,
@@ -726,9 +788,11 @@
 				43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */,
 				4384631D188B3D52006DA1AA /* UIControlAction.m in Sources */,
 				432FF094185452EC005486C5 /* NSStringDrawing.m in Sources */,
+				43B819F618E2AA870020624F /* UITapGestureRecognizer.m in Sources */,
 				43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */,
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,
 				4384630C188B2751006DA1AA /* UIGeometry.m in Sources */,
+				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				43846310188B2BCD006DA1AA /* UIImage.m in Sources */,
 				4384633A188B41D2006DA1AA /* UIRoundedRectButton.m in Sources */,
 			);

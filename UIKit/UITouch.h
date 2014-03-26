@@ -18,6 +18,10 @@ typedef NS_ENUM(NSInteger, UITouchPhase) {
     UITouchPhaseStationary,        // whenever a finger is touching the surface but hasn't moved since the previous event.
     UITouchPhaseEnded,             // whenever a finger leaves the surface.
     UITouchPhaseCancelled,         // whenever a touch doesn't end but we need to stop tracking (e.g. putting device to face)
+    _UITouchPhaseGestureBegan,
+    _UITouchPhaseGestureChanged,
+    _UITouchPhaseGestureEnded,
+    _UITouchPhaseDiscreteGesture
 };
 
 @interface UITouch : NSObject

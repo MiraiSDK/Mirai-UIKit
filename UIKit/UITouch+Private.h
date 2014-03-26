@@ -7,7 +7,10 @@
 //
 
 #import "UITouch.h"
+
+//#if ANDROID
 #import <android/input.h>
+//#endif
 
 typedef enum {
     _UITouchGestureUnknown = 0,
@@ -36,6 +39,8 @@ typedef enum {
 
 @end
 
+//#if ANDROID
 @interface UITouch (Android)
 - (instancetype)initWithAMotionEvent:(AInputEvent *)aEvent;
 @end
+//#endif

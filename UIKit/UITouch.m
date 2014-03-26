@@ -7,7 +7,7 @@
 //
 
 #import "UITouch.h"
-#import "UITouch+Android.h"
+#import "UITouch+Private.h"
 #import "UIView.h"
 #import "UIWindow.h"
 
