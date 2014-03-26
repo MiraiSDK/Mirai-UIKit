@@ -361,22 +361,7 @@
 				4384632C188B3F7A006DA1AA /* View */,
 				43718E9E18517F0500850F08 /* UIResponder.h */,
 				43718E9F18517F0500850F08 /* UIResponder.m */,
-				43B819D918E2AA870020624F /* UIGestureRecognizer.h */,
-				43B819DA18E2AA870020624F /* UIGestureRecognizer.m */,
-				43B819DB18E2AA870020624F /* UIGestureRecognizerSubclass.h */,
-				43B819DC18E2AA870020624F /* UILongPressGestureRecognizer.h */,
-				43B819DD18E2AA870020624F /* UILongPressGestureRecognizer.m */,
-				43B819DE18E2AA870020624F /* UIPanGestureRecognizer.h */,
-				43B819DF18E2AA870020624F /* UIPanGestureRecognizer.m */,
-				43B819E018E2AA870020624F /* UIPinchGestureRecognizer.h */,
-				43B819E118E2AA870020624F /* UIPinchGestureRecognizer.m */,
-				43B819E218E2AA870020624F /* UIRotationGestureRecognizer.h */,
-				43B819E318E2AA870020624F /* UIRotationGestureRecognizer.m */,
-				43B819E418E2AA870020624F /* UISwipeGestureRecognizer.h */,
-				43B819E518E2AA870020624F /* UISwipeGestureRecognizer.m */,
-				43B819E618E2AA870020624F /* UITapGestureRecognizer.h */,
-				43B819E718E2AA870020624F /* UITapGestureRecognizer.m */,
-				43B819F718E2AA960020624F /* UIGestureRecognizer+UIPrivate.h */,
+				43B819F918E2B3C20020624F /* GestureRecognizer */,
 				43EBAA1718A9F0E2005DDD8D /* ViewControllers */,
 				4384634B188C636C006DA1AA /* UIDevice.h */,
 				4384634C188C636C006DA1AA /* UIDevice.m */,
@@ -546,6 +531,29 @@
 				43E2AC9C18ACD9370029EE86 /* UIToolbar.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		43B819F918E2B3C20020624F /* GestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				43B819D918E2AA870020624F /* UIGestureRecognizer.h */,
+				43B819DA18E2AA870020624F /* UIGestureRecognizer.m */,
+				43B819DB18E2AA870020624F /* UIGestureRecognizerSubclass.h */,
+				43B819DC18E2AA870020624F /* UILongPressGestureRecognizer.h */,
+				43B819DD18E2AA870020624F /* UILongPressGestureRecognizer.m */,
+				43B819DE18E2AA870020624F /* UIPanGestureRecognizer.h */,
+				43B819DF18E2AA870020624F /* UIPanGestureRecognizer.m */,
+				43B819E018E2AA870020624F /* UIPinchGestureRecognizer.h */,
+				43B819E118E2AA870020624F /* UIPinchGestureRecognizer.m */,
+				43B819E218E2AA870020624F /* UIRotationGestureRecognizer.h */,
+				43B819E318E2AA870020624F /* UIRotationGestureRecognizer.m */,
+				43B819E418E2AA870020624F /* UISwipeGestureRecognizer.h */,
+				43B819E518E2AA870020624F /* UISwipeGestureRecognizer.m */,
+				43B819E618E2AA870020624F /* UITapGestureRecognizer.h */,
+				43B819E718E2AA870020624F /* UITapGestureRecognizer.m */,
+				43B819F718E2AA960020624F /* UIGestureRecognizer+UIPrivate.h */,
+			);
+			name = GestureRecognizer;
 			sourceTree = "<group>";
 		};
 		43EBAA1718A9F0E2005DDD8D /* ViewControllers */ = {

@@ -16,7 +16,7 @@
 #import "UIEvent.h"
 #import "UITouch.h"
 #import "UIEvent+Android.h"
-#import "UITouch+Android.h"
+#import "UITouch+Private.h"
 
 #include <string.h>
 #include <jni.h>
@@ -487,7 +487,6 @@ void android_main(struct android_app* state)
 
 - (void)sendEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
     for (UITouch *touch in [event allTouches]) {
         [touch.window sendEvent:event];
     }

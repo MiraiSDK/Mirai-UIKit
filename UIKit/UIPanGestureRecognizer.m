@@ -31,10 +31,13 @@
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch+Private.h"
 #import "UIEvent.h"
+#import "UIGeometry.h"
 
 static UITouch *PanTouch(NSSet *touches)
 {
     for (UITouch *touch in touches) {
+        return touch;
+        
         if ([touch _gesture] == _UITouchGesturePan) {
             return touch;
         }
@@ -70,7 +73,9 @@ static UITouch *PanTouch(NSSet *touches)
 - (BOOL)_translate:(CGPoint)delta withEvent:(UIEvent *)event
 {
     const NSTimeInterval timeDiff = event.timestamp - _lastMovementTime;
-
+    NSLog(@"translate, timeDiff: %f",timeDiff);
+    NSLog(@"delta:%@",NSStringFromCGPoint(delta));
+    
     if (!CGPointEqualToPoint(delta, CGPointZero) && timeDiff > 0) {
         _translation.x += delta.x;
         _translation.y += delta.y;
@@ -95,7 +100,8 @@ static UITouch *PanTouch(NSSet *touches)
     return _velocity;
 }
 
-- (void)_gesturesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+//- (void)_gesturesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
 
@@ -109,7 +115,10 @@ static UITouch *PanTouch(NSSet *touches)
     } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
         if (touch) {
             if ([self _translate:[touch _delta] withEvent:event]) {
+                NSLog(@"pan changed");
                 self.state = UIGestureRecognizerStateChanged;
+            } else {
+                NSLog(@"translate failed");
             }
         } else {
             self.state = UIGestureRecognizerStateCancelled;
@@ -117,7 +126,8 @@ static UITouch *PanTouch(NSSet *touches)
     }
 }
 
-- (void)_gesturesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//- (void)_gesturesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
         UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
