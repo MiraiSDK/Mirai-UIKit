@@ -36,7 +36,7 @@
 #import <UIKit/UIFont.h>
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIGeometry.h>
-//#import <UIKit/UIGestureRecognizer.h>
+#import <UIKit/UIGestureRecognizer.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 //#import <UIKit/UIImagePickerController.h>
@@ -46,7 +46,7 @@
 #import <UIKit/UILabel.h>
 //#import <UIKit/UILocalNotification.h>
 //#import <UIKit/UILocalizedIndexedCollation.h>
-//#import <UIKit/UILongPressGestureRecognizer.h>
+#import <UIKit/UILongPressGestureRecognizer.h>
 //#import <UIKit/UIManagedDocument.h>
 //#import <UIKit/UIMenuController.h>
 //#import <UIKit/UIMotionEffect.h>
@@ -57,10 +57,10 @@
 //#import <UIKit/UINibLoading.h>
 //#import <UIKit/UIPageControl.h>
 //#import <UIKit/UIPageViewController.h>
-//#import <UIKit/UIPanGestureRecognizer.h>
+#import <UIKit/UIPanGestureRecognizer.h>
 //#import <UIKit/UIPasteboard.h>
 //#import <UIKit/UIPickerView.h>
-//#import <UIKit/UIPinchGestureRecognizer.h>
+#import <UIKit/UIPinchGestureRecognizer.h>
 //#import <UIKit/UIPopoverController.h>
 //#import <UIKit/UIPopoverBackgroundView.h>
 //#import <UIKit/UIPrintError.h>
@@ -73,7 +73,7 @@
 //#import <UIKit/UIReferenceLibraryViewController.h>
 //#import <UIKit/UIRefreshControl.h>
 #import <UIKit/UIResponder.h>
-//#import <UIKit/UIRotationGestureRecognizer.h>
+#import <UIKit/UIRotationGestureRecognizer.h>
 #import <UIKit/UIScreen.h>
 //#import <UIKit/UIScreenEdgePanGestureRecognizer.h>
 //#import <UIKit/UIScreenMode.h>
@@ -88,7 +88,7 @@
 //#import <UIKit/UIStoryboardPopoverSegue.h>
 //#import <UIKit/UIStoryboardSegue.h>
 //#import <UIKit/UIStringDrawing.h>
-//#import <UIKit/UISwipeGestureRecognizer.h>
+#import <UIKit/UISwipeGestureRecognizer.h>
 //#import <UIKit/UISwitch.h>
 //#import <UIKit/UITabBar.h>
 //#import <UIKit/UITabBarController.h>
@@ -97,7 +97,7 @@
 //#import <UIKit/UITableViewHeaderFooterView.h>
 //#import <UIKit/UITableViewCell.h>
 //#import <UIKit/UITableViewController.h>
-//#import <UIKit/UITapGestureRecognizer.h>
+#import <UIKit/UITapGestureRecognizer.h>
 //#import <UIKit/UITextChecker.h>
 //#import <UIKit/UITextField.h>
 //#import <UIKit/UITextInput.h>

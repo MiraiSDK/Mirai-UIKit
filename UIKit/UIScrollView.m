@@ -39,7 +39,7 @@
 //#import "UIResponderAppKitIntegration.h"
 #import "UIScrollViewAnimationScroll.h"
 #import "UIScrollViewAnimationDeceleration.h"
-//#import "UIPanGestureRecognizer.h"
+#import "UIPanGestureRecognizer.h"
 //#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -80,7 +80,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     BOOL _dragging;
     BOOL _decelerating;
     
-//    UIPanGestureRecognizer *_panGestureRecognizer;
+    UIPanGestureRecognizer *_panGestureRecognizer;
 //    UIScrollWheelGestureRecognizer *_scrollWheelGestureRecognizer;
     
     id _scrollAnimation;
@@ -127,8 +127,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _bounces = YES;
         _decelerationRate = UIScrollViewDecelerationRateNormal;
         
-//        _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
-//        [self addGestureRecognizer:_panGestureRecognizer];
+        _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
+        [self addGestureRecognizer:_panGestureRecognizer];
         
 //        _scrollWheelGestureRecognizer = [[UIScrollWheelGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
 //        [self addGestureRecognizer:_scrollWheelGestureRecognizer];
@@ -216,7 +216,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)setScrollEnabled:(BOOL)enabled
 {
-//    self.panGestureRecognizer.enabled = enabled;
+    self.panGestureRecognizer.enabled = enabled;
 //    self.scrollWheelGestureRecognizer.enabled = enabled;
     [self _updateScrollers];
     [self setNeedsLayout];
@@ -226,7 +226,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 {
 //    return self.panGestureRecognizer.enabled || self.scrollWheelGestureRecognizer.enabled;
 //FIXME:
-    return YES;
+    return self.panGestureRecognizer.enabled;
 }
 
 - (void)_cancelScrollAnimation
@@ -582,9 +582,10 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         }
     }
 }
-/* FIXME: gesture disabled
+
 - (void)_gestureDidChange:(UIGestureRecognizer *)gesture
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     // the scrolling gestures are broken into two components due to the somewhat fundamental differences
     // in how they are handled by the system. The UIPanGestureRecognizer will only track scrolling gestures
     // that come from actual touch scroller devices. This does *not* include old fashioned mouse wheels.
@@ -627,7 +628,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         } else if (_panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
             [self _endDraggingWithDecelerationVelocity:[_panGestureRecognizer velocityInView:self]];
         }
-    } else if (gesture == _scrollWheelGestureRecognizer) {
+    } /* else if (gesture == _scrollWheelGestureRecognizer) {
         if (_scrollWheelGestureRecognizer.state == UIGestureRecognizerStateRecognized) {
             const CGPoint delta = [_scrollWheelGestureRecognizer translationInView:self];
             
@@ -657,9 +658,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
                 [self _quickFlashScrollIndicators];
             }
         }
-    }
+    } */
 }
-*/
+
 - (void)_UIScrollerDidBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
 {
     [self _beginDragging];

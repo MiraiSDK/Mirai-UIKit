@@ -15,6 +15,8 @@
 #import "UIViewController.h"
 #import "UIViewLayoutManager.h"
 #import "UIApplication+UIPrivate.h"
+#import "UIGestureRecognizer.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 
 //Animation
 #import "UIViewAnimationGroup.h"
@@ -44,6 +46,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     BOOL _autoresizesSubviews;
     BOOL _needsDidAppearOrDisappear;
 
+    NSMutableSet *_gestureRecognizers;
     
     struct {
         unsigned int userInteractionDisabled:1;
@@ -134,6 +137,7 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
         _autoresizesSubviews = YES;
 
         _subviews = [NSMutableSet set];
+        _gestureRecognizers = [[NSMutableSet alloc] init];
         
         _layer = [[[class layerClass] alloc] init];
         _layer.delegate = self;
@@ -1223,29 +1227,41 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setGestureRecognizers:(NSArray *)gestureRecognizers
 {
-    NS_UNIMPLEMENTED_LOG;
+    for (UIGestureRecognizer *gesture in [_gestureRecognizers allObjects]) {
+        [self removeGestureRecognizer:gesture];
+    }
+    
+    for (UIGestureRecognizer *gesture in gestureRecognizers) {
+        [self addGestureRecognizer:gesture];
+    }
 }
 
 - (NSArray *)gestureRecognizers
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return [_gestureRecognizers allObjects];
 }
 
 - (void)addGestureRecognizer:(UIGestureRecognizer*)gestureRecognizer
 {
-    NS_UNIMPLEMENTED_LOG;
+    if (![_gestureRecognizers containsObject:gestureRecognizer]) {
+        [gestureRecognizer.view removeGestureRecognizer:gestureRecognizer];
+        [_gestureRecognizers addObject:gestureRecognizer];
+        [gestureRecognizer _setView:self];
+    }
 }
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer*)gestureRecognizer
 {
-    NS_UNIMPLEMENTED_LOG;
+    if ([_gestureRecognizers containsObject:gestureRecognizer]) {
+        [gestureRecognizer _setView:nil];
+        [_gestureRecognizers removeObject:gestureRecognizer];
+    }
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    NS_UNIMPLEMENTED_LOG;
-    return NO;
+    //FIXME: 
+    return YES;
 }
 
 @end

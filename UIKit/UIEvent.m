@@ -11,7 +11,7 @@
 
 #import "UIEvent+Android.h"
 #include <android/input.h>
-#import "UITouch+Android.h"
+#import "UITouch+Private.h"
 //#include <string.h>
 //#include <jni.h>
 

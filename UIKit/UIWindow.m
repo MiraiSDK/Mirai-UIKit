@@ -12,8 +12,11 @@
 #import "UIViewController.h"
 #import "UIEvent.h"
 #import "UITouch.h"
+#import "UITouch+Private.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIScreenPrivate.h"
+#import "UIGestureRecognizer+UIPrivate.h"
+
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
@@ -252,18 +255,17 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 
 - (void)sendEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
-//        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
+        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
         
-//        for (UITouch *touch in touches) {
-//            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
-//        }
+        for (UITouch *touch in touches) {
+            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
+        }
         
-//        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
-//            [recognizer _recognizeTouches:touches withEvent:event];
-//        }
+        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
+            [recognizer _recognizeTouches:touches withEvent:event];
+        }
         
         for (UITouch *touch in touches) {
             // normally there'd be no need to retain the view here, but this works around a strange problem I ran into.
@@ -286,10 +288,25 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
             // better way to fix this without it having to have this hacky-feeling retain here, that'd be cool, but be
             // aware that this is here for a reason and that the problem it prevents is very rare and somewhat contrived.
             UIView *view = touch.view;
-            NSLog(@"touched view:%@",view);
             
             const UITouchPhase phase = touch.phase;
-//            const _UITouchGesture gesture = [touch _gesture];
+            const _UITouchGesture gesture = [touch _gesture];
+            
+            static NSDictionary *map = nil;
+            if (!map) {
+                map = @{
+                        @(UITouchPhaseBegan):@"UITouchPhaseBegan",
+                        @(UITouchPhaseMoved):@"UITouchPhaseMoved",
+                        @(UITouchPhaseEnded):@"UITouchPhaseEnded",
+                        @(UITouchPhaseCancelled):@"UITouchPhaseCancelled",
+                        @(UITouchPhaseStationary):@"UITouchPhaseStationary",
+                        @(_UITouchPhaseGestureBegan):@"_UITouchPhaseGestureBegan",
+                        @(_UITouchPhaseGestureChanged):@"_UITouchPhaseGestureChanged",
+                        @(_UITouchPhaseGestureEnded):@"_UITouchPhaseGestureEnded",
+                        @(_UITouchPhaseDiscreteGesture):@"_UITouchPhaseDiscreteGesture",};
+            }
+            
+            NSLog(@"phase:%@",[map objectForKey:@(phase)]);
             
             if (phase == UITouchPhaseBegan) {
                 [view touchesBegan:touches withEvent:event];

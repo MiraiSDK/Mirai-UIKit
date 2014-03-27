@@ -16,7 +16,7 @@
 #import "UIEvent.h"
 #import "UITouch.h"
 #import "UIEvent+Android.h"
-#import "UITouch+Android.h"
+#import "UITouch+Private.h"
 
 #include <string.h>
 #include <jni.h>
@@ -139,9 +139,25 @@ struct engine {
 //                int pollTimeout = engine.animating ? 0 : -1;
                 int pollTimeout = 0;
                 
+                
+                BOOL runLoopFired = NO;
                 while ((ident=ALooper_pollAll(pollTimeout, NULL, &events, (void**)&source)) >= 0) {
-                    NSLog(@"handle event");
-                    // Process this event.
+//
+                    if (!runLoopFired) {
+                        NSDate *untilDate = nil;
+                        
+                        if (source != NULL) {
+                            untilDate = [NSDate date];
+                        } else {
+                            untilDate = [NSDate distantFuture];
+                        }
+        
+                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
+                        runLoopFired = YES;
+                    }
+                    
+//                    NSLog(@"handle event");
+//                    // Process this event.
                     if (source != NULL) {
                         source->process(app_state, source);
                     }
@@ -159,6 +175,7 @@ struct engine {
                     @autoreleasepool {
                         _renderer.layer = _app.keyWindow.layer;
                         [_renderer.layer layoutIfNeeded];
+                        [_renderer addUpdateRect:_renderer.layer.bounds];
                         [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
                         [_renderer render];
                         [_renderer endFrame];
@@ -205,13 +222,21 @@ static void engine_term_display(struct engine* engine) {
 
 - (void)handleAEvent:(AInputEvent *)aEvent
 {
+    [[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
+
     int32_t aType = AInputEvent_getType(aEvent);
     if (aType == AINPUT_EVENT_TYPE_MOTION) {
         UITouch *touch = [[_currentEvent allTouches] anyObject];
         
         int64_t eventTime = AMotionEvent_getEventTime(aEvent);
-        const NSTimeInterval timestamp = eventTime/1000000000.0f; // convert nanoSeconds to Seconds
+        const NSTimeInterval eventTimestamp = eventTime/1000000000.0f; // convert nanoSeconds to Seconds
+        [_currentEvent _setTimestamp:eventTimestamp];
         
+        size_t pointerCount = AMotionEvent_getPointerCount(aEvent);
+        for (size_t pointer_index = 0; pointer_index < pointerCount ; pointer_index++) {
+            int32_t pointerIdentifier = AMotionEvent_getPointerId(aEvent, pointer_index);
+        }
+
         int32_t action = AMotionEvent_getAction(aEvent);
         int32_t trueAction = action & AMOTION_EVENT_ACTION_MASK;
         int32_t pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
@@ -247,7 +272,7 @@ static void engine_term_display(struct engine* engine) {
                 phase = UITouchPhaseCancelled;
                 break;
         }
-        [touch _updatePhase:phase screenLocation:screenLocation timestamp:timestamp];
+        [touch _updatePhase:phase screenLocation:screenLocation timestamp:eventTimestamp];
 
         //update touche.view
         UIView *previousView = touch.view;
@@ -255,8 +280,8 @@ static void engine_term_display(struct engine* engine) {
         [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
         
         [self sendEvent:_currentEvent];
-
         
+
     }
     
 }
@@ -487,7 +512,6 @@ void android_main(struct android_app* state)
 
 - (void)sendEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
     for (UITouch *touch in [event allTouches]) {
         [touch.window sendEvent:event];
     }
@@ -749,47 +773,47 @@ const NSTimeInterval UIApplicationBackgroundFetchIntervalMinimum = 0.0;
 const NSTimeInterval UIApplicationBackgroundFetchIntervalNever = INFINITY;
 
 
-NSString *const UITrackingRunLoopModeKey = @"UITrackingRunLoopMode";
-NSString *const UIApplicationDidEnterBackgroundNotificationKey = @"UIApplicationDidEnterBackgroundNotification";
-NSString *const UIApplicationWillEnterForegroundNotificationKey = @"UIApplicationWillEnterForegroundNotification";
-NSString *const UIApplicationDidFinishLaunchingNotificationKey = @"UIApplicationDidFinishLaunchingNotification";
-NSString *const UIApplicationDidBecomeActiveNotificationKey = @"UIApplicationDidBecomeActiveNotification";
-NSString *const UIApplicationWillResignActiveNotificationKey = @"UIApplicationWillResignActiveNotification";
-NSString *const UIApplicationDidReceiveMemoryWarningNotificationKey = @"UIApplicationDidReceiveMemoryWarningNotification";
-NSString *const UIApplicationWillTerminateNotificationKey = @"UIApplicationWillTerminateNotification";
-NSString *const UIApplicationSignificantTimeChangeNotificationKey = @"UIApplicationSignificantTimeChangeNotification";
-NSString *const UIApplicationWillChangeStatusBarOrientationNotificationKey = @"UIApplicationWillChangeStatusBarOrientationNotification";
-NSString *const UIApplicationDidChangeStatusBarOrientationNotificationKey = @"UIApplicationDidChangeStatusBarOrientationNotification";
-NSString *const UIApplicationStatusBarOrientationUserInfoKeyKey = @"UIApplicationStatusBarOrientationUserInfoKey";
-NSString *const UIApplicationWillChangeStatusBarFrameNotificationKey = @"UIApplicationWillChangeStatusBarFrameNotification";
-NSString *const UIApplicationDidChangeStatusBarFrameNotificationKey = @"UIApplicationDidChangeStatusBarFrameNotification";
-NSString *const UIApplicationStatusBarFrameUserInfoKeyKey = @"UIApplicationStatusBarFrameUserInfoKey";
-NSString *const UIApplicationBackgroundRefreshStatusDidChangeNotificationKey = @"UIApplicationBackgroundRefreshStatusDidChangeNotification";
-NSString *const UIApplicationLaunchOptionsURLKeyKey = @"UIApplicationLaunchOptionsURLKey";
-NSString *const UIApplicationLaunchOptionsSourceApplicationKeyKey = @"UIApplicationLaunchOptionsSourceApplicationKey";
-NSString *const UIApplicationLaunchOptionsRemoteNotificationKeyKey = @"UIApplicationLaunchOptionsRemoteNotificationKey";
-NSString *const UIApplicationLaunchOptionsLocalNotificationKeyKey = @"UIApplicationLaunchOptionsLocalNotificationKey";
-NSString *const UIApplicationLaunchOptionsAnnotationKeyKey = @"UIApplicationLaunchOptionsAnnotationKey";
-NSString *const UIApplicationProtectedDataWillBecomeUnavailableKey = @"UIApplicationProtectedDataWillBecomeUnavailable";
-NSString *const UIApplicationProtectedDataDidBecomeAvailableKey = @"UIApplicationProtectedDataDidBecomeAvailable";
-NSString *const UIApplicationLaunchOptionsLocationKeyKey = @"UIApplicationLaunchOptionsLocationKey";
-NSString *const UIApplicationLaunchOptionsNewsstandDownloadsKeyKey = @"UIApplicationLaunchOptionsNewsstandDownloadsKey";
-NSString *const UIApplicationLaunchOptionsBluetoothCentralsKeyKey = @"UIApplicationLaunchOptionsBluetoothCentralsKey";
-NSString *const UIApplicationLaunchOptionsBluetoothPeripheralsKeyKey = @"UIApplicationLaunchOptionsBluetoothPeripheralsKey";
-NSString *const UIContentSizeCategoryExtraSmallKey = @"UIContentSizeCategoryExtraSmall";
-NSString *const UIContentSizeCategorySmallKey = @"UIContentSizeCategorySmall";
-NSString *const UIContentSizeCategoryMediumKey = @"UIContentSizeCategoryMedium";
-NSString *const UIContentSizeCategoryLargeKey = @"UIContentSizeCategoryLarge";
-NSString *const UIContentSizeCategoryExtraLargeKey = @"UIContentSizeCategoryExtraLarge";
-NSString *const UIContentSizeCategoryExtraExtraLargeKey = @"UIContentSizeCategoryExtraExtraLarge";
-NSString *const UIContentSizeCategoryExtraExtraExtraLargeKey = @"UIContentSizeCategoryExtraExtraExtraLarge";
-NSString *const UIContentSizeCategoryAccessibilityMediumKey = @"UIContentSizeCategoryAccessibilityMedium";
-NSString *const UIContentSizeCategoryAccessibilityLargeKey = @"UIContentSizeCategoryAccessibilityLarge";
-NSString *const UIContentSizeCategoryAccessibilityExtraLargeKey = @"UIContentSizeCategoryAccessibilityExtraLarge";
-NSString *const UIContentSizeCategoryAccessibilityExtraExtraLargeKey = @"UIContentSizeCategoryAccessibilityExtraExtraLarge";
-NSString *const UIContentSizeCategoryAccessibilityExtraExtraExtraLargeKey = @"UIContentSizeCategoryAccessibilityExtraExtraExtraLarge";
-NSString *const UIContentSizeCategoryDidChangeNotificationKey = @"UIContentSizeCategoryDidChangeNotification";
-NSString *const UIContentSizeCategoryNewValueKeyKey = @"UIContentSizeCategoryNewValueKey";
-NSString *const UIApplicationUserDidTakeScreenshotNotificationKey = @"UIApplicationUserDidTakeScreenshotNotification";
+NSString *const UITrackingRunLoopMode = @"UITrackingRunLoopMode";
+NSString *const UIApplicationDidEnterBackgroundNotification = @"UIApplicationDidEnterBackgroundNotification";
+NSString *const UIApplicationWillEnterForegroundNotification = @"UIApplicationWillEnterForegroundNotification";
+NSString *const UIApplicationDidFinishLaunchingNotification = @"UIApplicationDidFinishLaunchingNotification";
+NSString *const UIApplicationDidBecomeActiveNotification = @"UIApplicationDidBecomeActiveNotification";
+NSString *const UIApplicationWillResignActiveNotification = @"UIApplicationWillResignActiveNotification";
+NSString *const UIApplicationDidReceiveMemoryWarningNotification = @"UIApplicationDidReceiveMemoryWarningNotification";
+NSString *const UIApplicationWillTerminateNotification = @"UIApplicationWillTerminateNotification";
+NSString *const UIApplicationSignificantTimeChangeNotification = @"UIApplicationSignificantTimeChangeNotification";
+NSString *const UIApplicationWillChangeStatusBarOrientationNotification = @"UIApplicationWillChangeStatusBarOrientationNotification";
+NSString *const UIApplicationDidChangeStatusBarOrientationNotification = @"UIApplicationDidChangeStatusBarOrientationNotification";
+NSString *const UIApplicationStatusBarOrientationUserInfo = @"UIApplicationStatusBarOrientationUserInfoKey";
+NSString *const UIApplicationWillChangeStatusBarFrameNotification = @"UIApplicationWillChangeStatusBarFrameNotification";
+NSString *const UIApplicationDidChangeStatusBarFrameNotification = @"UIApplicationDidChangeStatusBarFrameNotification";
+NSString *const UIApplicationStatusBarFrameUserInfo = @"UIApplicationStatusBarFrameUserInfoKey";
+NSString *const UIApplicationBackgroundRefreshStatusDidChangeNotification = @"UIApplicationBackgroundRefreshStatusDidChangeNotification";
+NSString *const UIApplicationLaunchOptionsURLKey = @"UIApplicationLaunchOptionsURLKey";
+NSString *const UIApplicationLaunchOptionsSourceApplication = @"UIApplicationLaunchOptionsSourceApplicationKey";
+NSString *const UIApplicationLaunchOptionsRemoteNotificationKey = @"UIApplicationLaunchOptionsRemoteNotificationKey";
+NSString *const UIApplicationLaunchOptionsLocalNotificationKey = @"UIApplicationLaunchOptionsLocalNotificationKey";
+NSString *const UIApplicationLaunchOptionsAnnotationKey = @"UIApplicationLaunchOptionsAnnotationKey";
+NSString *const UIApplicationProtectedDataWillBecomeUnavailable = @"UIApplicationProtectedDataWillBecomeUnavailable";
+NSString *const UIApplicationProtectedDataDidBecomeAvailable = @"UIApplicationProtectedDataDidBecomeAvailable";
+NSString *const UIApplicationLaunchOptionsLocationKey = @"UIApplicationLaunchOptionsLocationKey";
+NSString *const UIApplicationLaunchOptionsNewsstandDownloadsKey = @"UIApplicationLaunchOptionsNewsstandDownloadsKey";
+NSString *const UIApplicationLaunchOptionsBluetoothCentralsKey = @"UIApplicationLaunchOptionsBluetoothCentralsKey";
+NSString *const UIApplicationLaunchOptionsBluetoothPeripheralsKey = @"UIApplicationLaunchOptionsBluetoothPeripheralsKey";
+NSString *const UIContentSizeCategoryExtraSmall = @"UIContentSizeCategoryExtraSmall";
+NSString *const UIContentSizeCategorySmall = @"UIContentSizeCategorySmall";
+NSString *const UIContentSizeCategoryMedium = @"UIContentSizeCategoryMedium";
+NSString *const UIContentSizeCategoryLarge = @"UIContentSizeCategoryLarge";
+NSString *const UIContentSizeCategoryExtraLarge = @"UIContentSizeCategoryExtraLarge";
+NSString *const UIContentSizeCategoryExtraExtraLarge = @"UIContentSizeCategoryExtraExtraLarge";
+NSString *const UIContentSizeCategoryExtraExtraExtraLarge = @"UIContentSizeCategoryExtraExtraExtraLarge";
+NSString *const UIContentSizeCategoryAccessibilityMedium = @"UIContentSizeCategoryAccessibilityMedium";
+NSString *const UIContentSizeCategoryAccessibilityLarge = @"UIContentSizeCategoryAccessibilityLarge";
+NSString *const UIContentSizeCategoryAccessibilityExtraLarge = @"UIContentSizeCategoryAccessibilityExtraLarge";
+NSString *const UIContentSizeCategoryAccessibilityExtraExtraLarge = @"UIContentSizeCategoryAccessibilityExtraExtraLarge";
+NSString *const UIContentSizeCategoryAccessibilityExtraExtraExtraLarge = @"UIContentSizeCategoryAccessibilityExtraExtraExtraLarge";
+NSString *const UIContentSizeCategoryDidChangeNotification = @"UIContentSizeCategoryDidChangeNotification";
+NSString *const UIContentSizeCategoryNewValueKey = @"UIContentSizeCategoryNewValueKey";
+NSString *const UIApplicationUserDidTakeScreenshotNotification = @"UIApplicationUserDidTakeScreenshotNotification";
 
 

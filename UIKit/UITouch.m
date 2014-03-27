@@ -7,7 +7,7 @@
 //
 
 #import "UITouch.h"
-#import "UITouch+Android.h"
+#import "UITouch+Private.h"
 #import "UIView.h"
 #import "UIWindow.h"
 
@@ -62,6 +62,9 @@ static NSArray *GestureRecognizersForView(UIView *view)
     if (!CGPointEqualToPoint(screenLocation, _location)) {
         _previousLocation = _location;
         _location = screenLocation;
+        
+        //FIXME: is it right?
+        _delta = CGPointMake(screenLocation.x- _previousLocation.x, screenLocation.y - _previousLocation.y);
     }
     
     _phase = phase;
