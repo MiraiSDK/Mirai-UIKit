@@ -139,9 +139,25 @@ struct engine {
 //                int pollTimeout = engine.animating ? 0 : -1;
                 int pollTimeout = 0;
                 
+                
+                BOOL runLoopFired = NO;
                 while ((ident=ALooper_pollAll(pollTimeout, NULL, &events, (void**)&source)) >= 0) {
-                    NSLog(@"handle event");
-                    // Process this event.
+//
+                    if (!runLoopFired) {
+                        NSDate *untilDate = nil;
+                        
+                        if (source != NULL) {
+                            untilDate = [NSDate date];
+                        } else {
+                            untilDate = [NSDate distantFuture];
+                        }
+        
+                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
+                        runLoopFired = YES;
+                    }
+                    
+//                    NSLog(@"handle event");
+//                    // Process this event.
                     if (source != NULL) {
                         source->process(app_state, source);
                     }
@@ -159,6 +175,7 @@ struct engine {
                     @autoreleasepool {
                         _renderer.layer = _app.keyWindow.layer;
                         [_renderer.layer layoutIfNeeded];
+                        [_renderer addUpdateRect:_renderer.layer.bounds];
                         [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
                         [_renderer render];
                         [_renderer endFrame];
@@ -205,13 +222,21 @@ static void engine_term_display(struct engine* engine) {
 
 - (void)handleAEvent:(AInputEvent *)aEvent
 {
+    [[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
+
     int32_t aType = AInputEvent_getType(aEvent);
     if (aType == AINPUT_EVENT_TYPE_MOTION) {
         UITouch *touch = [[_currentEvent allTouches] anyObject];
         
         int64_t eventTime = AMotionEvent_getEventTime(aEvent);
-        const NSTimeInterval timestamp = eventTime/1000000000.0f; // convert nanoSeconds to Seconds
+        const NSTimeInterval eventTimestamp = eventTime/1000000000.0f; // convert nanoSeconds to Seconds
+        [_currentEvent _setTimestamp:eventTimestamp];
         
+        size_t pointerCount = AMotionEvent_getPointerCount(aEvent);
+        for (size_t pointer_index = 0; pointer_index < pointerCount ; pointer_index++) {
+            int32_t pointerIdentifier = AMotionEvent_getPointerId(aEvent, pointer_index);
+        }
+
         int32_t action = AMotionEvent_getAction(aEvent);
         int32_t trueAction = action & AMOTION_EVENT_ACTION_MASK;
         int32_t pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
@@ -247,7 +272,7 @@ static void engine_term_display(struct engine* engine) {
                 phase = UITouchPhaseCancelled;
                 break;
         }
-        [touch _updatePhase:phase screenLocation:screenLocation timestamp:timestamp];
+        [touch _updatePhase:phase screenLocation:screenLocation timestamp:eventTimestamp];
 
         //update touche.view
         UIView *previousView = touch.view;
@@ -255,8 +280,8 @@ static void engine_term_display(struct engine* engine) {
         [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
         
         [self sendEvent:_currentEvent];
-
         
+
     }
     
 }

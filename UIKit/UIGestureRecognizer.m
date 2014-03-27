@@ -170,7 +170,8 @@
                 // note that this means that reset can't happen until the next run loop, either otherwise
                 // the state property is going to be wrong when the action handler looks at it, so as a result
                 // I'm also delaying the reset call (if necessary) just below here.
-                [actionRecord.target performSelector:actionRecord.action withObject:self afterDelay:0];
+                NSLog(@"call gesture action");
+                [actionRecord.target performSelector:actionRecord.action withObject:self afterDelay:0 inModes:@[UITrackingRunLoopMode,NSDefaultRunLoopMode]];
             }
         }
         
