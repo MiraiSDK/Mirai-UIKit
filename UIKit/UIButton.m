@@ -354,13 +354,6 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     _backgroundImageView.frame = [self backgroundRectForBounds:bounds];
     _titleLabel.frame = [self titleRectForContentRect:contentRect];
     _imageView.frame = [self imageRectForContentRect:contentRect];
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    
-    NSLog(@"bounds:%@",NSStringFromCGRect(bounds));
-    NSLog(@"contentRect: %@",NSStringFromCGRect(contentRect));
-    NSLog(@"backgroundFrame: %@",NSStringFromCGRect(_backgroundImageView.frame));
-    NSLog(@"titleLabelFrame: %@",NSStringFromCGRect(_titleLabel.frame));
-    NSLog(@"imageViewFrame: %@",NSStringFromCGRect(_imageView.frame));
 }
 
 - (void)_stateDidChange
