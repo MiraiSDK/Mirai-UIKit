@@ -30,6 +30,8 @@
 #import "UIRoundedRectButton.h"
 #import "UIImage+UIPrivate.h"
 #import "UIColor.h"
+#import "UIBezierPath.h"
+#import "UIGraphics.h"
 
 @implementation UIRoundedRectButton
 
@@ -52,8 +54,22 @@
 {
 //    [(self.highlighted? [UIImage _highlightedRoundedRectButtonImage] : [UIImage _roundedRectButtonImage]) drawInRect:self.bounds];
     
-    [(self.highlighted? [UIImage _highlightedRoundedRectButtonImage] : [UIImage _roundedRectButtonImage]) drawInRect:self.bounds];
-
+//    [(self.highlighted? [UIImage _highlightedRoundedRectButtonImage] : [UIImage _roundedRectButtonImage]) drawInRect:self.bounds];
+    CGFloat length = MIN(rect.size.width, rect.size.height);
+    CGFloat radius = length/5;
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    UIColor *fillColor = self.isHighlighted ? [UIColor blueColor] : [UIColor whiteColor];
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
+    
+    CGContextSaveGState(ctx);
+    [bezierPath addClip];
+    [fillColor setFill];
+    CGContextFillRect(UIGraphicsGetCurrentContext(), rect);
+    CGContextRestoreGState(ctx);
+    
+    [[UIColor grayColor] setStroke];
+    [bezierPath stroke];
 }
 
 @end
