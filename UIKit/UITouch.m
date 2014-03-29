@@ -64,7 +64,8 @@ static NSArray *GestureRecognizersForView(UIView *view)
         _location = screenLocation;
         
         //FIXME: is it right?
-        _delta = CGPointMake(screenLocation.x- _previousLocation.x, screenLocation.y - _previousLocation.y);
+        _delta = CGPointMake(_previousLocation.x - screenLocation.x,
+                             _previousLocation.y - screenLocation.y);
     }
     
     _phase = phase;
