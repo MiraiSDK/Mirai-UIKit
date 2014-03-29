@@ -130,6 +130,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    CGContextClearRect(UIGraphicsGetCurrentContext(), rect);
+    
     if ([_text length] > 0) {
         CGContextSaveGState(UIGraphicsGetCurrentContext());
         
