@@ -81,6 +81,21 @@
 		4384634D188C636C006DA1AA /* UIDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4384634B188C636C006DA1AA /* UIDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4384634E188C636C006DA1AA /* UIDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 4384634C188C636C006DA1AA /* UIDevice.m */; };
 		439487E71893B2A4004F8636 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439487E61893B2A4004F8636 /* OpenGLES.framework */; };
+		439A73BD18E84C4E00B1BE40 /* NSIndexPath+UITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73B518E84C4E00B1BE40 /* NSIndexPath+UITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439A73BE18E84C4E00B1BE40 /* NSIndexPath+UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73B618E84C4E00B1BE40 /* NSIndexPath+UITableView.m */; };
+		439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73B718E84C4E00B1BE40 /* UITableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439A73C018E84C4E00B1BE40 /* UITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73B818E84C4E00B1BE40 /* UITableView.m */; };
+		439A73C118E84C4E00B1BE40 /* UITableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73B918E84C4E00B1BE40 /* UITableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439A73C218E84C4E00B1BE40 /* UITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73BA18E84C4E00B1BE40 /* UITableViewCell.m */; };
+		439A73C318E84C4E00B1BE40 /* UITableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73BB18E84C4E00B1BE40 /* UITableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439A73C418E84C4E00B1BE40 /* UITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73BC18E84C4E00B1BE40 /* UITableViewController.m */; };
+		439A73C618E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73C518E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h */; };
+		439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73C718E84C6300B1BE40 /* UITableViewCellSeparator.h */; };
+		439A73CE18E84C6300B1BE40 /* UITableViewCellSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73C818E84C6300B1BE40 /* UITableViewCellSeparator.m */; };
+		439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73C918E84C6300B1BE40 /* UITableViewSection.h */; };
+		439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73CA18E84C6300B1BE40 /* UITableViewSection.m */; };
+		439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */; };
+		439A73D218E84C6300B1BE40 /* UITableViewSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */; };
 		43B819CF18E27D550020624F /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819C918E27D550020624F /* UIScrollViewAnimation.h */; };
 		43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819CA18E27D550020624F /* UIScrollViewAnimation.m */; };
 		43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819CB18E27D550020624F /* UIScrollViewAnimationDeceleration.h */; };
@@ -226,6 +241,21 @@
 		4384634B188C636C006DA1AA /* UIDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDevice.h; sourceTree = "<group>"; };
 		4384634C188C636C006DA1AA /* UIDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDevice.m; sourceTree = "<group>"; };
 		439487E61893B2A4004F8636 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		439A73B518E84C4E00B1BE40 /* NSIndexPath+UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+UITableView.h"; sourceTree = "<group>"; };
+		439A73B618E84C4E00B1BE40 /* NSIndexPath+UITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+UITableView.m"; sourceTree = "<group>"; };
+		439A73B718E84C4E00B1BE40 /* UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableView.h; sourceTree = "<group>"; };
+		439A73B818E84C4E00B1BE40 /* UITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableView.m; sourceTree = "<group>"; };
+		439A73B918E84C4E00B1BE40 /* UITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCell.h; sourceTree = "<group>"; };
+		439A73BA18E84C4E00B1BE40 /* UITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCell.m; sourceTree = "<group>"; };
+		439A73BB18E84C4E00B1BE40 /* UITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewController.h; sourceTree = "<group>"; };
+		439A73BC18E84C4E00B1BE40 /* UITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewController.m; sourceTree = "<group>"; };
+		439A73C518E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+UIPrivate.h"; sourceTree = "<group>"; };
+		439A73C718E84C6300B1BE40 /* UITableViewCellSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellSeparator.h; sourceTree = "<group>"; };
+		439A73C818E84C6300B1BE40 /* UITableViewCellSeparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellSeparator.m; sourceTree = "<group>"; };
+		439A73C918E84C6300B1BE40 /* UITableViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewSection.h; sourceTree = "<group>"; };
+		439A73CA18E84C6300B1BE40 /* UITableViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSection.m; sourceTree = "<group>"; };
+		439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewSectionLabel.h; sourceTree = "<group>"; };
+		439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSectionLabel.m; sourceTree = "<group>"; };
 		43B819C918E27D550020624F /* UIScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimation.h; sourceTree = "<group>"; };
 		43B819CA18E27D550020624F /* UIScrollViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewAnimation.m; sourceTree = "<group>"; };
 		43B819CB18E27D550020624F /* UIScrollViewAnimationDeceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimationDeceleration.h; sourceTree = "<group>"; };
@@ -516,13 +546,10 @@
 				43ECCF101851CAA80076535C /* UIWindow.h */,
 				4315799B18B0EC3200AE4256 /* UIWindow+UIPrivate.h */,
 				43ECCF111851CAA80076535C /* UIWindow.m */,
-				43EBAA6618AA5639005DDD8D /* UIScrollView.h */,
-				43EBAA6718AA5639005DDD8D /* UIScrollView.m */,
-				43B819D518E27D710020624F /* UIScrollView+UIPrivate.h */,
-				43EBAA6A18AA588F005DDD8D /* UIScroller.h */,
-				43EBAA6B18AA588F005DDD8D /* UIScroller.m */,
+				439A73B318E84C1E00B1BE40 /* UIScrollView */,
 				4384632D188B4025006DA1AA /* UIImageView.h */,
 				4384632E188B4025006DA1AA /* UIImageView.m */,
+				439A73B418E84C3C00B1BE40 /* UITableView */,
 				43846333188B417F006DA1AA /* UIButton.h */,
 				43846334188B417F006DA1AA /* UIButton.m */,
 				43EBAA8018AB7087005DDD8D /* UINavigationBar.h */,
@@ -531,6 +558,40 @@
 				43E2AC9C18ACD9370029EE86 /* UIToolbar.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		439A73B318E84C1E00B1BE40 /* UIScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				43EBAA6618AA5639005DDD8D /* UIScrollView.h */,
+				43EBAA6718AA5639005DDD8D /* UIScrollView.m */,
+				43B819D518E27D710020624F /* UIScrollView+UIPrivate.h */,
+				43EBAA6A18AA588F005DDD8D /* UIScroller.h */,
+				43EBAA6B18AA588F005DDD8D /* UIScroller.m */,
+			);
+			name = UIScrollView;
+			sourceTree = "<group>";
+		};
+		439A73B418E84C3C00B1BE40 /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				439A73C718E84C6300B1BE40 /* UITableViewCellSeparator.h */,
+				439A73C818E84C6300B1BE40 /* UITableViewCellSeparator.m */,
+				439A73C918E84C6300B1BE40 /* UITableViewSection.h */,
+				439A73CA18E84C6300B1BE40 /* UITableViewSection.m */,
+				439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */,
+				439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */,
+				439A73C518E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h */,
+				439A73B518E84C4E00B1BE40 /* NSIndexPath+UITableView.h */,
+				439A73B618E84C4E00B1BE40 /* NSIndexPath+UITableView.m */,
+				439A73B718E84C4E00B1BE40 /* UITableView.h */,
+				439A73B818E84C4E00B1BE40 /* UITableView.m */,
+				439A73B918E84C4E00B1BE40 /* UITableViewCell.h */,
+				439A73BA18E84C4E00B1BE40 /* UITableViewCell.m */,
+				439A73BB18E84C4E00B1BE40 /* UITableViewController.h */,
+				439A73BC18E84C4E00B1BE40 /* UITableViewController.m */,
+			);
+			name = UITableView;
 			sourceTree = "<group>";
 		};
 		43B819F918E2B3C20020624F /* GestureRecognizer */ = {
@@ -574,6 +635,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439A73BD18E84C4E00B1BE40 /* NSIndexPath+UITableView.h in Headers */,
 				43718EC418518FA800850F08 /* UIKit.h in Headers */,
 				43B819CF18E27D550020624F /* UIScrollViewAnimation.h in Headers */,
 				4315799C18B0EC3200AE4256 /* UIWindow+UIPrivate.h in Headers */,
@@ -615,7 +677,11 @@
 				43B819EB18E2AA870020624F /* UILongPressGestureRecognizer.h in Headers */,
 				43B819ED18E2AA870020624F /* UIPanGestureRecognizer.h in Headers */,
 				43B819F118E2AA870020624F /* UIRotationGestureRecognizer.h in Headers */,
+				439A73C318E84C4E00B1BE40 /* UITableViewController.h in Headers */,
+				439A73C118E84C4E00B1BE40 /* UITableViewCell.h in Headers */,
+				439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */,
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
+				439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */,
 				43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */,
 				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
@@ -623,6 +689,7 @@
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
 				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
 				43EBAA9018AB85FB005DDD8D /* UIBarButtonItem.h in Headers */,
+				439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */,
 				43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */,
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
@@ -634,8 +701,10 @@
 				43846317188B3B74006DA1AA /* UIEvent.h in Headers */,
 				432FF05F185338BD005486C5 /* UIScreen.h in Headers */,
 				43718EA418517FBA00850F08 /* UIApplication.h in Headers */,
+				439A73C618E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h in Headers */,
 				43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */,
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
+				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
 				43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */,
 				432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */,
 			);
@@ -754,6 +823,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43846330188B4025006DA1AA /* UIImageView.m in Sources */,
+				439A73C418E84C4E00B1BE40 /* UITableViewController.m in Sources */,
 				431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */,
 				43B819F418E2AA870020624F /* UISwipeGestureRecognizer.m in Sources */,
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
@@ -768,6 +838,7 @@
 				43EBAA8318AB7087005DDD8D /* UINavigationBar.m in Sources */,
 				43846321188B3D5B006DA1AA /* UIControl.m in Sources */,
 				43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */,
+				439A73CE18E84C6300B1BE40 /* UITableViewCellSeparator.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
 				432FF08C18544D7A005486C5 /* UIStringDrawing.m in Sources */,
@@ -777,18 +848,22 @@
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
 				43846303188B1ED9006DA1AA /* UIColor.m in Sources */,
 				43EBAA9118AB85FB005DDD8D /* UIBarButtonItem.m in Sources */,
+				439A73D218E84C6300B1BE40 /* UITableViewSectionLabel.m in Sources */,
 				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
 				43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
 				43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */,
 				43718EA518517FBA00850F08 /* UIApplication.m in Sources */,
+				439A73C218E84C4E00B1BE40 /* UITableViewCell.m in Sources */,
 				43B819D418E27D550020624F /* UIScrollViewAnimationScroll.m in Sources */,
+				439A73BE18E84C4E00B1BE40 /* NSIndexPath+UITableView.m in Sources */,
 				43B819F218E2AA870020624F /* UIRotationGestureRecognizer.m in Sources */,
 				43718EA118517F0500850F08 /* UIResponder.m in Sources */,
 				43718EC018518AB200850F08 /* android_native_app_glue.c in Sources */,
 				434BC9CB18D58A4300BECD47 /* UIImage+UIPrivate.m in Sources */,
 				432FF060185338BD005486C5 /* UIScreen.m in Sources */,
 				43B819D218E27D550020624F /* UIScrollViewAnimationDeceleration.m in Sources */,
+				439A73C018E84C4E00B1BE40 /* UITableView.m in Sources */,
 				431412D418C0A5A4001AF732 /* UIViewLayoutManager.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
 				43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */,
@@ -801,6 +876,7 @@
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,
 				4384630C188B2751006DA1AA /* UIGeometry.m in Sources */,
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
+				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
 				43846310188B2BCD006DA1AA /* UIImage.m in Sources */,
 				4384633A188B41D2006DA1AA /* UIRoundedRectButton.m in Sources */,
 			);
