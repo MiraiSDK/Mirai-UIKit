@@ -197,6 +197,11 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     return [NSString stringWithFormat:@"<%@: %p; frame = %@; hidden = %@; layer = %@>", [self className], self, NSStringFromCGRect(self.frame), (self.hidden ? @"YES" : @"NO"), self.layer];
 }
 
+- (UIResponder *)nextResponder
+{
+    return (UIResponder *)_viewController ?: (UIResponder *)_superview;
+}
+
 @end
 
 @implementation UIView (UIViewGeometry)
