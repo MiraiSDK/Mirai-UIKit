@@ -882,6 +882,12 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
     return _backgroundColor;
 }
 
+- (id<CAAction>) actionForLayer: (CALayer*)layer forKey: (NSString*)eventKey
+{
+    // FIX: create a class _UIViewAnimatingLayerDelegate
+    return [NSNull null];
+}
+
 - (void)displayLayer:(CALayer *)theLayer
 {
 //    CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -1265,6 +1271,3 @@ static BOOL _animationsEnabled = YES;
 }
 
 @end
-
-
-
