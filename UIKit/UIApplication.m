@@ -77,19 +77,18 @@ static UIApplication *_app;
 
 - (void)finishLaunching
 {
-    NSLog(@"in finishLaunching...");
-    NSLog(@"delegate: %s",[self.delegate description].UTF8String);
     if (self.delegate) {
-        NSLog(@"will coll didfinish");
         [self.delegate application:self didFinishLaunchingWithOptions:nil];
     }
 }
 
-static void draw_frame(ANativeWindow_Buffer *buffer);
+#pragma mark - Android glue
 static void handle_app_command(struct android_app* app, int32_t cmd);
 static int32_t handle_input(struct android_app* app, AInputEvent* event);
 bool app_has_focus = false;
 static struct android_app* app_state;
+static EAGLContext *_mainContext = nil;
+static CARenderer *_mainRenderer = nil;
 
 /**
  * Shared state for our app.
@@ -98,10 +97,236 @@ struct engine {
     struct android_app* app;
     
     int animating;
+    bool isScreenReady;
 };
 
+static void constructExecutablePath(char *result, struct android_app* state)
+{
+    char buffer[1024];
+    char basePath[1024];
+    
+    // externalDataPath: /storage/emulated/0/Android/data/org.tiny4.BasicCairo/files
+    const char * externalDataPath = app_state->activity->externalDataPath;
+    
+    // remove last component
+    char *lastSlash = strrchr(externalDataPath, '/');
+    strncpy(basePath, externalDataPath, lastSlash - externalDataPath);
+    
+    // get last component
+    char activityName[1024];
+    memset(activityName, 0, 1024);
+    lastSlash = strrchr(basePath, '/');
+    strcpy(activityName, lastSlash+1);
+    
+    // construct path
+    memset(buffer, 0, 1024);
+    sprintf(buffer, "%s/%s.app/UIKitApp",basePath,activityName);
+    
+    strcpy(result, buffer);
+}
+
+// Entry point from android part
+void android_main(struct android_app* state)
+{
+    @autoreleasepool {
+        
+        // Forward NSLog to android logging system
+        _NSLog_printf_handler = *_NSLog_android_log_handler;
+        
+        app_state = state;
+        
+        char buffer[1024];
+        constructExecutablePath(buffer, state);
+        
+        // Initialize process info
+        int argc = 1;
+        char * argv[] = {buffer};
+        [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
+        
+        // Make sure glue isn't stripped.
+        app_dummy();
+        
+        //setup engine
+        struct engine engine;
+        memset(&engine, 0, sizeof(engine));
+        app_state->userData = &engine;
+        app_state->onAppCmd = handle_app_command;
+        app_state->onInputEvent = handle_input;
+        engine.app = app_state;
+        
+        // Wait until screen is ready
+        // which is wait to receive APP_CMD_INIT_WINDOW cmd
+        while (!engine.isScreenReady) {
+            int ident;
+            int events;
+            struct android_poll_source* source;
+            int pollTimeout = 0;
+            
+            while ((ident=ALooper_pollAll(pollTimeout, NULL, &events, (void**)&source)) >= 0) {
+                if (source != NULL) {
+                    source->process(app_state, source);
+                }
+                
+                if (engine.isScreenReady) {
+                    break;
+                }
+            }
+        }
+        
+        // unzip assets to bundle path
+        NSString *bundlePath = [NSString stringWithUTF8String:buffer];
+        bundlePath = [bundlePath stringByDeletingLastPathComponent];
+        _prepareAsset(bundlePath);
+        
+        // call launcher, launcher will call the main()
+        [TNAndroidLauncher launchWithArgc:argc argv:argv];
+    }
+    
+}
+
+#pragma mark Events
+
+static void handle_app_command(struct android_app* app, int32_t cmd) {
+    /* app->userData is available here */
+    
+    struct engine* engine = (struct engine*)app->userData;
+    switch (cmd) {
+        case APP_CMD_INIT_WINDOW:
+            // The window is being shown, get it ready.
+            if (engine->app->window != NULL) {
+                engine_init_display(engine);
+            }
+            engine->isScreenReady = true;
+            break;
+        case APP_CMD_TERM_WINDOW:
+            // The window is being hidden or closed, clean it up.
+            engine_term_display(engine);
+            break;
+        case APP_CMD_LOST_FOCUS:
+            app_has_focus=false;
+            // Also stop animating.
+            engine->animating = 0;
+            break;
+        case APP_CMD_GAINED_FOCUS:
+            app_has_focus=true;
+            break;
+    }
+}
+
+static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
+    /* app->userData is available here */
+    [_app handleAEvent:aEvent];
+    return 1;
+}
+
+#pragma mark Display setup
+/**
+ * Initialize an EGL context for the current display.
+ */
+static int engine_init_display(struct engine* engine) {
+    // initialize OpenGL ES and EGL
+    
+    [UIScreen androidSetupMainScreenWith:engine->app];
+    
+    // Initialize GL state.
+    
+    EAGLContext *ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    _mainRenderer = [CARenderer rendererWithEAGLContext:ctx options:nil];
+    _mainContext = ctx;
+    
+    return 0;
+}
+
+/**
+ * Tear down the EGL context currently associated with the display.
+ */
+static void engine_term_display(struct engine* engine) {
+    _app->_renderer = nil;
+    _app->_context = nil;
+    
+    [UIScreen androidTeardownMainScreen];
+}
+
+#pragma mark Logging
+static void _NSLog_android_log_handler (NSString *message)
+{
+    __android_log_write(ANDROID_LOG_INFO,"NSLog",[message UTF8String]);
+}
+
+#pragma mark MainBundle
+#define BUFSIZ 1024
+
+static void _extractFolder(NSString *folder, NSString *path)
+{
+    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
+    NSString *destPath = [path stringByAppendingPathComponent:folder];
+    if (! [[NSFileManager defaultManager] fileExistsAtPath:destPath]) {
+        NSLog(@"create folder:%@",destPath);
+        NSError *creationError = nil;
+        BOOL createSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:destPath withIntermediateDirectories:YES attributes:nil error:&creationError];
+        if (!createSuccess) {
+            NSLog(@"%@",creationError);
+        }
+    }
+    
+    AAssetManager *mgr = app_state->activity->assetManager;
+//    NSLog(@"open dir:%@",folder);
+    AAssetDir *assetDir = AAssetManager_openDir(mgr, [folder UTF8String]);
+    const char * filename = NULL;
+    while ((filename = AAssetDir_getNextFileName(assetDir)) != NULL) {
+//        NSLog(@"process filename:%s",filename);
+        NSString *NS_filename = [NSString stringWithUTF8String:filename];
+        const char *destion = [[destPath stringByAppendingPathComponent:NS_filename] UTF8String];
+        FILE *isExist = fopen(destion, "r");
+        if (isExist) {
+            //FIXME: what if the file is updated?
+//            NSLog(@"skip exist file:%s",destion);
+            fclose(isExist);
+            continue;
+        }
+        
+        NSString *relativePath = [folder stringByAppendingPathComponent:NS_filename];
+//        NSLog(@"relativePath:%@",relativePath);
+//        NSLog(@"extract bundle file: %s",destion);
+        AAsset *asset = AAssetManager_open(mgr, [relativePath UTF8String], AASSET_MODE_STREAMING);
+//        NSLog(@"asset:<%p>",asset);
+        char buf[BUFSIZ];
+        int nb_read = 0;
+        FILE *out = fopen(destion, "w");
+        while ((nb_read = AAsset_read(asset, buf, BUFSIZ)) > 0) {
+            fwrite(buf, nb_read, 1, out);
+        }
+        fclose(out);
+        AAsset_close(asset);
+    }
+    AAssetDir_close(assetDir);
+    
+}
+
+static void _prepareAsset(NSString *path)
+{
+    //
+    // FIXME: should only check files after the apk file changed
+    //
+    
+    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
+    // FIXME: workaround, should enumerate subfolders.
+    _extractFolder(@"",path);
+    _extractFolder(@"Resources",path);
+    _extractFolder(@"Resources/UIKit.bundle",path);
+    
+    //    NSLog(@"main resourcePath: %@",[[NSBundle mainBundle] resourcePath]);
+    //    NSLog(@"main bundlePath: %@",[[NSBundle mainBundle] bundlePath]);
+    //    NSLog(@"main executablePath: %@",[[NSBundle mainBundle] executablePath]);
+    
+}
+
+#pragma mark - mainRunLoop
 - (void)_run
 {
+    _renderer = _mainRenderer;
+    _context = _mainContext;
+    
     static BOOL didlaunch = NO;
     @autoreleasepool {
         _isRunning = YES;
@@ -116,16 +341,9 @@ struct engine {
             }
         }
         
-        // Make sure glue isn't stripped.
-        app_dummy();
-        struct engine engine;
-        memset(&engine, 0, sizeof(engine));
-        app_state->userData = &engine;
-        app_state->onAppCmd = handle_app_command;
-        app_state->onInputEvent = handle_input;
-        engine.app = app_state;
-        
         NSLog(@"start loop");
+        struct engine* engine = (struct engine*)app_state->userData;
+
         do {
             @autoreleasepool {
                 // Read all pending events. If app_has_focus is true, then we are going
@@ -136,13 +354,12 @@ struct engine {
                 int ident;
                 int events;
                 struct android_poll_source* source;
-//                int pollTimeout = engine.animating ? 0 : -1;
+//                int pollTimeout = engine->animating ? 0 : -1;
                 int pollTimeout = 0;
-                
                 
                 BOOL runLoopFired = NO;
                 while ((ident=ALooper_pollAll(pollTimeout, NULL, &events, (void**)&source)) >= 0) {
-//
+                    
                     if (!runLoopFired) {
                         NSDate *untilDate = nil;
                         
@@ -156,8 +373,7 @@ struct engine {
                         runLoopFired = YES;
                     }
                     
-//                    NSLog(@"handle event");
-//                    // Process this event.
+                    // Process this event.
                     if (source != NULL) {
                         source->process(app_state, source);
                     }
@@ -165,7 +381,7 @@ struct engine {
                     // Check if we are exiting.
                     if (app_state->destroyRequested != 0) {
                         NSLog(@"Engine thread destroy requested!");
-                        engine_term_display(&engine);
+                        engine_term_display(engine);
                         return;
                     }
                 }
@@ -193,33 +409,6 @@ struct engine {
 }
 
 
-/**
- * Initialize an EGL context for the current display.
- */
-static int engine_init_display(struct engine* engine) {
-    // initialize OpenGL ES and EGL
-    
-    [UIScreen androidSetupMainScreenWith:engine->app];
-    
-    // Initialize GL state.
-    
-    EAGLContext *ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    _app->_renderer = [CARenderer rendererWithEAGLContext:ctx options:nil];
-    _app->_context = ctx;
-    
-    return 0;
-}
-
-/**
- * Tear down the EGL context currently associated with the display.
- */
-static void engine_term_display(struct engine* engine) {
-    _app->_renderer = nil;
-    _app->_context = nil;
-
-    [UIScreen androidTeardownMainScreen];
-}
-
 - (void)handleAEvent:(AInputEvent *)aEvent
 {
     [[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
@@ -243,7 +432,9 @@ static void engine_term_display(struct engine* engine) {
         float x = AMotionEvent_getX(aEvent, pointerIndex);
         float y = AMotionEvent_getY(aEvent, pointerIndex);
 
-        const CGPoint screenLocation = CGPointMake(x, y);
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        
+        const CGPoint screenLocation = CGPointMake(x/scale, y/scale);
         UITouchPhase phase = UITouchPhaseCancelled;
         switch (trueAction) {
             case AMOTION_EVENT_ACTION_DOWN:
@@ -280,175 +471,7 @@ static void engine_term_display(struct engine* engine) {
         [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
         
         [self sendEvent:_currentEvent];
-        
-
     }
-    
-}
-
-static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
-    /* app->userData is available here */
-    
-    [_app handleAEvent:aEvent];
-    return 1;
-//    
-//    UIEvent *ui_Event = [[UIEvent alloc] initWithAInputEvent:aEvent];
-//    
-//    if (ui_Event) {
-//        [_app sendEvent:ui_Event];
-//        return 1;
-//    }
-//    
-//    return 0;
-}
-
-static void handle_app_command(struct android_app* app, int32_t cmd) {
-    /* app->userData is available here */
-    struct engine* engine = (struct engine*)app->userData;
-    
-    switch (cmd) {
-        case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
-            if (engine->app->window != NULL) {
-                engine_init_display(engine);
-//                engine_draw_frame(engine);
-            }
-            break;
-        case APP_CMD_TERM_WINDOW:
-            // The window is being hidden or closed, clean it up.
-            engine_term_display(engine);
-            break;
-        case APP_CMD_LOST_FOCUS:
-            app_has_focus=false;
-            // Also stop animating.
-            engine->animating = 0;
-//            engine_draw_frame(engine);
-            break;
-        case APP_CMD_GAINED_FOCUS:
-            app_has_focus=true;
-            break;
-    }
-}
-
-static void _NSLog_android_log_handler (NSString *message)
-{
-    __android_log_write(ANDROID_LOG_INFO,"NSLog",[message UTF8String]);
-}
-
-#define BUFSIZ 1024
-
-static void _extractFolder(NSString *folder, NSString *path)
-{
-    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
-    NSString *destPath = [path stringByAppendingPathComponent:folder];
-    if (! [[NSFileManager defaultManager] fileExistsAtPath:destPath]) {
-        NSLog(@"create folder:%@",destPath);
-        NSError *creationError = nil;
-        BOOL createSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:destPath withIntermediateDirectories:YES attributes:nil error:&creationError];
-        if (!createSuccess) {
-            NSLog(@"%@",creationError);
-        }
-    }
-    
-    AAssetManager *mgr = app_state->activity->assetManager;
-    NSLog(@"open dir:%@",folder);
-    AAssetDir *assetDir = AAssetManager_openDir(mgr, [folder UTF8String]);
-    const char * filename = NULL;
-    while ((filename = AAssetDir_getNextFileName(assetDir)) != NULL) {
-        NSLog(@"process filename:%s",filename);
-        NSString *NS_filename = [NSString stringWithUTF8String:filename];
-        const char *destion = [[destPath stringByAppendingPathComponent:NS_filename] UTF8String];
-        FILE *isExist = fopen(destion, "r");
-        if (isExist) {
-            //FIXME: what if the file is updated?
-            NSLog(@"skip exist file:%s",destion);
-            fclose(isExist);
-            continue;
-        }
-        
-        NSString *relativePath = [folder stringByAppendingPathComponent:NS_filename];
-        NSLog(@"relativePath:%@",relativePath);
-        NSLog(@"extract bundle file: %s",destion);
-        AAsset *asset = AAssetManager_open(mgr, [relativePath UTF8String], AASSET_MODE_STREAMING);
-        NSLog(@"asset:<%p>",asset);
-        char buf[BUFSIZ];
-        int nb_read = 0;
-        FILE *out = fopen(destion, "w");
-        while ((nb_read = AAsset_read(asset, buf, BUFSIZ)) > 0) {
-            fwrite(buf, nb_read, 1, out);
-        }
-        fclose(out);
-        AAsset_close(asset);
-    }
-    AAssetDir_close(assetDir);
-
-}
-
-static void _prepareAsset(NSString *path)
-{
-    //
-    // FIXME: should only check files after the apk file changed
-    //
-    
-    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
-    // FIXME: workaround, should enumerate subfolders.
-    _extractFolder(@"",path);
-    _extractFolder(@"Resources",path);
-    _extractFolder(@"Resources/UIKit.bundle",path);
-
-//    NSLog(@"main resourcePath: %@",[[NSBundle mainBundle] resourcePath]);
-//    NSLog(@"main bundlePath: %@",[[NSBundle mainBundle] bundlePath]);
-//    NSLog(@"main executablePath: %@",[[NSBundle mainBundle] executablePath]);
-
-}
-
-static void constructExecutablePath(char *result, struct android_app* state)
-{
-    char buffer[1024];
-    char basePath[1024];
-
-    // externalDataPath: /storage/emulated/0/Android/data/org.tiny4.BasicCairo/files
-    const char * externalDataPath = app_state->activity->externalDataPath;
-    
-    // remove last component
-    char *lastSlash = strrchr(externalDataPath, '/');
-    strncpy(basePath, externalDataPath, lastSlash - externalDataPath);
-    
-    // get last component
-    char activityName[1024];
-    memset(activityName, 0, 1024);
-    lastSlash = strrchr(basePath, '/');
-    strcpy(activityName, lastSlash+1);
-    
-    // construct path
-    memset(buffer, 0, 1024);
-    sprintf(buffer, "%s/%s.app/UIKitApp",basePath,activityName);
-
-    strcpy(result, buffer);
-}
-
-//int main(int argc, char * argv[]);
-void android_main(struct android_app* state)
-{
-    _NSLog_printf_handler = *_NSLog_android_log_handler;
-    
-    app_state = state;
-    
-    char buffer[1024];
-    constructExecutablePath(buffer, state);
-
-    int argc = 1;
-    char * argv[] = {buffer};
-    [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
-    NSLog(@"on android_main");
-
-    @autoreleasepool {
-        NSString *bundlePath = [NSString stringWithUTF8String:buffer];
-        bundlePath = [bundlePath stringByDeletingLastPathComponent];
-        _prepareAsset(bundlePath);
-        [TNAndroidLauncher launchWithArgc:argc argv:argv];
-    }
-    
 }
 
 #pragma mark -
@@ -620,6 +643,8 @@ void android_main(struct android_app* state)
 }
 
 @end
+
+
 
 @implementation UIApplication (UIRemoteNotifications)
 
