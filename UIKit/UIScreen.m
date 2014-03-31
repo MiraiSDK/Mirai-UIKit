@@ -22,6 +22,7 @@ static NSMutableArray *_allScreens;
     CGRect _bounds;
     CGRect _applicationFrame;
     CGFloat _scale;
+    CGRect _pixelBounds;
     
 }
 
@@ -39,7 +40,6 @@ static UIScreen *_mainScreen = nil;
 static EGLDisplay _mainDisplay = EGL_NO_DISPLAY;
 static EGLContext _mainContext = EGL_NO_CONTEXT;
 static EGLSurface _mainSurface = EGL_NO_SURFACE;
-static CGRect _mainDisplayBounds;
 
 + (BOOL)androidSetupMainScreenWith:(struct android_app *)androidApp
 {
@@ -61,7 +61,7 @@ static CGRect _mainDisplayBounds;
         EGL_NONE
     };
 
-    EGLint w, h, dummy, format;
+    EGLint pixelWidth, pixelHeight, dummy, format;
     EGLint numConfigs;
     EGLConfig config;
     EGLSurface surface;
@@ -91,15 +91,16 @@ static CGRect _mainDisplayBounds;
         return NO;
     }
     
-    eglQuerySurface(display, surface, EGL_WIDTH, &w);
-    eglQuerySurface(display, surface, EGL_HEIGHT, &h);
+    eglQuerySurface(display, surface, EGL_WIDTH, &pixelWidth);
+    eglQuerySurface(display, surface, EGL_HEIGHT, &pixelHeight);
     
     _mainDisplay = display;
     _mainContext = context;
     _mainSurface = surface;
-    _mainDisplayBounds = CGRectMake(0, 0, w, h);
     
-    _mainScreen->_bounds = _mainDisplayBounds;
+    _mainScreen->_pixelBounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
+    _mainScreen->_scale = 1;
+    _mainScreen->_bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
     
     return YES;
 }
@@ -128,7 +129,15 @@ static CGRect _mainDisplayBounds;
     _mainDisplay = EGL_NO_DISPLAY;
     _mainContext = EGL_NO_CONTEXT;
     _mainSurface = EGL_NO_SURFACE;
-    _mainDisplayBounds = CGRectZero;
+}
+
+- (void)_setScale:(CGFloat)scale
+{
+    _scale = scale;
+
+    _bounds = CGRectMake(0, 0,
+                         _pixelBounds.size.width/scale,
+                         _pixelBounds.size.height/scale);
 }
 
 + (NSArray *)screens

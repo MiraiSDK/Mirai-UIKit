@@ -227,11 +227,13 @@ static int engine_init_display(struct engine* engine) {
     // initialize OpenGL ES and EGL
     
     [UIScreen androidSetupMainScreenWith:engine->app];
+    [[UIScreen mainScreen] _setScale:2];
     
     // Initialize GL state.
     
     EAGLContext *ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     _mainRenderer = [CARenderer rendererWithEAGLContext:ctx options:nil];
+    _mainRenderer.bounds = [[UIScreen mainScreen] bounds];
     _mainContext = ctx;
     
     return 0;

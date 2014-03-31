@@ -15,6 +15,7 @@
 + (BOOL)androidSetupMainScreenWith:(struct android_app *)androidApp;
 + (void)androidTeardownMainScreen;
 
+- (void)_setScale:(CGFloat)scale;
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent;
 @end
 
