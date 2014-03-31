@@ -9,6 +9,8 @@
 #import "UIViewController.h"
 #import "UIView+UIPrivate.h"
 
+#import "UIScreen.h"
+
 @implementation UIViewController {
     NSMutableArray *_childViewControllers;
 }
@@ -62,7 +64,7 @@
 
 - (void)loadView
 {
-    self.view = [[UIView alloc] initWithFrame:CGRectMake(0,0,320,480)];
+    self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 }
 
 - (void)viewDidLoad
