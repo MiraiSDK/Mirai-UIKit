@@ -30,6 +30,8 @@
 		432FF093185452EC005486C5 /* NSStringDrawing.h in Headers */ = {isa = PBXBuildFile; fileRef = 432FF091185452EC005486C5 /* NSStringDrawing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		432FF094185452EC005486C5 /* NSStringDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 432FF092185452EC005486C5 /* NSStringDrawing.m */; };
 		432FF09618548FDA005486C5 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432FF09518548FDA005486C5 /* CoreText.framework */; };
+		4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336782018F1476D00F1D556 /* UIKit+Android.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */ = {isa = PBXBuildFile; fileRef = 4336782118F1476D00F1D556 /* UIKit+Android.m */; };
 		434BC9CA18D58A4300BECD47 /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */; };
 		434BC9CB18D58A4300BECD47 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */; };
 		43718E7718517B7B00850F08 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43718E7518517B7B00850F08 /* InfoPlist.strings */; };
@@ -197,6 +199,8 @@
 		432FF091185452EC005486C5 /* NSStringDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringDrawing.h; sourceTree = "<group>"; };
 		432FF092185452EC005486C5 /* NSStringDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringDrawing.m; sourceTree = "<group>"; };
 		432FF09518548FDA005486C5 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4336782018F1476D00F1D556 /* UIKit+Android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKit+Android.h"; sourceTree = "<group>"; };
+		4336782118F1476D00F1D556 /* UIKit+Android.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIKit+Android.m"; sourceTree = "<group>"; };
 		434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIPrivate.h"; sourceTree = "<group>"; };
 		434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
 		43718E6918517B7B00850F08 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -446,6 +450,8 @@
 		43718E7318517B7B00850F08 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4336782018F1476D00F1D556 /* UIKit+Android.h */,
+				4336782118F1476D00F1D556 /* UIKit+Android.m */,
 				43718EBF18518AB200850F08 /* android_native_app_glue.h */,
 				43718EBE18518AB200850F08 /* android_native_app_glue.c */,
 				43718E7418517B7B00850F08 /* UIKit-Info.plist */,
@@ -748,6 +754,7 @@
 				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
 				43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */,
+				4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */,
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
 				43C200CF18EBE0AA00490D59 /* UIActivityIndicatorView.h in Headers */,
 				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
@@ -946,6 +953,7 @@
 				43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */,
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,
 				4384630C188B2751006DA1AA /* UIGeometry.m in Sources */,
+				4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */,
 				43C200A518EBB58300490D59 /* UIWebView.m in Sources */,
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
