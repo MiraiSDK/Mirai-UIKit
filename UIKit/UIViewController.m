@@ -10,6 +10,7 @@
 #import "UIView+UIPrivate.h"
 
 #import "UIScreen.h"
+#import "UIWindow.h"
 
 @implementation UIViewController {
     NSMutableArray *_childViewControllers;
@@ -201,6 +202,7 @@
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated: (BOOL)flag completion:(void (^)(void))completion
 {
     NS_UNIMPLEMENTED_LOG;
+    [self presentModalViewController:viewControllerToPresent animated:flag];
 }
 
 - (void)dismissViewControllerAnimated: (BOOL)flag completion: (void (^)(void))completion
@@ -209,7 +211,28 @@
 }
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated{
-    NS_UNIMPLEMENTED_LOG;
+    if (!_modalViewController && _modalViewController != self) {
+        _modalViewController = modalViewController;
+        [_modalViewController _setParentViewController:self];
+        
+        UIWindow *window = self.view.window;
+        UIView *selfView = self.view;
+        UIView *newView = _modalViewController.view;
+        
+        newView.autoresizingMask = selfView.autoresizingMask;
+        newView.frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+        
+        [window addSubview:newView];
+        [_modalViewController viewWillAppear:animated];
+        
+        [self viewWillDisappear:animated];
+        selfView.hidden = YES;		// I think the real one may actually remove it, which would mean needing to remember the superview, I guess? Not sure...
+        [self viewDidDisappear:animated];
+        
+        
+        [_modalViewController viewDidAppear:animated];
+    }
+
 }// NS_DEPRECATED_IOS(2_0, 6_0);
 
 - (void)dismissModalViewControllerAnimated:(BOOL)animated
