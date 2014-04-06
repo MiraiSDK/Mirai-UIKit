@@ -323,3 +323,8 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     }
 }
 @end
+
+const UIWindowLevel UIWindowLevelNormal = 0;
+const UIWindowLevel UIWindowLevelAlert = 2000;
+const UIWindowLevel UIWindowLevelStatusBar = 1000;
+
