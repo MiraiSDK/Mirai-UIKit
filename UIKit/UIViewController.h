@@ -57,6 +57,9 @@ typedef NS_ENUM(NSInteger, UIModalPresentationStyle) {
 - (void)viewDidLoad;
 - (BOOL)isViewLoaded;
 
+- (void)viewWillUnload;// NS_DEPRECATED_IOS(5_0,6_0);
+- (void)viewDidUnload;// NS_DEPRECATED_IOS(3_0,6_0);
+
 @property(nonatomic, readonly, copy) NSString *nibName;
 @property(nonatomic, readonly, retain) NSBundle *nibBundle;
 @property(nonatomic, readonly, retain) UIStoryboard *storyboard;
@@ -147,6 +150,32 @@ UIKIT_EXTERN NSString *const UIViewControllerHierarchyInconsistencyException;
 
 - (UIViewController *)childViewControllerForStatusBarStyle;// NS_AVAILABLE_IOS(7_0);
 - (UIViewController *)childViewControllerForStatusBarHidden;// NS_AVAILABLE_IOS(7_0);
+
+@end
+
+@interface UIViewController (UIViewControllerRotation)
+
++ (void)attemptRotationToDeviceOrientation;
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;// NS_DEPRECATED_IOS(2_0, 6_0);
+
+- (BOOL)shouldAutorotate;
+- (NSUInteger)supportedInterfaceOrientations;
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation;
+
+- (UIView *)rotatingHeaderView;
+- (UIView *)rotatingFooterView;
+
+@property(nonatomic,readonly) UIInterfaceOrientation interfaceOrientation;
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+
+- (void)willAnimateFirstHalfOfRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+- (void)didAnimateFirstHalfOfRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;
+- (void)willAnimateSecondHalfOfRotationFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation duration:(NSTimeInterval)duration;
 
 @end
 
