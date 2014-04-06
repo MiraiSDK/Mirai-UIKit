@@ -9,11 +9,15 @@
 #import <UIKit/UIKitDefines.h>
 //#import <UIKit/UIAccelerometer.h>
 //#import <UIKit/UIAccessibility.h>
-//#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIActivityIndicatorView.h>
 //#import <UIKit/UIActivity.h>
 //#import <UIKit/UIActivityItemProvider.h>
 //#import <UIKit/UIActivityViewController.h>
+
 //#import <UIKit/UIAlert.h>
+#import <UIKit/UIActionSheet.h>
+//#import <UIKit/UIAlertView.h>
+
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UIBarItem.h>
@@ -27,7 +31,7 @@
 //#import <UIKit/UICollectionViewTransitionLayout.h>
 #import <UIKit/UIColor.h>
 #import <UIKit/UIControl.h>
-//#import <UIKit/UIDataDetectors.h>
+#import <UIKit/UIDataDetectors.h>
 //#import <UIKit/UIDatePicker.h>
 #import <UIKit/UIDevice.h>
 //#import <UIKit/UIDocument.h>
@@ -55,7 +59,7 @@
 //#import <UIKit/UINib.h>
 //#import <UIKit/UINibDeclarations.h>
 //#import <UIKit/UINibLoading.h>
-//#import <UIKit/UIPageControl.h>
+#import <UIKit/UIPageControl.h>
 //#import <UIKit/UIPageViewController.h>
 #import <UIKit/UIPanGestureRecognizer.h>
 //#import <UIKit/UIPasteboard.h>
@@ -101,14 +105,14 @@
 //#import <UIKit/UITextChecker.h>
 //#import <UIKit/UITextField.h>
 //#import <UIKit/UITextInput.h>
-//#import <UIKit/UITextInputTraits.h>
-//#import <UIKit/UITextView.h>
+#import <UIKit/UITextInputTraits.h>
+#import <UIKit/UITextView.h>
 #import <UIKit/UIToolbar.h>
 #import <UIKit/UITouch.h>
 //#import <UIKit/UIVideoEditorController.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UIViewController.h>
-//#import <UIKit/UIWebView.h>
+#import <UIKit/UIWebView.h>
 #import <UIKit/UIWindow.h>
 //#import <UIKit/NSAttributedString.h>
 //#import <UIKit/NSLayoutConstraint.h>
