@@ -93,6 +93,7 @@
         imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
     } else {
         NSLog(@"method: %s, unsupported image type:%@",__PRETTY_FUNCTION__,lowercasePathExtension);
+        return nil;
     }
     if (imageRef) {
         return [self initWithCGImage:imageRef];
@@ -105,7 +106,34 @@
 {
     self = [super init];
     if (self) {
-        NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+        unsigned char buffer[4];
+        [data getBytes:&buffer length:4];
+        
+        //isJPEG?
+        BOOL isJPEG = (buffer[0]==0xff &&
+                       buffer[1]==0xd8 &&
+                       buffer[2]==0xff &&
+                       buffer[3]==0xe0);
+        BOOL isPNG = NO;
+        if (!isJPEG) {
+            isPNG = (buffer[0]==0x89 &&
+                     buffer[1]==0x50 &&
+                     buffer[2]==0x4e &&
+                     buffer[3]==0x47);
+        }
+        
+        CGDataProviderRef source = CGDataProviderCreateWithCFData(data);
+        CGImageRef imageRef = NULL;
+        if (isJPEG) {
+            imageRef = CGImageCreateWithJPEGDataProvider(source, NULL, false, kCGRenderingIntentDefault);
+        } else if (isPNG) {
+            imageRef = CGImageCreateWithPNGDataProvider(source, NULL, false, kCGRenderingIntentDefault);
+        } else {
+            NSLog(@"unknow image data, head:%s",buffer);
+            return nil;
+        }
+        
+        return [self initWithCGImage:imageRef];
     }
     return self;
 }
