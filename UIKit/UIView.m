@@ -18,6 +18,8 @@
 #import "UIGestureRecognizer.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 
+#import "UIKit+Android.h"
+
 //Animation
 #import "UIViewAnimationGroup.h"
 #import "UIViewBlockAnimationDelegate.h"
@@ -1195,22 +1197,33 @@ static BOOL _animationsEnabled = YES;
 + (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL finished))completion
 {
     NS_UNIMPLEMENTED_LOG;
-//    //FIXME: Needs Imp
+    //FIXME: Needs Imp
+    NSLog(@"call async");
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        NSLog(@"in transition async");
+        if (completion) {
+            NSLog(@"call completion");
+            completion(YES);
+        }
+    }];
 //    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (completion) {
-//            completion(YES);
-//        }
 //    });
 }
 
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion
 {
     NS_UNIMPLEMENTED_LOG;
-//    //FIXME: Needs Imp
+    //FIXME: Needs Imp
+    NSLog(@"call async");
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        NSLog(@"in transition async");
+        if (completion) {
+            NSLog(@"call completion");
+            completion(YES);
+        }
+    }];
 //    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (completion) {
-//            completion(YES);
-//        }
+//        
 //    });
 }
 
