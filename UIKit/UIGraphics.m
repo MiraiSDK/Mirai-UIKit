@@ -8,6 +8,8 @@
 
 #import "UIGraphics.h"
 
+#import "UIImage.h"
+
 static NSMutableArray* contextStack()
 {
     static NSMutableArray *_contextStack;
@@ -71,7 +73,9 @@ UIImage* UIGraphicsGetImageFromCurrentImageContext(void)
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
-    return cgImage;
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    return image;
 }
 
 void     UIGraphicsEndImageContext(void)
