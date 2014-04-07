@@ -101,6 +101,7 @@ static EGLSurface _mainSurface = EGL_NO_SURFACE;
     _mainScreen->_pixelBounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
     _mainScreen->_scale = 1;
     _mainScreen->_bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
+    _mainScreen->_applicationFrame = _mainScreen->_bounds;
     
     return YES;
 }
@@ -138,6 +139,7 @@ static EGLSurface _mainSurface = EGL_NO_SURFACE;
     _bounds = CGRectMake(0, 0,
                          _pixelBounds.size.width/scale,
                          _pixelBounds.size.height/scale);
+    _applicationFrame = _bounds;
 }
 
 + (NSArray *)screens
