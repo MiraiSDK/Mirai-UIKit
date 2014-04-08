@@ -90,13 +90,15 @@
     if ([lowercasePathExtension isEqualToString:@"png"]) {
         imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
     } else if ([lowercasePathExtension isEqualToString:@"jpg"]) {
-        imageRef = CGImageCreateWithPNGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
+        imageRef = CGImageCreateWithJPEGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
     } else {
         NSLog(@"method: %s, unsupported image type:%@",__PRETTY_FUNCTION__,lowercasePathExtension);
         return nil;
     }
     if (imageRef) {
         return [self initWithCGImage:imageRef];
+    } else {
+        NSLog(@"[UIImage]Create backend CGImage failed");
     }
     
     return nil;
