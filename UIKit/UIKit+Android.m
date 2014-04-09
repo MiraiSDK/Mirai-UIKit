@@ -253,14 +253,11 @@
 
 - (void)main
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
     for (void (^b)(void) in _blocks) {
         if (self.isCancelled) {
-            NSLog(@"block operation cancelled");
             break;
         }
         
-        NSLog(@"invoke block");
         b();
     }
 }
@@ -271,7 +268,6 @@
 
 - (void)addOperationWithBlock:(void (^)(void))block
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
     NSBlockOperation *blockOP = [NSBlockOperation blockOperationWithBlock:block];
     [self addOperation:blockOP];
 }
