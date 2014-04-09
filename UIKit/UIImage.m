@@ -130,7 +130,7 @@
         } else if (isPNG) {
             imageRef = CGImageCreateWithPNGDataProvider(source, NULL, false, kCGRenderingIntentDefault);
         } else {
-            NSLog(@"unknow image data, head:%s",buffer);
+            NSLog(@"unknow image data, head:%02x%02x%02x%02x",buffer[0],buffer[1],buffer[2],buffer[3]);
             return nil;
         }
         
