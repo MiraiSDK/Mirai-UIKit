@@ -334,11 +334,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_bringScrollersToFront
 {
-    //FIXME:
-//    NSLog(@"_horizontalScroller:%@",_horizontalScroller);
-//    NSLog(@"_verticalScroller:%@",_verticalScroller);
-//    [super bringSubviewToFront:_horizontalScroller];
-//    [super bringSubviewToFront:_verticalScroller];
+    [super bringSubviewToFront:_horizontalScroller];
+    [super bringSubviewToFront:_verticalScroller];
 }
 
 - (void)addSubview:(UIView *)subview
