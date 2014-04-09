@@ -43,6 +43,23 @@
 - (void)enumerateSubstringsInRange:(NSRange)range options:(NSStringEnumerationOptions)opts usingBlock:(void (^)(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop))block
 {
     NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
+    
+    BOOL isReverse = opts & NSStringEnumerationReverse;
+    BOOL isLocalized = opts & NSStringEnumerationLocalized;
+    BOOL isSubstringNotRequired = opts & NSStringEnumerationSubstringNotRequired;
+    NSStringEnumerationOptions by = opts & 0x0001111111;
+    
+    NSUInteger length = self.length;
+    if (by == NSStringEnumerationByWords) {
+        NSRange subStringRange = NSMakeRange(0, length);
+        BOOL shouldStop = NO;
+        @autoreleasepool {
+            block(self,subStringRange,subStringRange,&shouldStop);
+        }
+    } else {
+        NSLog(@"unimplemented options:%d",opts);
+    }
+    
 }
 
 @end
