@@ -103,12 +103,67 @@
 @implementation NSAttributedString (Android)
 - (void)enumerateAttributesInRange:(NSRange)enumerationRange options:(NSAttributedStringEnumerationOptions)opts usingBlock:(void (^)(NSDictionary *attrs, NSRange range, BOOL *stop))block
 {
-    NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
+    BOOL isLongestEffectiveRangeNotRequired = opts & NSAttributedStringEnumerationLongestEffectiveRangeNotRequired;
+    BOOL isReverse = opts & NSAttributedStringEnumerationReverse;
+    if (isReverse) {
+        NSLog(@"NSAttributedStringEnumerationReverse option unimplemented");
+    }
+
+    BOOL shouldStop = NO;
+    NSInteger pos = enumerationRange.location;
+    NSInteger end = NSMaxRange(enumerationRange);
+    
+    while (pos < end) {
+        NSRange effectiveRange;
+        NSDictionary *attributes = nil;
+        
+        if (isLongestEffectiveRangeNotRequired) {
+            attributes = [self attributesAtIndex:enumerationRange.location effectiveRange:&effectiveRange];
+        } else {
+            attributes = [self attributesAtIndex:pos longestEffectiveRange:&effectiveRange inRange:enumerationRange];
+        }
+        if (attributes) {
+            block(attributes,effectiveRange,&shouldStop);
+        }
+        
+        pos = NSMaxRange(effectiveRange);
+        if (shouldStop) {
+            break;
+        }
+    }
 }
 
 - (void)enumerateAttribute:(NSString *)attrName inRange:(NSRange)enumerationRange options:(NSAttributedStringEnumerationOptions)opts usingBlock:(void (^)(id, NSRange, BOOL *))block
 {
-    NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
+    BOOL isLongestEffectiveRangeNotRequired = opts & NSAttributedStringEnumerationLongestEffectiveRangeNotRequired;
+    BOOL isReverse = opts & NSAttributedStringEnumerationReverse;
+    
+    if (isReverse) {
+        NSLog(@"NSAttributedStringEnumerationReverse option unimplemented");
+    }
+    
+    BOOL shouldStop = NO;
+    NSInteger pos = enumerationRange.location;
+    NSInteger end = NSMaxRange(enumerationRange);
+    while (pos < end) {
+        NSRange effectiveRange;
+        id attribute = nil;
+        if (isLongestEffectiveRangeNotRequired) {
+            attribute = [self attribute:attrName atIndex:pos effectiveRange:&effectiveRange];
+        } else {
+            attribute = [self attribute:attrName atIndex:pos longestEffectiveRange:&effectiveRange inRange:enumerationRange];
+        }
+        
+        if (attribute) {
+            block(attribute,effectiveRange,&shouldStop);
+        }
+        
+        pos = NSMaxRange(effectiveRange);
+        if (shouldStop) {
+            break;
+        }
+    }
+
 }
 
 @end
