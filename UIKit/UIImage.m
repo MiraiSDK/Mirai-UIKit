@@ -141,9 +141,12 @@
 
 - (id)initWithData:(NSData *)data scale:(CGFloat)scale
 {
+    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+
+    return [self initWithData:data];
+    
     self = [super init];
     if (self) {
-        NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
     }
     return self;
 }
