@@ -179,7 +179,6 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
         return !_implementsDrawRect;
     } else {
         BOOL responds = [super respondsToSelector:aSelector];
-        NSLog(@"%@",responds?@"YES":@"NO");
         return responds;
     }
 }
