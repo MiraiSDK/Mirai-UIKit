@@ -114,7 +114,7 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIWebView.h>
 #import <UIKit/UIWindow.h>
-//#import <UIKit/NSAttributedString.h>
+#import <UIKit/NSAttributedString.h>
 //#import <UIKit/NSLayoutConstraint.h>
 //#import <UIKit/NSLayoutManager.h>
 #import <UIKit/NSParagraphStyle.h>

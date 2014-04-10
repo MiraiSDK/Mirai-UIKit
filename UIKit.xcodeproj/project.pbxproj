@@ -139,6 +139,8 @@
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
 		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
+		43E3429418F6947E00463092 /* NSAttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E3429218F6947E00463092 /* NSAttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43E3429518F6947E00463092 /* NSAttributedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E3429318F6947E00463092 /* NSAttributedString.m */; };
 		43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA1818A9F11C005DDD8D /* UIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA1918A9F11C005DDD8D /* UIViewController.m */; };
 		43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA6618AA5639005DDD8D /* UIScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -317,6 +319,8 @@
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
 		43E2ACA118AF4B6A0029EE86 /* UIEvent+Android.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIEvent+Android.h"; sourceTree = "<group>"; };
 		43E2ACA218AF59AD0029EE86 /* UITouch+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITouch+Private.h"; sourceTree = "<group>"; };
+		43E3429218F6947E00463092 /* NSAttributedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedString.h; sourceTree = "<group>"; };
+		43E3429318F6947E00463092 /* NSAttributedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedString.m; sourceTree = "<group>"; };
 		43EBAA1818A9F11C005DDD8D /* UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewController.h; sourceTree = "<group>"; };
 		43EBAA1918A9F11C005DDD8D /* UIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewController.m; sourceTree = "<group>"; };
 		43EBAA6618AA5639005DDD8D /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
@@ -423,6 +427,8 @@
 				4384632C188B3F7A006DA1AA /* View */,
 				43718E9E18517F0500850F08 /* UIResponder.h */,
 				43718E9F18517F0500850F08 /* UIResponder.m */,
+				43E3429218F6947E00463092 /* NSAttributedString.h */,
+				43E3429318F6947E00463092 /* NSAttributedString.m */,
 				43B819F918E2B3C20020624F /* GestureRecognizer */,
 				43EBAA1718A9F0E2005DDD8D /* ViewControllers */,
 				4384634B188C636C006DA1AA /* UIDevice.h */,
@@ -777,6 +783,7 @@
 				439A73C618E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h in Headers */,
 				43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */,
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
+				43E3429418F6947E00463092 /* NSAttributedString.h in Headers */,
 				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
 				43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */,
 				432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */,
@@ -926,6 +933,7 @@
 				43EBAA9118AB85FB005DDD8D /* UIBarButtonItem.m in Sources */,
 				439A73D218E84C6300B1BE40 /* UITableViewSectionLabel.m in Sources */,
 				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
+				43E3429518F6947E00463092 /* NSAttributedString.m in Sources */,
 				43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
 				43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */,
