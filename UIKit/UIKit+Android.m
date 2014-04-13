@@ -50,14 +50,17 @@
     NSStringEnumerationOptions by = opts & 0x0001111111;
     
     NSUInteger length = self.length;
+    NSRange subStringRange = NSMakeRange(0, length);
+
     if (by == NSStringEnumerationByWords) {
-        NSRange subStringRange = NSMakeRange(0, length);
-        BOOL shouldStop = NO;
-        @autoreleasepool {
-            block(self,subStringRange,subStringRange,&shouldStop);
-        }
+    } else if (by == NSStringEnumerationByLines) {
+        
     } else {
         NSLog(@"unimplemented options:%d",opts);
+    }
+    BOOL shouldStop = NO;
+    @autoreleasepool {
+        block(self,subStringRange,subStringRange,&shouldStop);
     }
     
 }
