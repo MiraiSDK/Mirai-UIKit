@@ -17,6 +17,11 @@
     return nil;
 }
 
+- (CTFontRef)_CTFont
+{
+    return _font;
+}
+
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
     CTFontRef ctFont = CTFontCreateWithName(fontName, fontSize, NULL);
