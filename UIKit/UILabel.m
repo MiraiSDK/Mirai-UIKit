@@ -13,6 +13,7 @@
 #import "UIFont.h"
 
 #import <CoreText/CoreText.h>
+#import "UIKit+Android.h"
 
 @implementation UILabel
 - (id)initWithFrame:(CGRect)frame
@@ -21,10 +22,10 @@
         self.userInteractionEnabled = NO;
         self.textAlignment = UITextAlignmentLeft;
         self.lineBreakMode = UILineBreakModeTailTruncation;
-        self.textColor = [UIColor blackColor];
+        self.textColor = nil;
         self.backgroundColor = [UIColor whiteColor];
         self.enabled = YES;
-        self.font = [UIFont systemFontOfSize:17];
+        self.font = nil;
         self.numberOfLines = 1;
         self.contentMode = UIViewContentModeLeft;
         self.clipsToBounds = YES;
@@ -124,7 +125,27 @@
 
 - (void)drawTextInRect:(CGRect)rect
 {
-    [_text drawInRect:rect withAttributes:@{kCTForegroundColorAttributeName: self.textColor}];
+    
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    if (self.font) {
+        attributes[NSFontAttributeName] = self.font;
+    } else {
+        attributes[NSFontAttributeName] = [UIFont systemFontOfSize:17];
+    }
+    
+    if (self.textColor) {
+        attributes[NSForegroundColorAttributeName] = self.textColor;
+    }
+    
+    if (self.shadowColor) {
+        NSLog(@"[UILabel] shadowColor unimplemented");
+    }
+    
+    // FIXME: alignment, linebreakMode
+    
+    
+    
+    [_text drawInRect:rect withAttributes:attributes];
 //    [_text drawInRect:rect withFont:_font lineBreakMode:_lineBreakMode alignment:_textAlignment];
 }
 
