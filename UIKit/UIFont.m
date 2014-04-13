@@ -19,8 +19,8 @@
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    CTFontRef ctFont = CTFontCreateWithName(fontName, fontSize, NULL);
+    return [UIFont _fontWithCTFont:ctFont];
 }
 
 static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
@@ -64,20 +64,17 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return [UIFont fontWithName:@"Robot" size:fontSize];
 }
 
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return [UIFont fontWithName:@"Robot" size:fontSize];
 }
 
 + (UIFont *)italicSystemFontOfSize:(CGFloat)fontSize
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return [UIFont fontWithName:@"Robot" size:fontSize];
 }
 
 + (UIFont *)_fontWithCTFont:(CTFontRef)aFont
