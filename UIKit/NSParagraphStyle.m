@@ -47,7 +47,8 @@
 @implementation NSParagraphStyle
 + (NSParagraphStyle *)defaultParagraphStyle
 {
-    return nil;
+    NS_UNIMPLEMENTED_LOG;
+    return [[self alloc] init];
 }
 
 + (NSWritingDirection)defaultWritingDirectionForLanguage:(NSString *)languageName
