@@ -9,6 +9,9 @@
 #import "NSStringDrawing.h"
 #import "UIGraphics.h"
 #import <CoreText/CoreText.h>
+#import "UIColor.h"
+#import "NSParagraphStyle.h"
+#import "UIFont.h"
 
 @implementation NSStringDrawingContext
 
@@ -23,43 +26,99 @@
 
 - (void)drawAtPoint:(CGPoint)point withAttributes:(NSDictionary *)attrs
 {
-    NS_UNIMPLEMENTED_LOG;
+    CGSize size = [self sizeWithAttributes:attrs];
+    CGRect rect = {point,size};
+    [self drawInRect:rect withAttributes:attrs];
+}
+
+- (NSDictionary *)defaultAttributes
+{
+    static NSDictionary *_defaultAttributes = nil;
+    
+    if (_defaultAttributes == nil) {
+        _defaultAttributes = @{
+                               NSFontAttributeName:[UIFont systemFontOfSize:12],
+                               NSParagraphStyleAttributeName:[NSParagraphStyle defaultParagraphStyle],
+                               NSForegroundColorAttributeName:[UIColor blackColor],
+                               NSLigatureAttributeName:@1,
+                               };
+    }
+    return _defaultAttributes;
 }
 
 - (void)drawInRect:(CGRect)rect withAttributes:(NSDictionary *)attrs
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    NSLog(@"get context");
-
-    CGColorRef blue = CGColorCreateGenericRGB(0, 0, 1, 1);
-    CTFontRef font = CTFontCreateWithName(@"Roboto", 16, NULL);
-    NSDictionary *dict = @{kCTForegroundColorAttributeName:blue,kCTFontAttributeName:font};
+    NSMutableDictionary *dict = [self defaultAttributes].mutableCopy;
+    [dict addEntriesFromDictionary:attrs];
+    
     NSAttributedString *att =[[NSAttributedString alloc] initWithString:self attributes:dict];
-    NSLog(@"%@, length:%d",att,[att length]);
+    
+    [att drawInRect:rect];
+}
+@end
 
-    CTFramesetterRef frameseter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(att));
-    NSLog(@"framesetter:%@",frameseter);
+@implementation NSAttributedString (NSStringDrawing)
 
-    CGMutablePathRef path = CGPathCreateMutable();
-    NSLog(@"path:%@",path);
-    CGPathAddRect(path, NULL, CGRectMake(0, 0, rect.size.width, rect.size.height));
-    NSLog(@"addRect");
+- (CGSize)size
+{
+    NS_UNIMPLEMENTED_LOG;
+    return CGSizeZero;
+}
+- (void)drawAtPoint:(CGPoint)point
+{
+    CGRect rect = {point,self.size};
+    [self drawInRect:rect];
+}
 
+- (void)drawInRect:(CGRect)rect
+{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+    CTFramesetterRef frameseter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(self));
+    
+    CGPathRef path = CGPathCreateWithRect(rect, NULL);
     CTFrameRef frame = CTFramesetterCreateFrame(frameseter, CFRangeMake(0, 0), path, NULL);
-    NSLog(@"frame:%@",frameseter);
-    CGContextSetStrokeColorWithColor(ctx, blue);
-    CGContextSetFillColorWithColor(ctx, blue);
+    
+    //    CGContextSetStrokeColorWithColor(ctx, blue);
+    //    CGContextSetFillColorWithColor(ctx, blue);
     
     CGContextScaleCTM(ctx, 1, -1);
     CGContextTranslateCTM(ctx, 0, -rect.size.height);
     
     CTFrameDraw(frame, ctx);
-    NSLog(@"draw");
-
     
     CGPathRelease(path);
-    NSLog(@"releasePath");
 }
+
+@end
+
+@implementation NSString (NSExtendedStringDrawing)
+
+- (void)drawWithRect:(CGRect)rect options:(NSStringDrawingOptions)options attributes:(NSDictionary *)attributes context:(NSStringDrawingContext *)context
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+
+- (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(NSDictionary *)attributes context:(NSStringDrawingContext *)context
+{
+    NS_UNIMPLEMENTED_LOG;
+    return CGRectZero;
+}
+
+@end
+
+@implementation NSAttributedString (NSExtendedStringDrawing)
+
+- (void)drawWithRect:(CGRect)rect options:(NSStringDrawingOptions)options context:(NSStringDrawingContext *)context
+{
+    NS_UNIMPLEMENTED_LOG;
+}
+
+- (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options context:(NSStringDrawingContext *)context
+{
+    NS_UNIMPLEMENTED_LOG;
+    return CGRectZero;
+}
+
 @end
 
