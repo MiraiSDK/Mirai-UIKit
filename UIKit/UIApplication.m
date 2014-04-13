@@ -146,6 +146,16 @@ void android_main(struct android_app* state)
         // Make sure glue isn't stripped.
         app_dummy();
         
+        NSString *internalDataPath = [NSString stringWithCString:app_state->activity->internalDataPath];
+        
+        // FIXME: hard code cache path is ugly
+        NSString *cachePath = [[internalDataPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"cache"];
+        
+        
+        NSString *fontconfigFilePath = [cachePath stringByAppendingPathComponent:@"fontconfig.conf"];
+        // settign font config file
+        setenv("FONTCONFIG_FILE",[fontconfigFilePath UTF8String],1);
+        
         //setup engine
         struct engine engine;
         memset(&engine, 0, sizeof(engine));
@@ -227,7 +237,7 @@ static int engine_init_display(struct engine* engine) {
     // initialize OpenGL ES and EGL
     
     [UIScreen androidSetupMainScreenWith:engine->app];
-    [[UIScreen mainScreen] _setScale:2];
+    [[UIScreen mainScreen] _setScale:1];
     
     // Initialize GL state.
     
@@ -346,6 +356,7 @@ static void _prepareAsset(NSString *path)
         NSLog(@"start loop");
         struct engine* engine = (struct engine*)app_state->userData;
 
+        @try {
         do {
             @autoreleasepool {
                 // Read all pending events. If app_has_focus is true, then we are going
@@ -404,6 +415,13 @@ static void _prepareAsset(NSString *path)
                 
             }
         } while (_isRunning);
+            
+        }
+        @catch (NSException *exception) {
+            NSLog(@"exception:%@",exception);
+            abort();
+        }
+
     }
 
     NSLog(@"end running");
