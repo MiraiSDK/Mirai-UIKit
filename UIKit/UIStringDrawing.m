@@ -131,7 +131,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 {
     CGSize resultingSize = CGSizeZero;
     
-    CFArrayRef lines = CreateCTLinesForString(self, size, font, lineBreakMode, &resultingSize);
+//    CFArrayRef lines = CreateCTLinesForString(self, size, font, lineBreakMode, &resultingSize);
 //    if (lines) CFRelease(lines);
     return CGSizeMake(200, 100);
     
