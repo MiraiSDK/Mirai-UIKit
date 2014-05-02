@@ -98,6 +98,8 @@
 		439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73CA18E84C6300B1BE40 /* UITableViewSection.m */; };
 		439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */; };
 		439A73D218E84C6300B1BE40 /* UITableViewSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */; };
+		43B6B64D1913A0EC005D09ED /* UIPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B6B64B1913A0EC005D09ED /* UIPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B6B64E1913A0EC005D09ED /* UIPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B6B64C1913A0EC005D09ED /* UIPopoverController.m */; };
 		43B819CF18E27D550020624F /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819C918E27D550020624F /* UIScrollViewAnimation.h */; };
 		43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B819CA18E27D550020624F /* UIScrollViewAnimation.m */; };
 		43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819CB18E27D550020624F /* UIScrollViewAnimationDeceleration.h */; };
@@ -276,6 +278,8 @@
 		439A73CA18E84C6300B1BE40 /* UITableViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSection.m; sourceTree = "<group>"; };
 		439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewSectionLabel.h; sourceTree = "<group>"; };
 		439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSectionLabel.m; sourceTree = "<group>"; };
+		43B6B64B1913A0EC005D09ED /* UIPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverController.h; sourceTree = "<group>"; };
+		43B6B64C1913A0EC005D09ED /* UIPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverController.m; sourceTree = "<group>"; };
 		43B819C918E27D550020624F /* UIScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimation.h; sourceTree = "<group>"; };
 		43B819CA18E27D550020624F /* UIScrollViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewAnimation.m; sourceTree = "<group>"; };
 		43B819CB18E27D550020624F /* UIScrollViewAnimationDeceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimationDeceleration.h; sourceTree = "<group>"; };
@@ -694,6 +698,8 @@
 				43EBAA1918A9F11C005DDD8D /* UIViewController.m */,
 				43EBAA7818AB6744005DDD8D /* UINavigationController.h */,
 				43EBAA7918AB6744005DDD8D /* UINavigationController.m */,
+				43B6B64B1913A0EC005D09ED /* UIPopoverController.h */,
+				43B6B64C1913A0EC005D09ED /* UIPopoverController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -743,6 +749,7 @@
 				43B819EF18E2AA870020624F /* UIPinchGestureRecognizer.h in Headers */,
 				43B819F518E2AA870020624F /* UITapGestureRecognizer.h in Headers */,
 				4384634D188C636C006DA1AA /* UIDevice.h in Headers */,
+				43B6B64D1913A0EC005D09ED /* UIPopoverController.h in Headers */,
 				43846332188B4031006DA1AA /* UIImageView+UIPrivate.h in Headers */,
 				43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */,
 				4384632F188B4025006DA1AA /* UIImageView.h in Headers */,
@@ -907,6 +914,7 @@
 				431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */,
 				43B819F418E2AA870020624F /* UISwipeGestureRecognizer.m in Sources */,
 				43C200BA18EBB71A00490D59 /* UITextLayer.m in Sources */,
+				43B6B64E1913A0EC005D09ED /* UIPopoverController.m in Sources */,
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
 				431412DE18C0B958001AF732 /* UIViewBlockAnimationDelegate.m in Sources */,
 				43EBAA6D18AA588F005DDD8D /* UIScroller.m in Sources */,

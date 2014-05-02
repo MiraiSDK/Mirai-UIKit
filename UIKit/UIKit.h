@@ -65,7 +65,7 @@
 //#import <UIKit/UIPasteboard.h>
 //#import <UIKit/UIPickerView.h>
 #import <UIKit/UIPinchGestureRecognizer.h>
-//#import <UIKit/UIPopoverController.h>
+#import <UIKit/UIPopoverController.h>
 //#import <UIKit/UIPopoverBackgroundView.h>
 //#import <UIKit/UIPrintError.h>
 //#import <UIKit/UIPrintFormatter.h>
