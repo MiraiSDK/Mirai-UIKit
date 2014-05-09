@@ -16,15 +16,6 @@
 
 #define UIKIT_STATIC_INLINE	static inline
 
-//TODO: should move to Foundation framework
-#ifndef NS_ENUM
-#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
-#endif
-
-#ifndef NS_OPTIONS
-#define NS_OPTIONS(_type, _name) enum _name : _type _name; enum _name : _type
-#endif
-
 #define NS_UNIMPLEMENTED_LOG NSLog(@"Unimplemented method: %s",__PRETTY_FUNCTION__)
 
 #ifndef NS_REQUIRES_NIL_TERMINATION
