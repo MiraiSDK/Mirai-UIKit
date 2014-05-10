@@ -9,10 +9,32 @@
 #import "UIDevice.h"
 
 @implementation UIDevice
+
+static UIDevice *theDevice;
+
++ (void)initialize
+{
+    if (self == [UIDevice class]) {
+        theDevice = [[UIDevice alloc] init];
+    }
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+    }
+    return self;
+}
+
 + (UIDevice *)currentDevice
 {
-    NS_UNIMPLEMENTED_LOG;
-    return nil;
+    return theDevice;
+}
+
+- (BOOL)isMultitaskingSupported
+{
+    return YES;
 }
 
 - (void)beginGeneratingDeviceOrientationNotifications
