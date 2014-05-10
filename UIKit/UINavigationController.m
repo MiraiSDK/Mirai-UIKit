@@ -465,6 +465,10 @@ typedef enum {
     NS_UNIMPLEMENTED_LOG;
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return self.topViewController.supportedInterfaceOrientations;
+}
 @end
 
 @implementation UIViewController (UINavigationControllerItem)
