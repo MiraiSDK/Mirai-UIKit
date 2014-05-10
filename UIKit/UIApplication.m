@@ -220,6 +220,18 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
         case APP_CMD_GAINED_FOCUS:
             app_has_focus=true;
             break;
+        case APP_CMD_INPUT_CHANGED:break;
+        case APP_CMD_WINDOW_RESIZED:break;
+        case APP_CMD_WINDOW_REDRAW_NEEDED:break;
+        case APP_CMD_CONTENT_RECT_CHANGED:break;
+        case APP_CMD_CONFIG_CHANGED:break;
+        case APP_CMD_LOW_MEMORY:break;
+        case APP_CMD_START:break;
+        case APP_CMD_RESUME:break;
+        case APP_CMD_SAVE_STATE:break;
+        case APP_CMD_PAUSE:break;
+        case APP_CMD_STOP:break;
+        case APP_CMD_DESTROY:break;
     }
 }
 
