@@ -37,11 +37,14 @@
 
 typedef enum {
     UIButtonTypeCustom = 0,
-    UIButtonTypeRoundedRect,
+    UIButtonTypeSystem,
+
     UIButtonTypeDetailDisclosure,
     UIButtonTypeInfoLight,
     UIButtonTypeInfoDark,
     UIButtonTypeContactAdd,
+    
+    UIButtonTypeRoundedRect = UIButtonTypeSystem,
 } UIButtonType;
 
 @interface UIButton : UIControl {
