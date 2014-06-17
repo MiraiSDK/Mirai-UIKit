@@ -123,7 +123,7 @@
                      buffer[3]==0x47);
         }
         
-        CGDataProviderRef source = CGDataProviderCreateWithCFData(data);
+        CGDataProviderRef source = CGDataProviderCreateWithCFData((__bridge CFDataRef)(data));
         CGImageRef imageRef = NULL;
         if (isJPEG) {
             imageRef = CGImageCreateWithJPEGDataProvider(source, NULL, false, kCGRenderingIntentDefault);
@@ -279,7 +279,7 @@ NSData *UIImagePNGRepresentation(UIImage *image)
     CGImageDestinationRef dest = CGImageDestinationCreateWithData(data, kUTTypePNG, 1, NULL);
     CGImageDestinationAddImage(dest, image.CGImage, NULL);
     CGImageDestinationFinalize(dest);
-    return data;
+    return (__bridge NSData *)(data);
 }
 
  // return image as JPEG. May return nil if image has no CGImageRef or invalid bitmap format. compression is 0(most)..1(least)
@@ -288,9 +288,9 @@ NSData *UIImageJPEGRepresentation(UIImage *image, CGFloat compressionQuality)
     CFMutableDataRef data = CFDataCreateMutable(NULL, 0);
     CGImageDestinationRef dest = CGImageDestinationCreateWithData(data, kUTTypeJPEG, 1, NULL);
     NSDictionary *properties = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:compressionQuality] forKey:kCGImageDestinationLossyCompressionQuality];
-    CGImageDestinationAddImage(dest, image.CGImage, properties);
+    CGImageDestinationAddImage(dest, image.CGImage, (__bridge CFDictionaryRef)(properties));
     CGImageDestinationFinalize(dest);
-    return data;
+    return (__bridge NSData *)(data);
 }
 
 @implementation UIImage (UIImageDeprecated)

@@ -24,7 +24,7 @@
 
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
-    CTFontRef ctFont = CTFontCreateWithName(fontName, fontSize, NULL);
+    CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef)(fontName), fontSize, NULL);
     return [UIFont _fontWithCTFont:ctFont];
 }
 
@@ -104,7 +104,7 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 
 - (NSString *)fontName
 {
-    return (NSString *)CTFontCopyFullName(_font);
+    return (__bridge NSString *)CTFontCopyFullName(_font);
 }
 
 - (CGFloat)ascender
@@ -143,7 +143,7 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 
 - (NSString *)familyName
 {
-    return (NSString *)CTFontCopyFamilyName(_font);
+    return (__bridge NSString *)CTFontCopyFamilyName(_font);
 }
 
 + (UIFont *)fontWithDescriptor:(UIFontDescriptor *)descriptor size:(CGFloat)pointSize
