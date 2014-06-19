@@ -356,6 +356,8 @@ static void _prepareAsset(NSString *path)
         NSLog(@"start loop");
         struct engine* engine = (struct engine*)app_state->userData;
 
+        BKRenderingServiceRun();
+
         @try {
         do {
             @autoreleasepool {
@@ -399,8 +401,8 @@ static void _prepareAsset(NSString *path)
                     }
                 }
                 
-                EGLDisplay display = eglGetCurrentDisplay();
-                if (display != EGL_NO_DISPLAY) {
+//                EGLDisplay display = eglGetCurrentDisplay();
+//                if (display != EGL_NO_DISPLAY) {
                     @autoreleasepool {
                         // commit?
                         CALayer *layer = _app.keyWindow.layer;
@@ -431,8 +433,13 @@ static void _prepareAsset(NSString *path)
                         
                         //Client Side
                         //  commitIfNeeds
+                        [CATransaction commit];
+                        
                         //      copy renderTree
+                        CALayer *renderTree = [layer copyRenderLayer:nil];
                         //      send to server
+                        BKRenderingServiceUploadRenderLayer(renderTree);
+                        
                         //
                         // Server Side
                         //  copy renderTree
@@ -447,9 +454,9 @@ static void _prepareAsset(NSString *path)
                         
                     }
                 }
+            
                 
-                
-            }
+//            }
         } while (_isRunning);
             
         }

@@ -9,11 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 struct android_app;
+@class CALayer;
 
 @interface BKRenderingService : NSObject
 
 @end
 
 void BKRenderingServiceBegin(struct android_app *androidApp);
+void BKRenderingServiceRun();
 void BKRenderingServiceEnd();
 CGRect BKRenderingServiceGetPixelBounds();
+void BKRenderingServiceUploadRenderLayer(CALayer *layer);
+

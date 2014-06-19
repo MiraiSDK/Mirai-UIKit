@@ -31,7 +31,7 @@
 @property (nonatomic, assign) EGLContext context;
 @property (nonatomic, assign) EGLSurface surface;
 
-@property (nonatomic, strong) CALayer *layer;
+@property (strong) CALayer *layer;
 @property (nonatomic, strong) CARenderer *renderer;
 
 @property (nonatomic, assign, getter = isCanceled) BOOL canceled;
@@ -57,12 +57,17 @@ static BKRenderingService *currentService = nil;
         [weakSelf setup];
     }];
     [self.renderQueue waitUntilAllOperationsAreFinished];
+    
+}
+
+- (void)run
+{
+    __weak typeof(self) weakSelf = self;
     [self.renderQueue addOperationWithBlock:^{
-        [weakSelf run];
+        [weakSelf rendering];
         [weakSelf tearDown];
     }];
 }
-
 #pragma mark - call from queue
 - (void)setup
 {
@@ -72,8 +77,8 @@ static BKRenderingService *currentService = nil;
     EAGLContext * context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     [EAGLContext setCurrentContext:context];
     
-    _layer = [CALayer layer];
-    _layer.frame = _bounds;
+//    _layer = [CALayer layer];
+//    _layer.frame = _bounds;
     
     _renderer = [CARenderer rendererWithEAGLContext:context options:nil];
     _renderer.bounds = _bounds;
@@ -172,18 +177,20 @@ static BKRenderingService *currentService = nil;
     _surface = EGL_NO_SURFACE;
 }
 
-- (void)run
+- (void)rendering
 {
     // rendering
-    
     while (!self.isCanceled) {
-        _renderer.layer = [UIApplication sharedApplication].keyWindow.layer;
+        if (!self.layer) {continue;}
+        
+        _renderer.layer = self.layer;
         [_renderer addUpdateRect:_renderer.layer.bounds];
         [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [_renderer render];
         [_renderer endFrame];
         eglSwapBuffers(_display, _surface);
     }
+
 }
 
 
@@ -202,11 +209,24 @@ static BKRenderingService *currentService = nil;
     currentService.canceled = YES;
     currentService = nil;
 }
+
+- (void)uploadRenderLayer:(CALayer *)layer
+{
+    if (!layer) {
+        NSLog(@"[Warning] upload render layer is nil");
+    }
+    self.layer = layer;
+}
 @end
 
 void BKRenderingServiceBegin(struct android_app *androidApp)
 {
     [BKRenderingService setupWithAndroidApp:androidApp];
+}
+
+void BKRenderingServiceRun()
+{
+    [currentService run];
 }
 
 void BKRenderingServiceEnd()
@@ -217,4 +237,9 @@ void BKRenderingServiceEnd()
 CGRect BKRenderingServiceGetPixelBounds()
 {
     return currentService.pixelBounds;
+}
+
+void BKRenderingServiceUploadRenderLayer(CALayer *layer)
+{
+    [currentService uploadRenderLayer:layer];
 }
