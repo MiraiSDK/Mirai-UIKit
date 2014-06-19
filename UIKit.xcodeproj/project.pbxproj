@@ -138,6 +138,8 @@
 		43C200D018EBE0AA00490D59 /* UIActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C200CE18EBE0AA00490D59 /* UIActivityIndicatorView.m */; };
 		43C200DA18EBE57400490D59 /* UIActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C200D818EBE57400490D59 /* UIActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43C200DB18EBE57400490D59 /* UIActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C200D918EBE57400490D59 /* UIActionSheet.m */; };
+		43D7627B195039C9003DB7B2 /* BKRenderingService.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D76279195039C9003DB7B2 /* BKRenderingService.h */; };
+		43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D7627A195039C9003DB7B2 /* BKRenderingService.m */; };
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
 		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
@@ -318,6 +320,8 @@
 		43C200CE18EBE0AA00490D59 /* UIActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIActivityIndicatorView.m; sourceTree = "<group>"; };
 		43C200D818EBE57400490D59 /* UIActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIActionSheet.h; sourceTree = "<group>"; };
 		43C200D918EBE57400490D59 /* UIActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIActionSheet.m; sourceTree = "<group>"; };
+		43D76279195039C9003DB7B2 /* BKRenderingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRenderingService.h; sourceTree = "<group>"; };
+		43D7627A195039C9003DB7B2 /* BKRenderingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRenderingService.m; sourceTree = "<group>"; };
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
@@ -453,6 +457,8 @@
 				432FF08E18544EE4005486C5 /* NSText.m */,
 				43846319188B3D3A006DA1AA /* Private Classes */,
 				43718E7318517B7B00850F08 /* Supporting Files */,
+				43D76279195039C9003DB7B2 /* BKRenderingService.h */,
+				43D7627A195039C9003DB7B2 /* BKRenderingService.m */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -765,6 +771,7 @@
 				439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */,
 				43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */,
 				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
+				43D7627B195039C9003DB7B2 /* BKRenderingService.h in Headers */,
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
 				43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */,
 				4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */,
@@ -960,6 +967,7 @@
 				431412D418C0A5A4001AF732 /* UIViewLayoutManager.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
 				43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */,
+				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
 				43C200C518EBBCD400490D59 /* UIPageControl.m in Sources */,
 				43EBAA7F18AB67C2005DDD8D /* UIInterface.m in Sources */,
 				43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */,
