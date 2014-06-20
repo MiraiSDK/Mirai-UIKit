@@ -16,6 +16,8 @@
 + (void)androidTeardownMainScreen;
 
 - (void)_setScale:(CGFloat)scale;
+- (void)_setPixelBounds:(CGRect)bounds;
+
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent;
 @end
 

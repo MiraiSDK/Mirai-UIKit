@@ -142,6 +142,11 @@ static EGLSurface _mainSurface = EGL_NO_SURFACE;
     _applicationFrame = _bounds;
 }
 
+- (void)_setPixelBounds:(CGRect)bounds
+{
+    _pixelBounds = bounds;
+}
+
 + (NSArray *)screens
 {
     return _allScreens;

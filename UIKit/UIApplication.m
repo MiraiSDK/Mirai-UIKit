@@ -30,6 +30,8 @@
 #define ANDROID 1
 #import <OpenGLES/EAGL.h>
 
+#import "BKRenderingService.h"
+
 
 @interface TNAndroidLauncher : NSObject
 + (void)launchWithArgc:(int)argc argv:(char *[])argv;
@@ -43,8 +45,6 @@
 
 @implementation UIApplication {
     BOOL _isRunning;
-    EAGLContext *_context;
-    CARenderer *_renderer;
     
     UIEvent *_currentEvent;
     NSMutableSet *_visibleWindows;
@@ -246,17 +246,11 @@ static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
  * Initialize an EGL context for the current display.
  */
 static int engine_init_display(struct engine* engine) {
-    // initialize OpenGL ES and EGL
+    BKRenderingServiceBegin(engine->app);
+    CGRect bounds = BKRenderingServiceGetPixelBounds();
     
-    [UIScreen androidSetupMainScreenWith:engine->app];
+    [[UIScreen mainScreen] _setPixelBounds:bounds];
     [[UIScreen mainScreen] _setScale:1];
-    
-    // Initialize GL state.
-    
-    EAGLContext *ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    _mainRenderer = [CARenderer rendererWithEAGLContext:ctx options:nil];
-    _mainRenderer.bounds = [[UIScreen mainScreen] bounds];
-    _mainContext = ctx;
     
     return 0;
 }
@@ -265,10 +259,7 @@ static int engine_init_display(struct engine* engine) {
  * Tear down the EGL context currently associated with the display.
  */
 static void engine_term_display(struct engine* engine) {
-    _app->_renderer = nil;
-    _app->_context = nil;
-    
-    [UIScreen androidTeardownMainScreen];
+    BKRenderingServiceEnd();
 }
 
 #pragma mark Logging
@@ -348,9 +339,6 @@ static void _prepareAsset(NSString *path)
 #pragma mark - mainRunLoop
 - (void)_run
 {
-    _renderer = _mainRenderer;
-    _context = _mainContext;
-    
     static BOOL didlaunch = NO;
     @autoreleasepool {
         _isRunning = YES;
@@ -367,6 +355,8 @@ static void _prepareAsset(NSString *path)
         
         NSLog(@"start loop");
         struct engine* engine = (struct engine*)app_state->userData;
+
+        BKRenderingServiceRun();
 
         @try {
         do {
@@ -411,21 +401,62 @@ static void _prepareAsset(NSString *path)
                     }
                 }
                 
-                EGLDisplay display = eglGetCurrentDisplay();
-                if (display != EGL_NO_DISPLAY) {
+//                EGLDisplay display = eglGetCurrentDisplay();
+//                if (display != EGL_NO_DISPLAY) {
                     @autoreleasepool {
-                        _renderer.layer = _app.keyWindow.layer;
-                        [_renderer.layer layoutIfNeeded];
-                        [_renderer addUpdateRect:_renderer.layer.bounds];
-                        [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-                        [_renderer render];
-                        [_renderer endFrame];
-                        eglSwapBuffers(eglGetCurrentDisplay(), eglGetCurrentSurface(EGL_DRAW));
+                        // commit?
+                        CALayer *layer = _app.keyWindow.layer;
+                        [layer _recursionLayoutAndDisplayIfNeeds];
+                        
+                        //
+                        // The CARenderer work flow
+                        //
+                        // begin frame
+                        // 1. commit transaction
+                        // 2. update model layer
+                        //      set render:current frame time
+                        //      update presentationLayer
+                        //      apply animation to presentation layer
+                        //      set render:next frame time
+                        //      schedule rasterization layer
+                        
+                        // render
+                        // 1. layout if needs
+                        // 2. render presentation layer
+                        
+                        // end frame
+                        // 1. reset updatedBounds
+                        
+                        //
+                        // The BKRenderingService work flow
+                        //
+                        
+                        //Client Side
+                        //  commitIfNeeds
+                        [CATransaction commit];
+                        
+                        //      copy renderTree
+                        CALayer *renderTree = [layer copyRenderLayer:nil];
+                        //      send to server
+                        BKRenderingServiceUploadRenderLayer(renderTree);
+                        
+                        //
+                        // Server Side
+                        //  copy renderTree
+                        //  begin frame
+                        //      set current frame time
+                        //      update renderTree
+                        //      apply animation to render layer
+                        //      set nextFrameTime
+                        //
+                        //  render
+                        //  end frame
+                        
                     }
                 }
+            
                 
-                
-            }
+//            }
         } while (_isRunning);
             
         }
