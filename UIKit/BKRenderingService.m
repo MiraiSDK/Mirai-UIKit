@@ -182,13 +182,15 @@ static BKRenderingService *currentService = nil;
     // rendering
     while (!self.isCanceled) {
         if (!self.layer) {continue;}
+        @autoreleasepool {
+            _renderer.layer = self.layer;
+            [_renderer addUpdateRect:_renderer.layer.bounds];
+            [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
+            [_renderer render];
+            [_renderer endFrame];
+            eglSwapBuffers(_display, _surface);
+        }
         
-        _renderer.layer = self.layer;
-        [_renderer addUpdateRect:_renderer.layer.bounds];
-        [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-        [_renderer render];
-        [_renderer endFrame];
-        eglSwapBuffers(_display, _surface);
     }
 
 }
