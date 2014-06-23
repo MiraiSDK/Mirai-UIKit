@@ -31,6 +31,7 @@
 #import <OpenGLES/EAGL.h>
 
 #import "BKRenderingService.h"
+#import "TNAConfiguration.h"
 
 
 @interface TNAndroidLauncher : NSObject
@@ -49,6 +50,7 @@
     UIEvent *_currentEvent;
     NSMutableSet *_visibleWindows;
 
+    BOOL _landscaped;
 }
 
 static UIApplication *_app;
@@ -223,8 +225,14 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
         case APP_CMD_INPUT_CHANGED:break;
         case APP_CMD_WINDOW_RESIZED:break;
         case APP_CMD_WINDOW_REDRAW_NEEDED:break;
-        case APP_CMD_CONTENT_RECT_CHANGED:break;
-        case APP_CMD_CONFIG_CHANGED:break;
+        case APP_CMD_CONTENT_RECT_CHANGED:{
+            ARect rect = app->contentRect;
+            NSLog(@"contentRect:{%d,%d %d,%d}", rect.top,rect.left,rect.bottom,rect.right);
+        } break;
+        case APP_CMD_CONFIG_CHANGED: {
+            TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:app->config];
+            _app->_landscaped = (config.orientation == TNAConfigurationOrientationLand);
+        } break;
         case APP_CMD_LOW_MEMORY:break;
         case APP_CMD_START:break;
         case APP_CMD_RESUME:break;
@@ -357,6 +365,8 @@ static void _prepareAsset(NSString *path)
         struct engine* engine = (struct engine*)app_state->userData;
 
         BKRenderingServiceRun();
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        CGRect landscapedBounds = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
 
         @try {
         do {
@@ -405,7 +415,20 @@ static void _prepareAsset(NSString *path)
 //                if (display != EGL_NO_DISPLAY) {
                     @autoreleasepool {
                         // commit?
+                        UIWindow *keyWindow = _app.keyWindow;
+                        
                         CALayer *layer = _app.keyWindow.layer;
+                        CGRect bounds = screenBounds;
+                        if (_landscaped) {
+                            bounds = landscapedBounds;
+                        }
+                        
+                        if (!CGRectEqualToRect(keyWindow.frame, bounds)) {
+                            keyWindow.frame = bounds;
+                            keyWindow.rootViewController.view.frame = bounds;
+                            NSLog(@"set window layer frame:%@",NSStringFromCGRect(bounds));
+                        }
+                            
                         [layer _recursionLayoutAndDisplayIfNeeds];
                         
                         //

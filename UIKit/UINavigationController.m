@@ -469,6 +469,11 @@ typedef enum {
 {
     return self.topViewController.supportedInterfaceOrientations;
 }
+
+- (void)viewWillLayoutSubviews
+{
+    self.topViewController.view.frame = self.view.bounds;
+}
 @end
 
 @implementation UIViewController (UINavigationControllerItem)

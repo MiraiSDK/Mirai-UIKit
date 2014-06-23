@@ -182,8 +182,13 @@ static BKRenderingService *currentService = nil;
     // rendering
     while (!self.isCanceled) {
         if (!self.layer) {continue;}
+        EGLint pixelWidth, pixelHeight;
+        eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
+        eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
+        
         @autoreleasepool {
             _renderer.layer = self.layer;
+            _renderer.bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
             [_renderer addUpdateRect:_renderer.layer.bounds];
             [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
             [_renderer render];
