@@ -116,8 +116,20 @@
 
 - (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options context:(NSStringDrawingContext *)context
 {
-    NS_UNIMPLEMENTED_LOG;
-    return CGRectZero;
+    CGRect result = CGRectZero;
+
+    if (options != 0) {
+        NSLog(@"[WARNING]%s options unsupported.",__PRETTY_FUNCTION__);
+    }
+    
+    if (context) {
+        NSLog(@"[WARNING]%s context unsupported.",__PRETTY_FUNCTION__);
+    }
+    
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(self));
+    result.size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, size, NULL);
+    
+    return result;
 }
 
 @end
