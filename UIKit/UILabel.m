@@ -155,6 +155,10 @@
     
     if ([_text length] > 0) {
         CGContextSaveGState(UIGraphicsGetCurrentContext());
+        if (self.backgroundColor) {
+            [self.backgroundColor setFill];
+            CGContextFillRect(UIGraphicsGetCurrentContext(), rect);
+        }
         
         const CGRect bounds = self.bounds;
         CGRect drawRect = CGRectZero;
