@@ -131,9 +131,14 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 {
     CGSize resultingSize = CGSizeZero;
     
-//    CFArrayRef lines = CreateCTLinesForString(self, size, font, lineBreakMode, &resultingSize);
-//    if (lines) CFRelease(lines);
-    return CGSizeMake(200, 100);
+    //FIXME: lineBreakMode is ignored.
+    NSDictionary *attributes = @{
+                                 (NSString *)kCTFontAttributeName:font,
+                                 };
+    NSAttributedString *att = [[NSAttributedString alloc] initWithString:self attributes:attributes];
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(att));
+    CFRange fitRange;
+    resultingSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, size, &fitRange);
     
     return resultingSize;
 }
