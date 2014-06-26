@@ -122,10 +122,8 @@
     return (CGRect){bounds.origin, {0, 0}};
 }
 
-
-- (void)drawTextInRect:(CGRect)rect
+- (NSDictionary *)_attributes
 {
-    
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     if (self.font) {
         attributes[NSFontAttributeName] = self.font;
@@ -140,13 +138,16 @@
     if (self.shadowColor) {
         NSLog(@"[UILabel] shadowColor unimplemented");
     }
+
+    // TODO: alignment, linebreakMode
     
-    // FIXME: alignment, linebreakMode
-    
-    
-    
-    [_text drawInRect:rect withAttributes:attributes];
-//    [_text drawInRect:rect withFont:_font lineBreakMode:_lineBreakMode alignment:_textAlignment];
+
+    return attributes;
+}
+
+- (void)drawTextInRect:(CGRect)rect
+{
+    [_text drawInRect:rect withAttributes:[self _attributes]];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -174,7 +175,11 @@
                 maxSize.height = bounds.size.height;
             }
         }
-        drawRect.size = [_text sizeWithFont:_font constrainedToSize:maxSize lineBreakMode:_lineBreakMode];
+        
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:_text attributes:[self _attributes]];
+        CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
+        
+        drawRect.size = boundingRect.size;
         
         // now vertically center it
         drawRect.origin.y = roundf((bounds.size.height - drawRect.size.height) / 2.f);
