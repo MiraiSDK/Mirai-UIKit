@@ -73,14 +73,16 @@
 - (void)drawInRect:(CGRect)rect
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+
+    CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y);
 
     CTFramesetterRef frameseter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(self));
     
-    CGPathRef path = CGPathCreateWithRect(rect, NULL);
+    CGRect bounds = rect;
+    bounds.origin = CGPointZero;
+    CGPathRef path = CGPathCreateWithRect(bounds, NULL);
     CTFrameRef frame = CTFramesetterCreateFrame(frameseter, CFRangeMake(0, 0), path, NULL);
-    
-    //    CGContextSetStrokeColorWithColor(ctx, blue);
-    //    CGContextSetFillColorWithColor(ctx, blue);
     
     CGContextScaleCTM(ctx, 1, -1);
     CGContextTranslateCTM(ctx, 0, -rect.size.height);
@@ -88,6 +90,8 @@
     CTFrameDraw(frame, ctx);
     
     CGPathRelease(path);
+    
+    CGContextRestoreGState(ctx);
 }
 
 @end
