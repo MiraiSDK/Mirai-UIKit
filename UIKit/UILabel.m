@@ -140,7 +140,13 @@
     }
 
     // TODO: alignment, linebreakMode
+    CTTextAlignment textAlign = NSTextAlignmentToCTTextAlignment(self.textAlignment);
     
+    CTParagraphStyleSetting settings[] = {
+        { kCTParagraphStyleSpecifierAlignment,sizeof(CTTextAlignment), &textAlign },
+    };
+    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, 1);
+    attributes[(NSString *)kCTParagraphStyleAttributeName] = paragraphStyle;
 
     return attributes;
 }
