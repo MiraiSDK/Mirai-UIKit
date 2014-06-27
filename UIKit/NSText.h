@@ -13,7 +13,7 @@
 ///* Values for NSTextAlignment */
 typedef NS_ENUM(NSInteger, NSTextAlignment) {
     NSTextAlignmentLeft      = 0,    // Visually left aligned
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || __ANDROID__
     NSTextAlignmentCenter    = 1,    // Visually centered
     NSTextAlignmentRight     = 2,    // Visually right aligned
 #else /* !TARGET_OS_IPHONE */
