@@ -472,7 +472,7 @@ typedef enum {
 
 - (void)viewWillLayoutSubviews
 {
-    self.topViewController.view.frame = self.view.bounds;
+    self.topViewController.view.frame = [self _controllerFrameForTransition:_UINavigationControllerVisibleControllerTransitionNone];
 }
 @end
 
