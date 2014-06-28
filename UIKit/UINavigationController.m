@@ -120,9 +120,7 @@ typedef enum {
 	// schedules a deferred method to run
 	if (!_visibleViewControllerNeedsUpdate) {
 		_visibleViewControllerNeedsUpdate = YES;
-//FIXME: performSelector afterDelay is broken in Android
-//		[self performSelector:@selector(_updateVisibleViewController) withObject:nil afterDelay:0];
-        [self performSelector:@selector(_updateVisibleViewController)];
+		[self performSelector:@selector(_updateVisibleViewController) withObject:nil afterDelay:0];
 	}
 }
 
