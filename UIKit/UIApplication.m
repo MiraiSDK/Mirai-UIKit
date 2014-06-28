@@ -33,6 +33,10 @@
 #import "BKRenderingService.h"
 #import "TNAConfiguration.h"
 
+// HACK: private workaround method
+@interface NSThread (Private)
++ (void)setCurrentThreadAsMainThread;
+@end
 
 @interface TNAndroidLauncher : NSObject
 + (void)launchWithArgc:(int)argc argv:(char *[])argv;
@@ -59,9 +63,15 @@ static UIApplication *_app;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _app = [[self alloc] init];
+        
+        // install a timer to keep runloop alive
+        [NSTimer scheduledTimerWithTimeInterval:3600 target:_app selector:@selector(dummy_runLoopKeepAlive) userInfo:nil repeats:YES];
     });
     return _app;
 }
+
+// dummy method to keep runloop alive
+- (void)dummy_runLoopKeepAlive{}
 
 - (id)init
 {
@@ -144,6 +154,13 @@ void android_main(struct android_app* state)
         int argc = 1;
         char * argv[] = {buffer};
         [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
+        
+        // Cheat current current thread as main thread
+        // The default main thread(thread 0), which is Android's Java side
+        // Java side run our codes on secondly thread (thread 1)
+        // we treat thread 1 as main thread, to keep our codes insulate with Java,
+        // and gain ability to run our runloop.
+        [NSThread setCurrentThreadAsMainThread];
         
         // Make sure glue isn't stripped.
         app_dummy();
@@ -409,6 +426,13 @@ static void _prepareAsset(NSString *path)
                         engine_term_display(engine);
                         return;
                     }
+                }
+                
+                if (!runLoopFired) {
+                    NSDate *untilDate = [NSDate date];
+                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
+
+                    runLoopFired = YES;
                 }
                 
 //                EGLDisplay display = eglGetCurrentDisplay();
