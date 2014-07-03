@@ -32,11 +32,7 @@
 
 @implementation UIBarButtonItem {
     BOOL _isSystemItem;
-    NSString *_title;
-    UIImage *_image;
-    
     UIBarButtonSystemItem _systemItem;
-    UIBarButtonItemStyle _style;
 }
 
 - (id)init
@@ -44,7 +40,7 @@
     self = [super init];
     if (self) {
         _isSystemItem = NO;
-        _style = UIBarButtonItemStylePlain;
+        self.style = UIBarButtonItemStylePlain;
     }
     return self;
 }
@@ -55,8 +51,8 @@
         _isSystemItem = YES;
         _systemItem = systemItem;
         
-        _target = target;
-        _action = action;
+        self.target = target;
+        self.action = action;
     }
     return self;
 }
@@ -72,10 +68,10 @@
 - (id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
 {
     if ((self=[self init])) {
-        _title = title;
-        _style = style;
-        _target = target;
-        _action = action;
+        self.title = title;
+        self.style = style;
+        self.target = target;
+        self.action = action;
     }
     return self;
 }
@@ -83,10 +79,10 @@
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
 {
     if ((self=[self init])) {
-        _image = image;
-        _style = style;
-        _target = target;
-        _action = action;
+        self.image = image;
+        self.style = style;
+        self.target = target;
+        self.action = action;
     }
     return self;
 }
