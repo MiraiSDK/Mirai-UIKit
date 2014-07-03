@@ -88,6 +88,11 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     return self;
 }
 
+- (instancetype)init
+{
+    return [self initWithFrame:CGRectZero];
+}
+
 - (NSString *)currentTitle
 {
     return _titleLabel.text;
