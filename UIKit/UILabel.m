@@ -14,8 +14,12 @@
 
 #import <CoreText/CoreText.h>
 #import "UIKit+Android.h"
+#import "UIInterface.h"
 
 @implementation UILabel
+@synthesize font = _font;
+@synthesize textColor = _textColor;
+
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
@@ -53,12 +57,28 @@
     }
 }
 
+- (UIFont *)font
+{
+    if (_font == nil) {
+        return [UIFont systemFontOfSize:17];
+    }
+    return _font;
+}
+
 - (void)setTextColor:(UIColor *)newColor
 {
     if (newColor != _textColor) {
         _textColor = newColor;
         [self setNeedsDisplay];
     }
+}
+
+- (UIColor *)textColor
+{
+    if (_textColor == nil) {
+        return [UIColor darkTextColor];
+    }
+    return _textColor;
 }
 
 - (void)setShadowColor:(UIColor *)newColor
