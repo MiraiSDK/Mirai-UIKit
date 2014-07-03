@@ -30,6 +30,9 @@ NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotif
 NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
 NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotification";
 
+static NSMutableArray *_animationGroups;
+static BOOL _animationsEnabled = YES;
+
 @implementation UIView {
     @package
     BOOL _implementsDrawRect;
@@ -315,10 +318,10 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 {
     if (!CGRectEqualToRect(newFrame,_layer.frame)) {
         CGRect oldBounds = _layer.bounds;
-        _layer.frame = newFrame;
         NSLog(@"set layer frame: {%.2f,%.2f,%.2f,%.2f}",newFrame.origin.x,newFrame.origin.y,newFrame.size.width,newFrame.size.height);
         _layer.bounds = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
         _layer.position = CGPointMake(newFrame.origin.x+newFrame.size.width/2, newFrame.origin.y+newFrame.size.height/2);
+        [self setNeedsLayout];
         
         [self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
@@ -891,6 +894,9 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 - (id<CAAction>) actionForLayer: (CALayer*)layer forKey: (NSString*)eventKey
 {
     // FIX: create a class _UIViewAnimatingLayerDelegate
+    if (_animationsEnabled && [_animationGroups lastObject] && layer == _layer) {
+        return [[_animationGroups lastObject] actionForView:self forKey:eventKey] ?: (id)[NSNull null];
+    }
     return [NSNull null];
 }
 
@@ -1036,8 +1042,6 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 @end
 
 @implementation UIView (UIViewAnimation)
-static NSMutableArray *_animationGroups;
-static BOOL _animationsEnabled = YES;
 
 + (void)initialize
 {
