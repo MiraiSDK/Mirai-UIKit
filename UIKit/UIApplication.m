@@ -137,6 +137,13 @@ static void constructExecutablePath(char *result, struct android_app* state)
     strcpy(result, buffer);
 }
 
+//workaround for call objc methods in gdb
+//should move to Foundation or objc library
+void* ___gdb_android_workaround_malloc(size_t size)
+{
+    return malloc(size);
+}
+
 // Entry point from android part
 void android_main(struct android_app* state)
 {
