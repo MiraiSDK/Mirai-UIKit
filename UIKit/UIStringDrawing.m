@@ -129,6 +129,10 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
 
 - (CGSize)sizeWithFont:(UIFont *)font constrainedToSize:(CGSize)size lineBreakMode:(NSLineBreakMode)lineBreakMode
 {
+    if (font == nil) {
+        return CGSizeZero;
+    }
+    
     CGSize resultingSize = CGSizeZero;
     
     //FIXME: lineBreakMode is ignored.
