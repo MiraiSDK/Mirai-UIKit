@@ -163,6 +163,9 @@
         _imageRef = cgImage;
         _scale = scale;
         _imageOrientation = orientation;
+        size_t width = CGImageGetWidth(cgImage);
+        size_t height = CGImageGetHeight(cgImage);
+        _size = CGSizeMake(width, height);
     }
     return self;
 }
