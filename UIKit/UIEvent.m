@@ -185,4 +185,10 @@
     }
     return self;
 }
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p> timestamp:%.0f touches %@",NSStringFromClass(self.class),self, self.timestamp,self.allTouches.allObjects];
+}
+
 @end

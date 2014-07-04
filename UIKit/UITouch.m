@@ -10,6 +10,7 @@
 #import "UITouch+Private.h"
 #import "UIView.h"
 #import "UIWindow.h"
+#import "UIGeometry.h"
 
 
 static NSArray *GestureRecognizersForView(UIView *view)
@@ -222,7 +223,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
 //            phase = @"DiscreteGesture";
 //            break;
     }
-    return [NSString stringWithFormat:@"<%@: %p; timestamp = %e; tapCount = %lu; phase = %@; view = %@; window = %@>", [self className], self, self.timestamp, (unsigned long)self.tapCount, phase, self.view, self.window];
+    return [NSString stringWithFormat:@"<%@: %p; timestamp = %e; tapCount = %lu; phase = %@; view = %@; window = %@> location:%@ location in view: %@ previous location in view: %@", [self className], self, self.timestamp, (unsigned long)self.tapCount, phase, self.view, self.window, NSStringFromCGPoint(_location), NSStringFromCGPoint([self locationInView:self.view]),NSStringFromCGPoint([self previousLocationInView:self.view])];
 }
 
 @end
