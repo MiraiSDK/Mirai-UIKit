@@ -535,7 +535,7 @@ static void _prepareAsset(NSString *path)
         UITouch *touch = [[_currentEvent allTouches] anyObject];
         
         int64_t eventTime = AMotionEvent_getEventTime(aEvent);
-        const NSTimeInterval eventTimestamp = eventTime/1000000000.0f; // convert nanoSeconds to Seconds
+        const NSTimeInterval eventTimestamp = eventTime/1000000000.0; // convert nanoSeconds to Seconds
         [_currentEvent _setTimestamp:eventTimestamp];
         
         size_t pointerCount = AMotionEvent_getPointerCount(aEvent);
