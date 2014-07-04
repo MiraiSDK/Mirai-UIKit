@@ -551,6 +551,7 @@ static void _prepareAsset(NSString *path)
 
         CGFloat scale = [[UIScreen mainScreen] scale];
         
+        // top-left coordinate
         const CGPoint screenLocation = CGPointMake(x/scale, y/scale);
         UITouchPhase phase = UITouchPhaseCancelled;
         switch (trueAction) {
