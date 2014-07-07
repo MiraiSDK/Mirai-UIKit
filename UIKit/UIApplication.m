@@ -179,9 +179,14 @@ void android_main(struct android_app* state)
         
         
         NSString *fontconfigFilePath = [cachePath stringByAppendingPathComponent:@"fontconfig.conf"];
-        // settign font config file
+        // settign font config file env
         setenv("FONTCONFIG_FILE",[fontconfigFilePath UTF8String],1);
         
+        // create font config file if not exists
+        if (![[NSFileManager defaultManager] fileExistsAtPath:fontconfigFilePath]) {
+            _createFontconfigFile(fontconfigFilePath, cachePath);
+        }
+
         //setup engine
         struct engine engine;
         memset(&engine, 0, sizeof(engine));
@@ -366,6 +371,15 @@ static void _prepareAsset(NSString *path)
     //    NSLog(@"main bundlePath: %@",[[NSBundle mainBundle] bundlePath]);
     //    NSLog(@"main executablePath: %@",[[NSBundle mainBundle] executablePath]);
     
+}
+
+void _createFontconfigFile(NSString *path, NSString *cachePath)
+{
+    NSString *cache = [NSString stringWithFormat:@"<?xml version=\"1.0\"?><!DOCTYPE fontconfig SYSTEM \"fonts.dtd\"><fontconfig><dir>/system/fonts</dir><cachedir>%@</cachedir>",cachePath];
+    NSString *end = @"<match><test name=\"lang\"><string>en</string></test><edit name=\"family\" mode=\"prepend_first\"><string>Phantom Open Emoji</string></edit></match><match><test name=\"lang\"><string>ar</string></test><edit name=\"family\" mode=\"prepend_first\"><string>Droid Naskh Shift Alt</string></edit></match><match><test name=\"lang\"><string>ja</string></test><edit name=\"family\" mode=\"prepend_first\"><string>MotoyaLMaru</string></edit></match><match><test name=\"lang\"><string>th</string></test><edit name=\"family\" mode=\"prepend_first\"><string>Droid Sans Thai</string></edit></match><match><test name=\"lang\"><string>ru</string></test><edit name=\"family\" mode=\"append_last\"><string>Roboto</string></edit></match><match><test name=\"family\"><string>Helvetica</string></test><edit name=\"family\" mode=\"append_last\"><string>Roboto</string></edit></match><match><test name=\"family\"><string>Roboto</string></test><edit name=\"file\" mode=\"prepend_first\"><string>/system/fonts/Roboto-Regular.ttf</string></edit></match><match target=\"font\"><edit mode=\"assign\" name=\"hinting\"><bool>true</bool></edit></match><match target=\"font\"><edit mode=\"assign\" name=\"hintstyle\"><const>hintmedium</const></edit></match></fontconfig>";
+    NSString *finalContent = [cache stringByAppendingString:end];
+    
+    [finalContent writeToFile:path atomically:YES];
 }
 
 #pragma mark - mainRunLoop
