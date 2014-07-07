@@ -11,7 +11,7 @@
 #import "UIToolbar.h"
 
 static const NSTimeInterval kAnimationDuration = 0.33;
-static const CGFloat NavBarHeight = 28;
+static const CGFloat NavBarHeight = 112;//28;
 static const CGFloat ToolbarHeight = 28;
 
 typedef enum {

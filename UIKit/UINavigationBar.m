@@ -47,8 +47,10 @@
 static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
-static const CGFloat kMaxButtonHeight = 24;
+static const CGFloat kMaxButtonHeight = 96;//24;
 static const CGFloat kDefaultButtonsGap = 8;
+static const CGFloat kDefaultBackButtonsFontSize = 22; //11
+static const CGFloat kDefaultTitleFontSize = 28; //14
 
 static const NSTimeInterval kAnimationDuration = 0.33;
 
@@ -99,7 +101,7 @@ typedef enum {
     [backButton setBackgroundImage:[UIImage _backButtonImage] forState:UIControlStateNormal];
     [backButton setBackgroundImage:[UIImage _highlightedBackButtonImage] forState:UIControlStateHighlighted];
     [backButton setTitle:item.title forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont systemFontOfSize:11];
+    backButton.titleLabel.font = [UIFont systemFontOfSize:kDefaultBackButtonsFontSize];
     backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
     [backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self _setBarButtonSize:backButton];
@@ -119,7 +121,7 @@ typedef enum {
         [button setBackgroundImage:[UIImage _highlightedToolbarButtonImage] forState:UIControlStateHighlighted];
         [button setTitle:item.title forState:UIControlStateNormal];
         [button setImage:item.image forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:11];
+        button.titleLabel.font = [UIFont systemFontOfSize:kDefaultBackButtonsFontSize];
         button.contentEdgeInsets = UIEdgeInsetsMake(0,7,0,7);
         [button addTarget:item.target action:item.action forControlEvents:UIControlEventTouchUpInside];
         [self _setBarButtonSize:button];
@@ -287,7 +289,7 @@ typedef enum {
             titleLabel.textAlignment = UITextAlignmentCenter;
             titleLabel.backgroundColor = [UIColor clearColor];
             titleLabel.textColor = [UIColor whiteColor];
-            titleLabel.font = [UIFont boldSystemFontOfSize:14];
+            titleLabel.font = [UIFont boldSystemFontOfSize:kDefaultTitleFontSize];
             _centerView = titleLabel;
         }
         
