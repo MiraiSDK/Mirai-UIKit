@@ -41,6 +41,10 @@ static NSString *UIButtonContentTypeTitleShadowColor = @"UIButtonContentTypeTitl
 static NSString *UIButtonContentTypeBackgroundImage = @"UIButtonContentTypeBackgroundImage";
 static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
+// TODO: screen scale
+#define kButtonSizeMinWidth 60 //30
+#define kButtonSizeMinHeight 60 //30
+
 @implementation UIButton
 @synthesize buttonType=_buttonType, titleLabel=_titleLabel, reversesTitleShadowWhenHighlighted=_reversesTitleShadowWhenHighlighted;
 @synthesize adjustsImageWhenHighlighted=_adjustsImageWhenHighlighted, adjustsImageWhenDisabled=_adjustsImageWhenDisabled;
@@ -384,6 +388,9 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
         fitSize.width = MAX(fitSize.width, backgroundSize.width);
         fitSize.height = MAX(fitSize.height, backgroundSize.height);
     }
+    
+    fitSize.width = MAX(fitSize.width, kButtonSizeMinWidth);
+    fitSize.height = MAX(fitSize.height, kButtonSizeMinHeight);
     
     return fitSize;
 }
