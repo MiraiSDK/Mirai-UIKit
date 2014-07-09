@@ -32,12 +32,11 @@
 
 
 @implementation UIBezierPath {
-    CGPathRef _path;
-
     CGFloat *_lineDashPattern;
     NSInteger _lineDashCount;
     CGFloat _lineDashPhase;
 }
+@synthesize CGPath = _path;
 
 - (id)init
 {
