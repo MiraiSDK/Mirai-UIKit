@@ -119,22 +119,31 @@ static void constructExecutablePath(char *result, struct android_app* state)
     char buffer[1024];
     char basePath[1024];
     
-    // externalDataPath: /storage/emulated/0/Android/data/org.tiny4.BasicCairo/files
+    // externalDataPath: /storage/emulated/0/Android/data/com.company.example/files
     const char * externalDataPath = app_state->activity->externalDataPath;
     
     // remove last component
+    // basePath will be formate like /storage/emulated/0/Android/data/com.company.example
     char *lastSlash = strrchr(externalDataPath, '/');
     strncpy(basePath, externalDataPath, lastSlash - externalDataPath);
     
     // get last component
-    char activityName[1024];
-    memset(activityName, 0, 1024);
+    // activityIdentifier will be formate like com.company.example
+    char activityIdentifier[1024];
+    memset(activityIdentifier, 0, 1024);
     lastSlash = strrchr(basePath, '/');
-    strcpy(activityName, lastSlash+1);
+    strcpy(activityIdentifier, lastSlash+1);
+    
+    // get product name
+    // productName will be example
+    char productName[1024];
+    memset(productName, 0, 1024);
+    char *lastDot = strrchr(activityIdentifier, '.');
+    strcpy(productName, lastDot+1);
     
     // construct path
     memset(buffer, 0, 1024);
-    sprintf(buffer, "%s/%s.app/UIKitApp",basePath,activityName);
+    sprintf(buffer, "%s/%s.app/%s",basePath,activityIdentifier,productName);
     
     strcpy(result, buffer);
 }
