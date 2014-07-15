@@ -427,6 +427,10 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
+    if (_modalViewController) {
+        return [_modalViewController supportedInterfaceOrientations];
+    }
+    
     return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown |UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
 }
 

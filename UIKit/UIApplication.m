@@ -108,6 +108,8 @@ static CARenderer *_mainRenderer = nil;
 struct engine {
     struct android_app* app;
     
+    JNIEnv *env;
+    
     int animating;
     bool isScreenReady;
 };
@@ -195,6 +197,12 @@ void android_main(struct android_app* state)
         app_state->onInputEvent = handle_input;
         engine.app = app_state;
         
+        // attach current thread to java vm, so we can call java code
+        JNIEnv *env;
+        JavaVM *vm = state->activity->vm;
+        (*vm)->AttachCurrentThread(vm,&env,NULL);
+        engine.env = env;
+        
         // Wait until screen is ready
         // which is wait to receive APP_CMD_INIT_WINDOW cmd
         while (!engine.isScreenReady) {
@@ -270,6 +278,72 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
         case APP_CMD_STOP:break;
         case APP_CMD_DESTROY:break;
     }
+}
+
+#pragma mark - Orientation
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return self.keyWindow.rootViewController.supportedInterfaceOrientations;
+}
+
+typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
+    SCREEN_ORIENTATION_UNSPECIFIED = -1,
+
+    SCREEN_ORIENTATION_LANDSCAPE = 0,
+    SCREEN_ORIENTATION_PORTRAIT = 1,
+    SCREEN_ORIENTATION_USER = 2,
+    SCREEN_ORIENTATION_BEHIND = 3,
+
+    SCREEN_ORIENTATION_SENSOR = 4,
+    SCREEN_ORIENTATION_NOSENSOR = 5,
+    
+    SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6,
+    SCREEN_ORIENTATION_SENSOR_PORTRAIT = 7,
+    SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 8,
+    SCREEN_ORIENTATION_REVERSE_PORTRAIT = 9,
+    SCREEN_ORIENTATION_FULL_SENSOR = 10,
+    SCREEN_ORIENTATION_USER_LANDSCAPE = 11,
+    SCREEN_ORIENTATION_USER_PORTRAIT = 12,
+    SCREEN_ORIENTATION_FULL_USER = 13,
+    SCREEN_ORIENTATION_LOCKED = 14,
+};
+
+- (int)JAVA_SCREEN_ORIENTATIONForCocoaInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations
+{
+    jint o = SCREEN_ORIENTATION_SENSOR;
+    
+    BOOL supportedPortrait = (supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait) == UIInterfaceOrientationMaskPortrait;
+    BOOL supportedPortraitUpsideDown = (supportedInterfaceOrientations & UIInterfaceOrientationMaskPortraitUpsideDown) == UIInterfaceOrientationMaskPortraitUpsideDown;
+    BOOL supportedLandscapeLeft = (supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscapeLeft) == UIInterfaceOrientationMaskLandscapeLeft;
+    BOOL supportedLandscapeRight = (supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscapeRight) == UIInterfaceOrientationMaskLandscapeRight;
+    
+    BOOL portrait = supportedPortrait || supportedPortraitUpsideDown;
+    BOOL landscape = supportedLandscapeLeft || supportedLandscapeRight;
+    if (portrait && landscape) {
+        o = SCREEN_ORIENTATION_SENSOR;
+    } else if (portrait && !landscape) {
+        o = SCREEN_ORIENTATION_PORTRAIT;
+    } else if (!portrait && landscape) {
+        o = SCREEN_ORIENTATION_LANDSCAPE;
+    }
+
+    return o;
+}
+
+- (void)updateAndroidOrientation:(JNIEnv *)env
+{
+    jclass thiz = app_state->activity->clazz;
+    
+    jclass test = (*env)->GetObjectClass(env, thiz);
+
+    jmethodID messageID = (*env)->GetMethodID(env,test,"updateSupportedOrientation","(I)V");
+
+    NSUInteger supportedInterfaceOrientations = [_app supportedInterfaceOrientations];
+    jint o = [self JAVA_SCREEN_ORIENTATIONForCocoaInterfaceOrientations:supportedInterfaceOrientations];
+    
+    (*env)->CallVoidMethod(env,thiz,messageID,o);
+
+    (*env)->DeleteLocalRef(env,test);
 }
 
 static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
@@ -455,6 +529,17 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
                     runLoopFired = YES;
                 }
+                
+                
+                // check supportedInterfaceOrientations changes
+                static NSUInteger prevSupportedInterfaceOrientation = UIInterfaceOrientationMaskAll;
+                NSUInteger supportedInterfaceOrientations = [self supportedInterfaceOrientations];
+                if (prevSupportedInterfaceOrientation != supportedInterfaceOrientations) {
+                    //supportedInterfaceOrientations changed, notify android activity
+                    [self updateAndroidOrientation:engine->env];
+                    prevSupportedInterfaceOrientation = supportedInterfaceOrientations;
+                }
+                
                 
 //                EGLDisplay display = eglGetCurrentDisplay();
 //                if (display != EGL_NO_DISPLAY) {
