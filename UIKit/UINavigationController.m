@@ -134,6 +134,8 @@ typedef enum {
     
 	// make sure the new top view is both loaded and set to appear in the correct place
 	topViewController.view.frame = [self _controllerFrameForTransition:_visibleViewControllerTransition];
+    topViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
     NSLog(@"set topViewController frame:%@",NSStringFromCGRect(topViewController.view.frame));
     
 	if (_visibleViewControllerTransition == _UINavigationControllerVisibleControllerTransitionNone) {
@@ -301,6 +303,7 @@ typedef enum {
 		_visibleViewControllerTransition = _UINavigationControllerVisibleControllerTransitionPushAnimated;
         
 		viewController.view.frame = [self _controllerFrameForTransition:_visibleViewControllerTransition];
+        viewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
 		[_visibleViewController viewWillDisappear:YES];
 		[viewController viewWillAppear:YES];
@@ -468,10 +471,6 @@ typedef enum {
     return self.topViewController.supportedInterfaceOrientations;
 }
 
-- (void)viewWillLayoutSubviews
-{
-    self.topViewController.view.frame = [self _controllerFrameForTransition:_UINavigationControllerVisibleControllerTransitionNone];
-}
 @end
 
 @implementation UIViewController (UINavigationControllerItem)

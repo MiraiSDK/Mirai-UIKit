@@ -68,6 +68,7 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
         }
         _rootViewController = rootViewController;
         _rootViewController.view.frame = self.bounds;    // unsure about this
+        _rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview:_rootViewController.view];
     }
 }

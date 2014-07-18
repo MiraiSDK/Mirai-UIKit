@@ -564,8 +564,6 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                         
                         if (!CGRectEqualToRect(keyWindow.frame, bounds)) {
                             keyWindow.frame = bounds;
-                            keyWindow.rootViewController.view.frame = bounds;
-                            NSLog(@"set window layer frame:%@",NSStringFromCGRect(bounds));
                         }
                             
                         [layer _recursionLayoutAndDisplayIfNeeds];
