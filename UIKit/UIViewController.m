@@ -199,15 +199,69 @@
     return NO;
 }
 
-- (void)presentViewController:(UIViewController *)viewControllerToPresent animated: (BOOL)flag completion:(void (^)(void))completion
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated: (BOOL)animated completion:(void (^)(void))completion
 {
-    NS_UNIMPLEMENTED_LOG;
-    [self presentModalViewController:viewControllerToPresent animated:flag];
+    _modalViewController = viewControllerToPresent;
+    [_modalViewController _setParentViewController:self];
+    
+    UIWindow *window = self.view.window;
+    UIView *selfView = self.view;
+    UIView *newView = _modalViewController.view;
+    newView.autoresizingMask = selfView.autoresizingMask;
+
+    CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+    CGRect frameBeforeAnimation = frame;
+    frameBeforeAnimation.origin.y += frame.size.height;
+    
+    newView.frame = frameBeforeAnimation;
+    [window addSubview:newView];
+
+    [_modalViewController viewWillAppear:animated];
+    [self viewWillDisappear:animated];
+    
+    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
+        newView.frame = frame;
+    } completion:^(BOOL finished) {
+        selfView.hidden = YES;		// I think the real one may actually remove it, which would mean needing to remember the superview, I guess? Not sure...
+        [selfView removeFromSuperview];
+        [self viewDidDisappear:animated];
+        
+        [_modalViewController viewDidAppear:animated];
+
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
-- (void)dismissViewControllerAnimated: (BOOL)flag completion: (void (^)(void))completion
+- (void)dismissViewControllerAnimated: (BOOL)animated completion: (void (^)(void))completion
 {
-    NS_UNIMPLEMENTED_LOG;
+    UIWindow *window = _modalViewController.view.window;
+    
+    CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+    CGRect frameAfterAnimation = frame;
+    frameAfterAnimation.origin.y += frame.size.height;
+    
+    [window insertSubview:self.view belowSubview:_modalViewController.view];
+    self.view.hidden = NO;
+    
+    [self viewWillAppear:animated];
+    [_modalViewController viewWillDisappear:animated];
+    
+    
+    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
+        _modalViewController.view.frame = frameAfterAnimation;
+    } completion:^(BOOL finished) {
+        
+        [_modalViewController.view removeFromSuperview];
+        [_modalViewController viewDidDisappear:animated];
+        [self viewDidAppear:animated];
+        
+        if (completion) {
+            completion();
+        }
+    }];
+
 }
 
 - (void)presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated{
