@@ -123,9 +123,7 @@
             attribute = [self attribute:attrName atIndex:pos longestEffectiveRange:&effectiveRange inRange:enumerationRange];
         }
         
-        if (attribute) {
-            block(attribute,effectiveRange,&shouldStop);
-        }
+        block(attribute,effectiveRange,&shouldStop);
         
         pos = NSMaxRange(effectiveRange);
         if (shouldStop) {
