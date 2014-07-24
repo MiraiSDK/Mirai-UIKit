@@ -205,7 +205,11 @@
 #pragma mark - Drawing
 - (void)drawAtPoint:(CGPoint)point
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
+    CGRect rect = CGRectZero;
+    rect.origin = point;
+    rect.size = self.size;
+    
+    [self drawInRect:rect];
 }
 
 - (void)drawAtPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
