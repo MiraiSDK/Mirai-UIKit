@@ -91,9 +91,8 @@
         } else {
             attributes = [self attributesAtIndex:pos longestEffectiveRange:&effectiveRange inRange:enumerationRange];
         }
-        if (attributes) {
-            block(attributes,effectiveRange,&shouldStop);
-        }
+
+        block(attributes,effectiveRange,&shouldStop);
         
         pos = NSMaxRange(effectiveRange);
         if (shouldStop) {
