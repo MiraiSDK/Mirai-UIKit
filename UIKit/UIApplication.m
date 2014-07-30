@@ -32,6 +32,7 @@
 
 #import "BKRenderingService.h"
 #import "TNAConfiguration.h"
+#import <TNJavaHelper/TNJavaHelper.h>
 
 // HACK: private workaround method
 @interface NSThread (Private)
@@ -206,11 +207,10 @@ void android_main(struct android_app* state)
         app_state->onInputEvent = handle_input;
         engine.app = app_state;
         
+        
         // attach current thread to java vm, so we can call java code
-        JNIEnv *env;
-        JavaVM *vm = state->activity->vm;
-        (*vm)->AttachCurrentThread(vm,&env,NULL);
-        engine.env = env;
+        [TNJavaHelper initializeWithVM:state->activity->vm activityClass:state->activity->clazz];
+        engine.env = [[TNJavaHelper sharedHelper] env];
         
         // Wait until screen is ready
         // which is wait to receive APP_CMD_INIT_WINDOW cmd
