@@ -319,8 +319,19 @@ static BOOL _animationsEnabled = YES;
     if (!CGRectEqualToRect(newFrame,_layer.frame)) {
         CGRect oldBounds = _layer.bounds;
         NSLog(@"set layer frame: {%.2f,%.2f,%.2f,%.2f}",newFrame.origin.x,newFrame.origin.y,newFrame.size.width,newFrame.size.height);
-        _layer.bounds = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
-        _layer.position = CGPointMake(newFrame.origin.x+newFrame.size.width/2, newFrame.origin.y+newFrame.size.height/2);
+        
+        CGPoint newOrigin = newFrame.origin;
+        CGAffineTransform invertedTransform = CGAffineTransformInvert(self.transform);
+        CGSize  transformedSize = CGSizeApplyAffineTransform(newFrame.size, invertedTransform);
+        
+        CGRect bounds = _layer.bounds;
+        bounds.size = transformedSize;
+        CGPoint anchorPoint = _layer.anchorPoint;
+        CGPoint position = CGPointMake(newOrigin.x + (newFrame.size.width * anchorPoint.x),
+                                newOrigin.y + (newFrame.size.height * anchorPoint.y));
+
+        _layer.bounds = bounds;
+        _layer.position = position;
         
         [self _boundsDidChangeFrom:oldBounds to:_layer.bounds];
         [[NSNotificationCenter defaultCenter] postNotificationName:UIViewFrameDidChangeNotification object:self];
