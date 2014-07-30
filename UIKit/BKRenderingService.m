@@ -123,9 +123,15 @@ static BKRenderingService *currentService = nil;
     eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
     
     //    ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
-    
     surface = eglCreateWindowSurface(display, config, androidApp->window, NULL);
-    context = eglCreateContext(display, config, NULL, NULL);
+    
+    const EGLint ctxAttribs[] = {
+        EGL_CONTEXT_CLIENT_VERSION, 2,
+        EGL_NONE
+    };
+
+    context = eglCreateContext(display, config, EGL_NO_CONTEXT, ctxAttribs);
+    
     
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
         NSLog(@"Unable to eglMakeCurrent");
