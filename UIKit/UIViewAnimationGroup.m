@@ -146,7 +146,14 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     [_animatingViews addObject:view];
     CALayer *layer = view.layer;
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
-    animation.fromValue = _animationBeginsFromCurrentState? [layer.presentationLayer valueForKey:keyPath] : [layer valueForKey:keyPath];
+//    animation.fromValue = _animationBeginsFromCurrentState? [layer.presentationLayer valueForKey:keyPath] : [layer valueForKey:keyPath];
+    
+    //FIXME:
+    if (_animationBeginsFromCurrentState)
+    {
+        NSLog(@"[WARNING]animation begins from current state not supported");
+    }
+    animation.fromValue = [layer valueForKey:keyPath];
     return [self addAnimation:animation];
 }
 
