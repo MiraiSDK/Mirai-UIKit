@@ -14,11 +14,13 @@
 
 @interface UIEvent (Private)
 - (id)initWithEventType:(UIEventType)type;
-- (void)_setTouch:(UITouch *)touch;
 - (void)_setTimestamp:(NSTimeInterval)timestamp;
 @end
 
 @interface UIEvent (Android)
 - (instancetype)initWithAInputEvent:(AInputEvent *)aEvent;
+- (void)_updateTouchesWithEvent:(AInputEvent *)aEvent;
+- (UITouch *)_touchForIdentifier:(NSInteger)identifier;
+- (void)_updateWithAEvent:(AInputEvent *)aEvent;
 
 @end

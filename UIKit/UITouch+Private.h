@@ -36,6 +36,9 @@ typedef enum {
 - (CGFloat)_magnification;
 - (UIView *)_previousView;
 - (_UITouchGesture)_gesture;
+- (void)_updatePhase:(UITouchPhase)phase;
+
+@property (nonatomic, assign) NSInteger identifier;
 
 @end
 

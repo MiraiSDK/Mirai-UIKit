@@ -82,7 +82,6 @@ static UIApplication *_app;
     self = [super init];
     if (self) {
         _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
-        [_currentEvent _setTouch:[[UITouch alloc] init]];
         _visibleWindows = [[NSMutableSet alloc] init];
     }
     return self;
@@ -633,68 +632,13 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
 }
 
-
 - (void)handleAEvent:(AInputEvent *)aEvent
 {
     [[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
 
     int32_t aType = AInputEvent_getType(aEvent);
     if (aType == AINPUT_EVENT_TYPE_MOTION) {
-        UITouch *touch = [[_currentEvent allTouches] anyObject];
-        
-        int64_t eventTime = AMotionEvent_getEventTime(aEvent);
-        const NSTimeInterval eventTimestamp = eventTime/1000000000.0; // convert nanoSeconds to Seconds
-        [_currentEvent _setTimestamp:eventTimestamp];
-        
-        size_t pointerCount = AMotionEvent_getPointerCount(aEvent);
-        for (size_t pointer_index = 0; pointer_index < pointerCount ; pointer_index++) {
-            int32_t pointerIdentifier = AMotionEvent_getPointerId(aEvent, pointer_index);
-        }
-
-        int32_t action = AMotionEvent_getAction(aEvent);
-        int32_t trueAction = action & AMOTION_EVENT_ACTION_MASK;
-        int32_t pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-        float x = AMotionEvent_getX(aEvent, pointerIndex);
-        float y = AMotionEvent_getY(aEvent, pointerIndex);
-
-        CGFloat scale = [[UIScreen mainScreen] scale];
-        
-        // top-left coordinate
-        const CGPoint screenLocation = CGPointMake(x/scale, y/scale);
-        UITouchPhase phase = UITouchPhaseCancelled;
-        switch (trueAction) {
-            case AMOTION_EVENT_ACTION_DOWN:
-                phase = UITouchPhaseBegan;
-                break;
-            case AMOTION_EVENT_ACTION_UP:
-                phase = UITouchPhaseEnded;
-                break;
-            case AMOTION_EVENT_ACTION_MOVE:
-                phase = UITouchPhaseMoved;
-                break;
-            case AMOTION_EVENT_ACTION_CANCEL:
-                phase = UITouchPhaseCancelled;
-                break;
-            case AMOTION_EVENT_ACTION_OUTSIDE:
-                phase = UITouchPhaseCancelled;
-                break;
-            case AMOTION_EVENT_ACTION_POINTER_DOWN:
-                //FIXME: what?
-                phase = UITouchPhaseStationary;
-                break;
-            case AMOTION_EVENT_ACTION_POINTER_UP:
-                phase = UITouchPhaseStationary;
-                break;
-            default:
-                phase = UITouchPhaseCancelled;
-                break;
-        }
-        [touch _updatePhase:phase screenLocation:screenLocation timestamp:eventTimestamp];
-
-        //update touche.view
-        UIView *previousView = touch.view;
-        UIScreen *theScreen = [UIScreen mainScreen];
-        [touch _setTouchedView:[theScreen _hitTest:screenLocation event:_currentEvent]];
+        [_currentEvent _updateWithAEvent:aEvent];
         
         [self sendEvent:_currentEvent];
     }
@@ -761,8 +705,13 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
 - (void)sendEvent:(UIEvent *)event
 {
+    NSMutableSet *windows = [NSMutableSet set];
     for (UITouch *touch in [event allTouches]) {
-        [touch.window sendEvent:event];
+        [windows addObject:touch.window];
+    }
+    
+    for (UIWindow *w in windows) {
+        [w sendEvent:event];
     }
 }
 

@@ -25,6 +25,10 @@ static NSArray *GestureRecognizersForView(UIView *view)
     return recognizers;
 }
 
+@interface UITouch ()
+@property (nonatomic, assign) NSInteger identifier;
+
+@end
 
 @implementation UITouch {
     _UITouchGesture _gesture;
@@ -58,7 +62,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
     _magnification = 0;
 }
 
-- (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
+- (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp
 {
     if (!CGPointEqualToPoint(screenLocation, _location)) {
         _previousLocation = _location;
@@ -72,6 +76,12 @@ static NSArray *GestureRecognizersForView(UIView *view)
     _phase = phase;
     _timestamp = timestamp;
 }
+
+- (void)_updatePhase:(UITouchPhase)phase
+{
+    _phase = phase;
+}
+
 
 - (void)_updateGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation delta:(CGPoint)delta rotation:(CGFloat)rotation magnification:(CGFloat)magnification timestamp:(NSTimeInterval)timestamp;
 {
