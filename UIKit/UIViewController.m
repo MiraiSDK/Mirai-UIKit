@@ -199,14 +199,16 @@
     return NO;
 }
 
+#define kViewControllerTransitionDuration 0.25
+
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated: (BOOL)animated completion:(void (^)(void))completion
 {
-    _modalViewController = viewControllerToPresent;
-    [_modalViewController _setParentViewController:self];
+    _presentedViewController = viewControllerToPresent;
+    viewControllerToPresent->_presentingViewController = self;
     
     UIWindow *window = self.view.window;
     UIView *selfView = self.view;
-    UIView *newView = _modalViewController.view;
+    UIView *newView = viewControllerToPresent.view;
     newView.autoresizingMask = selfView.autoresizingMask;
 
     CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
@@ -216,17 +218,16 @@
     newView.frame = frameBeforeAnimation;
     [window addSubview:newView];
 
-    [_modalViewController viewWillAppear:animated];
+    [viewControllerToPresent viewWillAppear:animated];
     [self viewWillDisappear:animated];
     
-    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
+    [UIView animateWithDuration:animated ? kViewControllerTransitionDuration : 0 animations:^{
         newView.frame = frame;
     } completion:^(BOOL finished) {
-        selfView.hidden = YES;		// I think the real one may actually remove it, which would mean needing to remember the superview, I guess? Not sure...
         [selfView removeFromSuperview];
         [self viewDidDisappear:animated];
         
-        [_modalViewController viewDidAppear:animated];
+        [viewControllerToPresent viewDidAppear:animated];
 
         if (completion) {
             completion();
@@ -236,26 +237,28 @@
 
 - (void)dismissViewControllerAnimated: (BOOL)animated completion: (void (^)(void))completion
 {
-    UIWindow *window = _modalViewController.view.window;
+    UIWindow *window = _presentedViewController.view.window;
     
     CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
     CGRect frameAfterAnimation = frame;
     frameAfterAnimation.origin.y += frame.size.height;
     
-    [window insertSubview:self.view belowSubview:_modalViewController.view];
-    self.view.hidden = NO;
+    [window insertSubview:self.view belowSubview:_presentedViewController.view];
     
     [self viewWillAppear:animated];
-    [_modalViewController viewWillDisappear:animated];
+    [_presentedViewController viewWillDisappear:animated];
     
     
-    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
-        _modalViewController.view.frame = frameAfterAnimation;
+    [UIView animateWithDuration:animated ? kViewControllerTransitionDuration : 0 animations:^{
+        _presentedViewController.view.frame = frameAfterAnimation;
     } completion:^(BOOL finished) {
         
-        [_modalViewController.view removeFromSuperview];
-        [_modalViewController viewDidDisappear:animated];
+        [_presentedViewController.view removeFromSuperview];
+        [_presentedViewController viewDidDisappear:animated];
         [self viewDidAppear:animated];
+        
+        _presentedViewController->_presentingViewController = nil;
+        _presentedViewController = nil;
         
         if (completion) {
             completion();
@@ -481,6 +484,10 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
+    if (_presentedViewController) {
+        return [_presentedViewController supportedInterfaceOrientations];
+    }
+
     if (_modalViewController) {
         return [_modalViewController supportedInterfaceOrientations];
     }

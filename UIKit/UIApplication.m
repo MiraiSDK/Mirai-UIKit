@@ -291,6 +291,9 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
 #pragma mark - Orientation
 - (NSUInteger)supportedInterfaceOrientations
 {
+    //FIXME: this doesn't working properly with presenting view controller.
+    // although we have a wrokaround in -[UIViewController supportedInterfaceOrientations], that will broken if user override it in rootViewController
+    // Consider implemente a class `UIWindowController`, to manage viewController-to-viewController transition
     return self.keyWindow.rootViewController.supportedInterfaceOrientations;
 }
 
