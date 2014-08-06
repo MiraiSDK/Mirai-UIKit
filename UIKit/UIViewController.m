@@ -14,8 +14,13 @@
 
 @implementation UIViewController {
     NSMutableArray *_childViewControllers;
+    
+    BOOL _isBeingPresented;
+    BOOL _isBeingDismissed;
 }
 @synthesize view = _view;
+@synthesize presentingViewController = _presentingViewController;
+@synthesize presentedViewController = _presentedViewController;
 
 - (id)init
 {
@@ -174,17 +179,52 @@
 
 #pragma mark -
 
+- (UIViewController *)presentedViewController
+{
+    UIViewController *result = _presentedViewController;
+    if (!result) {
+        for (UIViewController *child in [self childViewControllers]) {
+            result = [child presentedViewController];
+            if (result) {
+                break;
+            }
+        }
+    }
+    
+    return result;
+}
+
+- (UIViewController *)presentingViewController
+{
+    UIViewController *farestPresenting = _presentingViewController;
+    
+    UIViewController *parent = self.parentViewController;
+    while (parent) {
+        UIViewController *presenting = parent->_presentingViewController;
+        if (presenting) {
+            farestPresenting = presenting;
+        }
+        
+        parent = parent.parentViewController;
+    }
+    
+    UIViewController *result = farestPresenting;
+    while (result.parentViewController) {
+        result = result.parentViewController;
+    }
+    
+    
+    return result;
+}
 
 - (BOOL)isBeingPresented
 {
-    NS_UNIMPLEMENTED_LOG;
-    return NO;
+    return _isBeingPresented;
 }
 
 - (BOOL)isBeingDismissed
 {
-    NS_UNIMPLEMENTED_LOG;
-    return NO;
+    return _isBeingDismissed;
 }
 
 - (BOOL)isMovingToParentViewController
@@ -206,6 +246,8 @@
     _presentedViewController = viewControllerToPresent;
     viewControllerToPresent->_presentingViewController = self;
     
+    _isBeingPresented = YES;
+    
     UIWindow *window = self.view.window;
     UIView *selfView = self.view;
     UIView *newView = viewControllerToPresent.view;
@@ -224,6 +266,8 @@
     [UIView animateWithDuration:animated ? kViewControllerTransitionDuration : 0 animations:^{
         newView.frame = frame;
     } completion:^(BOOL finished) {
+        _isBeingPresented = NO;
+        
         [selfView removeFromSuperview];
         [self viewDidDisappear:animated];
         
@@ -237,6 +281,8 @@
 
 - (void)dismissViewControllerAnimated: (BOOL)animated completion: (void (^)(void))completion
 {
+    _isBeingDismissed = YES;
+    
     UIWindow *window = _presentedViewController.view.window;
     
     CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
@@ -252,6 +298,7 @@
     [UIView animateWithDuration:animated ? kViewControllerTransitionDuration : 0 animations:^{
         _presentedViewController.view.frame = frameAfterAnimation;
     } completion:^(BOOL finished) {
+        _isBeingDismissed = YES;
         
         [_presentedViewController.view removeFromSuperview];
         [_presentedViewController viewDidDisappear:animated];
@@ -484,14 +531,6 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    if (_presentedViewController) {
-        return [_presentedViewController supportedInterfaceOrientations];
-    }
-
-    if (_modalViewController) {
-        return [_modalViewController supportedInterfaceOrientations];
-    }
-    
     return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown |UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
 }
 

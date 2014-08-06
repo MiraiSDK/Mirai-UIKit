@@ -382,6 +382,11 @@ typedef enum {
 	return formerTopViewController;
 }
 
+- (NSArray *)childViewControllers
+{
+    return _viewControllers;
+}
+
 - (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     NSMutableArray *popped = [[NSMutableArray alloc] init];

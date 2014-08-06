@@ -289,12 +289,21 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
 }
 
 #pragma mark - Orientation
+- (UIViewController *)_topestViewController
+{
+    UIViewController *vc = self.keyWindow.rootViewController;
+    while (vc.presentedViewController) {
+        NSLog(@"get presentedViewController");
+        vc = vc.presentedViewController;
+    }
+    
+    return vc;
+}
 - (NSUInteger)supportedInterfaceOrientations
 {
-    //FIXME: this doesn't working properly with presenting view controller.
-    // although we have a wrokaround in -[UIViewController supportedInterfaceOrientations], that will broken if user override it in rootViewController
-    // Consider implemente a class `UIWindowController`, to manage viewController-to-viewController transition
-    return self.keyWindow.rootViewController.supportedInterfaceOrientations;
+    //FIXME: Legcy modelViewController not supported.
+    UIViewController *vc = [self _topestViewController];
+    return vc.supportedInterfaceOrientations;
 }
 
 typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
