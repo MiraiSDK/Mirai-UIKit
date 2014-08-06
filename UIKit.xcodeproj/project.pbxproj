@@ -142,6 +142,8 @@
 		43CA2A361956CD5A00B92F2C /* TNAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */; };
 		43D7627B195039C9003DB7B2 /* BKRenderingService.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D76279195039C9003DB7B2 /* BKRenderingService.h */; };
 		43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D7627A195039C9003DB7B2 /* BKRenderingService.m */; };
+		43DD64CA19910984000884BA /* TNGestureRecognizerMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DD64C819910984000884BA /* TNGestureRecognizerMath.h */; };
+		43DD64CB19910984000884BA /* TNGestureRecognizerMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 43DD64C919910984000884BA /* TNGestureRecognizerMath.m */; };
 		43DFBA511851D89000BA269F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DFBA501851D89000BA269F /* CoreFoundation.framework */; };
 		43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E2AC9B18ACD9370029EE86 /* UIToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
@@ -326,6 +328,8 @@
 		43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNAConfiguration.m; sourceTree = "<group>"; };
 		43D76279195039C9003DB7B2 /* BKRenderingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRenderingService.h; sourceTree = "<group>"; };
 		43D7627A195039C9003DB7B2 /* BKRenderingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRenderingService.m; sourceTree = "<group>"; };
+		43DD64C819910984000884BA /* TNGestureRecognizerMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureRecognizerMath.h; sourceTree = "<group>"; };
+		43DD64C919910984000884BA /* TNGestureRecognizerMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNGestureRecognizerMath.m; sourceTree = "<group>"; };
 		43DFBA501851D89000BA269F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43E2AC9B18ACD9370029EE86 /* UIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIToolbar.h; sourceTree = "<group>"; };
 		43E2AC9C18ACD9370029EE86 /* UIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIToolbar.m; sourceTree = "<group>"; };
@@ -661,6 +665,8 @@
 		43B819F918E2B3C20020624F /* GestureRecognizer */ = {
 			isa = PBXGroup;
 			children = (
+				43DD64C819910984000884BA /* TNGestureRecognizerMath.h */,
+				43DD64C919910984000884BA /* TNGestureRecognizerMath.m */,
 				43B819D918E2AA870020624F /* UIGestureRecognizer.h */,
 				43B819DA18E2AA870020624F /* UIGestureRecognizer.m */,
 				43B819DB18E2AA870020624F /* UIGestureRecognizerSubclass.h */,
@@ -741,6 +747,7 @@
 				43846326188B3D7C006DA1AA /* UIAction.h in Headers */,
 				43ECCF0E1851CA9A0076535C /* UIView.h in Headers */,
 				432FF07F1853645D005486C5 /* UIGraphics.h in Headers */,
+				43DD64CA19910984000884BA /* TNGestureRecognizerMath.h in Headers */,
 				43B819D318E27D550020624F /* UIScrollViewAnimationScroll.h in Headers */,
 				43C200A818EBB67C00490D59 /* UIDataDetectors.h in Headers */,
 				4384630B188B2751006DA1AA /* UIGeometry.h in Headers */,
@@ -962,6 +969,7 @@
 				43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */,
 				43C200B618EBB70B00490D59 /* UITextView.m in Sources */,
 				43718EA518517FBA00850F08 /* UIApplication.m in Sources */,
+				43DD64CB19910984000884BA /* TNGestureRecognizerMath.m in Sources */,
 				439A73C218E84C4E00B1BE40 /* UITableViewCell.m in Sources */,
 				43B819D418E27D550020624F /* UIScrollViewAnimationScroll.m in Sources */,
 				439A73BE18E84C4E00B1BE40 /* NSIndexPath+UITableView.m in Sources */,
