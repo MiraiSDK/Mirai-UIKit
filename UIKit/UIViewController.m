@@ -88,7 +88,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     for (UIViewController *child in self.childViewControllers) {
-        [child viewWillAppear:animated];
+        if (child.isViewLoaded) {
+            [child viewWillAppear:animated];
+        }
     }
 }
 
@@ -96,7 +98,9 @@
 {
     
     for (UIViewController *child in self.childViewControllers) {
-        [child viewDidAppear:animated];
+        if (child.isViewLoaded) {
+            [child viewDidAppear:animated];
+        }
     }
 }
 
