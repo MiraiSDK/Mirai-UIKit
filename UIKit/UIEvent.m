@@ -174,7 +174,13 @@
     
     UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
 
-    [touch _updatePhase:phase screenLocation:screenLocation timestamp:eventTimestamp];
+    
+    if (phase == UITouchPhaseEnded) {
+        [touch _setPhase:phase screenLocation:screenLocation tapCount:1 timestamp:eventTimestamp];
+    } else {
+        [touch _updatePhase:phase screenLocation:screenLocation timestamp:eventTimestamp];
+    }
+    
     UIView *previousView = touch.view;
     UIScreen *theScreen = [UIScreen mainScreen];
     [touch _setTouchedView:[theScreen _hitTest:screenLocation event:self]];
