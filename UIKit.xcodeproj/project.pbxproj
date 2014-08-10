@@ -921,7 +921,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "pushd $INSTALL_PATH\nFRAMEWORK_PATH=`pwd`/UIKit.framework\npushd ../../../usr/include\nln -sf $FRAMEWORK_PATH/Headers UIKit\npushd ../lib\nln -sf $FRAMEWORK_PATH/Versions/A/UIKit libUIKit.so\n";
+			shellScript = "pushd \"$SDK_LIB_PATH\"\nln -sf \"$LD_DYLIB_INSTALL_NAME\" \"lib$PRODUCT_NAME.so\"\npopd\n\npushd \"$SDK_ROOT/usr/include\"\nln -sf \"$INSTALL_PATH/$PUBLIC_HEADERS_FOLDER_PATH\" \"$PRODUCT_NAME\"\npopd\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
