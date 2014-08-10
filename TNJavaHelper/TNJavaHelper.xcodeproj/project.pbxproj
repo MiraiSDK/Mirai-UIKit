@@ -1,0 +1,446 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		43F962B219824CFE00530F4F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F962B119824CFE00530F4F /* Cocoa.framework */; };
+		43F962BC19824CFE00530F4F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43F962BA19824CFE00530F4F /* InfoPlist.strings */; };
+		43F962C019824CFE00530F4F /* TNJavaHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F962BF19824CFE00530F4F /* TNJavaHelper.m */; };
+		43F962DE19824D1000530F4F /* TNJavaHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F962BF19824CFE00530F4F /* TNJavaHelper.m */; };
+		43F962E319824D1000530F4F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43F962BA19824CFE00530F4F /* InfoPlist.strings */; };
+		43F962EC19824DF400530F4F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F962B419824CFE00530F4F /* Foundation.framework */; };
+		43F962ED198253C500530F4F /* TNJavaHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F962BE19824CFE00530F4F /* TNJavaHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		43F962AE19824CFE00530F4F /* TNJavaHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TNJavaHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43F962B119824CFE00530F4F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		43F962B419824CFE00530F4F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		43F962B519824CFE00530F4F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		43F962B619824CFE00530F4F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		43F962B919824CFE00530F4F /* TNJavaHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TNJavaHelper-Info.plist"; sourceTree = "<group>"; };
+		43F962BB19824CFE00530F4F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43F962BD19824CFE00530F4F /* TNJavaHelper-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaHelper-Prefix.pch"; sourceTree = "<group>"; };
+		43F962BE19824CFE00530F4F /* TNJavaHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TNJavaHelper.h; sourceTree = "<group>"; };
+		43F962BF19824CFE00530F4F /* TNJavaHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TNJavaHelper.m; sourceTree = "<group>"; };
+		43F962E719824D1000530F4F /* TNJavaHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TNJavaHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43F962E919824D6900530F4F /* Android.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Android.xcconfig; path = TNJavaHelper/Android.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		43F962AA19824CFE00530F4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962B219824CFE00530F4F /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43F962DF19824D1000530F4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962EC19824DF400530F4F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43F962A419824CFE00530F4F = {
+			isa = PBXGroup;
+			children = (
+				43F962EA19824D6E00530F4F /* xcconfig */,
+				43F962B719824CFE00530F4F /* TNJavaHelper */,
+				43F962B019824CFE00530F4F /* Frameworks */,
+				43F962AF19824CFE00530F4F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		43F962AF19824CFE00530F4F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43F962AE19824CFE00530F4F /* TNJavaHelper.framework */,
+				43F962E719824D1000530F4F /* TNJavaHelper.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		43F962B019824CFE00530F4F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43F962EB19824DDF00530F4F /* Android */,
+				43F962B119824CFE00530F4F /* Cocoa.framework */,
+				43F962B319824CFE00530F4F /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		43F962B319824CFE00530F4F /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43F962B419824CFE00530F4F /* Foundation.framework */,
+				43F962B519824CFE00530F4F /* CoreData.framework */,
+				43F962B619824CFE00530F4F /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		43F962B719824CFE00530F4F /* TNJavaHelper */ = {
+			isa = PBXGroup;
+			children = (
+				43F962BE19824CFE00530F4F /* TNJavaHelper.h */,
+				43F962BF19824CFE00530F4F /* TNJavaHelper.m */,
+				43F962B819824CFE00530F4F /* Supporting Files */,
+			);
+			path = TNJavaHelper;
+			sourceTree = "<group>";
+		};
+		43F962B819824CFE00530F4F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				43F962B919824CFE00530F4F /* TNJavaHelper-Info.plist */,
+				43F962BA19824CFE00530F4F /* InfoPlist.strings */,
+				43F962BD19824CFE00530F4F /* TNJavaHelper-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43F962EA19824D6E00530F4F /* xcconfig */ = {
+			isa = PBXGroup;
+			children = (
+				43F962E919824D6900530F4F /* Android.xcconfig */,
+			);
+			name = xcconfig;
+			sourceTree = "<group>";
+		};
+		43F962EB19824DDF00530F4F /* Android */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Android;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		43F962AB19824CFE00530F4F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43F962E119824D1000530F4F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962ED198253C500530F4F /* TNJavaHelper.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		43F962AD19824CFE00530F4F /* TNJavaHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43F962D619824CFE00530F4F /* Build configuration list for PBXNativeTarget "TNJavaHelper" */;
+			buildPhases = (
+				43F962A919824CFE00530F4F /* Sources */,
+				43F962AA19824CFE00530F4F /* Frameworks */,
+				43F962AB19824CFE00530F4F /* Headers */,
+				43F962AC19824CFE00530F4F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TNJavaHelper;
+			productName = TNJavaHelper;
+			productReference = 43F962AE19824CFE00530F4F /* TNJavaHelper.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43F962DC19824D1000530F4F /* TNJavaHelper-Android */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43F962E419824D1000530F4F /* Build configuration list for PBXNativeTarget "TNJavaHelper-Android" */;
+			buildPhases = (
+				43F962DD19824D1000530F4F /* Sources */,
+				43F962DF19824D1000530F4F /* Frameworks */,
+				43F962E119824D1000530F4F /* Headers */,
+				43F962E219824D1000530F4F /* Resources */,
+				040872381997BB6D00348AFC /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TNJavaHelper-Android";
+			productName = TNJavaHelper;
+			productReference = 43F962E719824D1000530F4F /* TNJavaHelper.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		43F962A519824CFE00530F4F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Shanghai TinyNetwork Inc.";
+			};
+			buildConfigurationList = 43F962A819824CFE00530F4F /* Build configuration list for PBXProject "TNJavaHelper" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 43F962A419824CFE00530F4F;
+			productRefGroup = 43F962AF19824CFE00530F4F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				43F962AD19824CFE00530F4F /* TNJavaHelper */,
+				43F962DC19824D1000530F4F /* TNJavaHelper-Android */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		43F962AC19824CFE00530F4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962BC19824CFE00530F4F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43F962E219824D1000530F4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962E319824D1000530F4F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		040872381997BB6D00348AFC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "pushd \"$SDK_LIB_PATH\"\nln -sf \"$LD_DYLIB_INSTALL_NAME\" \"lib$PRODUCT_NAME.so\"\npopd\n\npushd \"$SDK_ROOT/usr/include\"\nln -sf \"$INSTALL_PATH/$PUBLIC_HEADERS_FOLDER_PATH\" \"$PRODUCT_NAME\"\npopd\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		43F962A919824CFE00530F4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962C019824CFE00530F4F /* TNJavaHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43F962DD19824D1000530F4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F962DE19824D1000530F4F /* TNJavaHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		43F962BA19824CFE00530F4F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43F962BB19824CFE00530F4F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		43F962D419824CFE00530F4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		43F962D519824CFE00530F4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		43F962D719824CFE00530F4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TNJavaHelper/TNJavaHelper-Prefix.pch";
+				INFOPLIST_FILE = "TNJavaHelper/TNJavaHelper-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		43F962D819824CFE00530F4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TNJavaHelper/TNJavaHelper-Prefix.pch";
+				INFOPLIST_FILE = "TNJavaHelper/TNJavaHelper-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		43F962E519824D1000530F4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43F962E919824D6900530F4F /* Android.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TNJavaHelper/TNJavaHelper-Prefix.pch";
+				INFOPLIST_FILE = "TNJavaHelper/TNJavaHelper-Info.plist";
+				PRODUCT_NAME = TNJavaHelper;
+				SDKROOT = macosx0.0;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		43F962E619824D1000530F4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43F962E919824D6900530F4F /* Android.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TNJavaHelper/TNJavaHelper-Prefix.pch";
+				INFOPLIST_FILE = "TNJavaHelper/TNJavaHelper-Info.plist";
+				PRODUCT_NAME = TNJavaHelper;
+				SDKROOT = macosx0.0;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43F962A819824CFE00530F4F /* Build configuration list for PBXProject "TNJavaHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43F962D419824CFE00530F4F /* Debug */,
+				43F962D519824CFE00530F4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43F962D619824CFE00530F4F /* Build configuration list for PBXNativeTarget "TNJavaHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43F962D719824CFE00530F4F /* Debug */,
+				43F962D819824CFE00530F4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43F962E419824D1000530F4F /* Build configuration list for PBXNativeTarget "TNJavaHelper-Android" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43F962E519824D1000530F4F /* Debug */,
+				43F962E619824D1000530F4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 43F962A519824CFE00530F4F /* Project object */;
+}
