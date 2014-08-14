@@ -98,10 +98,12 @@
         [_touches removeObject:t];
     }
     
-    if (_touches.count != 2) {
+    if (_touches.count != 2 &&
+        (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged)) {
         self.state = UIGestureRecognizerStateEnded;
     }
 }
+
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
