@@ -32,4 +32,14 @@
 @interface UIGestureRecognizer (UIPrivate)
 - (void)_setView:(UIView *)v;
 - (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event;
+
+- (BOOL)_isExcludedByGesture:(UIGestureRecognizer *)otherGesture;
+- (BOOL)_isExcluded;
+- (void)_setExcluded;
+- (void)_sendActions;
+
+
+- (BOOL)_isFailed;
+- (BOOL)_canReceiveTouches;
+- (BOOL)_isActivity;
 @end

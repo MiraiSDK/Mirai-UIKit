@@ -30,11 +30,12 @@
 #import "UITapGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch.h"
+#import "UIGeometry.h"
 
 @interface UITapGestureRecognizer()
 @property (nonatomic, strong) NSMutableArray *touches;
 @property (nonatomic, assign) NSInteger numTouches;
-@property (nonatomic, strong) NSMutableDictionary *initLocations;
+@property (nonatomic, strong) NSMutableDictionary *beganLocations;
 @end
 
 @implementation UITapGestureRecognizer
@@ -46,7 +47,7 @@
         _numberOfTapsRequired = 1;
         _numberOfTouchesRequired = 1;
         _touches = [NSMutableArray array];
-        _initLocations = [NSMutableDictionary dictionary];
+        _beganLocations = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -75,6 +76,8 @@
 
 - (void)reset
 {
+    [super reset];
+    
     _numTouches = 0;
     [_touches removeAllObjects];
 }
@@ -86,6 +89,8 @@
     for (UITouch *t in touches) {
         NSInteger idx = [_touches indexOfObject:t];
         CGPoint initPoint = [t locationInView:self.view];
+        NSValue *v = [NSValue valueWithCGPoint:initPoint];
+        _beganLocations[@(idx)] = v;
         
     }
 }
@@ -93,9 +98,17 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
-    // if move so far, failed
-    if (self.state == UIGestureRecognizerStatePossible) {
-        self.state = UIGestureRecognizerStateFailed;
+    CGPoint currentLocation = [self locationInView:self.view];
+    
+    NSInteger idx = [_touches indexOfObject:touch];
+    CGPoint beginPoint = [_beganLocations[@(idx)] CGPointValue];
+
+    if (ABS(currentLocation.x - beginPoint.x) > 5 ||
+        ABS(currentLocation.y - beginPoint.y) > 5) {
+        // if move so far, failed
+        if (self.state == UIGestureRecognizerStatePossible) {
+            self.state = UIGestureRecognizerStateFailed;
+        }
     }
     
 //    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {

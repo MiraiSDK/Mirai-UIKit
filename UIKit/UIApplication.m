@@ -293,7 +293,6 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
 {
     UIViewController *vc = self.keyWindow.rootViewController;
     while (vc.presentedViewController) {
-        NSLog(@"get presentedViewController");
         vc = vc.presentedViewController;
     }
     
