@@ -30,6 +30,13 @@
 #import "UITapGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch.h"
+#import "UIGeometry.h"
+
+@interface UITapGestureRecognizer()
+@property (nonatomic, strong) NSMutableArray *touches;
+@property (nonatomic, assign) NSInteger numTouches;
+@property (nonatomic, strong) NSMutableDictionary *beganLocations;
+@end
 
 @implementation UITapGestureRecognizer
 @synthesize numberOfTapsRequired=_numberOfTapsRequired, numberOfTouchesRequired=_numberOfTouchesRequired;
@@ -39,6 +46,8 @@
     if ((self=[super initWithTarget:target action:action])) {
         _numberOfTapsRequired = 1;
         _numberOfTouchesRequired = 1;
+        _touches = [NSMutableArray array];
+        _beganLocations = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -65,37 +74,66 @@
     }
 }
 
+- (void)reset
+{
+    [super reset];
+    
+    _numTouches = 0;
+    [_touches removeAllObjects];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [touches anyObject];
-    if (touch.tapCount >= self.numberOfTapsRequired) {
-        if (self.state == UIGestureRecognizerStatePossible) {
-            self.state = UIGestureRecognizerStateBegan;
-        } else if (self.state == UIGestureRecognizerStateBegan) {
-            self.state = UIGestureRecognizerStateChanged;
-        }
+    [_touches addObjectsFromArray:touches.allObjects];
+    
+    for (UITouch *t in touches) {
+        NSInteger idx = [_touches indexOfObject:t];
+        CGPoint initPoint = [t locationInView:self.view];
+        NSValue *v = [NSValue valueWithCGPoint:initPoint];
+        _beganLocations[@(idx)] = v;
+        
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateCancelled;
+    UITouch *touch = [touches anyObject];
+    CGPoint currentLocation = [self locationInView:self.view];
+    
+    NSInteger idx = [_touches indexOfObject:touch];
+    CGPoint beginPoint = [_beganLocations[@(idx)] CGPointValue];
+
+    if (ABS(currentLocation.x - beginPoint.x) > 5 ||
+        ABS(currentLocation.y - beginPoint.y) > 5) {
+        // if move so far, failed
+        if (self.state == UIGestureRecognizerStatePossible) {
+            self.state = UIGestureRecognizerStateFailed;
+        }
     }
+    
+//    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+//        self.state = UIGestureRecognizerStateCancelled;
+//    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateEnded;
+    [_touches removeObjectsInArray:touches.allObjects];
+    _numTouches += touches.count;
+    
+    if (self.state == UIGestureRecognizerStatePossible) {
+        if (_touches.count == 0) {
+            // all touches ended
+            if (_numTouches >= self.numberOfTouchesRequired) {
+                self.state = UIGestureRecognizerStateEnded;
+            }
+        }
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateCancelled;
-    }
+    
 }
 
 @end

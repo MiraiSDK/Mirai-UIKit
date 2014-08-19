@@ -34,6 +34,9 @@
 #import "UIApplication.h"
 
 @implementation UIGestureRecognizer
+{
+    BOOL _excluded;
+}
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
 @synthesize state=_state, enabled=_enabled, view=_view;
 
@@ -165,14 +168,11 @@
         _state = transition->toState;
         
         if (transition->shouldNotify) {
-            for (UIAction *actionRecord in _registeredActions) {
-                // docs mention that the action messages are sent on the next run loop, so we'll do that here.
-                // note that this means that reset can't happen until the next run loop, either otherwise
-                // the state property is going to be wrong when the action handler looks at it, so as a result
-                // I'm also delaying the reset call (if necessary) just below here.
-                NSLog(@"call gesture action");
-                [actionRecord.target performSelector:actionRecord.action withObject:self afterDelay:0 inModes:@[UITrackingRunLoopMode,NSDefaultRunLoopMode]];
-            }
+            // docs mention that the action messages are sent on the next run loop, so we'll do that here.
+            // note that this means that reset can't happen until the next run loop, either otherwise
+            // the state property is going to be wrong when the action handler looks at it, so as a result
+            // I'm also delaying the reset call (if necessary) just below here.
+            [self performSelector:@selector(_sendActions) withObject:nil afterDelay:0 inModes:@[UITrackingRunLoopMode,NSDefaultRunLoopMode]];
         }
         
         if (transition->shouldReset) {
@@ -182,8 +182,19 @@
     }
 }
 
+- (void)_sendActions
+{
+    if (![self _isExcluded]) {
+        for (UIAction *actionRecord in _registeredActions) {
+            [actionRecord.target performSelector:actionRecord.action withObject:self];
+        }
+    }
+
+}
+
 - (void)reset
 {
+    _excluded = NO;
     _state = UIGestureRecognizerStatePossible;
     [_trackingTouches removeAllObjects];
 }
@@ -232,6 +243,78 @@
 
 - (void)_discreteGestures:(NSSet *)touches withEvent:(UIEvent *)event
 {
+}
+
+- (BOOL)_delegateCanPreventGestureRecognizer:(UIGestureRecognizer *)otherGesture
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)]) {
+        BOOL simultaneously = [self.delegate gestureRecognizer:self shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGesture];
+        return !simultaneously;
+    }
+    
+    return NO;
+}
+
+- (BOOL)_isExcludedByGesture:(UIGestureRecognizer *)otherGesture
+{
+    if (self != otherGesture &&
+        ![otherGesture _isExcluded] &&
+        [otherGesture _isActivity] &&
+        [otherGesture.view isDescendantOfView:self.view]) {
+        
+        BOOL canBePrevented = [self canBePreventedByGestureRecognizer:otherGesture];
+        if (canBePrevented) {
+            canBePrevented = [otherGesture canPreventGestureRecognizer:self];
+        }
+        
+        if (canBePrevented) {
+            canBePrevented = [self _delegateCanPreventGestureRecognizer:otherGesture];
+        }
+        
+        if (canBePrevented) {
+            canBePrevented = [otherGesture _delegateCanPreventGestureRecognizer:self];
+        }
+        
+        return canBePrevented;
+    }
+    return NO;
+}
+
+- (BOOL)_isExcluded
+{
+    return _excluded;
+}
+
+- (void)_setExcluded
+{
+    NSLog(@"-[%@ _setExcluded]",self.class);
+    _excluded = YES;
+    [self reset];
+}
+
+- (BOOL)_isFailed
+{
+    return self.state == UIGestureRecognizerStateFailed;
+}
+
+- (BOOL)_canReceiveTouches
+{
+    return [self _shouldAttemptToRecognize];
+}
+
+
+- (BOOL)_isActivity
+{
+    switch (self.state) {
+        case UIGestureRecognizerStateBegan:
+        case UIGestureRecognizerStateChanged:
+        case UIGestureRecognizerStateEnded:
+            return YES;
+            break;
+            
+        default:break;
+    }
+    return NO;
 }
 
 - (BOOL)_shouldAttemptToRecognize

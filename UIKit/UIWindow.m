@@ -16,12 +16,17 @@
 #import "UIApplication+UIPrivate.h"
 #import "UIScreenPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
-
+#import "UIGestureRecognizerSubclass.h"
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
 
 @implementation UIWindow
+{
+    NSMutableSet *_touches;
+    NSMutableSet *_excludedRecognizers;
+
+}
 - (id)initWithFrame:(CGRect)theFrame
 {
     if ((self=[super initWithFrame:theFrame])) {
@@ -29,6 +34,8 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
         [self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
         self.screen = [UIScreen mainScreen];
         self.opaque = NO;
+        _touches = [NSMutableSet set];
+        _excludedRecognizers = [NSMutableSet set];
     }
     return self;
 }
@@ -258,6 +265,16 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 {
     if (event.type == UIEventTypeTouches) {
         NSSet *touches = [event touchesForWindow:self];
+        
+        for (UITouch *t in touches) {
+            if (t.phase == UITouchPhaseBegan) {
+                [_touches addObject:t];
+            } else if (t.phase == UITouchPhaseEnded || t.phase == UITouchPhaseCancelled) {
+                [_touches removeObject:t];
+            }
+        }
+        BOOL isAllTouchesEnded = (_touches.count == 0);
+        
         NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
         
         for (UITouch *touch in touches) {
@@ -265,7 +282,26 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
         }
         
         for (UIGestureRecognizer *recognizer in gestureRecognizers) {
-            [recognizer _recognizeTouches:touches withEvent:event];
+            if (![_excludedRecognizers containsObject:recognizer]) {
+                [recognizer _recognizeTouches:touches withEvent:event];
+            }
+        }
+        
+        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
+            if (![recognizer _isFailed]) {
+                for (UIGestureRecognizer *other in gestureRecognizers) {
+                    if (![other _isFailed]) {
+                        BOOL exclued = [recognizer _isExcludedByGesture:other];
+                        if (exclued) {
+                            [recognizer _setExcluded];
+                            [_excludedRecognizers addObject:recognizer];
+                        }
+                    }
+                }
+            }
+        }
+        if (isAllTouchesEnded) {
+            [_excludedRecognizers removeAllObjects];
         }
         
         for (UITouch *touch in touches) {

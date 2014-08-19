@@ -75,7 +75,6 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
     } else if (_touches.count == 2) {
         _initialTouchDistance = [self currentTouchDistance];
         _initialTouchAngle = [self currentTouchAngle];
-        self.state = UIGestureRecognizerStateBegan;
     }
 }
 
@@ -126,7 +125,8 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
         [_touches removeObject:t];
     }
     
-    if (_touches.count != 2) {
+    if (_touches.count != 2 &&
+        (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged)) {
         self.state = UIGestureRecognizerStateEnded;
     }
 }
