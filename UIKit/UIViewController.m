@@ -34,6 +34,9 @@
 //        _contentSizeForViewInPopover = CGSizeMake(320,1100);
 //        _hidesBottomBarWhenPushed = NO;
         _navigationItem = nil;
+        _automaticallyAdjustsScrollViewInsets = YES;
+        _edgesForExtendedLayout = UIRectEdgeAll;
+        _extendedLayoutIncludesOpaqueBars = NO;
     }
     return self;
 }
