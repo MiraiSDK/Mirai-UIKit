@@ -60,6 +60,15 @@ typedef enum {
     _UINavigationBarTransitionReload		// explicitly tag reloads from changed UINavigationItem data
 } _UINavigationBarTransition;
 
+@interface UIColor (SystemColor)
+
+@end
+@implementation UIColor(SystemColor)
++ (UIColor *)_systemTextColor
+{
+    return [UIColor colorWithRed:18.0f/255.0f green:96.0f/255.0f blue:243.0f/255.0f alpha:1.0f];
+}
+@end
 @implementation UINavigationBar
 {
     NSMutableArray *_navStack;
@@ -98,10 +107,9 @@ typedef enum {
     if (!item) return nil;
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setBackgroundImage:[UIImage _backButtonImage] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage _highlightedBackButtonImage] forState:UIControlStateHighlighted];
-    [backButton setTitle:item.title forState:UIControlStateNormal];
+    [backButton setTitle:[NSString stringWithFormat:@"< %@",item.title?:@"Back"] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont systemFontOfSize:kDefaultBackButtonsFontSize];
+    [backButton setTitleColor:[UIColor _systemTextColor] forState:UIControlStateNormal];
     backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
     [backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self _setBarButtonSize:backButton];
@@ -117,8 +125,6 @@ typedef enum {
         return item.customView;
     } else {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setBackgroundImage:[UIImage _toolbarButtonImage] forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage _highlightedToolbarButtonImage] forState:UIControlStateHighlighted];
         [button setTitle:item.title forState:UIControlStateNormal];
         [button setImage:item.image forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:kDefaultBackButtonsFontSize];
@@ -288,7 +294,7 @@ typedef enum {
             titleLabel.text = topItem.title;
             titleLabel.textAlignment = UITextAlignmentCenter;
             titleLabel.backgroundColor = [UIColor clearColor];
-            titleLabel.textColor = [UIColor whiteColor];
+            titleLabel.textColor = [UIColor _systemTextColor];
             titleLabel.font = [UIFont boldSystemFontOfSize:kDefaultTitleFontSize];
             _centerView = titleLabel;
         }
@@ -452,12 +458,18 @@ typedef enum {
     // so that it actually doesn "tint" the image instead of define it. That'd probably work better with the bottom line coloring and stuff, too, but
     // for now hardcoding stuff works well enough.
     
-    [_tintColor setFill];
-    UIRectFill(bounds);
+//    [_tintColor setFill];
+//    UIRectFill(bounds);
     
     // FIXME: should correct draw background
-    [[UIColor whiteColor] setFill];
+    [[UIColor colorWithWhite:0.95 alpha:0.95] setFill];
     UIRectFill(bounds);
+    
+    // bottom line
+    CGRect lineRect = CGRectMake(0, self.bounds.size.height-1, self.bounds.size.width, 1);
+    [[UIColor blackColor] setFill];
+    UIRectFill(lineRect);
+    
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage forBarMetrics:(UIBarMetrics)barMetrics
