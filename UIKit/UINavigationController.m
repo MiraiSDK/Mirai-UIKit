@@ -92,9 +92,9 @@ typedef enum {
     CGRect controllerFrame = self.view.bounds;
     NSLog(@"%s: navi bounds: %@",__PRETTY_FUNCTION__,NSStringFromCGRect(controllerFrame));
 
-    
     // adjust for the nav bar
-    if (!self.navigationBarHidden) {
+    if (!self.navigationBarHidden &&
+        ![self _isNavigationBarTranslucent]) {
         controllerFrame.origin.y += NavBarHeight;
         controllerFrame.size.height -= NavBarHeight;
     }
@@ -183,6 +183,11 @@ typedef enum {
     
     NSLog(@"set visible ViewController");
 	_visibleViewController = topViewController;
+}
+
+- (BOOL)_isNavigationBarTranslucent
+{
+    return YES;
 }
 
 - (void)loadView
@@ -451,9 +456,38 @@ typedef enum {
 {
     _navigationBarHidden = navigationBarHidden;
     
-    // this shouldn't just hide it, but should animate it out of view (if animated==YES) and then adjust the layout
-    // so the main view fills the whole space, etc.
-    _navigationBar.hidden = navigationBarHidden;
+    CGRect visibleFrame = [self _navigationBarFrame];
+    CGRect invisibleFrame = visibleFrame;
+    invisibleFrame.origin.y -= visibleFrame.size.height;
+    
+    CGRect targetFrame = visibleFrame;
+    if (navigationBarHidden) {
+        targetFrame = invisibleFrame;
+    }
+    
+    if (animated) {
+        if (!navigationBarHidden) {
+            _navigationBar.hidden = NO;
+        }
+
+        // this shouldn't just hide it, but should animate it out of view (if animated==YES) and then adjust the layout
+        // so the main view fills the whole space, etc.
+        [UIView animateWithDuration:animated ? 0.25 : 0.0 animations:^{
+            _navigationBar.frame = targetFrame;
+            
+            // TODO: adjust main view
+            _visibleViewController.view.frame = [self _controllerFrameForTransition:_UINavigationControllerVisibleControllerTransitionNone];
+        } completion:^(BOOL finished) {
+            _navigationBar.hidden = navigationBarHidden;
+        }];
+    } else {
+        _navigationBar.frame = targetFrame;
+        _navigationBar.hidden = navigationBarHidden;
+        
+        _visibleViewController.view.frame = [self _controllerFrameForTransition:_UINavigationControllerVisibleControllerTransitionNone];
+    }
+    
+    
 }
 
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden
