@@ -9,6 +9,7 @@
 #import "UINavigationController.h"
 #import "UINavigationBar.h"
 #import "UIToolbar.h"
+#import "UIScrollView.h"
 
 static const NSTimeInterval kAnimationDuration = 0.33;
 static const CGFloat NavBarHeight = 112;//28;
@@ -124,6 +125,25 @@ typedef enum {
 	}
 }
 
+- (void)_adjustScrollViewInsetsIfNeeds:(UIViewController *)viewController
+{
+    if (viewController.automaticallyAdjustsScrollViewInsets) {
+        UIScrollView *viewToAdjust = nil;
+        if ([viewController.view isKindOfClass:[UIScrollView class]]) {
+            viewToAdjust = (UIScrollView *)viewController.view;
+        }
+        
+        if (!viewToAdjust && viewController.view.subviews.count > 0) {
+            UIView *firstSubView = viewController.view.subviews[0];
+            if ([firstSubView isKindOfClass:[UIScrollView class]]) {
+                viewToAdjust = (UIScrollView *)firstSubView;
+            }
+        }
+        
+        viewToAdjust.contentInset = UIEdgeInsetsMake(NavBarHeight, 0, 0, 0);
+    }
+}
+
 - (void)_updateVisibleViewController
 {
     NSLog(@"%s",__PRETTY_FUNCTION__);
@@ -150,6 +170,8 @@ typedef enum {
 		[_visibleViewController.view removeFromSuperview];
 		[self.view insertSubview:topViewController.view atIndex:0];
         
+        [self _adjustScrollViewInsetsIfNeeds:topViewController];
+        
 		[_visibleViewController viewDidDisappear:NO];
 		[topViewController viewDidAppear:NO];
         
@@ -169,6 +191,7 @@ typedef enum {
                          animations:^(void) {
                              previouslyVisibleViewController.view.frame = visibleControllerFrame;
                              topViewController.view.frame = topControllerFrame;
+                             [self _adjustScrollViewInsetsIfNeeds:topViewController];
                          }
                          completion:^(BOOL finished) {
                              [previouslyVisibleViewController.view removeFromSuperview];

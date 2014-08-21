@@ -356,6 +356,12 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     [self _bringScrollersToFront];
 }
 
+- (void)setContentInset:(UIEdgeInsets)contentInset
+{
+    _contentInset = contentInset;
+    [self setNeedsLayout];
+}
+
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
     if (animated) {
@@ -370,8 +376,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _contentOffset.y = roundf(theOffset.y);
         
         CGRect bounds = self.bounds;
-        bounds.origin.x = _contentOffset.x+_contentInset.left;
-        bounds.origin.y = _contentOffset.y+_contentInset.top;
+        bounds.origin.x = _contentOffset.x-_contentInset.left;
+        bounds.origin.y = _contentOffset.y-_contentInset.top;
         self.bounds = bounds;
         
         [self _updateScrollers];
