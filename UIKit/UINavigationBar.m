@@ -127,6 +127,7 @@ typedef enum {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:item.title forState:UIControlStateNormal];
         [button setImage:item.image forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor _systemTextColor] forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:kDefaultBackButtonsFontSize];
         button.contentEdgeInsets = UIEdgeInsetsMake(0,7,0,7);
         [button addTarget:item.target action:item.action forControlEvents:UIControlEventTouchUpInside];
