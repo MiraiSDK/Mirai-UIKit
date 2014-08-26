@@ -30,8 +30,32 @@
 
 + (UIImage *)imageNamed:(NSString *)name
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-    return nil;
+    //FIXME: should release on memory warning
+    static NSMutableDictionary *cache;
+    if (!cache) {
+        cache = [NSMutableDictionary dictionary];
+    }
+    
+    UIImage *cachedImage = cache[name];
+    if (!cachedImage) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@""];
+        
+        if (!path) {
+            path = [[NSBundle mainBundle] pathForResource:name ofType:@"png"];
+        }
+        
+        if (path) {
+            NSData *data = [[NSData alloc] initWithContentsOfFile:path];
+            cachedImage = [[UIImage alloc] initWithData:data];
+        }
+        
+        if (cachedImage) {
+            // cache image
+            cache[name] = cachedImage;
+        }
+    }
+    
+    return cachedImage;
 }
 
 + (UIImage *)imageWithContentsOfFile:(NSString *)path
