@@ -33,6 +33,7 @@
 #import "UILabel.h"
 #import "UIImageView.h"
 #import "UIFont.h"
+#import "UIImage.h"
 
 extern CGFloat _UITableViewDefaultRowHeight;
 
@@ -91,21 +92,27 @@ extern CGFloat _UITableViewDefaultRowHeight;
     _selectedBackgroundView.frame = contentFrame;
     _contentView.frame = contentFrame;
     
-//    [self sendSubviewToBack:_selectedBackgroundView];
-//    [self sendSubviewToBack:_backgroundView];
-//    [self bringSubviewToFront:_contentView];
-//    [self bringSubviewToFront:_accessoryView];
+    [self sendSubviewToBack:_selectedBackgroundView];
+    [self sendSubviewToBack:_backgroundView];
+    [self bringSubviewToFront:_contentView];
+    [self bringSubviewToFront:_accessoryView];
     
     if (showingSeperator) {
         _seperatorView.frame = CGRectMake(0,bounds.size.height-1,bounds.size.width,1);
-//        [self bringSubviewToFront:_seperatorView];
+        [self bringSubviewToFront:_seperatorView];
     }
     
     if (_style == UITableViewCellStyleDefault) {
         const CGFloat padding = 5;
 
         const BOOL showImage = (_imageView.image != nil);
-        const CGFloat imageWidth = (showImage? 30:0);
+        CGFloat fitImageWidth = 0;
+        if (showImage) {
+            CGSize imageSize = _imageView.image.size;
+            CGFloat contentHeight = contentFrame.size.height;
+            fitImageWidth = contentHeight * imageSize.width/imageSize.height;
+        }
+        const CGFloat imageWidth = (showImage? fitImageWidth:0);
 
         _imageView.frame = CGRectMake(padding,0,imageWidth,contentFrame.size.height);
         
