@@ -54,6 +54,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
         _seperatorView = [[UITableViewCellSeparator alloc] init];
         [self addSubview:_seperatorView];
         
+        [self setSelectedBackgroundView:[[UIView alloc] initWithFrame:CGRectZero]];
+        
         self.accessoryType = UITableViewCellAccessoryNone;
         self.editingAccessoryType = UITableViewCellAccessoryNone;
     }
@@ -152,7 +154,6 @@ extern CGFloat _UITableViewDefaultRowHeight;
         _textLabel = [[UILabel alloc] init];
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.textColor = [UIColor blackColor];
-        _textLabel.highlightedTextColor = [UIColor whiteColor];
         _textLabel.font = [UIFont boldSystemFontOfSize:17];
         [self.contentView addSubview:_textLabel];
         [self layoutIfNeeded];
@@ -174,6 +175,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
         }
         [self _setHighlighted:highlighted forViews:[view subviews]];
     }
+    
+    _selectedBackgroundView.backgroundColor = highlighted ? [UIColor colorWithWhite:0.80f alpha:0.8f] : nil;
 }
 
 - (void)_updateSelectionState

@@ -893,7 +893,10 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
-    _backgroundColor = backgroundColor;
+    if (_backgroundColor != backgroundColor) {
+        _backgroundColor = backgroundColor;
+        [self setNeedsDisplay];
+    }
 }
 
 - (UIColor *)backgroundColor
