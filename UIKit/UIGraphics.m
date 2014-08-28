@@ -66,8 +66,10 @@ void     UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloa
         
         [imageContextStack() addObject:@(scale)];
         
+        CGImageAlphaInfo alphaInfo = opaque? kCGImageAlphaNoneSkipFirst : kCGImageAlphaPremultipliedFirst;
+        
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, (opaque? kCGImageAlphaNoneSkipFirst : kCGImageAlphaPremultipliedFirst));
+        CGContextRef ctx = CGBitmapContextCreate(NULL, width, height, 8, 4*width, colorSpace, kCGBitmapByteOrder32Little | alphaInfo);
         CGContextConcatCTM(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, height));
         CGContextScaleCTM(ctx, scale, scale);
         CGColorSpaceRelease(colorSpace);
