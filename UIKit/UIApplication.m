@@ -718,7 +718,11 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 {
     NSMutableSet *windows = [NSMutableSet set];
     for (UITouch *touch in [event allTouches]) {
-        [windows addObject:touch.window];
+        if (touch.window) {
+            [windows addObject:touch.window];
+        } else {
+            NSLog(@"[WARNING]A touch missing it's window:%@",touch);
+        }
     }
     
     for (UIWindow *w in windows) {
