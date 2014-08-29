@@ -446,7 +446,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 //    [super mouseExitedView:exited enteredView:entered withEvent:event];
 //}
 
-- (UIScrollViewAnimation *)_pageSnapAnimation
+#define kForceNextPageVelocity 1000
+- (UIScrollViewAnimation *)_pageSnapAnimationWithVelocity:(CGPoint)velocity
 {
     const CGSize pageSize = self.bounds.size;
     const CGSize numberOfWholePages = CGSizeMake(floorf(_contentSize.width/pageSize.width), floorf(_contentSize.height/pageSize.height));
@@ -456,20 +457,48 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     
     CGPoint finalContentOffset = CGPointZero;
     
-    // if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
+    BOOL hasHorNextPage = (currentPage.width+1) < numberOfWholePages.width;
+    BOOL hasVetNextPage = (currentPage.height+1) < numberOfWholePages.height;    
     
-    if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
-        finalContentOffset.x = pageSize.width * (currentPage.width + 1);
-    } else {
+    if (fabsf(velocity.x) > kForceNextPageVelocity) {
         finalContentOffset.x = pageSize.width * currentPage.width;
-    }
-    
-    if (currentPagePercentage.height < 0.5 && (currentPage.height+1) < numberOfWholePages.height) {
-        finalContentOffset.y = pageSize.height * (currentPage.height + 1);
+        if  (fabsf(velocity.x) > kForceNextPageVelocity) {
+            if (velocity.x > 0 && hasHorNextPage) {
+                finalContentOffset.x = pageSize.width * (currentPage.width + 1);
+            } else {
+                finalContentOffset.x = pageSize.width * currentPage.width;
+            }
+        }
     } else {
-        finalContentOffset.y = pageSize.height * currentPage.height;
+        // if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
+        if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
+            finalContentOffset.x = pageSize.width * (currentPage.width + 1);
+        } else {
+            finalContentOffset.x = pageSize.width * currentPage.width;
+        }
     }
     
+    
+    if (fabsf(velocity.y) > kForceNextPageVelocity) {
+        finalContentOffset.y = pageSize.height * currentPage.height;
+        if (fabsf(velocity.y) > kForceNextPageVelocity) {
+            if (velocity.y > 0 && hasVetNextPage) {
+                finalContentOffset.y = pageSize.height * (currentPage.height + 1);
+            } else {
+                finalContentOffset.y = pageSize.height * currentPage.height;
+                if (finalContentOffset.y < 0) {
+                    finalContentOffset.y = 0;
+                }
+            }
+        }
+        
+    } else {
+        if (currentPagePercentage.height < 0.5 && (currentPage.height+1) < numberOfWholePages.height) {
+            finalContentOffset.y = pageSize.height * (currentPage.height + 1);
+        } else {
+            finalContentOffset.y = pageSize.height * currentPage.height;
+        }
+    }
     // quickly animate the snap (if necessary)
     if (!CGPointEqualToPoint(finalContentOffset, _contentOffset)) {
         return [[UIScrollViewAnimationScroll alloc] initWithScrollView:self
@@ -529,7 +558,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     if (_dragging) {
         _dragging = NO;
         
-        UIScrollViewAnimation *decelerationAnimation = _pagingEnabled? [self _pageSnapAnimation] : [self _decelerationAnimationWithVelocity:velocity];
+        UIScrollViewAnimation *decelerationAnimation = _pagingEnabled? [self _pageSnapAnimationWithVelocity:velocity] : [self _decelerationAnimationWithVelocity:velocity];
         
         if (_delegateCan.scrollViewDidEndDragging) {
             [_delegate scrollViewDidEndDragging:self willDecelerate:(decelerationAnimation != nil)];
