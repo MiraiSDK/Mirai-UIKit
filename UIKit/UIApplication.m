@@ -34,6 +34,8 @@
 #import "TNAConfiguration.h"
 #import <TNJavaHelper/TNJavaHelper.h>
 
+#import <ObjectiveZip/ObjectiveZip.h>
+
 // HACK: private workaround method
 @interface NSThread (Private)
 + (void)setCurrentThreadAsMainThread;
@@ -448,22 +450,86 @@ static void _extractFolder(NSString *folder, NSString *path)
     
 }
 
+const char *getAPKPath()
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    ANativeActivity *activity = app_state->activity;
+    jclass clazz = (*env)->GetObjectClass(env, activity->clazz);
+    jmethodID methodID = (*env)->GetMethodID(env, clazz, "getPackageCodePath", "()Ljava/lang/String;");
+    jobject result = (*env)->CallObjectMethod(env, activity->clazz, methodID);
+
+    jboolean isCopy;
+    const char *res = (*env)->GetStringUTFChars(env,(jstring)result, &isCopy);
+
+    (*env)->DeleteLocalRef(env,result);
+    (*env)->DeleteLocalRef(env,clazz);
+    
+    return res;
+}
+
+static void _unzipAssetsToMainBundle(NSString *zipPath, NSString *path)
+{
+    ZipFile *file = [[ZipFile alloc] initWithFileName:zipPath mode:ZipFileModeUnzip];
+    NSArray *fileInfos = [file listFileInZipInfos];
+    [file goToFirstFileInZip];
+    do {
+        FileInZipInfo *info = [file getCurrentFileInZipInfo];
+        NSString *fileName = [info name];
+        if (! [fileName hasPrefix:@"assets/"]) {
+            continue;
+        }
+        fileName = [fileName stringByDeletingPrefix:@"assets/"];
+        
+        NSString *destFilePath = [path stringByAppendingPathComponent:fileName];
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:destFilePath]) {
+            ZipReadStream *readStream = [file readCurrentFileInZip];
+            NSMutableData *contentData = [[NSMutableData alloc] initWithLength:info.length];
+            [readStream readDataWithBuffer:contentData];
+            
+            if ([contentData length] >0) {
+                // create directory if not exists
+                NSString *directory = [destFilePath stringByDeletingLastPathComponent];
+                BOOL directoryExists = [[NSFileManager defaultManager] fileExistsAtPath:directory];
+                if (!directoryExists) {
+                    [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+                }
+                
+                // write contents
+                NSError *writeError = nil;
+                BOOL success = [contentData writeToFile:destFilePath options:NSDataWritingAtomic error:&writeError];
+                if (!success) {
+                    NSLog(@"unzip data to path %@ failed. error:%@",destFilePath,[writeError localizedDescription]);
+                }
+            }
+            [readStream finishedReading];
+            
+        }
+    } while ([file goToNextFileInZip]);
+    
+    [file close];
+}
+
 static void _prepareAsset(NSString *path)
 {
-    //
-    // FIXME: should only check files after the apk file changed
-    //
+    const char *apkPathUTF8 = getAPKPath();
+    NSString *apkPath = [NSString stringWithUTF8String:apkPathUTF8];
+    NSDictionary *attributes = [[NSFileManager defaultManager] fileAttributesAtPath:apkPath traverseLink:NO];
+    NSDate *modificationDate = attributes[NSFileModificationDate];
     
-    // we should not call [NSBundle mainBundle] before extract files to mainBundle's path
-    // FIXME: workaround, should enumerate subfolders.
-    _extractFolder(@"",path);
-    _extractFolder(@"Resources",path);
-    _extractFolder(@"Resources/UIKit.bundle",path);
-    
-    //    NSLog(@"main resourcePath: %@",[[NSBundle mainBundle] resourcePath]);
-    //    NSLog(@"main bundlePath: %@",[[NSBundle mainBundle] bundlePath]);
-    //    NSLog(@"main executablePath: %@",[[NSBundle mainBundle] executablePath]);
-    
+    NSDate *lastModificationDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"TN_APKFileModificationDate"];
+    if (!lastModificationDate ||
+        ![lastModificationDate isEqualToDate:modificationDate]) {
+        
+        // extract folder
+        NSLog(@"unziping apk to path:%@",path);
+        _unzipAssetsToMainBundle(apkPath, path);
+        
+        [[NSUserDefaults standardUserDefaults] setObject:modificationDate forKey:@"TN_APKFileModificationDate"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } else {
+        NSLog(@"apk unchanged, skip unzip");
+    }
 }
 
 void _createFontconfigFile(NSString *path, NSString *cachePath)

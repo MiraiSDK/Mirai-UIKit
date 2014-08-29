@@ -183,6 +183,27 @@
 			remoteGlobalIDString = 43718E6818517B7B00850F08;
 			remoteInfo = UIKit;
 		};
+		43CAEA5819B0CB5300B0AA8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
+			remoteInfo = "Objective-Zip";
+		};
+		43CAEA5A19B0CB5300B0AA8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43CAE9FC19B0A45E00B0AA8F;
+			remoteInfo = "ObjectiveZip-Android";
+		};
+		43CAEA5C19B0CB6C00B0AA8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43CAE9FB19B0A45E00B0AA8F;
+			remoteInfo = "ObjectiveZip-Android";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -326,6 +347,7 @@
 		43C200D918EBE57400490D59 /* UIActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIActionSheet.m; sourceTree = "<group>"; };
 		43CA2A331956CD5A00B92F2C /* TNAConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNAConfiguration.h; sourceTree = "<group>"; };
 		43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNAConfiguration.m; sourceTree = "<group>"; };
+		43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Objective-Zip.xcodeproj"; path = "Support/Objective-Zip/Objective-Zip.xcodeproj"; sourceTree = "<group>"; };
 		43D76279195039C9003DB7B2 /* BKRenderingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRenderingService.h; sourceTree = "<group>"; };
 		43D7627A195039C9003DB7B2 /* BKRenderingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRenderingService.m; sourceTree = "<group>"; };
 		43DD64C819910984000884BA /* TNGestureRecognizerMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureRecognizerMath.h; sourceTree = "<group>"; };
@@ -412,6 +434,7 @@
 		43718E6B18517B7B00850F08 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */,
 				439487E61893B2A4004F8636 /* OpenGLES.framework */,
 				432FF09518548FDA005486C5 /* CoreText.framework */,
 				43DFBA501851D89000BA269F /* CoreFoundation.framework */,
@@ -709,6 +732,15 @@
 			name = UITextView;
 			sourceTree = "<group>";
 		};
+		43CAEA5419B0CB5300B0AA8F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43CAEA5919B0CB5300B0AA8F /* Objective-Zip.app */,
+				43CAEA5B19B0CB5300B0AA8F /* ObjectiveZip.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		43EBAA1718A9F0E2005DDD8D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -834,6 +866,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43CAEA5D19B0CB6C00B0AA8F /* PBXTargetDependency */,
 			);
 			name = UIKit;
 			productName = UIKit;
@@ -882,6 +915,12 @@
 			mainGroup = 43718E5F18517B7B00850F08;
 			productRefGroup = 43718E6A18517B7B00850F08 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 43CAEA5419B0CB5300B0AA8F /* Products */;
+					ProjectRef = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				43718E6818517B7B00850F08 /* UIKit */,
@@ -889,6 +928,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		43CAEA5919B0CB5300B0AA8F /* Objective-Zip.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Objective-Zip.app";
+			remoteRef = 43CAEA5819B0CB5300B0AA8F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43CAEA5B19B0CB5300B0AA8F /* ObjectiveZip.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ObjectiveZip.framework;
+			remoteRef = 43CAEA5A19B0CB5300B0AA8F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		43718E6718517B7B00850F08 /* Resources */ = {
@@ -1017,6 +1073,11 @@
 			isa = PBXTargetDependency;
 			target = 43718E6818517B7B00850F08 /* UIKit */;
 			targetProxy = 43718E8418517B7B00850F08 /* PBXContainerItemProxy */;
+		};
+		43CAEA5D19B0CB6C00B0AA8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "ObjectiveZip-Android";
+			targetProxy = 43CAEA5C19B0CB6C00B0AA8F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

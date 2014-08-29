@@ -12,5 +12,5 @@ SDK_LIB_PATH=$(SDK_ROOT)/usr/lib
 DEPLOYMENT_LOCATION = YES
 DSTROOT = /
 INSTALL_PATH = $(SDK_ROOT)/System/Library/Frameworks/
-OTHER_LDFLAGS= $(inherited) -shared -Wl,-z,defs -lTNJavaHelper -lobjc -ldispatch -landroid -lEGL -lGLESv2 -llog -lm
+OTHER_LDFLAGS= $(inherited) -shared -Wl,-z,defs -lTNJavaHelper -lObjectiveZip -lobjc -ldispatch -landroid -lEGL -lGLESv2 -llog -lm
 OTHER_CFLAGS = -DANDROID $(inherited)
