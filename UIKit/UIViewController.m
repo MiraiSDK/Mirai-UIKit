@@ -260,7 +260,7 @@
     UIView *newView = viewControllerToPresent.view;
     newView.autoresizingMask = selfView.autoresizingMask;
 
-    CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
+    CGRect frame = window.bounds;
     CGRect frameBeforeAnimation = frame;
     frameBeforeAnimation.origin.y += frame.size.height;
     
