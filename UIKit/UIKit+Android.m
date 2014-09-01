@@ -41,19 +41,88 @@
 @implementation NSFileManager (Android)
 - (NSArray *)URLsForDirectory:(NSSearchPathDirectory)directory inDomains:(NSSearchPathDomainMask)domainMask
 {
-    NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
+    if (domainMask != NSUserDomainMask) {
+        NSLog(@"currentlly only support NSUserDomainMask!");
+        return @[];
+    }
     NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
     NSString *path = [bundlePath stringByDeletingLastPathComponent];
     NSString *result = nil;
     switch (directory) {
         case NSCachesDirectory:
-            result = [path stringByAppendingPathComponent:@"Caches"];
+            result = [path stringByAppendingPathComponent:@"Library/Caches"];
             break;
         case NSDocumentDirectory:
-            result = [path stringByAppendingPathComponent:@"Document"];
+            result = [path stringByAppendingPathComponent:@"Documents"];
             break;
         case NSLibraryDirectory:
             result = [path stringByAppendingPathComponent:@"Library"];
+            break;
+        case NSApplicationDirectory:
+            result = [path stringByAppendingPathComponent:@"Applications"];
+            break;
+        case NSDocumentationDirectory:
+            result = [path stringByAppendingPathComponent:@"Library/Documentation"];
+            break;
+        case NSDesktopDirectory:
+            result = [path stringByAppendingPathComponent:@"Desktop"];
+            break;
+        case NSApplicationSupportDirectory:
+            result = [path stringByAppendingPathComponent:@"Library/Application Support"];
+            break;
+        case NSDownloadsDirectory:
+            result = [path stringByAppendingPathComponent:@"Downloads"];
+            break;
+            
+        case NSDemoApplicationDirectory:
+            result = [path stringByAppendingPathComponent:@"Applications/Demos"];
+            break;
+        case NSDeveloperApplicationDirectory:
+            result = [path stringByAppendingPathComponent:@"Developer/Applications"];
+            break;
+        case NSAdminApplicationDirectory:
+            result = [path stringByAppendingPathComponent:@"Applications/Utilities"];
+            break;
+        case NSDeveloperDirectory:
+            result = [path stringByAppendingPathComponent:@"Developer"];
+            break;
+//        case NSAutosavedInformationDirectory:
+//            result = [path stringByAppendingPathComponent:@"Library/Autosave Information"];
+//            break;
+//        case NSInputMethodsDirectory:
+//            result = [path stringByAppendingPathComponent:@"Library/Input Methods"];
+//            break;
+//        case NSMoviesDirectory:
+//            result = [path stringByAppendingPathComponent:@"Movies"];
+//            break;
+//        case NSMusicDirectory:
+//            result = [path stringByAppendingPathComponent:@"Music"];
+//            break;
+//        case NSPicturesDirectory:
+//            result = [path stringByAppendingPathComponent:@"Pictures"];
+//            break;
+//        case NSSharedPublicDirectory:
+//            result = [path stringByAppendingPathComponent:@"Public"];
+//            break;
+//        case NSSharedPublicDirectory:
+//            result = [path stringByAppendingPathComponent:@"Library/PreferencePanes"];
+//            break;
+            
+        case NSUserDirectory:
+//        case NSPrinterDescriptionDirectory:
+//        case NSItemReplacementDirectory:
+            result = nil;
+            break;
+            
+        case NSAllApplicationsDirectory:
+            return @[[path stringByAppendingPathComponent:@"Applications"],
+                     [path stringByAppendingPathComponent:@"Applications/Utilities"],
+                     [path stringByAppendingPathComponent:@"Developer/Applications"],
+                     [path stringByAppendingPathComponent:@"Applications/Demos"]];
+            break;
+        case NSAllLibrariesDirectory:
+            return @[[path stringByAppendingPathComponent:@"Library"],
+                     [path stringByAppendingPathComponent:@"Developer"]];
             break;
         default:
             NSLog(@"unknow search path directory:%d",directory);
