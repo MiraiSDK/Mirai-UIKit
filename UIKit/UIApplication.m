@@ -10,6 +10,7 @@
 #import <dispatch/dispatch.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIWindow.h>
+#import "UIWindow+UIPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIScreenPrivate.h"
 #import "UIGraphics.h"
@@ -382,7 +383,10 @@ static int engine_init_display(struct engine* engine) {
     CGRect bounds = BKRenderingServiceGetPixelBounds();
     
     [[UIScreen mainScreen] _setPixelBounds:bounds];
-    [[UIScreen mainScreen] _setScale:1];
+
+    NSLog(@"screen pixel size:%@",NSStringFromCGSize(bounds.size));
+    
+    [[UIScreen mainScreen] _setScreenBounds:CGRectMake(0, 0, 768, 1024) fitMode:UIScreenFitModeScaleAspectFit];
     
     return 0;
 }
@@ -634,17 +638,12 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                         // commit?
                         UIWindow *keyWindow = _app.keyWindow;
                         
-                        CALayer *layer = _app.keyWindow.layer;
-                        CGRect bounds = screenBounds;
-                        if (_landscaped) {
-                            bounds = landscapedBounds;
-                        }
+                        CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
+                        [[UIScreen mainScreen] _setLandscaped:_landscaped];
+                        [keyWindow _setLandscaped:_landscaped];
                         
-                        if (!CGRectEqualToRect(keyWindow.frame, bounds)) {
-                            keyWindow.frame = bounds;
-                        }
-                            
-                        [layer _recursionLayoutAndDisplayIfNeeds];
+                        [pixelLayer _recursionLayoutAndDisplayIfNeeds];
+                        
                         
                         //
                         // The CARenderer work flow
@@ -674,7 +673,7 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                         [CATransaction commit];
                         
                         //      copy renderTree
-                        CALayer *renderTree = [layer copyRenderLayer:nil];
+                        CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
                         //      send to server
                         BKRenderingServiceUploadRenderLayer(renderTree);
                         

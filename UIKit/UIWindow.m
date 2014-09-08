@@ -25,6 +25,8 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 {
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
+    
+    BOOL _landscaped;
 
 }
 - (id)initWithFrame:(CGRect)theFrame
@@ -89,9 +91,10 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
         const BOOL wasHidden = self.hidden;
         [self _makeHidden];
         
-//        [self.layer removeFromSuperlayer];
+        [self.layer removeFromSuperlayer];
         _screen = theScreen;
-//        [[_screen _layer] addSublayer:self.layer];
+        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
+        [[_screen _windowLayer] addSublayer:self.layer];
         
         if (!wasHidden) {
             [self _makeVisible];
@@ -101,6 +104,14 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     }
 }
 
+- (void)_setLandscaped:(BOOL)landscaped
+{
+    if (_landscaped != landscaped) {
+        self.rootViewController.view.transform = landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
+        self.rootViewController.view.frame = self.window.bounds;
+        _landscaped = landscaped;
+    }
+}
 - (void)_screenModeChangedNotification:(NSNotification *)note
 {
     NS_UNIMPLEMENTED_LOG;
