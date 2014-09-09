@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, UIScreenFitMode) {
     UIScreenFitModeScaleAspectFit,
 };
 
-- (void)_setScreenBounds:(CGRect)bounds fitMode:(UIScreenFitMode)mode;
+- (void)_setScreenBounds:(CGRect)bounds scale:(CGFloat)scale fitMode:(UIScreenFitMode)mode;
 
 @end
 

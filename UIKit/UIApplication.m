@@ -385,9 +385,7 @@ static int engine_init_display(struct engine* engine) {
     [[UIScreen mainScreen] _setPixelBounds:bounds];
 
     NSLog(@"screen pixel size:%@",NSStringFromCGSize(bounds.size));
-    
-    [[UIScreen mainScreen] _setScreenBounds:CGRectMake(0, 0, 768, 1024) fitMode:UIScreenFitModeScaleAspectFit];
-    
+        
     return 0;
 }
 

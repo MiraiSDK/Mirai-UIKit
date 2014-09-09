@@ -49,3 +49,14 @@ typedef NS_ENUM(NSInteger, UIScreenOverscanCompensation) {
 - (UIView *)snapshotViewAfterScreenUpdates:(BOOL)afterUpdates;
 @end
  */
+
+typedef NS_ENUM(NSInteger, UIScreenSizeMode) {
+    UIScreenSizeModeDefault, // pixel equal
+    UIScreenSizeModePhone,   // 320x480
+    UIScreenSizeModePhone46,   // 320x568
+    UIScreenSizeModePad      // 768x1024
+};
+@interface UIScreen (SizeMode)
+//set scale to 0 to auto fit
+- (void)setScreenMode:(UIScreenSizeMode)sizeMode scale:(CGFloat)scale;
+@end

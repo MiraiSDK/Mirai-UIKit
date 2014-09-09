@@ -155,9 +155,8 @@ static UIScreen *_mainScreen = nil;
 
 #pragma mark - scale support
 
-- (void)_setScreenBounds:(CGRect)bounds fitMode:(UIScreenFitMode)mode
+- (void)_setScreenBounds:(CGRect)bounds scale:(CGFloat)scale fitMode:(UIScreenFitMode)mode
 {
-    CGFloat scale = 1;
     if (mode == UIScreenFitModeScaleAspectFit) {
         CGFloat widthScale = _pixelBounds.size.width / bounds.size.width;
         CGFloat heightScale = _pixelBounds.size.height / bounds.size.height;
@@ -177,6 +176,40 @@ static UIScreen *_mainScreen = nil;
 - (CALayer *)_windowLayer
 {
     return __windowLayer;
+}
+
+@end
+
+@implementation UIScreen (SizeMode)
+
+- (void)setScreenMode:(UIScreenSizeMode)sizeMode scale:(CGFloat)scale
+{
+    CGRect rect = _pixelBounds;
+    switch (sizeMode) {
+        case UIScreenSizeModeDefault:
+            rect = _pixelBounds;
+            break;
+        case UIScreenSizeModePhone:
+            rect = CGRectMake(0, 0, 320, 480);
+            break;
+        case UIScreenSizeModePhone46:
+            rect = CGRectMake(0, 0, 320, 568);
+            break;
+
+        case UIScreenSizeModePad:
+            rect = CGRectMake(0, 0, 768, 1024);
+            break;
+            
+        default:
+            break;
+    }
+    
+    UIScreenFitMode fitMode = UIScreenFitModeCenter;
+    if (scale == 0) {
+        fitMode = UIScreenFitModeScaleAspectFit;
+    }
+    
+    [self _setScreenBounds:rect scale:scale fitMode:fitMode];
 }
 
 @end
