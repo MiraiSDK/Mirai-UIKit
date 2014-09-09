@@ -49,10 +49,15 @@ static UIScreen *_mainScreen = nil;
 //        __pixelLayer.backgroundColor =[UIColor redColor].CGColor;
         
         __windowLayer = [CALayer layer];
+        __windowLayer.delegate = self;
 //        __windowLayer.backgroundColor = [UIColor greenColor].CGColor;
         [__pixelLayer addSublayer:__windowLayer];
     }
     return self;
+}
+- (id<CAAction>) actionForLayer: (CALayer*)layer forKey: (NSString*)eventKey
+{
+    return [NSNull null];
 }
 
 - (void)_setScale:(CGFloat)scale
