@@ -12,6 +12,9 @@
 #import "UIEvent+Android.h"
 #include <android/input.h>
 #import "UITouch+Private.h"
+#import "UIApplication.h"
+#import "UIWindow.h"
+#import <QuartzCore/QuartzCore.h>
 //#include <string.h>
 //#include <jni.h>
 
@@ -163,22 +166,22 @@
     int32_t pointerIdentifier = AMotionEvent_getPointerId(aEvent, pointerIndex);
     float x = AMotionEvent_getRawX(aEvent, pointerIndex);
     float y = AMotionEvent_getRawY(aEvent, pointerIndex);
-
-    CGFloat scale = [[UIScreen mainScreen] scale];
     
     // top-left coordinate
-    const CGPoint screenLocation = CGPointMake(x/scale, y/scale);
+    const CGPoint screenLocation = CGPointMake(x, y);
+    CALayer *keyWindowLayer = [[[UIApplication sharedApplication] keyWindow] layer];
+    CGPoint windowLocation = [[[UIScreen mainScreen] _pixelLayer] convertPoint:screenLocation toLayer:keyWindowLayer];
+    
     NSString *actionName = [self nameForMotionAction:trueAction];
     UITouchPhase phase = [self _phaseForMotionAction:trueAction];
     NSLog(@"action:%@ phase:%@",actionName,[self _nameForPhase:phase]);
     
     UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
-
     
     if (phase == UITouchPhaseEnded) {
-        [touch _setPhase:phase screenLocation:screenLocation tapCount:1 timestamp:eventTimestamp];
+        [touch _setPhase:phase screenLocation:windowLocation tapCount:1 timestamp:eventTimestamp];
     } else {
-        [touch _updatePhase:phase screenLocation:screenLocation timestamp:eventTimestamp];
+        [touch _updatePhase:phase screenLocation:windowLocation timestamp:eventTimestamp];
     }
     
     UIView *previousView = touch.view;

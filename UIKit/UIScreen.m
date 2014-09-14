@@ -46,6 +46,7 @@ static UIScreen *_mainScreen = nil;
     self = [super init];
     if (self) {
         __pixelLayer = [CALayer layer];
+        __pixelLayer.masksToBounds = YES;
 //        __pixelLayer.backgroundColor =[UIColor redColor].CGColor;
         
         __windowLayer = [CALayer layer];
@@ -105,11 +106,14 @@ static UIScreen *_mainScreen = nil;
 
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent
 {
+//    NSLog(@"screen point:%@",NSStringFromCGPoint(clickPoint));
     for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
         if (window.screen == self) {
-            CGPoint windowPoint = [window convertPoint:clickPoint fromWindow:nil];
+            CGPoint windowPoint = [__pixelLayer convertPoint:clickPoint toLayer:window.layer];
+//            NSLog(@"window point:%@",NSStringFromCGPoint(windowPoint));
             UIView *clickedView = [window hitTest:windowPoint withEvent:theEvent];
             if (clickedView) {
+//                NSLog(@"clicked view:%@",clickedView);
                 return clickedView;
             }
         }
