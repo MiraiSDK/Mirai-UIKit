@@ -34,4 +34,6 @@
 - (void)_setFirstResponder:(UIResponder *)newFirstResponder;
 - (void)_makeHidden;
 - (void)_makeVisible;
+- (void)_setLandscaped:(BOOL)landscaped;
+
 @end

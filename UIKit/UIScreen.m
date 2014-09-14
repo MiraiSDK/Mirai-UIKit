@@ -11,10 +11,12 @@
 #import "UIApplication.h"
 #import "UIWindow.h"
 #import "UIGeometry.h"
+#import "UIColor.h"
 
 #import "android_native_app_glue.h"
 #import <android/native_activity.h>
 #import <EGL/egl.h>
+#import <QuartzCore/QuartzCore.h>
 
 static NSMutableArray *_allScreens;
 @implementation UIScreen {
@@ -23,7 +25,9 @@ static NSMutableArray *_allScreens;
     CGRect _applicationFrame;
     CGFloat _scale;
     CGRect _pixelBounds;
-    
+    CALayer *__pixelLayer;
+    CALayer *__windowLayer;
+    BOOL _landscaped;
 }
 
 static UIScreen *_mainScreen = nil;
@@ -37,99 +41,23 @@ static UIScreen *_mainScreen = nil;
     }
 }
 
-static EGLDisplay _mainDisplay = EGL_NO_DISPLAY;
-static EGLContext _mainContext = EGL_NO_CONTEXT;
-static EGLSurface _mainSurface = EGL_NO_SURFACE;
-
-+ (BOOL)androidSetupMainScreenWith:(struct android_app *)androidApp
+- (instancetype)init
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    // initialize OpenGL ES and EGL
-    
-    /*
-     * Here specify the attributes of the desired configuration.
-     * Below, we select an EGLConfig with at least 8 bits per color
-     * component compatible with on-screen windows
-     */
-    const EGLint attribs[] = {
-        EGL_CONFORMANT, EGL_OPENGL_ES2_BIT,
-        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-        EGL_BLUE_SIZE, 8,
-        EGL_GREEN_SIZE, 8,
-        EGL_RED_SIZE, 8,
-        EGL_NONE
-    };
-
-    EGLint pixelWidth, pixelHeight, dummy, format;
-    EGLint numConfigs;
-    EGLConfig config;
-    EGLSurface surface;
-    EGLContext context;
-
-    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-    eglInitialize(display, 0, 0);
-    
-    /* Here, the application chooses the configuration it desires. In this
-     * sample, we have a very simplified selection process, where we pick
-     * the first EGLConfig that matches our criteria */
-    eglChooseConfig(display, attribs, &config, 1, &numConfigs);
-
-    /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-     * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-     * As soon as we picked a EGLConfig, we can safely reconfigure the
-     * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-    eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
-
-//    ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
-
-    surface = eglCreateWindowSurface(display, config, androidApp->window, NULL);
-    context = eglCreateContext(display, config, NULL, NULL);
-    
-    if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-        NSLog(@"Unable to eglMakeCurrent");
-        return NO;
+    self = [super init];
+    if (self) {
+        __pixelLayer = [CALayer layer];
+//        __pixelLayer.backgroundColor =[UIColor redColor].CGColor;
+        
+        __windowLayer = [CALayer layer];
+        __windowLayer.delegate = self;
+//        __windowLayer.backgroundColor = [UIColor greenColor].CGColor;
+        [__pixelLayer addSublayer:__windowLayer];
     }
-    
-    eglQuerySurface(display, surface, EGL_WIDTH, &pixelWidth);
-    eglQuerySurface(display, surface, EGL_HEIGHT, &pixelHeight);
-    
-    _mainDisplay = display;
-    _mainContext = context;
-    _mainSurface = surface;
-    
-    _mainScreen->_pixelBounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
-    _mainScreen->_scale = 1;
-    _mainScreen->_bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
-    _mainScreen->_applicationFrame = _mainScreen->_bounds;
-    
-    return YES;
+    return self;
 }
-
-+ (void)androidTeardownMainScreen
+- (id<CAAction>) actionForLayer: (CALayer*)layer forKey: (NSString*)eventKey
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    
-    if (_mainDisplay != EGL_NO_DISPLAY) {
-        NSLog(@"[UIScreen] will clean context");
-        eglMakeCurrent(_mainDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        if (_mainContext != EGL_NO_CONTEXT) {
-            NSLog(@"[UIScreen] will destory context");
-            eglDestroyContext(_mainDisplay, _mainContext);
-        }
-        
-        if (_mainSurface != EGL_NO_SURFACE) {
-            NSLog(@"[UIScreen] will destory surface");
-            eglDestroySurface(_mainDisplay, _mainSurface);
-        }
-        
-        NSLog(@"[UIScreen] will terminate display");
-        eglTerminate(_mainDisplay);
-    }
-    
-    _mainDisplay = EGL_NO_DISPLAY;
-    _mainContext = EGL_NO_CONTEXT;
-    _mainSurface = EGL_NO_SURFACE;
+    return [NSNull null];
 }
 
 - (void)_setScale:(CGFloat)scale
@@ -142,10 +70,6 @@ static EGLSurface _mainSurface = EGL_NO_SURFACE;
     _applicationFrame = _bounds;
 }
 
-- (void)_setPixelBounds:(CGRect)bounds
-{
-    _pixelBounds = bounds;
-}
 
 + (NSArray *)screens
 {
@@ -198,6 +122,101 @@ static EGLSurface _mainSurface = EGL_NO_SURFACE;
 {
     return [NSString stringWithFormat:@"<%@: %p; bounds = %@; mode = %@>", [self className], self, NSStringFromCGRect(self.bounds), self.currentMode];
 }
+
+#pragma mark - Pixel glue
+- (CALayer *)_pixelLayer
+{
+    return __pixelLayer;
+}
+
+- (void)_setPixelBounds:(CGRect)bounds
+{
+    if (!CGRectEqualToRect(_pixelBounds, bounds)) {
+        _pixelBounds = bounds;
+        __pixelLayer.frame = bounds;
+    }
+}
+
+- (void)_setLandscaped:(BOOL)landscaped
+{
+    if (_landscaped != landscaped) {
+        CGFloat longSide = MAX(_pixelBounds.size.width,_pixelBounds.size.height);
+        CGFloat shortSide = MIN(_pixelBounds.size.width,_pixelBounds.size.height);
+        CGRect pixelBounds = landscaped? CGRectMake(0, 0, longSide, shortSide): CGRectMake(0, 0, shortSide, longSide);
+        [self _setPixelBounds:pixelBounds];
+        
+        __windowLayer.position = CGPointMake(pixelBounds.size.width/2, pixelBounds.size.height/2);
+        if (landscaped) {
+            CATransform3D scale = CATransform3DMakeScale(_scale, _scale, 1);
+            CATransform3D t = CATransform3DRotate(scale, M_PI_2, 0, 0, 1);
+            __windowLayer.transform = t;
+        } else {
+            __windowLayer.transform = CATransform3DMakeScale(_scale, _scale, 1);
+        }
+        _landscaped = landscaped;
+    }
+}
+
+
+#pragma mark - scale support
+
+- (void)_setScreenBounds:(CGRect)bounds scale:(CGFloat)scale fitMode:(UIScreenFitMode)mode
+{
+    if (mode == UIScreenFitModeScaleAspectFit) {
+        CGFloat widthScale = _pixelBounds.size.width / bounds.size.width;
+        CGFloat heightScale = _pixelBounds.size.height / bounds.size.height;
+        scale = MIN(widthScale, heightScale);
+
+    }
+    
+    NSLog(@"pixel bounds:%@",NSStringFromCGRect(_pixelBounds));
+    NSLog(@"set screen bounds:%@ scale:%.2f",NSStringFromCGRect(bounds),scale);
+    _scale = scale;
+    _bounds = bounds;
+    __windowLayer.bounds = bounds;
+    __windowLayer.position = CGPointMake(_pixelBounds.size.width/2, _pixelBounds.size.height/2);
+    __windowLayer.transform = CATransform3DMakeScale(scale, scale, 1);
+}
+
+- (CALayer *)_windowLayer
+{
+    return __windowLayer;
+}
+
+@end
+
+@implementation UIScreen (SizeMode)
+
+- (void)setScreenMode:(UIScreenSizeMode)sizeMode scale:(CGFloat)scale
+{
+    CGRect rect = _pixelBounds;
+    switch (sizeMode) {
+        case UIScreenSizeModeDefault:
+            rect = _pixelBounds;
+            break;
+        case UIScreenSizeModePhone:
+            rect = CGRectMake(0, 0, 320, 480);
+            break;
+        case UIScreenSizeModePhone46:
+            rect = CGRectMake(0, 0, 320, 568);
+            break;
+
+        case UIScreenSizeModePad:
+            rect = CGRectMake(0, 0, 768, 1024);
+            break;
+            
+        default:
+            break;
+    }
+    
+    UIScreenFitMode fitMode = UIScreenFitModeCenter;
+    if (scale == 0) {
+        fitMode = UIScreenFitModeScaleAspectFit;
+    }
+    
+    [self _setScreenBounds:rect scale:scale fitMode:fitMode];
+}
+
 @end
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";

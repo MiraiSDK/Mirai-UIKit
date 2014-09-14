@@ -486,16 +486,12 @@ static BOOL _animationsEnabled = YES;
 
 - (CGRect)convertRect:(CGRect)toConvert fromView:(UIView *)fromView
 {
-    CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) fromView:fromView];
-    CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) fromView:fromView];
-    return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+    return [self.layer convertRect:toConvert fromLayer:fromView.layer];
 }
 
 - (CGRect)convertRect:(CGRect)toConvert toView:(UIView *)toView
 {
-    CGPoint origin = [self convertPoint:CGPointMake(CGRectGetMinX(toConvert),CGRectGetMinY(toConvert)) toView:toView];
-    CGPoint bottom = [self convertPoint:CGPointMake(CGRectGetMaxX(toConvert),CGRectGetMaxY(toConvert)) toView:toView];
-    return CGRectMake(origin.x, origin.y, bottom.x-origin.x, bottom.y-origin.y);
+    return [self.layer convertRect:toConvert toLayer:toView.layer];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
