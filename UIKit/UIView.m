@@ -326,6 +326,8 @@ static BOOL _animationsEnabled = YES;
         
         CGRect bounds = _layer.bounds;
         bounds.size = transformedSize;
+        bounds = CGRectIntegral(bounds);
+        
         CGPoint anchorPoint = _layer.anchorPoint;
         CGPoint position = CGPointMake(newOrigin.x + (newFrame.size.width * anchorPoint.x),
                                 newOrigin.y + (newFrame.size.height * anchorPoint.y));
