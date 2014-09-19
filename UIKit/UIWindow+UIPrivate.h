@@ -35,5 +35,5 @@
 - (void)_makeHidden;
 - (void)_makeVisible;
 - (void)_setLandscaped:(BOOL)landscaped;
-
+- (UIInterfaceOrientation)_currentOrientation;
 @end

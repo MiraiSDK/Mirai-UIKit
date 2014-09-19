@@ -11,6 +11,7 @@
 
 #import "UIScreen.h"
 #import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 
 @implementation UIViewController {
     NSMutableArray *_childViewControllers;
@@ -248,6 +249,38 @@
 
 #define kViewControllerTransitionDuration 0.25
 
+- (UIInterfaceOrientation)_bestOrientationToPrenstViewController:(UIViewController *)viewControllerToPresent
+{
+    UIInterfaceOrientation bestOrientation = UIInterfaceOrientationPortrait;
+    
+    UIWindow *window = self.view.window;
+    if (!window) {
+        window = _presentedViewController.view.window;
+    }
+    if (!window) {
+        window = [[UIApplication sharedApplication] keyWindow];
+    }
+    UIInterfaceOrientation currentOrientation = [window _currentOrientation];
+    
+    NSUInteger currentOrientationMask = 1 << currentOrientation;
+    NSUInteger supportedOrientations = viewControllerToPresent.supportedInterfaceOrientations;
+    BOOL isSupportCurrentOrientation = (currentOrientationMask & supportedOrientations) == currentOrientationMask;
+
+    if (isSupportCurrentOrientation) {
+        bestOrientation = currentOrientation;
+    } else {
+        if (supportedOrientations & UIInterfaceOrientationMaskPortrait) {
+            bestOrientation = UIInterfaceOrientationPortrait;
+        } else if (supportedOrientations & UIInterfaceOrientationMaskPortraitUpsideDown) {
+            bestOrientation = UIInterfaceOrientationPortraitUpsideDown;
+        } else {
+            bestOrientation = UIInterfaceOrientationLandscapeLeft;
+        }
+    }
+    
+    return bestOrientation;
+}
+
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated: (BOOL)animated completion:(void (^)(void))completion
 {
     _presentedViewController = viewControllerToPresent;
@@ -257,12 +290,41 @@
     
     UIWindow *window = self.view.window;
     UIView *selfView = self.view;
+    while (selfView.superview && ![selfView.superview isKindOfClass:[UIWindow class]]) {
+        selfView = selfView.superview;
+    }
+    
+    UIInterfaceOrientation orientation = [self _bestOrientationToPrenstViewController:viewControllerToPresent];
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    switch (orientation) {
+        case UIInterfaceOrientationPortrait:
+            transform = CGAffineTransformIdentity;
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            transform = CGAffineTransformMakeRotation(M_PI);
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            transform = CGAffineTransformMakeRotation(-M_PI_2);
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            transform = CGAffineTransformMakeRotation(M_PI_2);
+            break;
+            
+        default:
+            break;
+    }
+    
     UIView *newView = viewControllerToPresent.view;
     newView.autoresizingMask = selfView.autoresizingMask;
+    newView.transform = transform;
 
     CGRect frame = window.bounds;
     CGRect frameBeforeAnimation = frame;
-    frameBeforeAnimation.origin.y += frame.size.height;
+    if (UIInterfaceOrientationIsPortrait(orientation)) {
+        frameBeforeAnimation.origin.y += frame.size.height;
+    } else {
+        frameBeforeAnimation.origin.x += frame.size.width;
+    }
     
     newView.frame = frameBeforeAnimation;
     [window addSubview:newView];
@@ -293,15 +355,49 @@
     UIWindow *window = _presentedViewController.view.window;
     
     CGRect frame = _wantsFullScreenLayout? window.screen.bounds : window.screen.applicationFrame;
-    CGRect frameAfterAnimation = frame;
-    frameAfterAnimation.origin.y += frame.size.height;
+
     
-    [window insertSubview:self.view belowSubview:_presentedViewController.view];
+    UIView *viewToReadd = self.view;
+    while (viewToReadd.superview && ![viewToReadd.superview isKindOfClass:[UIWindow class]]) {
+        viewToReadd = viewToReadd.superview;
+    }
+
+    UIInterfaceOrientation orientation = [self _bestOrientationToPrenstViewController:self];
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    switch (orientation) {
+        case UIInterfaceOrientationPortrait:
+            transform = CGAffineTransformIdentity;
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            transform = CGAffineTransformMakeRotation(M_PI);
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            transform = CGAffineTransformMakeRotation(-M_PI_2);
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            transform = CGAffineTransformMakeRotation(M_PI_2);
+            break;
+            
+        default:
+            break;
+    }
+
+
+    viewToReadd.transform = transform;
+    viewToReadd.frame = frame;
+    [window insertSubview:viewToReadd belowSubview:_presentedViewController.view];
     
     [self viewWillAppear:animated];
     [_presentedViewController viewWillDisappear:animated];
     
     
+    CGRect frameAfterAnimation = frame;
+    if (UIInterfaceOrientationIsPortrait(orientation)) {
+        frameAfterAnimation.origin.y += frame.size.height;
+    } else {
+        frameAfterAnimation.origin.x += frame.size.width;
+    }
+
     [UIView animateWithDuration:animated ? kViewControllerTransitionDuration : 0 animations:^{
         _presentedViewController.view.frame = frameAfterAnimation;
     } completion:^(BOOL finished) {

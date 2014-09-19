@@ -104,14 +104,35 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     }
 }
 
+- (UIViewController *)_topestViewController
+{
+    UIViewController *vc = self.rootViewController;
+    while (vc.presentedViewController) {
+        vc = vc.presentedViewController;
+    }
+    
+    return vc;
+}
+
 - (void)_setLandscaped:(BOOL)landscaped
 {
     if (_landscaped != landscaped) {
-        self.rootViewController.view.transform = landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
-        self.rootViewController.view.frame = self.window.bounds;
+        UIViewController *vc = [self _topestViewController];
+        vc.view.transform = landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
+        vc.view.frame = self.window.bounds;
         _landscaped = landscaped;
     }
 }
+
+- (UIInterfaceOrientation)_currentOrientation
+{
+    if (_landscaped) {
+        return UIInterfaceOrientationLandscapeLeft;
+    }
+    
+    return UIInterfaceOrientationPortrait;
+}
+
 - (void)_screenModeChangedNotification:(NSNotification *)note
 {
     NS_UNIMPLEMENTED_LOG;
