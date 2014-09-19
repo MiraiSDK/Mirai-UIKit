@@ -177,6 +177,7 @@ static UIScreen *_mainScreen = nil;
     NSLog(@"set screen bounds:%@ scale:%.2f",NSStringFromCGRect(bounds),scale);
     _scale = scale;
     _bounds = bounds;
+    _applicationFrame = bounds;
     __windowLayer.bounds = bounds;
     __windowLayer.position = CGPointMake(_pixelBounds.size.width/2, _pixelBounds.size.height/2);
     __windowLayer.transform = CATransform3DMakeScale(scale, scale, 1);
