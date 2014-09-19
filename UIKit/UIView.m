@@ -488,11 +488,18 @@ static BOOL _animationsEnabled = YES;
 
 - (CGRect)convertRect:(CGRect)toConvert fromView:(UIView *)fromView
 {
+    if (fromView == nil) {
+        return [self.layer convertRect:toConvert fromLayer:self.window.layer];
+    }
+    
     return [self.layer convertRect:toConvert fromLayer:fromView.layer];
 }
 
 - (CGRect)convertRect:(CGRect)toConvert toView:(UIView *)toView
 {
+    if (toView == nil) {
+        return [self.layer convertRect:toConvert toLayer:self.window.layer];
+    }
     return [self.layer convertRect:toConvert toLayer:toView.layer];
 }
 
