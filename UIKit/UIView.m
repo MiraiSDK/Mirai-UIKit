@@ -941,11 +941,8 @@ static BOOL _animationsEnabled = YES;
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    NSLog(@"layer bounds:{%.2f,%.2f,%.2f,%.2f}",layer.bounds.origin.x,layer.bounds.origin.y,layer.bounds.size.width,layer.bounds.size.height);
     // We only get here if the UIView subclass implements drawRect:. To do this without a drawRect: is a huge waste of memory.
     const CGRect bounds = CGContextGetClipBoundingBox(ctx);
-    NSLog(@"bounds:{%.2f,%.2f,%.2f,%.2f}",bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
     UIGraphicsPushContext(ctx);
     CGContextSaveGState(ctx);
     CGContextScaleCTM(ctx, 1, -1);
