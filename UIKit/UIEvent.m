@@ -171,6 +171,8 @@
     const CGPoint screenLocation = CGPointMake(x, y);
     CALayer *keyWindowLayer = [[[UIApplication sharedApplication] keyWindow] layer];
     CGPoint windowLocation = [[[UIScreen mainScreen] _pixelLayer] convertPoint:screenLocation toLayer:keyWindowLayer];
+    windowLocation.x = ceilf(windowLocation.x);
+    windowLocation.y = ceilf(windowLocation.y);
     
     NSString *actionName = [self nameForMotionAction:trueAction];
     UITouchPhase phase = [self _phaseForMotionAction:trueAction];
