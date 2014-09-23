@@ -588,6 +588,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _horizontalScroller.alwaysVisible = YES;
         _verticalScroller.alwaysVisible = YES;
         
+        delta.x = -delta.x;
+        delta.y = -delta.y;
+        
         const CGPoint originalOffset = self.contentOffset;
         
         CGPoint proposedOffset = originalOffset;
