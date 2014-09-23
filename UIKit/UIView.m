@@ -25,6 +25,8 @@
 #import "UIViewBlockAnimationDelegate.h"
 #import <dispatch/dispatch.h>
 
+#import "UIScreen.h"
+
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
 NSString *const UIViewBoundsDidChangeNotification = @"UIViewBoundsDidChangeNotification";
 NSString *const UIViewDidMoveToSuperviewNotification = @"UIViewDidMoveToSuperviewNotification";
@@ -149,8 +151,10 @@ static BOOL _animationsEnabled = YES;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
         
         self.contentMode = UIViewContentModeScaleToFill;
-        self.contentScaleFactor = 0;
-        
+        if (_implementsDrawRect) {
+            self.contentScaleFactor = [[UIScreen mainScreen] scale];
+        }
+
         self.frame = frame;
         self.alpha = 1;
         self.opaque = YES;
@@ -408,13 +412,12 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor
 {
-    NSLog(@"Unimplementd Method: %s",__PRETTY_FUNCTION__);
+    _layer.contentsScale = contentScaleFactor;
 }
 
 - (CGFloat)contentScaleFactor
 {
-    NSLog(@"Unimplementd Method: %s",__PRETTY_FUNCTION__);
-    return 0.0f;
+    return _layer.contentsScale;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
