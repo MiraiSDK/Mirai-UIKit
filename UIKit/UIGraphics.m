@@ -9,6 +9,7 @@
 #import "UIGraphics.h"
 
 #import "UIImage.h"
+#import "UIScreen.h"
 
 static NSMutableArray* contextStack()
 {
@@ -56,7 +57,7 @@ void     UIGraphicsBeginImageContext(CGSize size)
 void     UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
 {
     if (scale == 0.f) {
-        scale = 1;
+        scale = [[UIScreen mainScreen] scale];
     }
     
     const size_t width = size.width * scale;
