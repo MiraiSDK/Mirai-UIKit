@@ -180,7 +180,12 @@ static NSArray *GestureRecognizersForView(UIView *view)
     
     // The stored location should always be in the coordinate space of the UIScreen that contains the touch's window.
     // So first convert from the screen to the window:
-    CGPoint point = [window convertPoint:thePoint fromWindow:nil];
+//    CGPoint point = [window convertPoint:thePoint fromWindow:nil];
+    
+    // HACK: we save window location now.
+    // TODO: rename relate variable from screelocation to windowloaction
+    //  or should we keep saving screen location?
+    CGPoint point = thePoint;
     
     // Then convert to the desired location (if any).
     if (inView) {
