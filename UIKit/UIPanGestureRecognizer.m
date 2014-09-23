@@ -32,6 +32,7 @@
 #import "UITouch+Private.h"
 #import "UIEvent.h"
 #import "UIGeometry.h"
+#import "UIWindow.h"
 
 static UITouch *PanTouch(NSSet *touches)
 {
@@ -46,6 +47,12 @@ static UITouch *PanTouch(NSSet *touches)
 }
 
 @implementation UIPanGestureRecognizer
+{
+    CGPoint _firstScreenLocation;
+    CGPoint _lastScreenLocation;
+    
+    NSMutableArray *_touches;
+}
 @synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
 
 - (id)initWithTarget:(id)target action:(SEL)action
@@ -53,7 +60,6 @@ static UITouch *PanTouch(NSSet *touches)
     if ((self=[super initWithTarget:target action:action])) {
         _minimumNumberOfTouches = 1;
         _maximumNumberOfTouches = NSUIntegerMax;
-        _translation = CGPointZero;
         _velocity = CGPointZero;
     }
     return self;
@@ -61,24 +67,26 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (CGPoint)translationInView:(UIView *)view
 {
-    return _translation;
+    CGPoint firstPoint = [view.window convertPoint:_firstScreenLocation toView:view];
+    CGPoint lastPoint = [view.window convertPoint:_lastScreenLocation toView:view];
+    CGPoint translation = CGPointMake(lastPoint.x - firstPoint.x , lastPoint.y - firstPoint.y);
+    
+    return translation;
 }
 
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view
 {
     _velocity = CGPointZero;
-    _translation = translation;
+    CGPoint lastPoint = [view convertPoint:_lastScreenLocation fromView:view.window];
+    CGPoint translatedPoint = CGPointMake(lastPoint.x + translation.x, lastPoint.y + translation.y);
+    _firstScreenLocation = [view convertPoint:translatedPoint toView:view.window];
 }
 
 - (BOOL)_translate:(CGPoint)delta withEvent:(UIEvent *)event
 {
     const NSTimeInterval timeDiff = event.timestamp - _lastMovementTime;
-    NSLog(@"translate, timeDiff: %f",timeDiff);
-    NSLog(@"delta:%@",NSStringFromCGPoint(delta));
     
     if (!CGPointEqualToPoint(delta, CGPointZero) && timeDiff > 0) {
-        _translation.x += delta.x;
-        _translation.y += delta.y;
         _velocity.x = delta.x / timeDiff;
         _velocity.y = delta.y / timeDiff;
         _lastMovementTime = event.timestamp;
@@ -91,8 +99,8 @@ static UITouch *PanTouch(NSSet *touches)
 - (void)reset
 {
     [super reset];
-    _translation = CGPointZero;
     _velocity = CGPointZero;
+    [_touches removeAllObjects];
 }
 
 - (CGPoint)velocityInView:(UIView *)view
@@ -100,16 +108,26 @@ static UITouch *PanTouch(NSSet *touches)
     return _velocity;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (_touches.count == 0) {
+        UITouch *touch = [touches anyObject];
+        _firstScreenLocation = [touch locationInView:self.view.window];
+    }
+    [_touches addObjectsFromArray:touches.allObjects];
+}
+
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-//- (void)_gesturesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
 
+    _lastScreenLocation = [touch locationInView:self.view.window];
+    
     // note that we being the gesture here in the _gesturesMoved:withEvent: method instead of the _gesturesBegan:withEvent:
     // method because the pan gesture cannot be recognized until the user moves their fingers a bit and OSX won't tag the
     // gesture as a pan until that movement has actually happened so we have to do the checking here.
     if (self.state == UIGestureRecognizerStatePossible && touch) {
-        [self setTranslation:[touch _delta] inView:touch.view];
+//        [self setTranslation:[touch _delta] inView:touch.view];
         _lastMovementTime = event.timestamp;
         self.state = UIGestureRecognizerStateBegan;
     } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
@@ -127,11 +145,11 @@ static UITouch *PanTouch(NSSet *touches)
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-//- (void)_gesturesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
         UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
-        
+        _lastScreenLocation = [touch locationInView:self.view.window];
+
         if (touch) {
             [self _translate:[touch _delta] withEvent:event];
             self.state = UIGestureRecognizerStateEnded;
