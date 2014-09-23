@@ -167,8 +167,11 @@ static UIScreen *_mainScreen = nil;
 - (void)_setScreenBounds:(CGRect)bounds scale:(CGFloat)scale fitMode:(UIScreenFitMode)mode
 {
     if (mode == UIScreenFitModeScaleAspectFit) {
-        CGFloat widthScale = _pixelBounds.size.width / bounds.size.width;
-        CGFloat heightScale = _pixelBounds.size.height / bounds.size.height;
+        CGFloat shortSide = MIN(_pixelBounds.size.width, _pixelBounds.size.height);
+        CGFloat longSide = MAX(_pixelBounds.size.width, _pixelBounds.size.height);
+
+        CGFloat widthScale = shortSide / bounds.size.width;
+        CGFloat heightScale = longSide / bounds.size.height;
         scale = MIN(widthScale, heightScale);
 
     }

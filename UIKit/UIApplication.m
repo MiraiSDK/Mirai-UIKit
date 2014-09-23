@@ -58,9 +58,9 @@
     UIEvent *_currentEvent;
     NSMutableSet *_visibleWindows;
 
-    BOOL _landscaped;
 }
 
+static BOOL _landscaped;
 static UIApplication *_app;
 + (UIApplication *)sharedApplication
 {
@@ -279,7 +279,7 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
         } break;
         case APP_CMD_CONFIG_CHANGED: {
             TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:app->config];
-            _app->_landscaped = (config.orientation == TNAConfigurationOrientationLand);
+            _landscaped = (config.orientation == TNAConfigurationOrientationLand);
         } break;
         case APP_CMD_LOW_MEMORY:break;
         case APP_CMD_START:break;
@@ -382,6 +382,9 @@ static int engine_init_display(struct engine* engine) {
     BKRenderingServiceBegin(engine->app);
     CGRect bounds = BKRenderingServiceGetPixelBounds();
     
+    TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:engine->app->config];
+    _landscaped = (config.orientation == TNAConfigurationOrientationLand);
+
     [[UIScreen mainScreen] _setPixelBounds:bounds];
 
     NSLog(@"screen pixel size:%@",NSStringFromCGSize(bounds.size));
@@ -566,9 +569,7 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
         struct engine* engine = (struct engine*)app_state->userData;
 
         BKRenderingServiceRun();
-        CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        CGRect landscapedBounds = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
-
+        
         @try {
         do {
             @autoreleasepool {
