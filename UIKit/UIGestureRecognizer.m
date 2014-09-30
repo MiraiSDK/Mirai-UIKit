@@ -172,7 +172,11 @@
             // note that this means that reset can't happen until the next run loop, either otherwise
             // the state property is going to be wrong when the action handler looks at it, so as a result
             // I'm also delaying the reset call (if necessary) just below here.
-            [self performSelector:@selector(_sendActions) withObject:nil afterDelay:0 inModes:@[UITrackingRunLoopMode,NSDefaultRunLoopMode]];
+//            [self performSelector:@selector(_sendActions) withObject:nil afterDelay:0];
+            
+            // FIXME: HACK, it seems actions messages are not sent in next run loop?
+            [self performSelector:@selector(_sendActions) withObject:nil];
+
         }
         
         if (transition->shouldReset) {
