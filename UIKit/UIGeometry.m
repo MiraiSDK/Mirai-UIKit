@@ -98,32 +98,47 @@ UIOffset UIOffsetFromString(NSString *string)
 @implementation NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point
 {
-    return [NSValue valueWithPoint:NSPointFromCGPoint(point)];
+    return [NSValue value:&point withObjCType:@encode(CGPoint)];
 }
 
 - (CGPoint)CGPointValue
 {
-    return NSPointToCGPoint([self pointValue]);
+    if (strcmp([self objCType], @encode(CGPoint)) == 0 ||
+        strcmp([self objCType], @encode(NSPoint)) == 0) {
+        CGPoint p; [self getValue:&p];
+        return p;
+    }
+    return CGPointZero;
 }
 
 + (NSValue *)valueWithCGRect:(CGRect)rect
 {
-    return [NSValue valueWithRect:NSRectFromCGRect(rect)];
+    return [NSValue value:&rect withObjCType:@encode(CGRect)];
 }
 
 - (CGRect)CGRectValue
 {
-    return NSRectToCGRect([self rectValue]);
+    if (strcmp([self objCType], @encode(CGRect)) == 0 ||
+        strcmp([self objCType], @encode(NSRect)) == 0) {
+        CGRect rect; [self getValue:&rect];
+        return rect;
+    }
+    return CGRectZero;
 }
 
 + (NSValue *)valueWithCGSize:(CGSize)size
 {
-    return [NSValue valueWithSize:NSSizeFromCGSize(size)];
+    return [NSValue value:&size withObjCType:@encode(CGSize)];
 }
 
 - (CGSize)CGSizeValue
 {
-    return NSSizeToCGSize([self sizeValue]);
+    if (strcmp([self objCType], @encode(CGSize)) == 0 ||
+        strcmp([self objCType], @encode(NSSize)) == 0) {
+        CGSize size; [self getValue:&size];
+        return size;
+    }
+    return CGSizeZero;
 }
 
 + (NSValue *)valueWithUIEdgeInsets:(UIEdgeInsets)insets
