@@ -103,12 +103,8 @@ UIOffset UIOffsetFromString(NSString *string)
 
 - (CGPoint)CGPointValue
 {
-    if (strcmp([self objCType], @encode(CGPoint)) == 0 ||
-        strcmp([self objCType], @encode(NSPoint)) == 0) {
-        CGPoint p; [self getValue:&p];
-        return p;
-    }
-    return CGPointZero;
+    CGPoint p; [self getValue:&p];
+    return p;
 }
 
 + (NSValue *)valueWithCGRect:(CGRect)rect
@@ -118,12 +114,8 @@ UIOffset UIOffsetFromString(NSString *string)
 
 - (CGRect)CGRectValue
 {
-    if (strcmp([self objCType], @encode(CGRect)) == 0 ||
-        strcmp([self objCType], @encode(NSRect)) == 0) {
-        CGRect rect; [self getValue:&rect];
-        return rect;
-    }
-    return CGRectZero;
+    CGRect rect; [self getValue:&rect];
+    return rect;
 }
 
 + (NSValue *)valueWithCGSize:(CGSize)size
@@ -133,12 +125,8 @@ UIOffset UIOffsetFromString(NSString *string)
 
 - (CGSize)CGSizeValue
 {
-    if (strcmp([self objCType], @encode(CGSize)) == 0 ||
-        strcmp([self objCType], @encode(NSSize)) == 0) {
-        CGSize size; [self getValue:&size];
-        return size;
-    }
-    return CGSizeZero;
+    CGSize size; [self getValue:&size];
+    return size;
 }
 
 + (NSValue *)valueWithUIEdgeInsets:(UIEdgeInsets)insets
