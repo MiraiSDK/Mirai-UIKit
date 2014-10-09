@@ -957,6 +957,11 @@ static BOOL _animationsEnabled = YES;
     CGContextSaveGState(ctx);
     CGContextScaleCTM(ctx, 1, -1);
     CGContextTranslateCTM(ctx, 0, -layer.bounds.size.height);
+    
+    if (!self.isOpaque && self.clearsContextBeforeDrawing) {
+        CGContextClearRect(ctx, layer.bounds);
+    }
+    
     [self drawRect:layer.bounds];
     CGContextRestoreGState(ctx);
     UIGraphicsPopContext();
