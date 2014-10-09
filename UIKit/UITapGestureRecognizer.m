@@ -88,7 +88,7 @@
     
     for (UITouch *t in touches) {
         NSInteger idx = [_touches indexOfObject:t];
-        CGPoint initPoint = [t locationInView:self.view];
+        CGPoint initPoint = [t locationInView:nil];
         NSValue *v = [NSValue valueWithCGPoint:initPoint];
         _beganLocations[@(idx)] = v;
         
@@ -98,7 +98,7 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
-    CGPoint currentLocation = [self locationInView:self.view];
+    CGPoint currentLocation = [self locationInView:nil];
     
     NSInteger idx = [_touches indexOfObject:touch];
     CGPoint beginPoint = [_beganLocations[@(idx)] CGPointValue];
