@@ -36,6 +36,8 @@
 @implementation UIGestureRecognizer
 {
     BOOL _excluded;
+    BOOL _shouldSendActions;
+    BOOL _shouldReset;
 }
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
 @synthesize state=_state, enabled=_enabled, view=_view;
@@ -166,24 +168,11 @@
 
     if (transition) {
         _state = transition->toState;
-        
-        if (transition->shouldNotify) {
-            // docs mention that the action messages are sent on the next run loop, so we'll do that here.
-            // note that this means that reset can't happen until the next run loop, either otherwise
-            // the state property is going to be wrong when the action handler looks at it, so as a result
-            // I'm also delaying the reset call (if necessary) just below here.
-//            [self performSelector:@selector(_sendActions) withObject:nil afterDelay:0];
-            
-            // FIXME: HACK, it seems actions messages are not sent in next run loop?
-            [self performSelector:@selector(_sendActions) withObject:nil];
+        _shouldSendActions = transition->shouldNotify;
+        _shouldReset = transition->shouldReset;
 
-        }
-        
-        if (transition->shouldReset) {
-            // see note above about the delay
-            [self performSelector:@selector(reset) withObject:nil afterDelay:0];
-        }
     }
+    
 }
 
 - (void)_sendActions
@@ -194,11 +183,14 @@
         }
     }
 
+    _shouldSendActions = NO;
 }
 
 - (void)reset
 {
     _excluded = NO;
+    _shouldReset = NO;
+    _shouldSendActions = NO;
     _state = UIGestureRecognizerStatePossible;
     [_trackingTouches removeAllObjects];
 }
@@ -271,11 +263,11 @@
             canBePrevented = [otherGesture canPreventGestureRecognizer:self];
         }
         
-        if (canBePrevented) {
+        if (canBePrevented && self.delegate) {
             canBePrevented = [self _delegateCanPreventGestureRecognizer:otherGesture];
         }
         
-        if (canBePrevented) {
+        if (canBePrevented && otherGesture.delegate) {
             canBePrevented = [otherGesture _delegateCanPreventGestureRecognizer:self];
         }
         
@@ -294,6 +286,16 @@
     NSLog(@"-[%@ _setExcluded]",self.class);
     _excluded = YES;
     [self reset];
+}
+
+- (BOOL)_shouldSendActions
+{
+    return _shouldSendActions;
+}
+
+- (BOOL)_shouldReset
+{
+    return _shouldReset;
 }
 
 - (BOOL)_isFailed

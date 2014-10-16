@@ -25,6 +25,7 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 {
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
+    NSMutableSet *_effectRecognizers;
     
     BOOL _landscaped;
 
@@ -38,6 +39,7 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
         self.opaque = NO;
         _touches = [NSMutableSet set];
         _excludedRecognizers = [NSMutableSet set];
+        _effectRecognizers = [NSMutableSet set];
     }
     return self;
 }
@@ -293,49 +295,94 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     _firstResponder = newFirstResponder;
 }
 
-- (void)sendEvent:(UIEvent *)event
+- (void)_sendGesturesForEvent:(UIEvent *)event
 {
-    if (event.type == UIEventTypeTouches) {
-        NSSet *touches = [event touchesForWindow:self];
-        
-        for (UITouch *t in touches) {
-            if (t.phase == UITouchPhaseBegan) {
-                [_touches addObject:t];
-            } else if (t.phase == UITouchPhaseEnded || t.phase == UITouchPhaseCancelled) {
-                [_touches removeObject:t];
-            }
+    NSSet *touches = [event touchesForWindow:self];
+    
+    NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
+    
+    for (UITouch *touch in touches) {
+        [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
+    }
+    
+    BOOL isFirstTouchDownEvent = (_touches.count == 0);
+    // if first touch down
+    if (isFirstTouchDownEvent) {
+        //    collect effect gestures
+        [_effectRecognizers unionSet:gestureRecognizers];
+    }
+    
+    // remember new touches
+    for (UITouch *touch in touches) {
+        if (touch.phase == UITouchPhaseBegan) {
+            [_touches addObject:touch];
         }
-        BOOL isAllTouchesEnded = (_touches.count == 0);
-        
-        NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
-        
-        for (UITouch *touch in touches) {
-            [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
-        }
-        
-        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
-            if (![_excludedRecognizers containsObject:recognizer]) {
-                [recognizer _recognizeTouches:touches withEvent:event];
-            }
-        }
-        
-        for (UIGestureRecognizer *recognizer in gestureRecognizers) {
-            if (![recognizer _isFailed]) {
-                for (UIGestureRecognizer *other in gestureRecognizers) {
-                    if (![other _isFailed]) {
-                        BOOL exclued = [recognizer _isExcludedByGesture:other];
-                        if (exclued) {
-                            [recognizer _setExcluded];
-                            [_excludedRecognizers addObject:recognizer];
-                        }
+    }
+    
+    // send event to effect gesture recognizers
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        [recognizer _recognizeTouches:touches withEvent:event];
+    }
+    
+    // determine relationship
+    NSMutableSet *toRemove = [NSMutableSet set];
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if (![recognizer _isFailed]) {
+            for (UIGestureRecognizer *other in _effectRecognizers) {
+                if (![other _isFailed]) {
+                    BOOL exclued = [recognizer _isExcludedByGesture:other];
+                    if (exclued) {
+                        [recognizer _setExcluded];
+                        [_excludedRecognizers addObject:recognizer];
+                        
+                        [toRemove addObject:recognizer];
                     }
                 }
             }
         }
-        if (isAllTouchesEnded) {
-            [_excludedRecognizers removeAllObjects];
+    }
+    
+    // remove invaild gestures
+    [_effectRecognizers minusSet:toRemove];
+
+    // send action if needs
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if ([recognizer _shouldSendActions]) {
+            [recognizer _sendActions];
+        }
+    }
+    
+    for (UITouch *touch in touches) {
+        if (touch.phase == UITouchPhaseEnded || touch.phase == UITouchPhaseCancelled) {
+            [_touches removeObject:touch];
+        }
+    }
+    
+    // if all touch up
+    if (_touches.count == 0) {
+        
+        //  reset
+        for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+            [recognizer reset];
         }
         
+        // reset exclued ges
+        for (UIGestureRecognizer *recognizer in _excludedRecognizers) {
+            [recognizer reset];
+        }
+        
+        //  clean up
+        [_effectRecognizers removeAllObjects];
+        [_excludedRecognizers removeAllObjects];
+    }
+}
+
+- (void)sendEvent:(UIEvent *)event
+{
+    if (event.type == UIEventTypeTouches) {
+        [self _sendGesturesForEvent:event];
+        
+        NSSet *touches = [event touchesForWindow:self];
         for (UITouch *touch in touches) {
             // normally there'd be no need to retain the view here, but this works around a strange problem I ran into.
             // what can happen is, now that UIView's -removeFromSuperview will remove the view from the active touch

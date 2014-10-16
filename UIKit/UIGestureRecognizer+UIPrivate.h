@@ -38,6 +38,9 @@
 - (void)_setExcluded;
 - (void)_sendActions;
 
+- (BOOL)_shouldSendActions;
+- (BOOL)_shouldReset;
+
 
 - (BOOL)_isFailed;
 - (BOOL)_canReceiveTouches;
