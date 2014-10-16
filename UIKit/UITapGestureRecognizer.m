@@ -52,17 +52,6 @@
     return self;
 }
 
-- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
-{
-    // this logic is here based on a note in the docs for -canBePreventedByGestureRecognizer:
-    // it may not be correct :)
-    if ([preventingGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
-        return (((UITapGestureRecognizer *)preventingGestureRecognizer).numberOfTapsRequired > self.numberOfTapsRequired);
-    } else {
-        return [super canBePreventedByGestureRecognizer:preventingGestureRecognizer];
-    }
-}
-
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
 {
     // this logic is here based on a note in the docs for -canPreventGestureRecognizer:
