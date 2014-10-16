@@ -271,11 +271,11 @@
             canBePrevented = [otherGesture canPreventGestureRecognizer:self];
         }
         
-        if (canBePrevented) {
+        if (canBePrevented && self.delegate) {
             canBePrevented = [self _delegateCanPreventGestureRecognizer:otherGesture];
         }
         
-        if (canBePrevented) {
+        if (canBePrevented && otherGesture.delegate) {
             canBePrevented = [otherGesture _delegateCanPreventGestureRecognizer:self];
         }
         
