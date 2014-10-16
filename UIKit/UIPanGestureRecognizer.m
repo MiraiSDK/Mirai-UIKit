@@ -119,7 +119,7 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
+    UITouch *touch = PanTouch(touches);
 
     _lastScreenLocation = [touch locationInView:self.view.window];
     
