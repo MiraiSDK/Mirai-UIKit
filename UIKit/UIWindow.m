@@ -26,6 +26,7 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
     NSMutableSet *_effectRecognizers;
+    BOOL _hasGestureRecognized;
     
     BOOL _landscaped;
 
@@ -310,6 +311,7 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     if (isFirstTouchDownEvent) {
         //    collect effect gestures
         [_effectRecognizers unionSet:gestureRecognizers];
+        _hasGestureRecognized = NO;
     }
     
     // remember new touches
@@ -345,6 +347,24 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     // remove invaild gestures
     [_effectRecognizers minusSet:toRemove];
 
+    // cancel touches if needs
+    BOOL shouldSendsTouchCancelled = NO;
+    if (!_hasGestureRecognized) {
+        for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+            if ([recognizer _shouldSendActions] &&
+                [recognizer cancelsTouchesInView]) {
+                shouldSendsTouchCancelled = YES;
+                break;
+            }
+        }
+    }
+    
+    if (shouldSendsTouchCancelled) {
+        for (UITouch *touch in touches) {
+            [touch.view touchesCancelled:touches withEvent:event];
+        }
+    }
+    
     // send action if needs
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         if ([recognizer _shouldSendActions]) {
@@ -374,6 +394,8 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
         //  clean up
         [_effectRecognizers removeAllObjects];
         [_excludedRecognizers removeAllObjects];
+        
+        _hasGestureRecognized = NO;
     }
 }
 
@@ -382,7 +404,20 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
     if (event.type == UIEventTypeTouches) {
         [self _sendGesturesForEvent:event];
         
-        NSSet *touches = [event touchesForWindow:self];
+        
+        NSMutableSet *touches = [[event touchesForWindow:self] mutableCopy];
+        NSMutableSet *eaten = [NSMutableSet set];
+        for (UITouch *touch in touches) {
+            for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+                if ([recognizer _isEatenTouche:touch]) {
+                    [eaten addObject:touch];
+                    break;
+                }
+            }
+        }
+        
+        [touches minusSet:eaten];
+        
         for (UITouch *touch in touches) {
             // normally there'd be no need to retain the view here, but this works around a strange problem I ran into.
             // what can happen is, now that UIView's -removeFromSuperview will remove the view from the active touch

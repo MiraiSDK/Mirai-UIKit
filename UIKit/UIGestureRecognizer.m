@@ -175,6 +175,16 @@
     
 }
 
+- (BOOL)_isEatenTouche:(UITouch *)touch
+{
+    if (self.cancelsTouchesInView && (self.state == UIGestureRecognizerStateBegan ||
+                                      self.state == UIGestureRecognizerStateChanged ||
+                                      self.state == UIGestureRecognizerStateEnded)) {
+        return [_trackingTouches containsObject:touch];
+    }
+    return NO;
+}
+
 - (void)_sendActions
 {
     if (![self _isExcluded]) {

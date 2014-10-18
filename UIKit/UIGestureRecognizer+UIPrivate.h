@@ -40,6 +40,7 @@
 
 - (BOOL)_shouldSendActions;
 - (BOOL)_shouldReset;
+- (BOOL)_isEatenTouche:(UITouch *)touch;
 
 
 - (BOOL)_isFailed;
