@@ -12,6 +12,7 @@
         _scalesPageToFit = NO;
         
         _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        [self addSubview:_scrollView];
         
     }
     return self;
@@ -28,7 +29,7 @@
 
 - (void)setDelegate:(id<UIWebViewDelegate>)newDelegate
 {
-//    _delegate = newDelegate;
+    _delegate = newDelegate;
 //    _delegateHas.shouldStartLoadWithRequest = [_delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)];
 //    _delegateHas.didFailLoadWithError = [_delegate respondsToSelector:@selector(webView:didFailLoadWithError:)];
 //    _delegateHas.didFinishLoad = [_delegate respondsToSelector:@selector(webViewDidFinishLoad:)];

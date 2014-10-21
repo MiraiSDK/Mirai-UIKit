@@ -35,6 +35,11 @@ NSString *const UIViewHiddenDidChangeNotification = @"UIViewHiddenDidChangeNotif
 static NSMutableArray *_animationGroups;
 static BOOL _animationsEnabled = YES;
 
+@interface UIView (UnimplementedHelper)
++ (BOOL)isUnimplemented;
+- (void)displayUnimplemented;
+@end
+
 @implementation UIView {
     @package
     BOOL _implementsDrawRect;
@@ -161,6 +166,10 @@ static BOOL _animationsEnabled = YES;
         
         [self setNeedsLayout];
         [self setNeedsDisplay];
+
+        if ([[self class] isUnimplemented]) {
+            [self displayUnimplemented];
+        }
     }
     return self;
 }
@@ -1314,4 +1323,23 @@ static BOOL _animationsEnabled = YES;
     return YES;
 }
 
+@end
+
+#import "UILabel.h"
+@implementation UIView (UnimplementedHelper)
+
++ (BOOL)isUnimplemented
+{
+    return NO;
+}
+
+- (void)displayUnimplemented
+{
+    self.backgroundColor = [UIColor redColor];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:self.bounds];
+    label.backgroundColor = [UIColor redColor];
+    label.text = [NSString stringWithFormat:@"%@ unimplemented",NSStringFromClass(self.class)];
+    [self addSubview:label];
+}
 @end

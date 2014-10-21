@@ -34,6 +34,34 @@
 		4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */ = {isa = PBXBuildFile; fileRef = 4336782118F1476D00F1D556 /* UIKit+Android.m */; };
 		434BC9CA18D58A4300BECD47 /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */; };
 		434BC9CB18D58A4300BECD47 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */; };
+		436D4A6619F2621300F6F8F9 /* UIAndroidWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4A6419F2621300F6F8F9 /* UIAndroidWebView.h */; };
+		436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4A6519F2621300F6F8F9 /* UIAndroidWebView.m */; };
+		436D4AD419F52E0300F6F8F9 /* UISwitch.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AD219F52E0300F6F8F9 /* UISwitch.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AD519F52E0300F6F8F9 /* UISwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AD319F52E0300F6F8F9 /* UISwitch.m */; };
+		436D4AD919F52FB300F6F8F9 /* UISlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AD719F52FB300F6F8F9 /* UISlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4ADA19F52FB300F6F8F9 /* UISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AD819F52FB300F6F8F9 /* UISlider.m */; };
+		436D4ADD19F52FDB00F6F8F9 /* UIStepper.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4ADB19F52FDB00F6F8F9 /* UIStepper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4ADE19F52FDB00F6F8F9 /* UIStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4ADC19F52FDB00F6F8F9 /* UIStepper.m */; };
+		436D4AE119F5314700F6F8F9 /* UIAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4ADF19F5314700F6F8F9 /* UIAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AE219F5314700F6F8F9 /* UIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AE019F5314700F6F8F9 /* UIAlertView.m */; };
+		436D4AE519F531D300F6F8F9 /* UITextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AE319F531D300F6F8F9 /* UITextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AE619F531D300F6F8F9 /* UITextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AE419F531D300F6F8F9 /* UITextField.m */; };
+		436D4AE919F532D700F6F8F9 /* UITextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AE719F532D700F6F8F9 /* UITextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AEA19F532D700F6F8F9 /* UITextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AE819F532D700F6F8F9 /* UITextInput.m */; };
+		436D4AF319F5466800F6F8F9 /* UIDatePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AF119F5466800F6F8F9 /* UIDatePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AF419F5466800F6F8F9 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AF219F5466800F6F8F9 /* UIDatePicker.m */; };
+		436D4AF819F5471E00F6F8F9 /* UISegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AF619F5471E00F6F8F9 /* UISegmentedControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AF919F5471E00F6F8F9 /* UISegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AF719F5471E00F6F8F9 /* UISegmentedControl.m */; };
+		436D4AFC19F548FA00F6F8F9 /* UIPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4AFA19F548FA00F6F8F9 /* UIPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4AFD19F548FA00F6F8F9 /* UIPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4AFB19F548FA00F6F8F9 /* UIPickerView.m */; };
+		436D4B0A19F54FCB00F6F8F9 /* UISearchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4B0819F54FCB00F6F8F9 /* UISearchController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4B0B19F54FCB00F6F8F9 /* UISearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4B0919F54FCB00F6F8F9 /* UISearchController.m */; };
+		436D4B0E19F5507C00F6F8F9 /* UISearchBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4B0F19F5507C00F6F8F9 /* UISearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */; };
+		436D4B1219F553D300F6F8F9 /* UITabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4B1019F553D300F6F8F9 /* UITabBarController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4B1319F553D300F6F8F9 /* UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4B1119F553D300F6F8F9 /* UITabBarController.m */; };
+		436D4B1619F5547900F6F8F9 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 436D4B1419F5547900F6F8F9 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436D4B1719F5547900F6F8F9 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D4B1519F5547900F6F8F9 /* UITabBar.m */; };
 		43718E7718517B7B00850F08 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43718E7518517B7B00850F08 /* InfoPlist.strings */; };
 		43718E8218517B7B00850F08 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43718E8118517B7B00850F08 /* XCTest.framework */; };
 		43718E8618517B7B00850F08 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43718E6918517B7B00850F08 /* UIKit.framework */; };
@@ -234,6 +262,34 @@
 		4336782118F1476D00F1D556 /* UIKit+Android.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIKit+Android.m"; sourceTree = "<group>"; };
 		434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIPrivate.h"; sourceTree = "<group>"; };
 		434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
+		436D4A6419F2621300F6F8F9 /* UIAndroidWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidWebView.h; sourceTree = "<group>"; };
+		436D4A6519F2621300F6F8F9 /* UIAndroidWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidWebView.m; sourceTree = "<group>"; };
+		436D4AD219F52E0300F6F8F9 /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISwitch.h; sourceTree = "<group>"; };
+		436D4AD319F52E0300F6F8F9 /* UISwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISwitch.m; sourceTree = "<group>"; };
+		436D4AD719F52FB300F6F8F9 /* UISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISlider.h; sourceTree = "<group>"; };
+		436D4AD819F52FB300F6F8F9 /* UISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISlider.m; sourceTree = "<group>"; };
+		436D4ADB19F52FDB00F6F8F9 /* UIStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIStepper.h; sourceTree = "<group>"; };
+		436D4ADC19F52FDB00F6F8F9 /* UIStepper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIStepper.m; sourceTree = "<group>"; };
+		436D4ADF19F5314700F6F8F9 /* UIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAlertView.h; sourceTree = "<group>"; };
+		436D4AE019F5314700F6F8F9 /* UIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAlertView.m; sourceTree = "<group>"; };
+		436D4AE319F531D300F6F8F9 /* UITextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextField.h; sourceTree = "<group>"; };
+		436D4AE419F531D300F6F8F9 /* UITextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextField.m; sourceTree = "<group>"; };
+		436D4AE719F532D700F6F8F9 /* UITextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextInput.h; sourceTree = "<group>"; };
+		436D4AE819F532D700F6F8F9 /* UITextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextInput.m; sourceTree = "<group>"; };
+		436D4AF119F5466800F6F8F9 /* UIDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDatePicker.h; sourceTree = "<group>"; };
+		436D4AF219F5466800F6F8F9 /* UIDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDatePicker.m; sourceTree = "<group>"; };
+		436D4AF619F5471E00F6F8F9 /* UISegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISegmentedControl.h; sourceTree = "<group>"; };
+		436D4AF719F5471E00F6F8F9 /* UISegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISegmentedControl.m; sourceTree = "<group>"; };
+		436D4AFA19F548FA00F6F8F9 /* UIPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPickerView.h; sourceTree = "<group>"; };
+		436D4AFB19F548FA00F6F8F9 /* UIPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPickerView.m; sourceTree = "<group>"; };
+		436D4B0819F54FCB00F6F8F9 /* UISearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchController.h; sourceTree = "<group>"; };
+		436D4B0919F54FCB00F6F8F9 /* UISearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchController.m; sourceTree = "<group>"; };
+		436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchBar.h; sourceTree = "<group>"; };
+		436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchBar.m; sourceTree = "<group>"; };
+		436D4B1019F553D300F6F8F9 /* UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBarController.h; sourceTree = "<group>"; };
+		436D4B1119F553D300F6F8F9 /* UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBarController.m; sourceTree = "<group>"; };
+		436D4B1419F5547900F6F8F9 /* UITabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITabBar.h; sourceTree = "<group>"; };
+		436D4B1519F5547900F6F8F9 /* UITabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITabBar.m; sourceTree = "<group>"; };
 		43718E6918517B7B00850F08 /* UIKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43718E6F18517B7B00850F08 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		43718E7018517B7B00850F08 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -411,6 +467,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		436D4A6219F261E900F6F8F9 /* AndroidBackend */ = {
+			isa = PBXGroup;
+			children = (
+				436D4A6419F2621300F6F8F9 /* UIAndroidWebView.h */,
+				436D4A6519F2621300F6F8F9 /* UIAndroidWebView.m */,
+			);
+			name = AndroidBackend;
+			sourceTree = "<group>";
+		};
 		43718E5F18517B7B00850F08 = {
 			isa = PBXGroup;
 			children = (
@@ -647,6 +712,32 @@
 				43C200C318EBBCD400490D59 /* UIPageControl.m */,
 				43C200D818EBE57400490D59 /* UIActionSheet.h */,
 				43C200D918EBE57400490D59 /* UIActionSheet.m */,
+				436D4AD219F52E0300F6F8F9 /* UISwitch.h */,
+				436D4AD319F52E0300F6F8F9 /* UISwitch.m */,
+				436D4AD719F52FB300F6F8F9 /* UISlider.h */,
+				436D4AD819F52FB300F6F8F9 /* UISlider.m */,
+				436D4ADB19F52FDB00F6F8F9 /* UIStepper.h */,
+				436D4ADC19F52FDB00F6F8F9 /* UIStepper.m */,
+				436D4ADF19F5314700F6F8F9 /* UIAlertView.h */,
+				436D4AE019F5314700F6F8F9 /* UIAlertView.m */,
+				436D4AE319F531D300F6F8F9 /* UITextField.h */,
+				436D4AE419F531D300F6F8F9 /* UITextField.m */,
+				436D4AE719F532D700F6F8F9 /* UITextInput.h */,
+				436D4AE819F532D700F6F8F9 /* UITextInput.m */,
+				436D4AF119F5466800F6F8F9 /* UIDatePicker.h */,
+				436D4AF219F5466800F6F8F9 /* UIDatePicker.m */,
+				436D4AF619F5471E00F6F8F9 /* UISegmentedControl.h */,
+				436D4AF719F5471E00F6F8F9 /* UISegmentedControl.m */,
+				436D4AFA19F548FA00F6F8F9 /* UIPickerView.h */,
+				436D4AFB19F548FA00F6F8F9 /* UIPickerView.m */,
+				436D4B0819F54FCB00F6F8F9 /* UISearchController.h */,
+				436D4B0919F54FCB00F6F8F9 /* UISearchController.m */,
+				436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */,
+				436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */,
+				436D4B1419F5547900F6F8F9 /* UITabBar.h */,
+				436D4B1519F5547900F6F8F9 /* UITabBar.m */,
+				436D4B1019F553D300F6F8F9 /* UITabBarController.h */,
+				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -713,6 +804,7 @@
 		43C200A618EBB66B00490D59 /* UIWebView */ = {
 			isa = PBXGroup;
 			children = (
+				436D4A6219F261E900F6F8F9 /* AndroidBackend */,
 				43C200A718EBB67C00490D59 /* UIDataDetectors.h */,
 				43C200A218EBB58300490D59 /* UIWebView.h */,
 				43C200A318EBB58300490D59 /* UIWebView.m */,
@@ -763,6 +855,8 @@
 			files = (
 				43C200A418EBB58300490D59 /* UIWebView.h in Headers */,
 				439A73BD18E84C4E00B1BE40 /* NSIndexPath+UITableView.h in Headers */,
+				436D4B1619F5547900F6F8F9 /* UITabBar.h in Headers */,
+				436D4AF319F5466800F6F8F9 /* UIDatePicker.h in Headers */,
 				43718EC418518FA800850F08 /* UIKit.h in Headers */,
 				43B819CF18E27D550020624F /* UIScrollViewAnimation.h in Headers */,
 				43C200B918EBB71A00490D59 /* UITextLayer.h in Headers */,
@@ -781,9 +875,12 @@
 				432FF07F1853645D005486C5 /* UIGraphics.h in Headers */,
 				43DD64CA19910984000884BA /* TNGestureRecognizerMath.h in Headers */,
 				43B819D318E27D550020624F /* UIScrollViewAnimationScroll.h in Headers */,
+				436D4ADD19F52FDB00F6F8F9 /* UIStepper.h in Headers */,
 				43C200A818EBB67C00490D59 /* UIDataDetectors.h in Headers */,
 				4384630B188B2751006DA1AA /* UIGeometry.h in Headers */,
 				43846323188B3D62006DA1AA /* UIControl+UIPrivate.h in Headers */,
+				436D4A6619F2621300F6F8F9 /* UIAndroidWebView.h in Headers */,
+				436D4AE919F532D700F6F8F9 /* UITextInput.h in Headers */,
 				4315799A18B0E3CF00AE4256 /* UIApplication+UIPrivate.h in Headers */,
 				431412D318C0A5A4001AF732 /* UIViewLayoutManager.h in Headers */,
 				43EBAA6C18AA588F005DDD8D /* UIScroller.h in Headers */,
@@ -800,19 +897,24 @@
 				43B819EF18E2AA870020624F /* UIPinchGestureRecognizer.h in Headers */,
 				43B819F518E2AA870020624F /* UITapGestureRecognizer.h in Headers */,
 				4384634D188C636C006DA1AA /* UIDevice.h in Headers */,
+				436D4AD419F52E0300F6F8F9 /* UISwitch.h in Headers */,
 				43B6B64D1913A0EC005D09ED /* UIPopoverController.h in Headers */,
 				43846332188B4031006DA1AA /* UIImageView+UIPrivate.h in Headers */,
+				436D4B0E19F5507C00F6F8F9 /* UISearchBar.h in Headers */,
 				43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */,
 				4384632F188B4025006DA1AA /* UIImageView.h in Headers */,
 				43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */,
 				43C200DA18EBE57400490D59 /* UIActionSheet.h in Headers */,
 				43B819EB18E2AA870020624F /* UILongPressGestureRecognizer.h in Headers */,
 				43B819ED18E2AA870020624F /* UIPanGestureRecognizer.h in Headers */,
+				436D4AF819F5471E00F6F8F9 /* UISegmentedControl.h in Headers */,
 				43B819F118E2AA870020624F /* UIRotationGestureRecognizer.h in Headers */,
+				436D4AE119F5314700F6F8F9 /* UIAlertView.h in Headers */,
 				439A73C318E84C4E00B1BE40 /* UITableViewController.h in Headers */,
 				439A73C118E84C4E00B1BE40 /* UITableViewCell.h in Headers */,
 				439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */,
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
+				436D4AFC19F548FA00F6F8F9 /* UIPickerView.h in Headers */,
 				439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */,
 				43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */,
 				43EBAA7A18AB6744005DDD8D /* UINavigationController.h in Headers */,
@@ -827,12 +929,14 @@
 				439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */,
 				43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */,
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
+				436D4AE519F531D300F6F8F9 /* UITextField.h in Headers */,
 				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
 				431412DD18C0B958001AF732 /* UIViewBlockAnimationDelegate.h in Headers */,
 				43C200C418EBBCD400490D59 /* UIPageControl.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
+				436D4B0A19F54FCB00F6F8F9 /* UISearchController.h in Headers */,
 				43C200B418EBB70B00490D59 /* UITextInputTraits.h in Headers */,
 				43846313188B39EE006DA1AA /* UITouch.h in Headers */,
 				43846317188B3B74006DA1AA /* UIEvent.h in Headers */,
@@ -844,9 +948,11 @@
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
 				43E3429418F6947E00463092 /* NSAttributedString.h in Headers */,
 				43CA2A351956CD5A00B92F2C /* TNAConfiguration.h in Headers */,
+				436D4B1219F553D300F6F8F9 /* UITabBarController.h in Headers */,
 				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
 				43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */,
 				432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */,
+				436D4AD919F52FB300F6F8F9 /* UISlider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -996,22 +1102,27 @@
 				43846327188B3D7C006DA1AA /* UIAction.m in Sources */,
 				431412DE18C0B958001AF732 /* UIViewBlockAnimationDelegate.m in Sources */,
 				43EBAA6D18AA588F005DDD8D /* UIScroller.m in Sources */,
+				436D4AFD19F548FA00F6F8F9 /* UIPickerView.m in Sources */,
 				43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */,
 				43C200D018EBE0AA00490D59 /* UIActivityIndicatorView.m in Sources */,
 				43846341188C540F006DA1AA /* NSParagraphStyle.m in Sources */,
 				43846349188C5977006DA1AA /* UIFontDescriptor.m in Sources */,
 				43ECCF0F1851CA9A0076535C /* UIView.m in Sources */,
+				436D4B1719F5547900F6F8F9 /* UITabBar.m in Sources */,
 				43EBAA6918AA5639005DDD8D /* UIScrollView.m in Sources */,
 				4384634E188C636C006DA1AA /* UIDevice.m in Sources */,
 				43EBAA8318AB7087005DDD8D /* UINavigationBar.m in Sources */,
 				43846321188B3D5B006DA1AA /* UIControl.m in Sources */,
 				43EBAA7B18AB6744005DDD8D /* UINavigationController.m in Sources */,
+				436D4B1319F553D300F6F8F9 /* UITabBarController.m in Sources */,
 				439A73CE18E84C6300B1BE40 /* UITableViewCellSeparator.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
+				436D4AE219F5314700F6F8F9 /* UIAlertView.m in Sources */,
 				432FF08C18544D7A005486C5 /* UIStringDrawing.m in Sources */,
 				43B819EE18E2AA870020624F /* UIPanGestureRecognizer.m in Sources */,
 				43C200DB18EBE57400490D59 /* UIActionSheet.m in Sources */,
+				436D4AEA19F532D700F6F8F9 /* UITextInput.m in Sources */,
 				43846345188C58F9006DA1AA /* UIFont.m in Sources */,
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
@@ -1021,6 +1132,8 @@
 				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
 				43E3429518F6947E00463092 /* NSAttributedString.m in Sources */,
 				43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */,
+				436D4ADE19F52FDB00F6F8F9 /* UIStepper.m in Sources */,
+				436D4AF919F5471E00F6F8F9 /* UISegmentedControl.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
 				43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */,
 				43C200B618EBB70B00490D59 /* UITextView.m in Sources */,
@@ -1035,8 +1148,11 @@
 				434BC9CB18D58A4300BECD47 /* UIImage+UIPrivate.m in Sources */,
 				432FF060185338BD005486C5 /* UIScreen.m in Sources */,
 				43B819D218E27D550020624F /* UIScrollViewAnimationDeceleration.m in Sources */,
+				436D4AD519F52E0300F6F8F9 /* UISwitch.m in Sources */,
+				436D4B0F19F5507C00F6F8F9 /* UISearchBar.m in Sources */,
 				439A73C018E84C4E00B1BE40 /* UITableView.m in Sources */,
 				431412D418C0A5A4001AF732 /* UIViewLayoutManager.m in Sources */,
+				436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
 				43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */,
 				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
@@ -1045,8 +1161,12 @@
 				43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */,
 				4384631D188B3D52006DA1AA /* UIControlAction.m in Sources */,
 				432FF094185452EC005486C5 /* NSStringDrawing.m in Sources */,
+				436D4AF419F5466800F6F8F9 /* UIDatePicker.m in Sources */,
 				43B819F618E2AA870020624F /* UITapGestureRecognizer.m in Sources */,
+				436D4AE619F531D300F6F8F9 /* UITextField.m in Sources */,
+				436D4ADA19F52FB300F6F8F9 /* UISlider.m in Sources */,
 				43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */,
+				436D4B0B19F54FCB00F6F8F9 /* UISearchController.m in Sources */,
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,
 				4384630C188B2751006DA1AA /* UIGeometry.m in Sources */,
 				4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */,
