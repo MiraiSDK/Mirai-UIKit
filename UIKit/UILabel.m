@@ -227,7 +227,7 @@
         CGContextSetShadowWithColor(UIGraphicsGetCurrentContext(), offset, 0, _shadowColor.CGColor);
         
         // finally, draw the real label
-        UIColor *drawColor = (_highlighted && _highlightedTextColor)? _highlightedTextColor : _textColor;
+        UIColor *drawColor = (_highlighted && _highlightedTextColor)? _highlightedTextColor : [self textColor];
         [drawColor setFill];
         [self drawTextInRect:drawRect];
         
@@ -247,7 +247,7 @@
 - (CGSize)sizeThatFits:(CGSize)size
 {
     size = CGSizeMake(((_numberOfLines > 0)? CGFLOAT_MAX : size.width), ((_numberOfLines <= 0)? CGFLOAT_MAX : (_font.lineHeight*_numberOfLines)));
-    return [_text sizeWithFont:_font constrainedToSize:size lineBreakMode:_lineBreakMode];
+    return [_text sizeWithFont:[self font] constrainedToSize:size lineBreakMode:_lineBreakMode];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
