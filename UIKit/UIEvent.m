@@ -24,6 +24,8 @@
 @implementation UIEvent {
     NSMutableSet *_touches;
     NSMutableDictionary *_touchesByIdentifier;
+    
+    AInputEvent *_aEvent;
 }
 
 - (id)initWithEventType:(UIEventType)type
@@ -88,6 +90,11 @@
 @end
 
 @implementation UIEvent (Android)
+
+- (AInputEvent *)_AInputEvent
+{
+    return _aEvent;
+}
 
 /*
  * Android Event Handle
@@ -154,6 +161,8 @@
  */
 - (void)_updateWithAEvent:(AInputEvent *)aEvent
 {
+    _aEvent = aEvent;
+    
     [self _updateTouchesWithEvent:aEvent];
 
     int64_t eventTime = AMotionEvent_getEventTime(aEvent);

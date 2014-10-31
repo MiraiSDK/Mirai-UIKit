@@ -23,4 +23,5 @@
 - (UITouch *)_touchForIdentifier:(NSInteger)identifier;
 - (void)_updateWithAEvent:(AInputEvent *)aEvent;
 
+- (AInputEvent *)_AInputEvent;
 @end
