@@ -2,8 +2,12 @@
  */
 
 #import "UIWebView.h"
+#import "UIAndroidWebView.h"
 
 @implementation UIWebView
+{
+    UIAndroidWebView *_backend;
+}
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
 
 - (id)initWithFrame:(CGRect)frame
@@ -11,8 +15,11 @@
     if ((self=[super initWithFrame:frame])) {
         _scalesPageToFit = NO;
         
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        [self addSubview:_scrollView];
+//        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+//        [self addSubview:_scrollView];
+        
+        _backend = [[UIAndroidWebView alloc] initWithFrame:self.bounds];
+        [self addSubview:_backend];
         
     }
     return self;
@@ -20,6 +27,7 @@
 
 - (void)dealloc
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
 }
 
 - (void)layoutSubviews
@@ -37,13 +45,17 @@
 
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL
 {
+    [_backend loadHTMLString:string baseURL:baseURL];
 }
 
 - (void)loadRequest:(NSURLRequest *)request
 {
     if (request != _request) {
         _request = request;
+        
+        [_backend loadRequest:request];
     }
+    
 }
 
 - (void)stopLoading
@@ -100,6 +112,26 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_backend touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_backend touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_backend touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_backend touchesCancelled:touches withEvent:event];
 }
 
 @end

@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface UIAndroidWebView : UIView
+- (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
+- (void)loadRequest:(NSURLRequest *)request;
+- (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(NSURL *)baseURL;
 
 @end
