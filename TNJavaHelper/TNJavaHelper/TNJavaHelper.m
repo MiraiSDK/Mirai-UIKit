@@ -11,6 +11,7 @@
 @implementation TNJavaHelper {
     JNIEnv *env;
     JavaVM *vm;
+    jclass clazz;
     
     jobject _clsLoader;
     jmethodID _findClass;
@@ -25,6 +26,8 @@
     (*vm)->AttachCurrentThread(vm,&env,NULL);
     helper->env = env;
     helper->vm = vm;
+    helper->clazz = (*env)->NewGlobalRef(env,clazz);;
+    
     
     //
     //
@@ -64,6 +67,11 @@
 - (JavaVM *)vm
 {
     return vm;
+}
+
+- (jclass)clazz
+{
+    return clazz;
 }
 
 - (jclass)findCustomClass:(NSString *)className

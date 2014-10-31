@@ -15,5 +15,6 @@
 - (JNIEnv *)env;
 - (jclass)findCustomClass:(NSString *)className;
 - (JavaVM *)vm;
+- (jclass)clazz;
 
 @end
