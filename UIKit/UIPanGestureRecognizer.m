@@ -100,6 +100,9 @@ static UITouch *PanTouch(NSSet *touches)
 {
     [super reset];
     _velocity = CGPointZero;
+    _lastMovementTime = 0.0;
+    _firstScreenLocation = CGPointZero;
+    _lastScreenLocation = CGPointZero;
     [_touches removeAllObjects];
 }
 
@@ -127,7 +130,7 @@ static UITouch *PanTouch(NSSet *touches)
     // note that we being the gesture here in the _gesturesMoved:withEvent: method instead of the _gesturesBegan:withEvent:
     // method because the pan gesture cannot be recognized until the user moves their fingers a bit and OSX won't tag the
     // gesture as a pan until that movement has actually happened so we have to do the checking here.
-    if (self.state == UIGestureRecognizerStatePossible && touch && (translate.x > 5 || translate.y > 5)) {
+    if (self.state == UIGestureRecognizerStatePossible && touch && (ABS(translate.x) > 5 || ABS(translate.y) > 5)) {
 //        [self setTranslation:[touch _delta] inView:touch.view];
         _lastMovementTime = event.timestamp;
         self.state = UIGestureRecognizerStateBegan;
