@@ -36,6 +36,7 @@
 @implementation UIGestureRecognizer
 {
     BOOL _excluded;
+    NSMutableSet *_excludedTouches;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
 }
@@ -53,7 +54,8 @@
 
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
         _trackingTouches = [[NSMutableArray alloc] initWithCapacity:1];
-        
+        _excludedTouches = [[NSMutableSet alloc] initWithCapacity:1];
+
         [self addTarget:target action:action];
     }
     return self;
@@ -166,6 +168,18 @@
 
     NSAssert2((transition != NULL), @"invalid state transition from %d to %d", _state, state);
 
+//    if (state == UIGestureRecognizerStateBegan) {
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+//            BOOL shouldBegin = [self.delegate gestureRecognizerShouldBegin:self];
+//            if (!shouldBegin) {
+//                [self _setExcluded];
+//                _state = UIGestureRecognizerStateFailed;
+//                _shouldSendActions = NO;
+//                _shouldReset = YES;
+//                return;
+//            }
+//        }
+//    }
     if (transition) {
         _state = transition->toState;
         _shouldSendActions = transition->shouldNotify;
@@ -203,6 +217,7 @@
     _shouldSendActions = NO;
     _state = UIGestureRecognizerStatePossible;
     [_trackingTouches removeAllObjects];
+    [_excludedTouches removeAllObjects];
 }
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
@@ -344,7 +359,22 @@
 - (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if ([self _shouldAttemptToRecognize]) {
-        [_trackingTouches setArray:[touches allObjects]];
+        for (UITouch *touch in touches) {
+            if (touch.phase == UITouchPhaseBegan &&
+                self.delegate &&
+                ![_trackingTouches containsObject:touch] &&
+                ![_excludedTouches containsObject:touch] &&
+                [self.delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]&&
+                ![self.delegate gestureRecognizer:self shouldReceiveTouch:touch]) {
+                
+                [_excludedTouches addObject:touch];
+            }
+        }
+
+        
+        NSMutableSet *ts = [touches mutableCopy];
+        [ts minusSet:_excludedTouches];
+        [_trackingTouches setArray:[ts allObjects]];
 
         for (UITouch *touch in _trackingTouches) {
             switch (touch.phase) {
