@@ -499,6 +499,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
             finalContentOffset.y = pageSize.height * currentPage.height;
         }
     }
+    
+    finalContentOffset = [self _confinedContentOffset:finalContentOffset];
+    
     // quickly animate the snap (if necessary)
     if (!CGPointEqualToPoint(finalContentOffset, _contentOffset)) {
         return [[UIScrollViewAnimationScroll alloc] initWithScrollView:self
