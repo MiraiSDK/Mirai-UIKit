@@ -35,6 +35,8 @@
 #import "UIRoundedRectButton.h"
 #import "UIColor.h"
 
+#import "UITapGestureRecognizer.h"
+
 static NSString *UIButtonContentTypeTitle = @"UIButtonContentTypeTitle";
 static NSString *UIButtonContentTypeTitleColor = @"UIButtonContentTypeTitleColor";
 static NSString *UIButtonContentTypeTitleShadowColor = @"UIButtonContentTypeTitleShadowColor";
@@ -403,4 +405,14 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     // decent way to avoid the problem in general and define a kind of "standard" behavior in this case.
 }
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        CGPoint location = [gestureRecognizer locationInView:self];
+        return !CGRectContainsPoint(self.bounds, location);
+    }
+    
+    return [super gestureRecognizerShouldBegin:gestureRecognizer];
+}
 @end

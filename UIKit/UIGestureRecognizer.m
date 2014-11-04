@@ -32,6 +32,7 @@
 #import "UITouch+Private.h"
 #import "UIAction.h"
 #import "UIApplication.h"
+#import "UIView+UIPrivate.h"
 
 @implementation UIGestureRecognizer
 {
@@ -168,18 +169,20 @@
 
     NSAssert2((transition != NULL), @"invalid state transition from %d to %d", _state, state);
 
-//    if (state == UIGestureRecognizerStateBegan) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
-//            BOOL shouldBegin = [self.delegate gestureRecognizerShouldBegin:self];
-//            if (!shouldBegin) {
-//                [self _setExcluded];
-//                _state = UIGestureRecognizerStateFailed;
-//                _shouldSendActions = NO;
-//                _shouldReset = YES;
-//                return;
-//            }
-//        }
-//    }
+    // should began? (possible -> began) or (possible -> end)
+    if (_state == UIGestureRecognizerStatePossible &&
+            (state == UIGestureRecognizerStateBegan ||
+             state == UIGestureRecognizerStateEnded)) {
+        BOOL shouldBegan = [self _shouldBegan];
+        if (!shouldBegan) {
+            [self _setExcluded];
+            _state = UIGestureRecognizerStateFailed;
+            _shouldSendActions = NO;
+            _shouldReset = YES;
+            return;
+        }
+    }
+    
     if (transition) {
         _state = transition->toState;
         _shouldSendActions = transition->shouldNotify;
@@ -187,6 +190,30 @@
 
     }
     
+}
+
+- (BOOL)_shouldBegan
+{
+    BOOL shouldBegan = YES;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+        shouldBegan = [self.delegate gestureRecognizerShouldBegin:self];
+        
+    }
+    
+    UIView *targetView = self.view;
+    NSArray *views = targetView._allSubViews;
+    
+    if (shouldBegan) {
+        for (UIView *v in views) {
+            shouldBegan = [v gestureRecognizerShouldBegin:self];
+            if (!shouldBegan) {
+                break;
+            }
+        }
+    }
+    
+    NSLog(@"%s -> %@",__PRETTY_FUNCTION__,shouldBegan?@"YES":@"NO");
+    return shouldBegan;
 }
 
 - (BOOL)_isEatenTouche:(UITouch *)touch
@@ -310,7 +337,6 @@
 {
     NSLog(@"-[%@ _setExcluded]",self.class);
     _excluded = YES;
-    [self reset];
 }
 
 - (BOOL)_shouldSendActions

@@ -41,4 +41,5 @@ extern NSString *const UIViewHiddenDidChangeNotification;
 - (void)_superviewSizeDidChangeFrom:(CGSize)oldSize to:(CGSize)newSize;
 - (void)_layoutSubviews;
 - (void)_didMoveToScreen;
+- (NSArray *)_allSubViews;
 @end

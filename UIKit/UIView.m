@@ -786,6 +786,19 @@ static BOOL _animationsEnabled = YES;
     [[self _viewController] viewDidLayoutSubviews];
 }
 
+- (NSArray *)_allSubViews
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    NSArray *subviews = self.subviews;
+    
+    [arr addObjectsFromArray:subviews];
+    
+    for (UIView *v in subviews) {
+        [arr addObjectsFromArray:[v _allSubViews]];
+    }
+    
+    return arr;
+}
 #pragma mark Overriding point
 - (void)layoutSubviews
 {
@@ -1319,7 +1332,6 @@ static BOOL _animationsEnabled = YES;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    //FIXME: 
     return YES;
 }
 
