@@ -16,6 +16,10 @@
 		431412DE18C0B958001AF732 /* UIViewBlockAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 431412DC18C0B958001AF732 /* UIViewBlockAnimationDelegate.m */; };
 		4315799A18B0E3CF00AE4256 /* UIApplication+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4315799918B0E3CF00AE4256 /* UIApplication+UIPrivate.h */; };
 		4315799C18B0EC3200AE4256 /* UIWindow+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4315799B18B0EC3200AE4256 /* UIWindow+UIPrivate.h */; };
+		432F737A1A08AC9C009CEC64 /* UIMenuController.h in Headers */ = {isa = PBXBuildFile; fileRef = 432F73781A08AC9C009CEC64 /* UIMenuController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		432F737B1A08AC9C009CEC64 /* UIMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432F73791A08AC9C009CEC64 /* UIMenuController.m */; };
+		432F737F1A08AE99009CEC64 /* UISplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 432F737D1A08AE99009CEC64 /* UISplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		432F73801A08AE99009CEC64 /* UISplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432F737E1A08AE99009CEC64 /* UISplitViewController.m */; };
 		432FF05F185338BD005486C5 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 432FF05D185338BD005486C5 /* UIScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		432FF060185338BD005486C5 /* UIScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 432FF05E185338BD005486C5 /* UIScreen.m */; };
 		432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 432FF06118534615005486C5 /* UIScreenPrivate.h */; };
@@ -244,6 +248,10 @@
 		431412DC18C0B958001AF732 /* UIViewBlockAnimationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewBlockAnimationDelegate.m; sourceTree = "<group>"; };
 		4315799918B0E3CF00AE4256 /* UIApplication+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+UIPrivate.h"; sourceTree = "<group>"; };
 		4315799B18B0EC3200AE4256 /* UIWindow+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+UIPrivate.h"; sourceTree = "<group>"; };
+		432F73781A08AC9C009CEC64 /* UIMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMenuController.h; sourceTree = "<group>"; };
+		432F73791A08AC9C009CEC64 /* UIMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMenuController.m; sourceTree = "<group>"; };
+		432F737D1A08AE99009CEC64 /* UISplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISplitViewController.h; sourceTree = "<group>"; };
+		432F737E1A08AE99009CEC64 /* UISplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISplitViewController.m; sourceTree = "<group>"; };
 		432FF05D185338BD005486C5 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScreen.h; sourceTree = "<group>"; };
 		432FF05E185338BD005486C5 /* UIScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScreen.m; sourceTree = "<group>"; };
 		432FF06118534615005486C5 /* UIScreenPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIScreenPrivate.h; sourceTree = "<group>"; };
@@ -738,6 +746,10 @@
 				436D4B1519F5547900F6F8F9 /* UITabBar.m */,
 				436D4B1019F553D300F6F8F9 /* UITabBarController.h */,
 				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
+				432F73781A08AC9C009CEC64 /* UIMenuController.h */,
+				432F73791A08AC9C009CEC64 /* UIMenuController.m */,
+				432F737D1A08AE99009CEC64 /* UISplitViewController.h */,
+				432F737E1A08AE99009CEC64 /* UISplitViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -901,6 +913,7 @@
 				43B6B64D1913A0EC005D09ED /* UIPopoverController.h in Headers */,
 				43846332188B4031006DA1AA /* UIImageView+UIPrivate.h in Headers */,
 				436D4B0E19F5507C00F6F8F9 /* UISearchBar.h in Headers */,
+				432F737F1A08AE99009CEC64 /* UISplitViewController.h in Headers */,
 				43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */,
 				4384632F188B4025006DA1AA /* UIImageView.h in Headers */,
 				43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */,
@@ -948,6 +961,7 @@
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
 				43E3429418F6947E00463092 /* NSAttributedString.h in Headers */,
 				43CA2A351956CD5A00B92F2C /* TNAConfiguration.h in Headers */,
+				432F737A1A08AC9C009CEC64 /* UIMenuController.h in Headers */,
 				436D4B1219F553D300F6F8F9 /* UITabBarController.h in Headers */,
 				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
 				43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */,
@@ -1156,6 +1170,7 @@
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
 				43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */,
 				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
+				432F73801A08AE99009CEC64 /* UISplitViewController.m in Sources */,
 				43C200C518EBBCD400490D59 /* UIPageControl.m in Sources */,
 				43EBAA7F18AB67C2005DDD8D /* UIInterface.m in Sources */,
 				43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */,
@@ -1164,6 +1179,7 @@
 				436D4AF419F5466800F6F8F9 /* UIDatePicker.m in Sources */,
 				43B819F618E2AA870020624F /* UITapGestureRecognizer.m in Sources */,
 				436D4AE619F531D300F6F8F9 /* UITextField.m in Sources */,
+				432F737B1A08AC9C009CEC64 /* UIMenuController.m in Sources */,
 				436D4ADA19F52FB300F6F8F9 /* UISlider.m in Sources */,
 				43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */,
 				436D4B0B19F54FCB00F6F8F9 /* UISearchController.m in Sources */,

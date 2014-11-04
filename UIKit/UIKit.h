@@ -52,7 +52,7 @@
 //#import <UIKit/UILocalizedIndexedCollation.h>
 #import <UIKit/UILongPressGestureRecognizer.h>
 //#import <UIKit/UIManagedDocument.h>
-//#import <UIKit/UIMenuController.h>
+#import <UIKit/UIMenuController.h>
 //#import <UIKit/UIMotionEffect.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UINavigationController.h>
@@ -87,7 +87,7 @@
 //#import <UIKit/UISearchDisplayController.h>
 #import <UIKit/UISegmentedControl.h>
 #import <UIKit/UISlider.h>
-//#import <UIKit/UISplitViewController.h>
+#import <UIKit/UISplitViewController.h>
 #import <UIKit/UIStepper.h>
 //#import <UIKit/UIStoryboard.h>
 //#import <UIKit/UIStoryboardPopoverSegue.h>
