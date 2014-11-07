@@ -585,6 +585,12 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     return _selectedRow;
 }
 
+- (NSArray *)indexPathsForSelectedRows
+{
+    //FIXME: handle multi-selection
+    return @[_selectedRow];
+}
+
 - (NSIndexPath *)indexPathForCell:(UITableViewCell *)cell
 {
     for (NSIndexPath *index in [_cachedCells allKeys]) {

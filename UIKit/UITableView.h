@@ -89,7 +89,8 @@ typedef enum {
     UITableViewRowAnimationTop,
     UITableViewRowAnimationBottom,
     UITableViewRowAnimationNone,
-    UITableViewRowAnimationMiddle
+    UITableViewRowAnimationMiddle,
+    UITableViewRowAnimationAutomatic = 100
 } UITableViewRowAnimation;
 
 @interface UITableView : UIScrollView {
@@ -165,6 +166,7 @@ typedef enum {
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;	// not implemented
 
 - (NSIndexPath *)indexPathForSelectedRow;
+- (NSArray *)indexPathsForSelectedRows;
 - (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated;
 - (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 
@@ -184,6 +186,9 @@ typedef enum {
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic) BOOL allowsSelection;
 @property (nonatomic) BOOL allowsSelectionDuringEditing;	// not implemented
+@property (nonatomic) BOOL allowsMultipleSelection;
+@property (nonatomic) BOOL allowsMultipleSelectionDuringEditing;
+
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic) CGFloat sectionHeaderHeight;
 @property (nonatomic) CGFloat sectionFooterHeight;
