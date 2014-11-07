@@ -11,9 +11,9 @@
 
 #import <UIKit/UIKitDefines.h>
 #import <UIKit/UIResponder.h>
-//#import <UIKit/UIInterface.h>
+#import <UIKit/UIInterface.h>
 #import <UIKit/UIDevice.h>
-//#import <UIKit/UIAlert.h>
+#import <UIKit/UIAlert.h>
 
 #import <UIKit/UIView.h>
 

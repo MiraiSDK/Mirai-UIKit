@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIResponder.h>
-//#import <UIKit/UIInterface.h>
+#import <UIKit/UIInterface.h>
 #import <UIKit/UIKitDefines.h>
 //#import <UIKit/UIAppearance.h>
 //#import <UIKit/UIDynamicBehavior.h>
