@@ -10,6 +10,12 @@
 #import "UIScreenPrivate.h"
 
 #import <OpenGLES/EAGL.h>
+
+//#import <OpenGLES/EAGL+Private.h>
+@interface EAGLContext()
+- (id)initWithAPI:(EAGLRenderingAPI)api eglContext:(void *)ctx eglSurface:(void *)surface sharegroup:(EAGLSharegroup *)sharegroup;
+@end
+
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 #import <android/native_activity.h>
@@ -35,6 +41,7 @@
 @property (nonatomic, strong) CARenderer *renderer;
 
 @property (nonatomic, assign, getter = isCanceled) BOOL canceled;
+@property (nonatomic, strong) EAGLContext *eaglContext;
 @end
 @implementation BKRenderingService
 static BKRenderingService *currentService = nil;
@@ -74,8 +81,8 @@ static BKRenderingService *currentService = nil;
     // setup egl, opengl
     [self setupEGL:_app];
     
-    EAGLContext * context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    [EAGLContext setCurrentContext:context];
+    EAGLContext * context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 eglContext:_context eglSurface:_surface sharegroup:nil];
+    _eaglContext = context;
     
 //    _layer = [CALayer layer];
 //    _layer.frame = _bounds;
@@ -160,7 +167,7 @@ static BKRenderingService *currentService = nil;
     
     _layer = nil;
     _renderer = nil;
-    
+    [EAGLContext setCurrentContext:nil];
 }
 
 - (void)tearDownEGL

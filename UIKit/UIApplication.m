@@ -115,6 +115,7 @@ struct engine {
     
     int animating;
     bool isScreenReady;
+    bool isWarnStart;
 };
 
 static void constructExecutablePath(char *result, struct android_app* state)
@@ -252,15 +253,19 @@ static void handle_app_command(struct android_app* app, int32_t cmd) {
     struct engine* engine = (struct engine*)app->userData;
     switch (cmd) {
         case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
-            if (engine->app->window != NULL) {
-                engine_init_display(engine);
-            }
+            engine_init_display(engine);
             engine->isScreenReady = true;
+            if (engine->isWarnStart) {
+                BKRenderingServiceRun();
+                //FIXME:should reload textures here
+            }
+            engine->isWarnStart = true;
             break;
         case APP_CMD_TERM_WINDOW:
             // The window is being hidden or closed, clean it up.
             engine_term_display(engine);
+            engine->app->window = NULL;
+            engine->isScreenReady = false;
             break;
         case APP_CMD_LOST_FOCUS:
             app_has_focus=false;
@@ -581,11 +586,9 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                 int ident;
                 int events;
                 struct android_poll_source* source;
-//                int pollTimeout = engine->animating ? 0 : -1;
-                int pollTimeout = 0;
                 
                 BOOL runLoopFired = NO;
-                while ((ident=ALooper_pollAll(pollTimeout, NULL, &events, (void**)&source)) >= 0) {
+                while ((ident=ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
                     
                     if (!runLoopFired) {
                         NSDate *untilDate = nil;
@@ -629,70 +632,64 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     [self updateAndroidOrientation:engine->env];
                     prevSupportedInterfaceOrientation = supportedInterfaceOrientations;
                 }
-                
-                
-//                EGLDisplay display = eglGetCurrentDisplay();
-//                if (display != EGL_NO_DISPLAY) {
-                    @autoreleasepool {
-                        // commit?
-                        UIWindow *keyWindow = _app.keyWindow;
-                        
-                        CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
-                        [[UIScreen mainScreen] _setLandscaped:_landscaped];
-                        [keyWindow _setLandscaped:_landscaped];
-                        
-                        [pixelLayer _recursionLayoutAndDisplayIfNeeds];
-                        
-                        
-                        //
-                        // The CARenderer work flow
-                        //
-                        // begin frame
-                        // 1. commit transaction
-                        // 2. update model layer
-                        //      set render:current frame time
-                        //      update presentationLayer
-                        //      apply animation to presentation layer
-                        //      set render:next frame time
-                        //      schedule rasterization layer
-                        
-                        // render
-                        // 1. layout if needs
-                        // 2. render presentation layer
-                        
-                        // end frame
-                        // 1. reset updatedBounds
-                        
-                        //
-                        // The BKRenderingService work flow
-                        //
-                        
-                        //Client Side
-                        //  commitIfNeeds
-                        [CATransaction commit];
-                        
-                        //      copy renderTree
-                        CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
-                        //      send to server
-                        BKRenderingServiceUploadRenderLayer(renderTree);
-                        
-                        //
-                        // Server Side
-                        //  copy renderTree
-                        //  begin frame
-                        //      set current frame time
-                        //      update renderTree
-                        //      apply animation to render layer
-                        //      set nextFrameTime
-                        //
-                        //  render
-                        //  end frame
-                        
-                    }
-                }
             
-                
-//            }
+                @autoreleasepool {
+                    // commit?
+                    UIWindow *keyWindow = _app.keyWindow;
+                    
+                    CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
+                    [[UIScreen mainScreen] _setLandscaped:_landscaped];
+                    [keyWindow _setLandscaped:_landscaped];
+                    
+                    [pixelLayer _recursionLayoutAndDisplayIfNeeds];
+                    
+                    
+                    //
+                    // The CARenderer work flow
+                    //
+                    // begin frame
+                    // 1. commit transaction
+                    // 2. update model layer
+                    //      set render:current frame time
+                    //      update presentationLayer
+                    //      apply animation to presentation layer
+                    //      set render:next frame time
+                    //      schedule rasterization layer
+                    
+                    // render
+                    // 1. layout if needs
+                    // 2. render presentation layer
+                    
+                    // end frame
+                    // 1. reset updatedBounds
+                    
+                    //
+                    // The BKRenderingService work flow
+                    //
+                    
+                    //Client Side
+                    //  commitIfNeeds
+                    [CATransaction commit];
+                    
+                    //      copy renderTree
+                    CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
+                    //      send to server
+                    BKRenderingServiceUploadRenderLayer(renderTree);
+                    
+                    //
+                    // Server Side
+                    //  copy renderTree
+                    //  begin frame
+                    //      set current frame time
+                    //      update renderTree
+                    //      apply animation to render layer
+                    //      set nextFrameTime
+                    //
+                    //  render
+                    //  end frame
+                    
+                }
+            }
         } while (_isRunning);
             
         }
