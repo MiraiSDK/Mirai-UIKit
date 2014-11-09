@@ -67,19 +67,23 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
     return nil;
 }
 
+//static NSString *kPlatformDefaultFontName = @"Robot";
+//static NSString *kPlatformDefaultFontName = @"Helvetica Neue";
+static NSString *kPlatformDefaultFontName = @"Droid Sans Fallback";
+
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {
-    return [UIFont fontWithName:@"Robot" size:fontSize];
+    return [UIFont fontWithName:kPlatformDefaultFontName size:fontSize];
 }
 
 + (UIFont *)boldSystemFontOfSize:(CGFloat)fontSize
 {
-    return [UIFont fontWithName:@"Robot" size:fontSize];
+    return [UIFont fontWithName:kPlatformDefaultFontName size:fontSize];
 }
 
 + (UIFont *)italicSystemFontOfSize:(CGFloat)fontSize
 {
-    return [UIFont fontWithName:@"Robot" size:fontSize];
+    return [UIFont fontWithName:kPlatformDefaultFontName size:fontSize];
 }
 
 + (UIFont *)_fontWithCTFont:(CTFontRef)aFont
