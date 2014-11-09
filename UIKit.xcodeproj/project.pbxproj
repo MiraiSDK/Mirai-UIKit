@@ -96,7 +96,7 @@
 		434CFD561A0CB8B300B6AC9E /* UIStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 434CFD541A0CB8B300B6AC9E /* UIStoryboardSegue.m */; };
 		434CFD591A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.h in Headers */ = {isa = PBXBuildFile; fileRef = 434CFD571A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		434CFD5A1A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 434CFD581A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.m */; };
-		434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */ = {isa = PBXBuildFile; fileRef = 434CFD5C1A0CB9A800B6AC9E /* UIStateRestoration.h */; };
+		434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */ = {isa = PBXBuildFile; fileRef = 434CFD5C1A0CB9A800B6AC9E /* UIStateRestoration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		434CFD5F1A0CB9A800B6AC9E /* UIStateRestoration.m in Sources */ = {isa = PBXBuildFile; fileRef = 434CFD5D1A0CB9A800B6AC9E /* UIStateRestoration.m */; };
 		434CFD621A0CBAB400B6AC9E /* UIVideoEditorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 434CFD601A0CBAB400B6AC9E /* UIVideoEditorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		434CFD631A0CBAB400B6AC9E /* UIVideoEditorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 434CFD611A0CBAB400B6AC9E /* UIVideoEditorController.m */; };

@@ -80,9 +80,5 @@ typedef NS_OPTIONS(NSUInteger, NSAttributedStringEnumerationOptions) {
 - (void)removeObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath context:(void *)context;
 @end
 
-@interface NSObject(UINibLoadingAdditions)
-- (void)awakeFromNib;
-@end
-
 CFIndex CFStringGetHyphenationLocationBeforeIndex(CFStringRef string, CFIndex location, CFRange limitRange, CFOptionFlags options, CFLocaleRef locale, UTF32Char *character);
 
