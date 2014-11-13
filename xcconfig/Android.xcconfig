@@ -12,5 +12,9 @@ SDK_LIB_PATH=$(SDK_ROOT)/usr/lib
 DEPLOYMENT_LOCATION = YES
 DSTROOT = /
 INSTALL_PATH = $(SDK_ROOT)/System/Library/Frameworks/
-OTHER_LDFLAGS= $(inherited) -shared -Wl,-z,defs -lTNJavaHelper -lObjectiveZip -lobjc -ldispatch -landroid -lEGL -lGLESv2 -llog -lm
-OTHER_CFLAGS = -DANDROID $(inherited)
+
+ARCHFLAGS=-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16
+ARCHLDFLAGS=-march=armv7-a -Wl,--fix-cortex-a8
+
+OTHER_LDFLAGS= $(ARCHLDFLAGS) $(inherited) -shared -Wl,-z,defs -lTNJavaHelper -lObjectiveZip -lobjc -ldispatch -landroid -lEGL -lGLESv2 -llog -lm
+OTHER_CFLAGS = $(ARCHFLAGS) -DANDROID $(inherited)
