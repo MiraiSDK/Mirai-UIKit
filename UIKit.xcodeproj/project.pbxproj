@@ -267,6 +267,8 @@
 		43ECCF0F1851CA9A0076535C /* UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF0D1851CA9A0076535C /* UIView.m */; };
 		43ECCF121851CAA80076535C /* UIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 43ECCF101851CAA80076535C /* UIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43ECCF131851CAA80076535C /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF111851CAA80076535C /* UIWindow.m */; };
+		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
+		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -571,6 +573,8 @@
 		43ECCF0D1851CA9A0076535C /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		43ECCF101851CAA80076535C /* UIWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIWindow.h; sourceTree = "<group>"; };
 		43ECCF111851CAA80076535C /* UIWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIWindow.m; sourceTree = "<group>"; };
+		43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidEventsServer.h; sourceTree = "<group>"; };
+		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -690,6 +694,8 @@
 				43718EA218517FBA00850F08 /* UIApplication.h */,
 				4315799918B0E3CF00AE4256 /* UIApplication+UIPrivate.h */,
 				43718EA318517FBA00850F08 /* UIApplication.m */,
+				43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */,
+				43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */,
 				43CA2A331956CD5A00B92F2C /* TNAConfiguration.h */,
 				43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */,
 				432FF05D185338BD005486C5 /* UIScreen.h */,
@@ -1159,6 +1165,7 @@
 				43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */,
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				436D4AE519F531D300F6F8F9 /* UITextField.h in Headers */,
+				43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */,
 				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
 				431412DD18C0B958001AF732 /* UIViewBlockAnimationDelegate.h in Headers */,
@@ -1421,6 +1428,7 @@
 				43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */,
 				434CFD0E1A0CA91200B6AC9E /* NSShadow.m in Sources */,
 				4384631D188B3D52006DA1AA /* UIControlAction.m in Sources */,
+				43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */,
 				432FF094185452EC005486C5 /* NSStringDrawing.m in Sources */,
 				434CFD121A0CA98A00B6AC9E /* UIViewControllerTransitionCoordinator.m in Sources */,
 				434CFD2E1A0CB20E00B6AC9E /* UIScreenEdgePanGestureRecognizer.m in Sources */,

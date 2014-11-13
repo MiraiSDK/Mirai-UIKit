@@ -9,6 +9,7 @@
 
 #import "UIEvent.h"
 #include <android/input.h>
+@class UITouch;
 
 #pragma mark - Private Declarations
 

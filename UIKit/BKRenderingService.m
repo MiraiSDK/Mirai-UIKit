@@ -118,6 +118,7 @@ static BKRenderingService *currentService = nil;
     
     EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     eglInitialize(display, 0, 0);
+    eglSwapInterval(display, 1);
     
     /* Here, the application chooses the configuration it desires. In this
      * sample, we have a very simplified selection process, where we pick
@@ -194,6 +195,10 @@ static BKRenderingService *currentService = nil;
 - (void)rendering
 {
     // rendering
+    
+    long long frameCount = 0;
+    NSTimeInterval totalTime = 0;
+
     while (!self.isCanceled) {
         if (!self.layer) {continue;}
         EGLint pixelWidth, pixelHeight;
@@ -201,12 +206,25 @@ static BKRenderingService *currentService = nil;
         eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
         
         @autoreleasepool {
+//            NSDate * begin = [NSDate date];
             _renderer.layer = self.layer;
             _renderer.bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
             [_renderer addUpdateRect:_renderer.layer.bounds];
             [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
             [_renderer render];
             [_renderer endFrame];
+            
+//            NSTimeInterval usage = -[begin timeIntervalSinceNow];
+//            frameCount ++;
+//            totalTime += usage;
+//            
+//            if (frameCount >= 60) {
+//                NSLog(@"FSP:%.2f",frameCount / totalTime);
+//                
+//                frameCount = 0;
+//                totalTime = 0;
+//            }
+            
             eglSwapBuffers(_display, _surface);
         }
         

@@ -58,6 +58,7 @@
     UIEvent *_currentEvent;
     NSMutableSet *_visibleWindows;
 
+    NSMutableArray *_AEventQueue;
 }
 
 static BOOL _landscaped;
@@ -86,6 +87,7 @@ static UIApplication *_app;
     if (self) {
         _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
         _visibleWindows = [[NSMutableSet alloc] init];
+        _AEventQueue = [NSMutableArray array];
     }
     return self;
 }
@@ -553,6 +555,45 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
     [finalContent writeToFile:path atomically:YES];
 }
 
+- (id)nextEventBeforeDate:(NSDate *)limit inMode:(NSString *)mode
+{
+    do {
+        
+        //android event
+        int ident;
+        int events;
+        struct android_poll_source* source;
+        struct engine* engine = (struct engine*)app_state->userData;
+        
+        ident = ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source);
+        
+        if (source != NULL) {
+            AInputEvent *event = NULL;
+            if (AInputQueue_getEvent(app_state->inputQueue, &event) >= 0) {
+//                NSLog(@"New input event: type=%d",AInputEvent_getType(event));
+                
+                if (AInputQueue_preDispatchEvent(app_state->inputQueue, event)) {
+                    break;
+                }
+                
+                [_currentEvent _updateWithAEvent:event];
+                return _currentEvent;
+            }
+            
+        }
+        
+        //no input event
+        
+        // process runloop
+//        if ([[NSRunLoop currentRunLoop] runMode:mode beforeDate:limit] == NO) {
+//            break;
+//        }
+
+    } while ([limit timeIntervalSinceNow] > 0.0);
+    
+    return nil;
+}
+
 #pragma mark - mainRunLoop
 - (void)_run
 {
@@ -587,40 +628,68 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                 int events;
                 struct android_poll_source* source;
                 
-                BOOL runLoopFired = NO;
-                while ((ident=ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
-                    
-                    if (!runLoopFired) {
-                        NSDate *untilDate = nil;
-                        
-                        if (source != NULL) {
-                            untilDate = [NSDate date];
-                        } else {
-                            untilDate = [NSDate distantFuture];
-                        }
-        
-                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
-                        runLoopFired = YES;
-                    }
-                    
-                    // Process this event.
-                    if (source != NULL) {
-                        source->process(app_state, source);
-                    }
-
-                    // Check if we are exiting.
-                    if (app_state->destroyRequested != 0) {
-                        NSLog(@"Engine thread destroy requested!");
-                        engine_term_display(engine);
-                        return;
-                    }
-                }
+//                BOOL runLoopFired = NO;
+//                while ((ident=ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
+//                    
+//                    if (!runLoopFired) {
+//                        NSDate *untilDate = nil;
+//                        
+//                        if (source != NULL) {
+//                            untilDate = [NSDate date];
+//                        } else {
+//                            untilDate = [NSDate distantFuture];
+//                        }
+//        
+//                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
+//                        runLoopFired = YES;
+//                    }
+//                    
+//                    // Process this event.
+//                    if (source != NULL) {
+//                        source->process(app_state, source);
+//                    }
+//
+//                    // Check if we are exiting.
+//                    if (app_state->destroyRequested != 0) {
+//                        NSLog(@"Engine thread destroy requested!");
+//                        engine_term_display(engine);
+//                        return;
+//                    }
+//                    
+//                }
+//                
+//                if (!runLoopFired) {
+//                    NSDate *untilDate = [NSDate date];
+//                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
+//
+//                    runLoopFired = YES;
+//                }
                 
-                if (!runLoopFired) {
-                    NSDate *untilDate = [NSDate date];
-                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
+                // get event
+                
+//                NSDate *untilDate = [NSDate distantFuture];
+                NSDate *begin = [NSDate date];
+                
+                NSDate *untilDate = [NSDate date];
+                
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
 
-                    runLoopFired = YES;
+                UIEvent *event = [self nextEventBeforeDate:untilDate inMode:NSDefaultRunLoopMode];
+                
+                
+                
+                // send event
+                NSTimeInterval eventUsage = 0.0;
+                if (event) {
+                    NSDate *evenStart = [NSDate date];
+
+                    [self sendEvent:event];
+                    
+                    int32_t handled = 1;
+                    
+                    AInputEvent *aevent = [event _AInputEvent];
+                    AInputQueue_finishEvent(app_state->inputQueue, aevent, handled);
+                    eventUsage = -[evenStart timeIntervalSinceNow];
                 }
                 
                 
@@ -635,6 +704,7 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
             
                 @autoreleasepool {
                     // commit?
+                    NSDate *layouStart = [NSDate date];
                     UIWindow *keyWindow = _app.keyWindow;
                     
                     CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
@@ -643,7 +713,8 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     
                     [pixelLayer _recursionLayoutAndDisplayIfNeeds];
                     
-                    
+                    NSTimeInterval layoutUsage = -[layouStart timeIntervalSinceNow];
+
                     //
                     // The CARenderer work flow
                     //
@@ -667,15 +738,22 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     // The BKRenderingService work flow
                     //
                     
+                    NSDate *commit = [NSDate date];
+
                     //Client Side
                     //  commitIfNeeds
                     [CATransaction commit];
-                    
+                    NSTimeInterval commitUsage = -[commit timeIntervalSinceNow];
+
+                    NSDate *copyRender = [NSDate date];
                     //      copy renderTree
                     CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
+                    NSTimeInterval copyUsage = -[copyRender timeIntervalSinceNow];
+
                     //      send to server
                     BKRenderingServiceUploadRenderLayer(renderTree);
                     
+
                     //
                     // Server Side
                     //  copy renderTree
@@ -687,6 +765,8 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     //
                     //  render
                     //  end frame
+                    NSTimeInterval usage = -[begin timeIntervalSinceNow];
+                    //NSLog(@"runloop:%f s, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
                     
                 }
             }
@@ -706,14 +786,24 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
 - (void)handleAEvent:(AInputEvent *)aEvent
 {
-    [[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
+    //[[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
 
     int32_t aType = AInputEvent_getType(aEvent);
     if (aType == AINPUT_EVENT_TYPE_MOTION) {
-        [_currentEvent _updateWithAEvent:aEvent];
-        
-        [self sendEvent:_currentEvent];
+//        [_currentEvent _updateWithAEvent:aEvent];
+//        
+//        [self sendEvent:_currentEvent];
     }
+    
+    NSLog(@"queue a input event");
+    [_AEventQueue addObject:[NSValue valueWithPointer:aEvent]];
+    
+//    CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
+//    [pixelLayer _recursionLayoutAndDisplayIfNeeds];
+//
+//    CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
+//    //      send to server
+//    BKRenderingServiceUploadRenderLayer(renderTree);
 }
 
 #pragma mark -
@@ -1015,6 +1105,12 @@ int UIApplicationMain(int argc, char *argv[], NSString *principalClassName, NSSt
     NSLog(@"enter UIApplicationMain");
     id<UIApplicationDelegate>delegate = nil;
     @autoreleasepool {
+        // 1. start display services
+        // 2. register event callback
+        // 3. push runloop mode
+        // 4. start windows server
+        // 5. start status bar server
+        // 6.
 //        if (![UIScreen mainScreen]) {
 //            UIScreen *screen = [[UIScreen alloc] initWithAndroidNativeWindow:app_state->window];
 //        }
