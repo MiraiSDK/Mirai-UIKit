@@ -8,6 +8,8 @@
 
 #import "UIImage.h"
 #import "UIGraphics.h"
+#import "UIApplication.h"
+
 @interface UIImage ()
 @property (nonatomic, strong) CGImageRef imageRef;
 
@@ -28,10 +30,22 @@
 @synthesize alignmentRectInsets = _alignmentRectInsets;
 @synthesize renderingMode = _renderingMode;
 
+//FIXME: should release on memory warning
+static NSMutableDictionary *cache;
+
++ (void)handleMemoryWarning:(NSNotification *)notification
+{
+    [cache removeAllObjects];
+}
+
 + (UIImage *)imageNamed:(NSString *)name
 {
-    //FIXME: should release on memory warning
-    static NSMutableDictionary *cache;
+    static BOOL observerMemoryWarning = NO;
+    if (!observerMemoryWarning) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+        observerMemoryWarning = YES;
+    }
+    
     if (!cache) {
         cache = [NSMutableDictionary dictionary];
     }
