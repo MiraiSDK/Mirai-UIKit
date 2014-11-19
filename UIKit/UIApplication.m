@@ -254,6 +254,10 @@ void android_main(struct android_app* state)
     // we treat thread 1 as main thread, to keep our codes insulate with Java,
     // and gain ability to run our runloop.
     [NSThread setCurrentThreadAsMainThread];
+    
+    //JAVA: vm->AttachCurrentThread
+    [[TNJavaHelper sharedHelper] env];
+    
     [TNAndroidLauncher launchWithArgc:_argc argv:_argv];
 }
 

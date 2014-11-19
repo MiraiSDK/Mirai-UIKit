@@ -74,8 +74,7 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 //    NSLog(@"%s",__PRETTY_FUNCTION__);
     static JNIEnv *env = NULL;
     if (env == NULL) {
-        JavaVM *vm = [[TNJavaHelper sharedHelper] vm];
-        (*vm)->AttachCurrentThread(vm,&env,NULL);
+        env = [[TNJavaHelper sharedHelper] env];
     }
     
     jmethodID mid = (*env)->GetMethodID(env,_jWebViewClass,"updateTextureIfNeeds","([F)I");

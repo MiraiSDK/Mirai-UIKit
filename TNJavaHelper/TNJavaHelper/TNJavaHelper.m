@@ -8,8 +8,9 @@
 
 #import "TNJavaHelper.h"
 
+NSString *TNJavaEnvKey = @"TNJavaEnvKey";
+
 @implementation TNJavaHelper {
-    JNIEnv *env;
     JavaVM *vm;
     jclass clazz;
     
@@ -22,13 +23,12 @@
     TNJavaHelper *helper = [self sharedHelper];
     
     // attach current thread to java vm, so we can call java code
-    JNIEnv *env;
-    (*vm)->AttachCurrentThread(vm,&env,NULL);
-    helper->env = env;
     helper->vm = vm;
-    helper->clazz = (*env)->NewGlobalRef(env,clazz);;
     
     
+    JNIEnv *env = [helper env];
+    helper->clazz = (*env)->NewGlobalRef(env,clazz);
+
     //
     //
     
@@ -48,7 +48,7 @@
     NSLog(@"will call getClassLoader");
     jobject clsLoader = (*env)->CallObjectMethod(env, clazz, getClassLoader);
     NSLog(@"done getClassLoader, result:%p",clsLoader);
-    helper->_clsLoader = clsLoader;
+    helper->_clsLoader = (*env)->NewGlobalRef(env,clsLoader);
     
     
     NSLog(@"will find class java/lang/ClassLoader");
@@ -61,7 +61,15 @@
 
 - (JNIEnv *)env
 {
-    return env;
+    NSMutableDictionary *threadDictionary =[[NSThread currentThread] threadDictionary];
+    NSValue *value = threadDictionary[TNJavaEnvKey];
+    JNIEnv *e = [value pointerValue];
+    if (e  == NULL) {
+        (*vm)->AttachCurrentThread(vm,&e,NULL);
+        value = [NSValue valueWithPointer:e];
+        threadDictionary[TNJavaEnvKey] = value;
+    }
+    return e;
 }
 
 - (JavaVM *)vm
@@ -76,6 +84,7 @@
 
 - (jclass)findCustomClass:(NSString *)className
 {
+    JNIEnv *env = [self env];
     jstring strClassName = (*env)->NewStringUTF(env,className.UTF8String);
     
     jclass classIWant = (jclass)(*env)->CallObjectMethod(env, _clsLoader, _findClass, strClassName);
@@ -98,6 +107,7 @@
 
 - (id)callMethod:(NSString *)method class:(NSString *)className
 {
+    JNIEnv *env = [self env];
     jclass handlerClass = (*env)->FindClass(env, [className UTF8String]);
     if (handlerClass == NULL) {
         NSLog(@"can not find java class:%@",className);
@@ -123,6 +133,7 @@
 
 - (void)sss
 {
+    JNIEnv *env = [self env];
     jclass handlerClass = (*env)->FindClass(env, "com/foo/bar/ResultHandler");
     if (handlerClass == NULL) {
         NSLog(@"can not find java class");
