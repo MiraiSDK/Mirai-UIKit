@@ -331,7 +331,7 @@ static BOOL _animationsEnabled = YES;
 {
     if (!CGRectEqualToRect(newFrame,_layer.frame)) {
         CGRect oldBounds = _layer.bounds;
-        NSLog(@"set layer frame: {%.2f,%.2f,%.2f,%.2f}",newFrame.origin.x,newFrame.origin.y,newFrame.size.width,newFrame.size.height);
+        //NSLog(@"set layer frame: {%.2f,%.2f,%.2f,%.2f}",newFrame.origin.x,newFrame.origin.y,newFrame.size.width,newFrame.size.height);
         
         CGPoint newOrigin = newFrame.origin;
         CGAffineTransform invertedTransform = CGAffineTransformInvert(self.transform);
@@ -363,8 +363,10 @@ static BOOL _animationsEnabled = YES;
     if (!CGRectEqualToRect(aBounds,_layer.bounds)) {
         CGRect oldBounds = _layer.bounds;
         _layer.bounds = aBounds;
-        [self _boundsDidChangeFrom:oldBounds to:aBounds];
-        [[NSNotificationCenter defaultCenter] postNotificationName:UIViewBoundsDidChangeNotification object:self];
+        if (!CGSizeEqualToSize(oldBounds.size, aBounds.size)) {
+            [self _boundsDidChangeFrom:oldBounds to:aBounds];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIViewBoundsDidChangeNotification object:self];
+        }
     }
 }
 

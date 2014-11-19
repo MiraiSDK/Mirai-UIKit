@@ -185,7 +185,7 @@
     
     NSString *actionName = [self nameForMotionAction:trueAction];
     UITouchPhase phase = [self _phaseForMotionAction:trueAction];
-    NSLog(@"action:%@ phase:%@",actionName,[self _nameForPhase:phase]);
+    //NSLog(@"action:%@ phase:%@",actionName,[self _nameForPhase:phase]);
     
     UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
     

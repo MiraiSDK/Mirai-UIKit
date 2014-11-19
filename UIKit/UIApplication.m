@@ -36,6 +36,7 @@
 #import <TNJavaHelper/TNJavaHelper.h>
 
 #import <ObjectiveZip/ObjectiveZip.h>
+#import "UIAndroidEventsServer.h"
 
 // HACK: private workaround method
 @interface NSThread (Private)
@@ -58,6 +59,7 @@
     UIEvent *_currentEvent;
     NSMutableSet *_visibleWindows;
 
+    NSMutableArray *_AEventQueue;
 }
 
 static BOOL _landscaped;
@@ -86,6 +88,7 @@ static UIApplication *_app;
     if (self) {
         _currentEvent = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
         _visibleWindows = [[NSMutableSet alloc] init];
+        _AEventQueue = [NSMutableArray array];
     }
     return self;
 }
@@ -99,7 +102,6 @@ static UIApplication *_app;
 
 #pragma mark - Android glue
 static void handle_app_command(struct android_app* app, int32_t cmd);
-static int32_t handle_input(struct android_app* app, AInputEvent* event);
 bool app_has_focus = false;
 static struct android_app* app_state;
 static EAGLContext *_mainContext = nil;
@@ -159,6 +161,10 @@ void* ___gdb_android_workaround_malloc(size_t size)
     return malloc(size);
 }
 
+
+static int _argc;
+static char *_argv[];
+
 // Entry point from android part
 void android_main(struct android_app* state)
 {
@@ -176,13 +182,6 @@ void android_main(struct android_app* state)
         int argc = 1;
         char * argv[] = {buffer};
         [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
-        
-        // Cheat current current thread as main thread
-        // The default main thread(thread 0), which is Android's Java side
-        // Java side run our codes on secondly thread (thread 1)
-        // we treat thread 1 as main thread, to keep our codes insulate with Java,
-        // and gain ability to run our runloop.
-        [NSThread setCurrentThreadAsMainThread];
         
         // Make sure glue isn't stripped.
         app_dummy();
@@ -207,7 +206,6 @@ void android_main(struct android_app* state)
         memset(&engine, 0, sizeof(engine));
         app_state->userData = &engine;
         app_state->onAppCmd = handle_app_command;
-        app_state->onInputEvent = handle_input;
         engine.app = app_state;
         
         
@@ -240,10 +238,29 @@ void android_main(struct android_app* state)
         _prepareAsset(bundlePath);
         
         // call launcher, launcher will call the main()
-        [TNAndroidLauncher launchWithArgc:argc argv:argv];
+        _argc = argc;
+        [NSThread detachNewThreadSelector:@selector(launch) toTarget:[UIApplication class] withObject:nil];
+        
+        UIAndroidEventsServerStart(app_state);
     }
     
 }
+
++ (void)launch
+{
+    // Cheat current current thread as main thread
+    // The default main thread(thread 0), which is Android's Java side
+    // Java side run our codes on secondly thread (thread 1)
+    // we treat thread 1 as main thread, to keep our codes insulate with Java,
+    // and gain ability to run our runloop.
+    [NSThread setCurrentThreadAsMainThread];
+    
+    //JAVA: vm->AttachCurrentThread
+    [[TNJavaHelper sharedHelper] env];
+    
+    [TNAndroidLauncher launchWithArgc:_argc argv:_argv];
+}
+
 
 #pragma mark Events
 
@@ -371,12 +388,6 @@ typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
     (*env)->CallVoidMethod(env,thiz,messageID,o);
 
     (*env)->DeleteLocalRef(env,test);
-}
-
-static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
-    /* app->userData is available here */
-    [_app handleAEvent:aEvent];
-    return 1;
 }
 
 #pragma mark Display setup
@@ -553,6 +564,13 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
     [finalContent writeToFile:path atomically:YES];
 }
 
+- (id)nextEventBeforeDate:(NSDate *)limit inMode:(NSString *)mode
+{
+    return nil;
+}
+
+- (void)appstartEvent{}
+
 #pragma mark - mainRunLoop
 - (void)_run
 {
@@ -575,52 +593,37 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
         BKRenderingServiceRun();
         
+        NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
+        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+        
         @try {
         do {
             @autoreleasepool {
-                // Read all pending events. If app_has_focus is true, then we are going
-                // to read any events that are ready then render the screen. If we don't
-                // have focus, we are going to block and spin around the poll loop until
-                // we get focus again, preventing us from doing a bunch of rendering
-                // when the app isn't even visible.
-                int ident;
-                int events;
-                struct android_poll_source* source;
+                NSDate *begin = [NSDate date];
                 
-                BOOL runLoopFired = NO;
-                while ((ident=ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
-                    
-                    if (!runLoopFired) {
-                        NSDate *untilDate = nil;
-                        
-                        if (source != NULL) {
-                            untilDate = [NSDate date];
-                        } else {
-                            untilDate = [NSDate distantFuture];
-                        }
-        
-                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
-                        runLoopFired = YES;
-                    }
-                    
-                    // Process this event.
-                    if (source != NULL) {
-                        source->process(app_state, source);
-                    }
+                //TODO: should use distantFuture to reduce cpu usage
+                // but use distantFuture has a bug:
+                //      runMode:beforeDate: will wait until first input source processed or beforeDate is reached. timer is not considered an input source
+                //      and performSelector:withObject:afterDelay: is a timer
+                //      so if we do any ui change in a timer or performSelector, that will not at screen until runloop return
+//                NSDate *untilDate = [NSDate distantFuture];
+                NSDate *untilDate = [NSDate date];
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
 
-                    // Check if we are exiting.
-                    if (app_state->destroyRequested != 0) {
-                        NSLog(@"Engine thread destroy requested!");
-                        engine_term_display(engine);
-                        return;
-                    }
-                }
                 
-                if (!runLoopFired) {
-                    NSDate *untilDate = [NSDate date];
-                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
-
-                    runLoopFired = YES;
+//                UIEvent *event = [self nextEventBeforeDate:untilDate inMode:NSDefaultRunLoopMode];
+                
+                // send event
+                NSTimeInterval eventUsage = 0.0;
+                if (UIAndroidEventsServerHasEvents()) {
+                    NSDate *evenStart = [NSDate date];
+                    UIAndroidEventsGetEvent(_currentEvent);
+                    
+                    [self sendEvent:_currentEvent];
+                    
+                    int32_t handled = 1;
+                    
+                    eventUsage = -[evenStart timeIntervalSinceNow];
                 }
                 
                 
@@ -635,6 +638,7 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
             
                 @autoreleasepool {
                     // commit?
+                    NSDate *layouStart = [NSDate date];
                     UIWindow *keyWindow = _app.keyWindow;
                     
                     CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
@@ -643,7 +647,8 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     
                     [pixelLayer _recursionLayoutAndDisplayIfNeeds];
                     
-                    
+                    NSTimeInterval layoutUsage = -[layouStart timeIntervalSinceNow];
+
                     //
                     // The CARenderer work flow
                     //
@@ -667,15 +672,22 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     // The BKRenderingService work flow
                     //
                     
+                    NSDate *commit = [NSDate date];
+
                     //Client Side
                     //  commitIfNeeds
                     [CATransaction commit];
-                    
+                    NSTimeInterval commitUsage = -[commit timeIntervalSinceNow];
+
+                    NSDate *copyRender = [NSDate date];
                     //      copy renderTree
                     CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
+                    NSTimeInterval copyUsage = -[copyRender timeIntervalSinceNow];
+
                     //      send to server
                     BKRenderingServiceUploadRenderLayer(renderTree);
                     
+
                     //
                     // Server Side
                     //  copy renderTree
@@ -687,6 +699,8 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     //
                     //  render
                     //  end frame
+                    NSTimeInterval usage = -[begin timeIntervalSinceNow];
+                    //NSLog(@"runloop:%fs, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
                     
                 }
             }
@@ -702,18 +716,6 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
     NSLog(@"end running");
 
-}
-
-- (void)handleAEvent:(AInputEvent *)aEvent
-{
-    [[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
-
-    int32_t aType = AInputEvent_getType(aEvent);
-    if (aType == AINPUT_EVENT_TYPE_MOTION) {
-        [_currentEvent _updateWithAEvent:aEvent];
-        
-        [self sendEvent:_currentEvent];
-    }
 }
 
 #pragma mark -
@@ -1015,6 +1017,12 @@ int UIApplicationMain(int argc, char *argv[], NSString *principalClassName, NSSt
     NSLog(@"enter UIApplicationMain");
     id<UIApplicationDelegate>delegate = nil;
     @autoreleasepool {
+        // 1. start display services
+        // 2. register event callback
+        // 3. push runloop mode
+        // 4. start windows server
+        // 5. start status bar server
+        // 6.
 //        if (![UIScreen mainScreen]) {
 //            UIScreen *screen = [[UIScreen alloc] initWithAndroidNativeWindow:app_state->window];
 //        }

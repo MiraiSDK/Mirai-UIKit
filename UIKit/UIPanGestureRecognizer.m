@@ -137,7 +137,7 @@ static UITouch *PanTouch(NSSet *touches)
     } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
         if (touch) {
             if ([self _translate:[touch _delta] withEvent:event]) {
-                NSLog(@"pan changed");
+//                NSLog(@"pan changed");
                 self.state = UIGestureRecognizerStateChanged;
             } else {
                 NSLog(@"translate failed");
