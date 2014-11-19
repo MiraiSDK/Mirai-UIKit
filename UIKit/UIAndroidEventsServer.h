@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "UIEvent+Android.h"
+#import "android_native_app_glue.h"
+
 
 @interface UIAndroidEventsServer : NSObject
 
-+ (UIEvent *)event;
 @end
+
+void UIAndroidEventsServerStart(struct android_app *app);
+bool UIAndroidEventsServerHasEvents();
+void UIAndroidEventsGetEvent(UIEvent *event);

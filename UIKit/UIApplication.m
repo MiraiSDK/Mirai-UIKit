@@ -36,6 +36,7 @@
 #import <TNJavaHelper/TNJavaHelper.h>
 
 #import <ObjectiveZip/ObjectiveZip.h>
+#import "UIAndroidEventsServer.h"
 
 // HACK: private workaround method
 @interface NSThread (Private)
@@ -101,7 +102,6 @@ static UIApplication *_app;
 
 #pragma mark - Android glue
 static void handle_app_command(struct android_app* app, int32_t cmd);
-static int32_t handle_input(struct android_app* app, AInputEvent* event);
 bool app_has_focus = false;
 static struct android_app* app_state;
 static EAGLContext *_mainContext = nil;
@@ -161,6 +161,10 @@ void* ___gdb_android_workaround_malloc(size_t size)
     return malloc(size);
 }
 
+
+static int _argc;
+static char *_argv[];
+
 // Entry point from android part
 void android_main(struct android_app* state)
 {
@@ -178,13 +182,6 @@ void android_main(struct android_app* state)
         int argc = 1;
         char * argv[] = {buffer};
         [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
-        
-        // Cheat current current thread as main thread
-        // The default main thread(thread 0), which is Android's Java side
-        // Java side run our codes on secondly thread (thread 1)
-        // we treat thread 1 as main thread, to keep our codes insulate with Java,
-        // and gain ability to run our runloop.
-        [NSThread setCurrentThreadAsMainThread];
         
         // Make sure glue isn't stripped.
         app_dummy();
@@ -209,7 +206,6 @@ void android_main(struct android_app* state)
         memset(&engine, 0, sizeof(engine));
         app_state->userData = &engine;
         app_state->onAppCmd = handle_app_command;
-        app_state->onInputEvent = handle_input;
         engine.app = app_state;
         
         
@@ -242,10 +238,25 @@ void android_main(struct android_app* state)
         _prepareAsset(bundlePath);
         
         // call launcher, launcher will call the main()
-        [TNAndroidLauncher launchWithArgc:argc argv:argv];
+        _argc = argc;
+        [NSThread detachNewThreadSelector:@selector(launch) toTarget:[UIApplication class] withObject:nil];
+        
+        UIAndroidEventsServerStart(app_state);
     }
     
 }
+
++ (void)launch
+{
+    // Cheat current current thread as main thread
+    // The default main thread(thread 0), which is Android's Java side
+    // Java side run our codes on secondly thread (thread 1)
+    // we treat thread 1 as main thread, to keep our codes insulate with Java,
+    // and gain ability to run our runloop.
+    [NSThread setCurrentThreadAsMainThread];
+    [TNAndroidLauncher launchWithArgc:_argc argv:_argv];
+}
+
 
 #pragma mark Events
 
@@ -373,12 +384,6 @@ typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
     (*env)->CallVoidMethod(env,thiz,messageID,o);
 
     (*env)->DeleteLocalRef(env,test);
-}
-
-static int32_t handle_input(struct android_app* app, AInputEvent* aEvent) {
-    /* app->userData is available here */
-    [_app handleAEvent:aEvent];
-    return 1;
 }
 
 #pragma mark Display setup
@@ -557,42 +562,10 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
 - (id)nextEventBeforeDate:(NSDate *)limit inMode:(NSString *)mode
 {
-    do {
-        
-        //android event
-        int ident;
-        int events;
-        struct android_poll_source* source;
-        struct engine* engine = (struct engine*)app_state->userData;
-        
-        ident = ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source);
-        
-        if (source != NULL) {
-            AInputEvent *event = NULL;
-            if (AInputQueue_getEvent(app_state->inputQueue, &event) >= 0) {
-//                NSLog(@"New input event: type=%d",AInputEvent_getType(event));
-                
-                if (AInputQueue_preDispatchEvent(app_state->inputQueue, event)) {
-                    break;
-                }
-                
-                [_currentEvent _updateWithAEvent:event];
-                return _currentEvent;
-            }
-            
-        }
-        
-        //no input event
-        
-        // process runloop
-//        if ([[NSRunLoop currentRunLoop] runMode:mode beforeDate:limit] == NO) {
-//            break;
-//        }
-
-    } while ([limit timeIntervalSinceNow] > 0.0);
-    
     return nil;
 }
+
+- (void)appstartEvent{}
 
 #pragma mark - mainRunLoop
 - (void)_run
@@ -616,79 +589,36 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
         BKRenderingServiceRun();
         
+        NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
+        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+        
         @try {
         do {
             @autoreleasepool {
-                // Read all pending events. If app_has_focus is true, then we are going
-                // to read any events that are ready then render the screen. If we don't
-                // have focus, we are going to block and spin around the poll loop until
-                // we get focus again, preventing us from doing a bunch of rendering
-                // when the app isn't even visible.
-                int ident;
-                int events;
-                struct android_poll_source* source;
-                
-//                BOOL runLoopFired = NO;
-//                while ((ident=ALooper_pollAll(engine->isScreenReady ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
-//                    
-//                    if (!runLoopFired) {
-//                        NSDate *untilDate = nil;
-//                        
-//                        if (source != NULL) {
-//                            untilDate = [NSDate date];
-//                        } else {
-//                            untilDate = [NSDate distantFuture];
-//                        }
-//        
-//                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
-//                        runLoopFired = YES;
-//                    }
-//                    
-//                    // Process this event.
-//                    if (source != NULL) {
-//                        source->process(app_state, source);
-//                    }
-//
-//                    // Check if we are exiting.
-//                    if (app_state->destroyRequested != 0) {
-//                        NSLog(@"Engine thread destroy requested!");
-//                        engine_term_display(engine);
-//                        return;
-//                    }
-//                    
-//                }
-//                
-//                if (!runLoopFired) {
-//                    NSDate *untilDate = [NSDate date];
-//                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
-//
-//                    runLoopFired = YES;
-//                }
-                
-                // get event
-                
-//                NSDate *untilDate = [NSDate distantFuture];
                 NSDate *begin = [NSDate date];
                 
+                //TODO: should use distantFuture to reduce cpu usage
+                // but use distantFuture has a bug:
+                //      runMode:beforeDate: will wait until first input source processed or beforeDate is reached. timer is not considered an input source
+                //      and performSelector:withObject:afterDelay: is a timer
+                //      so if we do any ui change in a timer or performSelector, that will not at screen until runloop return
+//                NSDate *untilDate = [NSDate distantFuture];
                 NSDate *untilDate = [NSDate date];
-                
                 [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
 
-                UIEvent *event = [self nextEventBeforeDate:untilDate inMode:NSDefaultRunLoopMode];
                 
-                
+//                UIEvent *event = [self nextEventBeforeDate:untilDate inMode:NSDefaultRunLoopMode];
                 
                 // send event
                 NSTimeInterval eventUsage = 0.0;
-                if (event) {
+                if (UIAndroidEventsServerHasEvents()) {
                     NSDate *evenStart = [NSDate date];
-
-                    [self sendEvent:event];
+                    UIAndroidEventsGetEvent(_currentEvent);
+                    
+                    [self sendEvent:_currentEvent];
                     
                     int32_t handled = 1;
                     
-                    AInputEvent *aevent = [event _AInputEvent];
-                    AInputQueue_finishEvent(app_state->inputQueue, aevent, handled);
                     eventUsage = -[evenStart timeIntervalSinceNow];
                 }
                 
@@ -766,7 +696,7 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     //  render
                     //  end frame
                     NSTimeInterval usage = -[begin timeIntervalSinceNow];
-                    //NSLog(@"runloop:%f s, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
+                    //NSLog(@"runloop:%fs, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
                     
                 }
             }
@@ -782,28 +712,6 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 
     NSLog(@"end running");
 
-}
-
-- (void)handleAEvent:(AInputEvent *)aEvent
-{
-    //[[NSRunLoop currentRunLoop] runMode:UITrackingRunLoopMode beforeDate:[NSDate date]];
-
-    int32_t aType = AInputEvent_getType(aEvent);
-    if (aType == AINPUT_EVENT_TYPE_MOTION) {
-//        [_currentEvent _updateWithAEvent:aEvent];
-//        
-//        [self sendEvent:_currentEvent];
-    }
-    
-    NSLog(@"queue a input event");
-    [_AEventQueue addObject:[NSValue valueWithPointer:aEvent]];
-    
-//    CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
-//    [pixelLayer _recursionLayoutAndDisplayIfNeeds];
-//
-//    CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
-//    //      send to server
-//    BKRenderingServiceUploadRenderLayer(renderTree);
 }
 
 #pragma mark -
