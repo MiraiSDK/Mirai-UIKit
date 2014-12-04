@@ -380,7 +380,17 @@ NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotific
     }
     
     // if all touch up
-    if (_touches.count == 0) {
+    NSSet *set = [event allTouches];
+    BOOL allTouchUp = YES;
+    for (UITouch *t in set) {
+        if (t.phase != UITouchPhaseCancelled &&
+            t.phase != UITouchPhaseEnded) {
+            allTouchUp = NO;
+            break;
+        }
+    }
+    if (allTouchUp) {
+        NSLog(@"reset all gesture recognizer");
         
         //  reset
         for (UIGestureRecognizer *recognizer in _effectRecognizers) {
@@ -397,6 +407,8 @@ NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotific
         [_excludedRecognizers removeAllObjects];
         
         _hasGestureRecognized = NO;
+        
+        [_touches removeAllObjects];
     }
 }
 
