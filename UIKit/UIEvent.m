@@ -19,6 +19,7 @@
 //#include <jni.h>
 
 #import "UIScreenPrivate.h"
+#import "InputEvent.h"
 
 
 @implementation UIEvent {
@@ -373,6 +374,79 @@
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@: %p> timestamp:%.0f touches %@",NSStringFromClass(self.class),self, self.timestamp,self.allTouches.allObjects];
+}
+
+#pragma mark - configure with InputEvent
+- (void)_updateTouchesWithInputEvent:(InputEvent *)event
+{
+    NSMutableDictionary *prevExists = [_touchesByIdentifier mutableCopy];
+    for (MotionPointer *pointer in event.pointers) {
+        int32_t pointerIdentifier = pointer.pointerId;
+        UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
+        if (touch == nil) {
+            touch = [[UITouch alloc] init];
+            touch.identifier = pointerIdentifier;
+            [_touches addObject:touch];
+            [_touchesByIdentifier setObject:touch forKey:@(pointerIdentifier)];
+        }
+        [prevExists removeObjectForKey:@(pointerIdentifier)];
+    }
+    
+    // clean touch
+    if (prevExists.count > 0) {
+        for (NSString *key in prevExists.allKeys) {
+            UITouch *t = [_touchesByIdentifier objectForKey:key];
+            [_touches removeObject:t];
+            [_touchesByIdentifier removeObjectForKey:key];
+        }
+    }
+    
+}
+
+- (void)configureWithInputEvent:(InputEvent *)inputEvent
+{
+    _aEvent = inputEvent.aEvent;
+    
+    [self _updateTouchesWithInputEvent:inputEvent];
+    
+    NSTimeInterval eventTimestamp = [inputEvent timestamp];
+    [self _setTimestamp:eventTimestamp];
+    
+    int32_t trueAction = [inputEvent trueAction];
+    MotionPointer *pointer = [inputEvent activityPointer];
+    int32_t pointerIdentifier = pointer.pointerId;
+    
+    float x = pointer.rawX;
+    float y = pointer.rawY;
+    
+    // top-left coordinate
+    const CGPoint screenLocation = CGPointMake(x, y);
+    CALayer *keyWindowLayer = [[[UIApplication sharedApplication] keyWindow] layer];
+    CGPoint windowLocation = [[[UIScreen mainScreen] _pixelLayer] convertPoint:screenLocation toLayer:keyWindowLayer];
+    windowLocation.x = ceilf(windowLocation.x);
+    windowLocation.y = ceilf(windowLocation.y);
+    
+    UITouchPhase phase = [self _phaseForMotionAction:trueAction];
+    
+    UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
+    
+    if (phase == UITouchPhaseEnded) {
+        [touch _setPhase:phase screenLocation:windowLocation tapCount:1 timestamp:eventTimestamp];
+    } else {
+        [touch _updatePhase:phase screenLocation:windowLocation timestamp:eventTimestamp];
+    }
+    
+    UIView *previousView = touch.view;
+    UIScreen *theScreen = [UIScreen mainScreen];
+    [touch _setTouchedView:[theScreen _hitTest:screenLocation event:self]];
+    
+    for (UITouch *t in _touches) {
+        if (t.identifier == pointerIdentifier) {
+            continue;
+        }
+        
+        [t _updatePhase:UITouchPhaseStationary];
+    }
 }
 
 @end

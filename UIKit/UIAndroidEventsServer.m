@@ -8,16 +8,17 @@
 
 #import "UIAndroidEventsServer.h"
 
+#import "InputEvent.h"
+
 @implementation UIAndroidEventsServer
 {
     struct android_app* app_state;
     UIEvent *_event;
-    AInputEvent *_aEvent;
-    NSRecursiveLock *_eventLock;
+    NSRecursiveLock *_eventQueueLock;
     
+    NSMutableArray *_eventQueue;
 }
 
-static void handle_app_command(struct android_app* app, int32_t cmd);
 static int32_t handle_input(struct android_app* app, AInputEvent* event);
 static UIAndroidEventsServer *eventServer;
 
@@ -32,7 +33,10 @@ static UIAndroidEventsServer *eventServer;
         
         _event = [[UIEvent alloc] initWithEventType:UIEventTypeTouches];
         
-        _eventLock = [[NSRecursiveLock alloc] init];
+        _eventQueueLock = [[NSRecursiveLock alloc] init];
+        
+        _eventQueue = [NSMutableArray array];
+        
     }
     return self;
 }
@@ -48,7 +52,10 @@ static UIAndroidEventsServer *eventServer;
         while ((ident=ALooper_pollAll(-1, NULL, &events, (void**)&source))) {
             if (source != NULL) {
                 source->process(app_state,source);
-                hasInput = YES;
+
+                if (source->id == LOOPER_ID_INPUT) {
+                    hasInput = YES;
+                }
             }
             
             if (hasInput) {
@@ -70,22 +77,70 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
     NSLog(@"handle_input");
     int32_t aType = AInputEvent_getType(event);
     if (aType == AINPUT_EVENT_TYPE_MOTION) {
-        //[eventServer->_event _updateWithAEvent:event];
+        InputEvent *ie = [[InputEvent alloc] initWithInputEvent:event];
+        [eventServer->_eventQueueLock lock];
+        [eventServer->_eventQueue addObject:ie];
+        [eventServer->_eventQueueLock unlock];
     }
-    
-    [eventServer->_eventLock lock];
-    eventServer->_aEvent = event;
-    [eventServer->_eventLock unlock];
 
     return 1;
 }
 
-static void handle_app_command(struct android_app* app, int32_t cmd)
+- (BOOL)hasEvents
 {
-    
+    [_eventQueueLock lock];
+    BOOL hasEvent = [_eventQueue count] > 0;
+    [_eventQueueLock unlock];
+
+    return hasEvent;
 }
 
-#pragma mark - public access
+- (void)getEvent:(UIEvent *)event
+{
+    [_eventQueueLock lock];
+    InputEvent *matchedEvent = nil;
+    NSUInteger idx = 0;
+    for (InputEvent *ie in _eventQueue) {
+        int32_t trueAction = ie.trueAction;
+        if (trueAction == AMOTION_EVENT_ACTION_DOWN ||
+            trueAction == AMOTION_EVENT_ACTION_CANCEL ||
+            trueAction == AMOTION_EVENT_ACTION_UP) {
+            matchedEvent = ie;
+            break;
+        }
+        idx ++;
+    }
+    
+    if (matchedEvent) {
+        [_eventQueue removeObjectsInRange:NSMakeRange(0, idx+1)];
+    } else {
+        matchedEvent = [_eventQueue lastObject];
+        [_eventQueue removeAllObjects];
+    }
+    [_eventQueueLock unlock];
+    
+    [event configureWithInputEvent:matchedEvent];
+}
+
+#pragma mark - public class access
++ (BOOL)hasEvents
+{
+    return [eventServer hasEvents];
+}
+
++ (void)getEvent:(UIEvent *)event
+{
+    [eventServer getEvent:event];
+}
+
++ (void)start:(struct android_app *)app
+{
+    eventServer = [[UIAndroidEventsServer alloc] initWithAndroidApp:app];
+    [eventServer run];
+}
+@end
+
+#pragma mark - public c access
 
 void UIAndroidEventsServerStart(struct android_app *app)
 {
@@ -94,17 +149,9 @@ void UIAndroidEventsServerStart(struct android_app *app)
 }
 
 bool UIAndroidEventsServerHasEvents() {
-        [eventServer->_eventLock lock];
-    BOOL hasEvent = (eventServer->_aEvent != NULL);
-        [eventServer->_eventLock unlock];
-    return hasEvent;
+    return [eventServer hasEvents];
 }
 
 void UIAndroidEventsGetEvent(UIEvent *event) {
-    
-    [eventServer->_eventLock lock];
-    [event _updateWithAEvent:eventServer->_aEvent];
-    eventServer->_aEvent = NULL;
-    [eventServer->_eventLock unlock];
+    [eventServer getEvent:event];
 }
-@end

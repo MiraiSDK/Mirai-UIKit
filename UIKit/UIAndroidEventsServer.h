@@ -12,7 +12,9 @@
 
 
 @interface UIAndroidEventsServer : NSObject
-
++ (void)start:(struct android_app *)app;
++ (BOOL)hasEvents;
++ (void)getEvent:(UIEvent *)event;
 @end
 
 void UIAndroidEventsServerStart(struct android_app *app);

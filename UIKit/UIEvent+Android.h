@@ -10,6 +10,7 @@
 #import "UIEvent.h"
 #include <android/input.h>
 @class UITouch;
+@class InputEvent;
 
 #pragma mark - Private Declarations
 
@@ -26,4 +27,5 @@
 - (void)_updateWithAEvent:(AInputEvent *)aEvent;
 
 - (AInputEvent *)_AInputEvent;
+- (void)configureWithInputEvent:(InputEvent *)inputEvent;
 @end

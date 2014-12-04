@@ -243,6 +243,8 @@
 		43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2AC9C18ACD9370029EE86 /* UIToolbar.m */; };
 		43E3429418F6947E00463092 /* NSAttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E3429218F6947E00463092 /* NSAttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E3429518F6947E00463092 /* NSAttributedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E3429318F6947E00463092 /* NSAttributedString.m */; };
+		43E5ECBD1A304B8D009E624F /* InputEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E5ECBB1A304B8D009E624F /* InputEvent.h */; };
+		43E5ECBE1A304B8D009E624F /* InputEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E5ECBC1A304B8D009E624F /* InputEvent.m */; };
 		43EBAA1A18A9F11C005DDD8D /* UIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA1818A9F11C005DDD8D /* UIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EBAA1918A9F11C005DDD8D /* UIViewController.m */; };
 		43EBAA6818AA5639005DDD8D /* UIScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EBAA6618AA5639005DDD8D /* UIScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -549,6 +551,8 @@
 		43E2ACA218AF59AD0029EE86 /* UITouch+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITouch+Private.h"; sourceTree = "<group>"; };
 		43E3429218F6947E00463092 /* NSAttributedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedString.h; sourceTree = "<group>"; };
 		43E3429318F6947E00463092 /* NSAttributedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedString.m; sourceTree = "<group>"; };
+		43E5ECBB1A304B8D009E624F /* InputEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputEvent.h; sourceTree = "<group>"; };
+		43E5ECBC1A304B8D009E624F /* InputEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputEvent.m; sourceTree = "<group>"; };
 		43EBAA1818A9F11C005DDD8D /* UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewController.h; sourceTree = "<group>"; };
 		43EBAA1918A9F11C005DDD8D /* UIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewController.m; sourceTree = "<group>"; };
 		43EBAA6618AA5639005DDD8D /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
@@ -696,6 +700,8 @@
 				43718EA318517FBA00850F08 /* UIApplication.m */,
 				43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */,
 				43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */,
+				43E5ECBB1A304B8D009E624F /* InputEvent.h */,
+				43E5ECBC1A304B8D009E624F /* InputEvent.m */,
 				43CA2A331956CD5A00B92F2C /* TNAConfiguration.h */,
 				43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */,
 				432FF05D185338BD005486C5 /* UIScreen.h */,
@@ -1091,6 +1097,7 @@
 				434CFD411A0CB64000B6AC9E /* UIPopoverBackgroundView.h in Headers */,
 				43846326188B3D7C006DA1AA /* UIAction.h in Headers */,
 				43ECCF0E1851CA9A0076535C /* UIView.h in Headers */,
+				43E5ECBD1A304B8D009E624F /* InputEvent.h in Headers */,
 				434CFD291A0CB18D00B6AC9E /* UISearchDisplayController.h in Headers */,
 				432FF07F1853645D005486C5 /* UIGraphics.h in Headers */,
 				43DD64CA19910984000884BA /* TNGestureRecognizerMath.h in Headers */,
@@ -1435,6 +1442,7 @@
 				436D4AF419F5466800F6F8F9 /* UIDatePicker.m in Sources */,
 				43B819F618E2AA870020624F /* UITapGestureRecognizer.m in Sources */,
 				434CFCFE1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.m in Sources */,
+				43E5ECBE1A304B8D009E624F /* InputEvent.m in Sources */,
 				436D4AE619F531D300F6F8F9 /* UITextField.m in Sources */,
 				434CFD421A0CB64000B6AC9E /* UIPopoverBackgroundView.m in Sources */,
 				432F737B1A08AC9C009CEC64 /* UIMenuController.m in Sources */,
