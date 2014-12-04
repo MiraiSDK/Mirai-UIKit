@@ -51,7 +51,7 @@ static BOOL _animationsEnabled = YES;
     BOOL _clearsContextBeforeDrawing;
     BOOL _clipsToBounds;
     
-    UIView *_superview;
+    __weak UIView *_superview;
     UIWindow *_window;
     __weak UIViewController *_viewController;
     
