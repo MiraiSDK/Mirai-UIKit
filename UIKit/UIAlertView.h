@@ -22,9 +22,9 @@ typedef NS_ENUM(NSInteger, UIAlertViewStyle) {
 @class UILabel, UIToolbar, UITabBar, UIWindow, UIBarButtonItem, UIPopoverController;
 
 @interface UIAlertView : UIView
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id /*<UIAlertViewDelegate>*/)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id <UIAlertViewDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
 
-@property(nonatomic,assign) id /*<UIAlertViewDelegate>*/ delegate;    // weak reference
+@property(nonatomic,assign) id <UIAlertViewDelegate> delegate;    // weak reference
 @property(nonatomic,copy) NSString *title;
 @property(nonatomic,copy) NSString *message;   // secondary explanation text
 
