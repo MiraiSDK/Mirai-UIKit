@@ -16,6 +16,7 @@
 @interface UIEvent (Private)
 - (id)initWithEventType:(UIEventType)type;
 - (void)_setTimestamp:(NSTimeInterval)timestamp;
+- (void)_cleanTouches;
 @end
 
 @interface UIEvent (Android)

@@ -208,6 +208,18 @@
     }
 }
 
+- (void)_cleanTouches
+{
+    NSMutableSet *toRemove = [NSMutableSet set];
+    for (UITouch *t in _touches) {
+        if (t.phase == UITouchPhaseEnded || t.phase == UITouchPhaseCancelled) {
+            [toRemove addObject:t];
+            [_touchesByIdentifier removeObjectForKey:@(t.identifier)];
+        }
+    }
+    [_touches minusSet:toRemove];
+}
+
 - (NSString *)_nameForPhase:(UITouchPhase)phase
 {
     static NSDictionary *map = nil;

@@ -60,6 +60,7 @@
     NSMutableSet *_visibleWindows;
 
     NSMutableArray *_AEventQueue;
+    __weak UIWindow *_keyWindow;
 }
 
 static BOOL _landscaped;
@@ -621,6 +622,7 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
                     
                     [self sendEvent:_currentEvent];
                     
+                    [_currentEvent _cleanTouches];
                     int32_t handled = 1;
                     
                     eventUsage = -[evenStart timeIntervalSinceNow];
@@ -733,6 +735,16 @@ void _createFontconfigFile(NSString *path, NSString *cachePath)
 {
     if (theWindow == _keyWindow) [self _setKeyWindow:nil];
     [_visibleWindows removeObject:[NSValue valueWithNonretainedObject:theWindow]];
+}
+
+- (UIWindow *)keyWindow
+{
+    if (_keyWindow) {
+        return _keyWindow;
+    }
+    
+     UIWindow *window = [[self windows] lastObject];
+    return window;
 }
 
 - (NSArray *)windows

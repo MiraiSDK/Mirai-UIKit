@@ -21,6 +21,9 @@
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
 
+NSString *const UIWindowDidBecomeKeyNotification = @"UIWindowDidBecomeKeyNotification";
+NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotification";
+
 @implementation UIWindow
 {
     NSMutableSet *_touches;
@@ -209,11 +212,10 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 
 - (void)becomeKeyWindow
 {
-    NS_UNIMPLEMENTED_LOG;
-//    if ([[self _firstResponder] respondsToSelector:@selector(becomeKeyWindow)]) {
-//        [(id)[self _firstResponder] becomeKeyWindow];
-//    }
-//    [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeKeyNotification object:self];
+    if ([[self _firstResponder] respondsToSelector:@selector(becomeKeyWindow)]) {
+        [(id)[self _firstResponder] becomeKeyWindow];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeKeyNotification object:self];
 }
 
 - (void)makeKeyWindow
@@ -232,11 +234,10 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 
 - (void)resignKeyWindow
 {
-    NS_UNIMPLEMENTED_LOG;
-//    if ([[self _firstResponder] respondsToSelector:@selector(resignKeyWindow)]) {
-//        [(id)[self _firstResponder] resignKeyWindow];
-//    }
-//    [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidResignKeyNotification object:self];
+    if ([[self _firstResponder] respondsToSelector:@selector(resignKeyWindow)]) {
+        [(id)[self _firstResponder] resignKeyWindow];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidResignKeyNotification object:self];
 }
 
 - (void)_makeHidden
