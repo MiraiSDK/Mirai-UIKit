@@ -243,7 +243,18 @@
 
 - (void)drawInRect:(CGRect)rect
 {
-    CGContextDrawImage(UIGraphicsGetCurrentContext(), rect, self.CGImage);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    // flip coordinate
+    CGContextTranslateCTM(ctx, 0, rect.size.height);
+    CGContextScaleCTM(ctx, 1, -1);
+    
+    // coordinate flipped, so we needs adjust invert y axis
+    CGRect drawRect = rect;
+    drawRect.origin.y = -rect.origin.y;
+    
+    CGContextDrawImage(ctx, drawRect, self.CGImage);
+    CGContextRestoreGState(ctx);
 }
 
 - (void)drawInRect:(CGRect)rect blendMode:(CGBlendMode)blendMode alpha:(CGFloat)alpha
