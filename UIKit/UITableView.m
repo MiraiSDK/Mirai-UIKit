@@ -667,15 +667,17 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
 {
+    UITableViewCell *reuseCell = nil;
     for (UITableViewCell *cell in _reusableCells) {
         if ([cell.reuseIdentifier isEqualToString:identifier]) {
+            reuseCell = cell;
             [_reusableCells removeObject:cell];
-            [cell prepareForReuse];
-            return cell;
+            break;
         }
     }
     
-    return nil;
+    [reuseCell prepareForReuse];
+    return reuseCell;
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animate
