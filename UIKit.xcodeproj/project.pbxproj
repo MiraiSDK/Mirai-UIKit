@@ -499,6 +499,7 @@
 		439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSectionLabel.m; sourceTree = "<group>"; };
 		43B6B64B1913A0EC005D09ED /* UIPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverController.h; sourceTree = "<group>"; };
 		43B6B64C1913A0EC005D09ED /* UIPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverController.m; sourceTree = "<group>"; };
+		43B78C2D1A527E520037ABF3 /* UIViewController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Private.h"; sourceTree = "<group>"; };
 		43B819C918E27D550020624F /* UIScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimation.h; sourceTree = "<group>"; };
 		43B819CA18E27D550020624F /* UIScrollViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewAnimation.m; sourceTree = "<group>"; };
 		43B819CB18E27D550020624F /* UIScrollViewAnimationDeceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewAnimationDeceleration.h; sourceTree = "<group>"; };
@@ -1056,6 +1057,7 @@
 			children = (
 				43EBAA1818A9F11C005DDD8D /* UIViewController.h */,
 				43EBAA1918A9F11C005DDD8D /* UIViewController.m */,
+				43B78C2D1A527E520037ABF3 /* UIViewController+Private.h */,
 				43EBAA7818AB6744005DDD8D /* UINavigationController.h */,
 				43EBAA7918AB6744005DDD8D /* UINavigationController.m */,
 				43B6B64B1913A0EC005D09ED /* UIPopoverController.h */,

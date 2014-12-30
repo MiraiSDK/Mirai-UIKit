@@ -18,10 +18,35 @@
     
     BOOL _isBeingPresented;
     BOOL _isBeingDismissed;
+    NSValue *_instanceValue;
 }
 @synthesize view = _view;
 @synthesize presentingViewController = _presentingViewController;
 @synthesize presentedViewController = _presentedViewController;
+
+//we record every view controller instance, to send memory warning message
+static NSMutableArray *_viewControllerInstances;
+
++ (void) initialize
+{
+    if (self == [UIViewController class]) {
+        _viewControllerInstances = [NSMutableArray array];
+    }
+}
+
++ (void)_performMemoryWarning
+{
+    NSArray *vcs = [_viewControllerInstances copy];
+    for (NSValue *value in vcs) {
+        UIViewController *vc = [value nonretainedObjectValue];
+        [vc didReceiveMemoryWarning];
+    }
+}
+
+- (void)dealloc
+{
+    [_viewControllerInstances removeObject:_instanceValue];
+}
 
 - (id)init
 {
@@ -38,6 +63,9 @@
         _automaticallyAdjustsScrollViewInsets = YES;
         _edgesForExtendedLayout = UIRectEdgeAll;
         _extendedLayoutIncludesOpaqueBars = NO;
+        
+        _instanceValue = [NSValue valueWithNonretainedObject:self];
+        [_viewControllerInstances addObject:_instanceValue];
     }
     return self;
 }
