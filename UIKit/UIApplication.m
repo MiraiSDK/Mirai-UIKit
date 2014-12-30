@@ -18,6 +18,7 @@
 #import "UITouch.h"
 #import "UIEvent+Android.h"
 #import "UITouch+Private.h"
+#import "UIViewController+Private.h"
 
 #include <string.h>
 #include <jni.h>
@@ -389,6 +390,30 @@ typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
     (*env)->CallVoidMethod(env,thiz,messageID,o);
 
     (*env)->DeleteLocalRef(env,test);
+}
+
+- (void)_performMemoryWarning
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+
+    // post notification
+    NSLog(@"postNotificationName:%@",UIApplicationDidReceiveMemoryWarningNotification);
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+
+    // call -didReceiveMemoryWarning on view controllers
+    [UIViewController _performMemoryWarning];
+    
+}
+void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
+    //onTrimMemory
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    
+    @autoreleasepool {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [_app _performMemoryWarning];
+        }];
+    }
+    
 }
 
 #pragma mark Display setup

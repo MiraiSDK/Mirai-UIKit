@@ -35,6 +35,7 @@ static NSMutableDictionary *cache;
 
 + (void)handleMemoryWarning:(NSNotification *)notification
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     [cache removeAllObjects];
 }
 
@@ -42,6 +43,7 @@ static NSMutableDictionary *cache;
 {
     static BOOL observerMemoryWarning = NO;
     if (!observerMemoryWarning) {
+        NSLog(@"%s: add memory warning observer",__PRETTY_FUNCTION__);
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
         observerMemoryWarning = YES;
     }
