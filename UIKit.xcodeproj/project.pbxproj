@@ -1339,7 +1339,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "pushd \"$SDK_LIB_PATH\"\nln -sf \"$LD_DYLIB_INSTALL_NAME\" \"lib$PRODUCT_NAME.so\"\npopd\n\npushd \"$SDK_ROOT/usr/include\"\nln -sf \"$INSTALL_PATH/$PUBLIC_HEADERS_FOLDER_PATH\" \"$PRODUCT_NAME\"\npopd\n";
+			shellScript = "pushd \"$SDK_LIB_PATH\"\nln -sf \"$LD_DYLIB_INSTALL_NAME\" \"lib$PRODUCT_NAME.so\"\npopd\n\npushd \"$SDK_ROOT/usr/include\"\nln -sf \"$INSTALL_PATH/$PUBLIC_HEADERS_FOLDER_PATH\" \"$PRODUCT_NAME\"\npopd\n\npushd $SRCROOT\ncp -r CocoaActivity \"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk/System/Library/Frameworks/\"\npopd\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
