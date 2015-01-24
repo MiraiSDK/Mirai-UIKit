@@ -1,0 +1,409 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		437F25D41A736FA800FBE3E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437F25D31A736FA800FBE3E2 /* UIKit.framework */; };
+		437F25D91A736FA800FBE3E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25D81A736FA800FBE3E2 /* main.m */; };
+		437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25DB1A736FA800FBE3E2 /* AppDelegate.m */; };
+		437F25DE1A736FA800FBE3E2 /* TNAndroidLauncher.h in Resources */ = {isa = PBXBuildFile; fileRef = 437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */; };
+		437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25DF1A736FA800FBE3E2 /* TNAndroidLauncher.m */; };
+		437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25E61A736FA800FBE3E2 /* ViewController.m */; };
+		437F25EF1A736FB400FBE3E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25DB1A736FA800FBE3E2 /* AppDelegate.m */; };
+		437F25F11A736FB400FBE3E2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25E61A736FA800FBE3E2 /* ViewController.m */; };
+		437F25F21A736FB400FBE3E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25D81A736FA800FBE3E2 /* main.m */; };
+		437F25F41A736FB400FBE3E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437F25D31A736FA800FBE3E2 /* UIKit.framework */; };
+		437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */ = {isa = PBXBuildFile; fileRef = 437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		437F25D01A736FA800FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		437F25D31A736FA800FBE3E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		437F25D71A736FA800FBE3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		437F25D81A736FA800FBE3E2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		437F25DA1A736FA800FBE3E2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		437F25DB1A736FA800FBE3E2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TNAndroidLauncher.h; sourceTree = "<group>"; };
+		437F25DF1A736FA800FBE3E2 /* TNAndroidLauncher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TNAndroidLauncher.m; sourceTree = "<group>"; };
+		437F25E11A736FA800FBE3E2 /* Android.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Android.xcconfig; sourceTree = "<group>"; };
+		437F25E21A736FA800FBE3E2 /* Android.mk */ = {isa = PBXFileReference; lastKnownFileType = text; path = Android.mk; sourceTree = "<group>"; };
+		437F25E31A736FA800FBE3E2 /* MainActivity.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = MainActivity.java; sourceTree = "<group>"; };
+		437F25E41A736FA800FBE3E2 /* AndroidManifest.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AndroidManifest.xml; sourceTree = "<group>"; };
+		437F25E51A736FA800FBE3E2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		437F25E61A736FA800FBE3E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		437F25FB1A736FB400FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		437F25CC1A736FA800FBE3E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				437F25D41A736FA800FBE3E2 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		437F25F31A736FB400FBE3E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				437F25F41A736FB400FBE3E2 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		437F25C61A736FA800FBE3E2 = {
+			isa = PBXGroup;
+			children = (
+				437F25D51A736FA800FBE3E2 /* UIKitDemo */,
+				437F25D21A736FA800FBE3E2 /* Frameworks */,
+				437F25D11A736FA800FBE3E2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		437F25D11A736FA800FBE3E2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				437F25D01A736FA800FBE3E2 /* UIKitDemo.app */,
+				437F25FB1A736FB400FBE3E2 /* UIKitDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		437F25D21A736FA800FBE3E2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				437F25D31A736FA800FBE3E2 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		437F25D51A736FA800FBE3E2 /* UIKitDemo */ = {
+			isa = PBXGroup;
+			children = (
+				437F25DA1A736FA800FBE3E2 /* AppDelegate.h */,
+				437F25DB1A736FA800FBE3E2 /* AppDelegate.m */,
+				437F25E51A736FA800FBE3E2 /* ViewController.h */,
+				437F25E61A736FA800FBE3E2 /* ViewController.m */,
+				437F25D61A736FA800FBE3E2 /* Supporting Files */,
+			);
+			path = UIKitDemo;
+			sourceTree = "<group>";
+		};
+		437F25D61A736FA800FBE3E2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				437F25D71A736FA800FBE3E2 /* Info.plist */,
+				437F25D81A736FA800FBE3E2 /* main.m */,
+				437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */,
+				437F25DF1A736FA800FBE3E2 /* TNAndroidLauncher.m */,
+				437F25E11A736FA800FBE3E2 /* Android.xcconfig */,
+				437F25E21A736FA800FBE3E2 /* Android.mk */,
+				437F25E31A736FA800FBE3E2 /* MainActivity.java */,
+				437F25E41A736FA800FBE3E2 /* AndroidManifest.xml */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		437F25CF1A736FA800FBE3E2 /* UIKitDemo-Android */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 437F25EA1A736FA800FBE3E2 /* Build configuration list for PBXNativeTarget "UIKitDemo-Android" */;
+			buildPhases = (
+				437F25CB1A736FA800FBE3E2 /* Sources */,
+				437F25CC1A736FA800FBE3E2 /* Frameworks */,
+				437F25CD1A736FA800FBE3E2 /* Resources */,
+				437F25CE1A736FA800FBE3E2 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "UIKitDemo-Android";
+			productName = UIKitDemo;
+			productReference = 437F25D01A736FA800FBE3E2 /* UIKitDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		437F25ED1A736FB400FBE3E2 /* UIKitDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 437F25F81A736FB400FBE3E2 /* Build configuration list for PBXNativeTarget "UIKitDemo" */;
+			buildPhases = (
+				437F25EE1A736FB400FBE3E2 /* Sources */,
+				437F25F31A736FB400FBE3E2 /* Frameworks */,
+				437F25F51A736FB400FBE3E2 /* Resources */,
+				437F25F71A736FB400FBE3E2 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UIKitDemo;
+			productName = UIKitDemo;
+			productReference = 437F25FB1A736FB400FBE3E2 /* UIKitDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		437F25C71A736FA800FBE3E2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Shanghai TinyNetwork Inc.";
+				TargetAttributes = {
+					437F25CF1A736FA800FBE3E2 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 437F25CA1A736FA800FBE3E2 /* Build configuration list for PBXProject "UIKitDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 437F25C61A736FA800FBE3E2;
+			productRefGroup = 437F25D11A736FA800FBE3E2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				437F25ED1A736FB400FBE3E2 /* UIKitDemo */,
+				437F25CF1A736FA800FBE3E2 /* UIKitDemo-Android */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		437F25CD1A736FA800FBE3E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				437F25DE1A736FA800FBE3E2 /* TNAndroidLauncher.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		437F25F51A736FB400FBE3E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		437F25CE1A736FA800FBE3E2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT /Users/chyhfj/Development/MiraiSDK/toolchain/android/Android18.sdk/System/Library/Frameworks/CocoaActivity`\n    \n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    #build ndk\n    NDK_DEBUG=1 ndk-build\n    \n    # run if needs\n    \n    popd";
+		};
+		437F25F71A736FB400FBE3E2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT /Users/chyhfj/Development/MiraiSDK/toolchain/android/Android18.sdk/System/Library/Frameworks/CocoaActivity`\n    \n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    #build ndk\n    ndk-build\n    \n    # run if needs\n    \n    popd";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		437F25CB1A736FA800FBE3E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */,
+				437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */,
+				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
+				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		437F25EE1A736FB400FBE3E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				437F25EF1A736FB400FBE3E2 /* AppDelegate.m in Sources */,
+				437F25F11A736FB400FBE3E2 /* ViewController.m in Sources */,
+				437F25F21A736FB400FBE3E2 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		437F25E81A736FA800FBE3E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		437F25E91A736FA800FBE3E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		437F25EB1A736FA800FBE3E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = UIKitDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = UIKitDemo;
+			};
+			name = Debug;
+		};
+		437F25EC1A736FA800FBE3E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = UIKitDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = UIKitDemo;
+			};
+			name = Release;
+		};
+		437F25F91A736FB400FBE3E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = UIKitDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = UIKitDemo;
+			};
+			name = Debug;
+		};
+		437F25FA1A736FB400FBE3E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = UIKitDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = UIKitDemo;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		437F25CA1A736FA800FBE3E2 /* Build configuration list for PBXProject "UIKitDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				437F25E81A736FA800FBE3E2 /* Debug */,
+				437F25E91A736FA800FBE3E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		437F25EA1A736FA800FBE3E2 /* Build configuration list for PBXNativeTarget "UIKitDemo-Android" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				437F25EB1A736FA800FBE3E2 /* Debug */,
+				437F25EC1A736FA800FBE3E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		437F25F81A736FB400FBE3E2 /* Build configuration list for PBXNativeTarget "UIKitDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				437F25F91A736FB400FBE3E2 /* Debug */,
+				437F25FA1A736FB400FBE3E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 437F25C71A736FA800FBE3E2 /* Project object */;
+}
