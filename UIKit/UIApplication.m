@@ -20,23 +20,11 @@
 #import "UITouch+Private.h"
 #import "UIViewController+Private.h"
 
-#include <string.h>
-#include <jni.h>
-#include <android/log.h>
 #import <Foundation/NSObjCRuntime.h>
-#include "android_native_app_glue.h"
 #include "UIKitAndroidGlue.h"
 
-#include <EGL/egl.h>
-#include <GLES2/gl2.h>
-
-#define ANDROID 1
-#import <OpenGLES/EAGL.h>
-
 #import "BKRenderingService.h"
-#import "TNAConfiguration.h"
 #import <TNJavaHelper/TNJavaHelper.h>
-
 #import "UIAndroidEventsServer.h"
 
 @interface UIApplication ()
@@ -52,7 +40,6 @@
     __weak UIWindow *_keyWindow;
 }
 
-static BOOL _landscaped;
 static UIApplication *_app;
 + (UIApplication *)sharedApplication
 {
@@ -90,58 +77,8 @@ static UIApplication *_app;
 }
 
 #pragma mark - Android glue
-bool app_has_focus = false;
 
-#pragma mark Events
 
-void handle_app_command(struct android_app* app, int32_t cmd) {
-    /* app->userData is available here */
-    
-    struct engine* engine = (struct engine*)app->userData;
-    switch (cmd) {
-        case APP_CMD_INIT_WINDOW:
-            engine_init_display(engine);
-            engine->isScreenReady = true;
-            if (engine->isWarnStart) {
-                BKRenderingServiceRun();
-                //FIXME:should reload textures here
-            }
-            engine->isWarnStart = true;
-            break;
-        case APP_CMD_TERM_WINDOW:
-            // The window is being hidden or closed, clean it up.
-            engine_term_display(engine);
-            engine->app->window = NULL;
-            engine->isScreenReady = false;
-            break;
-        case APP_CMD_LOST_FOCUS:
-            app_has_focus=false;
-            // Also stop animating.
-            engine->animating = 0;
-            break;
-        case APP_CMD_GAINED_FOCUS:
-            app_has_focus=true;
-            break;
-        case APP_CMD_INPUT_CHANGED:break;
-        case APP_CMD_WINDOW_RESIZED:break;
-        case APP_CMD_WINDOW_REDRAW_NEEDED:break;
-        case APP_CMD_CONTENT_RECT_CHANGED:{
-            ARect rect = app->contentRect;
-            NSLog(@"contentRect:{%d,%d %d,%d}", rect.top,rect.left,rect.bottom,rect.right);
-        } break;
-        case APP_CMD_CONFIG_CHANGED: {
-            TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:app->config];
-            _landscaped = (config.orientation == TNAConfigurationOrientationLand);
-        } break;
-        case APP_CMD_LOW_MEMORY:break;
-        case APP_CMD_START:break;
-        case APP_CMD_RESUME:break;
-        case APP_CMD_SAVE_STATE:break;
-        case APP_CMD_PAUSE:break;
-        case APP_CMD_STOP:break;
-        case APP_CMD_DESTROY:break;
-    }
-}
 
 #pragma mark - Orientation
 - (UIViewController *)_topestViewController
@@ -206,7 +143,8 @@ typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
 
 - (void)updateAndroidOrientation:(JNIEnv *)env
 {
-    jclass thiz = app_state->activity->clazz;
+    
+    jclass thiz = [[TNJavaHelper sharedHelper] clazz];
     
     jclass test = (*env)->GetObjectClass(env, thiz);
 
@@ -244,35 +182,6 @@ void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
     
 }
 
-#pragma mark Display setup
-/**
- * Initialize an EGL context for the current display.
- */
-static int engine_init_display(struct engine* engine) {
-    BKRenderingServiceBegin(engine->app);
-    CGRect bounds = BKRenderingServiceGetPixelBounds();
-    
-    TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:engine->app->config];
-    _landscaped = (config.orientation == TNAConfigurationOrientationLand);
-
-    [[UIScreen mainScreen] _setPixelBounds:bounds];
-
-    NSLog(@"screen pixel size:%@",NSStringFromCGSize(bounds.size));
-        
-    return 0;
-}
-
-/**
- * Tear down the EGL context currently associated with the display.
- */
-static void engine_term_display(struct engine* engine) {
-    BKRenderingServiceEnd();
-}
-
-
-
-
-
 
 - (id)nextEventBeforeDate:(NSDate *)limit inMode:(NSString *)mode
 {
@@ -299,8 +208,6 @@ static void engine_term_display(struct engine* engine) {
         }
         
         NSLog(@"start loop");
-        struct engine* engine = (struct engine*)app_state->userData;
-
         BKRenderingServiceRun();
         
         NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
@@ -343,7 +250,7 @@ static void engine_term_display(struct engine* engine) {
                 NSUInteger supportedInterfaceOrientations = [self supportedInterfaceOrientations];
                 if (prevSupportedInterfaceOrientation != supportedInterfaceOrientations) {
                     //supportedInterfaceOrientations changed, notify android activity
-                    [self updateAndroidOrientation:engine->env];
+                    [self updateAndroidOrientation:[[TNJavaHelper sharedHelper] env]];
                     prevSupportedInterfaceOrientation = supportedInterfaceOrientations;
                 }
             
@@ -353,8 +260,8 @@ static void engine_term_display(struct engine* engine) {
                     UIWindow *keyWindow = _app.keyWindow;
                     
                     CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
-                    [[UIScreen mainScreen] _setLandscaped:_landscaped];
-                    [keyWindow _setLandscaped:_landscaped];
+                    [[UIScreen mainScreen] _setLandscaped:AGIsLandscaped()];
+                    [keyWindow _setLandscaped:AGIsLandscaped()];
                     
                     [pixelLayer _recursionLayoutAndDisplayIfNeeds];
                     

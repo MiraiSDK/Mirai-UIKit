@@ -8,24 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-#include <string.h>
-#include <jni.h>
-#include <android/log.h>
 #include "android_native_app_glue.h"
 
-extern struct android_app* app_state;
 
-/**
- * Shared state for our app.
- */
-struct engine {
-    struct android_app* app;
-    
-    JNIEnv *env;
-    
-    int animating;
-    bool isScreenReady;
-    bool isWarnStart;
-};
+bool AGIsLandscaped();
 
-extern void handle_app_command(struct android_app* app, int32_t cmd);
+typedef void (*AGEventsCallback) (struct android_app *app, int32_t cmd);
+void AGRegisterEventsCallback(AGEventsCallback callback);

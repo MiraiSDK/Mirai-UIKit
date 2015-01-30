@@ -8,12 +8,22 @@
 
 #import "UIKitAndroidGlue.h"
 
+#include <string.h>
+#include <jni.h>
+#include <android/log.h>
+
 #import <TNJavaHelper/TNJavaHelper.h>
 #import <ObjectiveZip/ObjectiveZip.h>
 
 #import "UIApplication.h"
 #import "UIAndroidEventsServer.h"
 #import "TNAConfiguration.h"
+
+#import "UIAndroidEventsServer.h"
+
+#import "UIScreenPrivate.h"
+
+#import "BKRenderingService.h"
 
 // HACK: private workaround method
 @interface NSThread (Private)
@@ -28,7 +38,27 @@
 
 
 #pragma mark -
+/**
+ * Shared state for our app.
+ */
+struct engine {
+    struct android_app* app;
+    
+    JNIEnv *env;
+    
+    int animating;
+    bool isScreenReady;
+    bool isWarnStart;
+};
+
 struct android_app* app_state;
+static AGEventsCallback _eventsCallback = NULL;
+static BOOL _landscaped;
+
+bool AGIsLandscaped()
+{
+    return _landscaped;
+}
 
 #pragma mark - GDB support
 //workaround for call objc methods in gdb
@@ -266,6 +296,82 @@ static char *_argv[];
 
 @end
 
+#pragma mark Display setup
+/**
+ * Initialize an EGL context for the current display.
+ */
+static int engine_init_display(struct engine* engine) {
+    BKRenderingServiceBegin(engine->app);
+    CGRect bounds = BKRenderingServiceGetPixelBounds();
+    
+    TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:engine->app->config];
+    _landscaped = (config.orientation == TNAConfigurationOrientationLand);
+    
+    [[UIScreen mainScreen] _setPixelBounds:bounds];
+    
+    NSLog(@"screen pixel size:%@",NSStringFromCGSize(bounds.size));
+    
+    return 0;
+}
+
+/**
+ * Tear down the EGL context currently associated with the display.
+ */
+static void engine_term_display(struct engine* engine) {
+    BKRenderingServiceEnd();
+}
+
+#pragma mark Events
+
+void handle_app_command(struct android_app* app, int32_t cmd) {
+    /* app->userData is available here */
+    
+    struct engine* engine = (struct engine*)app->userData;
+    switch (cmd) {
+        case APP_CMD_INIT_WINDOW:
+            engine_init_display(engine);
+            engine->isScreenReady = true;
+            if (engine->isWarnStart) {
+                BKRenderingServiceRun();
+                //FIXME:should reload textures here
+            }
+            engine->isWarnStart = true;
+            break;
+        case APP_CMD_TERM_WINDOW:
+            // The window is being hidden or closed, clean it up.
+            engine_term_display(engine);
+            engine->app->window = NULL;
+            engine->isScreenReady = false;
+            break;
+        case APP_CMD_LOST_FOCUS:
+            // Also stop animating.
+            engine->animating = 0;
+            break;
+        case APP_CMD_GAINED_FOCUS:
+            break;
+        case APP_CMD_INPUT_CHANGED:break;
+        case APP_CMD_WINDOW_RESIZED:break;
+        case APP_CMD_WINDOW_REDRAW_NEEDED:break;
+        case APP_CMD_CONTENT_RECT_CHANGED:{
+            ARect rect = app->contentRect;
+            NSLog(@"contentRect:{%d,%d %d,%d}", rect.top,rect.left,rect.bottom,rect.right);
+        } break;
+        case APP_CMD_CONFIG_CHANGED: {
+            TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:app->config];
+            _landscaped = (config.orientation == TNAConfigurationOrientationLand);
+        } break;
+        case APP_CMD_LOW_MEMORY:break;
+        case APP_CMD_START:break;
+        case APP_CMD_RESUME:break;
+        case APP_CMD_SAVE_STATE:break;
+        case APP_CMD_PAUSE:break;
+        case APP_CMD_STOP:break;
+        case APP_CMD_DESTROY:break;
+    }
+}
+
+
+
 #pragma mark - Entry point
 // Entry point from android part
 void android_main(struct android_app* state)
@@ -333,4 +439,10 @@ void android_main(struct android_app* state)
         UIAndroidEventsServerStart(app_state);
     }
     
+}
+
+#pragma mark - Public Access
+void AGRegisterEventsCallback(AGEventsCallback callback)
+{
+    _eventsCallback = callback;
 }
