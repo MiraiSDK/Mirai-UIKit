@@ -1,12 +1,12 @@
 //
-//  UIKitAndroidGlue.m
+//  AndroidMain.m
 //  UIKit
 //
 //  Created by Chen Yonghui on 1/30/15.
 //  Copyright (c) 2015 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIKitAndroidGlue.h"
+#import "AndroidMain.h"
 
 #include <string.h>
 #include <jni.h>
@@ -52,7 +52,7 @@ struct engine {
 };
 
 struct android_app* app_state;
-static AGEventsCallback _eventsCallback = NULL;
+static AMEventsCallback _eventsCallback = NULL;
 static BOOL _landscaped;
 
 bool AGIsLandscaped()
@@ -442,7 +442,7 @@ void android_main(struct android_app* state)
 }
 
 #pragma mark - Public Access
-void AGRegisterEventsCallback(AGEventsCallback callback)
+void AMRegisterEventsCallback(AMEventsCallback callback)
 {
     _eventsCallback = callback;
 }

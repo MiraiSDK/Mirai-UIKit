@@ -1,5 +1,5 @@
 //
-//  UIKitAndroidGlue.h
+//  AndroidMain.h
 //  UIKit
 //
 //  Created by Chen Yonghui on 1/30/15.
@@ -11,7 +11,7 @@
 #include "android_native_app_glue.h"
 
 
-bool AGIsLandscaped();
+bool AMIsLandscaped();
 
-typedef void (*AGEventsCallback) (struct android_app *app, int32_t cmd);
-void AGRegisterEventsCallback(AGEventsCallback callback);
+typedef void (*AMEventsCallback) (struct android_app *app, int32_t cmd);
+void AMRegisterEventsCallback(AMEventsCallback callback);

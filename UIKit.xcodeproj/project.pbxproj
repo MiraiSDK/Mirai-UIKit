@@ -234,8 +234,8 @@
 		43C200DB18EBE57400490D59 /* UIActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C200D918EBE57400490D59 /* UIActionSheet.m */; };
 		43CA2A351956CD5A00B92F2C /* TNAConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CA2A331956CD5A00B92F2C /* TNAConfiguration.h */; };
 		43CA2A361956CD5A00B92F2C /* TNAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */; };
-		43CBC1AF1A7AA7850060B2AE /* UIKitAndroidGlue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CBC1AD1A7AA7850060B2AE /* UIKitAndroidGlue.h */; };
-		43CBC1B01A7AA7850060B2AE /* UIKitAndroidGlue.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CBC1AE1A7AA7850060B2AE /* UIKitAndroidGlue.m */; };
+		43CBC1AF1A7AA7850060B2AE /* AndroidMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CBC1AD1A7AA7850060B2AE /* AndroidMain.h */; };
+		43CBC1B01A7AA7850060B2AE /* AndroidMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CBC1AE1A7AA7850060B2AE /* AndroidMain.m */; };
 		43D7627B195039C9003DB7B2 /* BKRenderingService.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D76279195039C9003DB7B2 /* BKRenderingService.h */; };
 		43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D7627A195039C9003DB7B2 /* BKRenderingService.m */; };
 		43DD64CA19910984000884BA /* TNGestureRecognizerMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DD64C819910984000884BA /* TNGestureRecognizerMath.h */; };
@@ -543,8 +543,8 @@
 		43CA2A331956CD5A00B92F2C /* TNAConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNAConfiguration.h; sourceTree = "<group>"; };
 		43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNAConfiguration.m; sourceTree = "<group>"; };
 		43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Objective-Zip.xcodeproj"; path = "Support/Objective-Zip/Objective-Zip.xcodeproj"; sourceTree = "<group>"; };
-		43CBC1AD1A7AA7850060B2AE /* UIKitAndroidGlue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKitAndroidGlue.h; sourceTree = "<group>"; };
-		43CBC1AE1A7AA7850060B2AE /* UIKitAndroidGlue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIKitAndroidGlue.m; sourceTree = "<group>"; };
+		43CBC1AD1A7AA7850060B2AE /* AndroidMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidMain.h; sourceTree = "<group>"; };
+		43CBC1AE1A7AA7850060B2AE /* AndroidMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndroidMain.m; sourceTree = "<group>"; };
 		43D76279195039C9003DB7B2 /* BKRenderingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRenderingService.h; sourceTree = "<group>"; };
 		43D7627A195039C9003DB7B2 /* BKRenderingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRenderingService.m; sourceTree = "<group>"; };
 		43DD64C819910984000884BA /* TNGestureRecognizerMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureRecognizerMath.h; sourceTree = "<group>"; };
@@ -703,8 +703,8 @@
 				43718EA218517FBA00850F08 /* UIApplication.h */,
 				4315799918B0E3CF00AE4256 /* UIApplication+UIPrivate.h */,
 				43718EA318517FBA00850F08 /* UIApplication.m */,
-				43CBC1AD1A7AA7850060B2AE /* UIKitAndroidGlue.h */,
-				43CBC1AE1A7AA7850060B2AE /* UIKitAndroidGlue.m */,
+				43CBC1AD1A7AA7850060B2AE /* AndroidMain.h */,
+				43CBC1AE1A7AA7850060B2AE /* AndroidMain.m */,
 				43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */,
 				43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */,
 				43E5ECBB1A304B8D009E624F /* InputEvent.h */,
@@ -1103,7 +1103,7 @@
 				43B819D618E27D710020624F /* UIScrollView+UIPrivate.h in Headers */,
 				43846302188B1ED9006DA1AA /* UIColor.h in Headers */,
 				434CFD411A0CB64000B6AC9E /* UIPopoverBackgroundView.h in Headers */,
-				43CBC1AF1A7AA7850060B2AE /* UIKitAndroidGlue.h in Headers */,
+				43CBC1AF1A7AA7850060B2AE /* AndroidMain.h in Headers */,
 				43846326188B3D7C006DA1AA /* UIAction.h in Headers */,
 				43ECCF0E1851CA9A0076535C /* UIView.h in Headers */,
 				43E5ECBD1A304B8D009E624F /* InputEvent.h in Headers */,
@@ -1466,7 +1466,7 @@
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
 				434CFD321A0CB24200B6AC9E /* UIRefreshControl.m in Sources */,
-				43CBC1B01A7AA7850060B2AE /* UIKitAndroidGlue.m in Sources */,
+				43CBC1B01A7AA7850060B2AE /* AndroidMain.m in Sources */,
 				43846310188B2BCD006DA1AA /* UIImage.m in Sources */,
 				4384633A188B41D2006DA1AA /* UIRoundedRectButton.m in Sources */,
 				434CFD1E1A0CAC2300B6AC9E /* NSTextContainer.m in Sources */,

@@ -21,7 +21,7 @@
 #import "UIViewController+Private.h"
 
 #import <Foundation/NSObjCRuntime.h>
-#include "UIKitAndroidGlue.h"
+#include "AndroidMain.h"
 
 #import "BKRenderingService.h"
 #import <TNJavaHelper/TNJavaHelper.h>
@@ -75,10 +75,6 @@ static UIApplication *_app;
         [self.delegate application:self didFinishLaunchingWithOptions:nil];
     }
 }
-
-#pragma mark - Android glue
-
-
 
 #pragma mark - Orientation
 - (UIViewController *)_topestViewController
@@ -260,8 +256,8 @@ void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
                     UIWindow *keyWindow = _app.keyWindow;
                     
                     CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
-                    [[UIScreen mainScreen] _setLandscaped:AGIsLandscaped()];
-                    [keyWindow _setLandscaped:AGIsLandscaped()];
+                    [[UIScreen mainScreen] _setLandscaped:AMIsLandscaped()];
+                    [keyWindow _setLandscaped:AMIsLandscaped()];
                     
                     [pixelLayer _recursionLayoutAndDisplayIfNeeds];
                     
