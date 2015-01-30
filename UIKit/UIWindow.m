@@ -246,7 +246,8 @@ NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotific
         [super setHidden:YES];
         if (self.screen) {
             [[UIApplication sharedApplication] _windowDidBecomeHidden:self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:self];
+            __weak typeof(self) weakSelf = self;
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeHiddenNotification object:weakSelf];
         }
     }
 }
