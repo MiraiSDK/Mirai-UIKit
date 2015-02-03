@@ -55,7 +55,7 @@ struct android_app* app_state;
 static AMEventsCallback _eventsCallback = NULL;
 static BOOL _landscaped;
 
-bool AGIsLandscaped()
+bool AMIsLandscaped()
 {
     return _landscaped;
 }
