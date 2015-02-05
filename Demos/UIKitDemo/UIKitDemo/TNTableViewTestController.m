@@ -1,43 +1,40 @@
 //
-//  ViewController.m
-//  UIKitDemo
+//  TNTableViewTestController.m
+//  BasicCairo
 //
-//  Created by Chen Yonghui on 1/24/15.
-//  Copyright (c) 2015 Shanghai TinyNetwork Inc. All rights reserved.
+//  Created by Chen Yonghui on 7/5/14.
+//  Copyright (c) 2014 Shanghai Tinynetwork. All rights reserved.
 //
 
-#import "ViewController.h"
-#import "TNTestViewController.h"
+#import "TNTableViewTestController.h"
+#import <QuartzCore/QuartzCore.h>
 
-@interface ViewController () <UITableViewDataSource,UITableViewDelegate>
-
-@property (nonatomic, strong) NSArray *tests;
+@interface TNTableViewTestController () <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
-
 @end
 
-@implementation ViewController
+@implementation TNTableViewTestController
++ (void)load
+{
+    [self regisiterTestClass:self];
+}
 
-- (void)viewDidLoad {
++ (NSString *)testName
+{
+    return @"UITableView";
+}
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    self.title = @"Main";
-    self.navigationItem.title = @"Tests";
-    self.view.backgroundColor = [UIColor whiteColor];
-    
-    self.tests = [[TNTestViewController tests] sortedArrayUsingComparator:^NSComparisonResult(Class c1, Class c2) {
-        return [[c1 testName] compare:[c2 testName]];
-    }];
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tableView.delegate = self;
     tableView.dataSource = self;
-    [self.view addSubview:tableView];
+    tableView.rowHeight = 200;
     self.tableView = tableView;
-
-#if __ANDROID__
-    tableView.rowHeight = 100;
-#endif
+    [self.view addSubview:tableView];
 }
 
 #pragma mark - Table view data source
@@ -48,7 +45,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.tests.count;
+    return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -60,18 +57,26 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    Class class = self.tests[indexPath.row];
-    cell.textLabel.text = [class testName];
+    cell.textLabel.text = [NSString stringWithFormat:@"Cell %d",indexPath.row];
+    UIImage *image = nil;
+    if (indexPath.row % 2 == 0) {
+        image = [UIImage imageNamed:@"kiniromosaic001.jpg"];
+    } else {
+        image = [UIImage imageNamed:@"34912115.jpg"];
+    }
+    
+    cell.imageView.image = image;
     
     return cell;
 }
 
+#pragma mark - Table view delegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Class class = self.tests[indexPath.row];
-    UIViewController *vc = [[class alloc] init];
-    
-    [self.navigationController pushViewController:vc animated:YES];
+    NSLog(@"contetnInset:%@ contentOffset:%@ bounds:%@", NSStringFromUIEdgeInsets(self.tableView.contentInset),NSStringFromCGPoint(self.tableView.contentOffset),NSStringFromCGRect(self.tableView.bounds));
+    NSLog(@"layer: bounds:%@",NSStringFromCGRect(tableView.layer.bounds));
+
 }
 
 @end
