@@ -18,7 +18,87 @@
 		437F25F21A736FB400FBE3E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25D81A736FA800FBE3E2 /* main.m */; };
 		437F25F41A736FB400FBE3E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437F25D31A736FA800FBE3E2 /* UIKit.framework */; };
 		437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */ = {isa = PBXBuildFile; fileRef = 437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */; };
+		4390B8061A8351470082B0F1 /* TNTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8031A8351470082B0F1 /* TNTestCase.m */; };
+		4390B8071A8351470082B0F1 /* TNTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8031A8351470082B0F1 /* TNTestCase.m */; };
+		4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8051A8351470082B0F1 /* TNTestViewController.m */; };
+		4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8051A8351470082B0F1 /* TNTestViewController.m */; };
+		4390B8111A8351CA0082B0F1 /* TNCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B80E1A8351CA0082B0F1 /* TNCustomView.m */; };
+		4390B8121A8351CA0082B0F1 /* TNCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B80E1A8351CA0082B0F1 /* TNCustomView.m */; };
+		4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8101A8351CA0082B0F1 /* TNViewTestViewController.m */; };
+		4390B8141A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8101A8351CA0082B0F1 /* TNViewTestViewController.m */; };
+		4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8171A8352400082B0F1 /* TNLabelTestViewController.m */; };
+		4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8171A8352400082B0F1 /* TNLabelTestViewController.m */; };
+		4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B81B1A8352500082B0F1 /* TNButtonTestViewController.m */; };
+		4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B81B1A8352500082B0F1 /* TNButtonTestViewController.m */; };
+		4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B81F1A8352590082B0F1 /* TNImageTestViewController.m */; };
+		4390B8211A8352590082B0F1 /* TNImageTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B81F1A8352590082B0F1 /* TNImageTestViewController.m */; };
+		4390B82C1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8251A8352990082B0F1 /* TNScrollTestViewController.m */; };
+		4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8251A8352990082B0F1 /* TNScrollTestViewController.m */; };
+		4390B82E1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8271A8352990082B0F1 /* TNScrollViewNestingTestViewController.m */; };
+		4390B82F1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8271A8352990082B0F1 /* TNScrollViewNestingTestViewController.m */; };
+		4390B8301A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8291A8352990082B0F1 /* TNClipsToBoundsTestViewController.m */; };
+		4390B8311A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8291A8352990082B0F1 /* TNClipsToBoundsTestViewController.m */; };
+		4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B82B1A8352990082B0F1 /* TNScrollViewPagingTestViewController.m */; };
+		4390B8331A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B82B1A8352990082B0F1 /* TNScrollViewPagingTestViewController.m */; };
+		4390B8371A8352C00082B0F1 /* TNTableViewTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8361A8352C00082B0F1 /* TNTableViewTestController.m */; };
+		4390B8381A8352C00082B0F1 /* TNTableViewTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8361A8352C00082B0F1 /* TNTableViewTestController.m */; };
+		4390B83C1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B83B1A8352E30082B0F1 /* TNWebViewTestViewController.m */; };
+		4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B83B1A8352E30082B0F1 /* TNWebViewTestViewController.m */; };
+		4390B8411A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8401A8352FB0082B0F1 /* TNAlertViewTestViewController.m */; };
+		4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8401A8352FB0082B0F1 /* TNAlertViewTestViewController.m */; };
+		4390B8491A83533D0082B0F1 /* TNVCTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8461A83533D0082B0F1 /* TNVCTestViewController.m */; };
+		4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8461A83533D0082B0F1 /* TNVCTestViewController.m */; };
+		4390B84B1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8481A83533D0082B0F1 /* TNPresentedContentViewController.m */; };
+		4390B84C1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8481A83533D0082B0F1 /* TNPresentedContentViewController.m */; };
+		4390B84F1A8353480082B0F1 /* TNPresentTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B84E1A8353480082B0F1 /* TNPresentTestViewController.m */; };
+		4390B8501A8353480082B0F1 /* TNPresentTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B84E1A8353480082B0F1 /* TNPresentTestViewController.m */; };
+		4390B8641A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8551A8353B50082B0F1 /* TNGestureRecognizerViewController.m */; };
+		4390B8651A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8551A8353B50082B0F1 /* TNGestureRecognizerViewController.m */; };
+		4390B8661A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8571A8353B50082B0F1 /* TNPinchAndRotationViewController.m */; };
+		4390B8671A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8571A8353B50082B0F1 /* TNPinchAndRotationViewController.m */; };
+		4390B8681A8353B50082B0F1 /* TNPinchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8591A8353B50082B0F1 /* TNPinchTestViewController.m */; };
+		4390B8691A8353B50082B0F1 /* TNPinchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8591A8353B50082B0F1 /* TNPinchTestViewController.m */; };
+		4390B86A1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B85B1A8353B50082B0F1 /* TNRotationTestViewController.m */; };
+		4390B86B1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B85B1A8353B50082B0F1 /* TNRotationTestViewController.m */; };
+		4390B86C1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B85D1A8353B50082B0F1 /* TNTapGestureTestViewController.m */; };
+		4390B86D1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B85D1A8353B50082B0F1 /* TNTapGestureTestViewController.m */; };
+		4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B85F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m */; };
+		4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B85F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m */; };
+		4390B8701A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8611A8353B50082B0F1 /* TNPanGestureTestViewController.m */; };
+		4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8611A8353B50082B0F1 /* TNPanGestureTestViewController.m */; };
+		4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8631A8353B50082B0F1 /* TNTouchesCancelTestViewController.m */; };
+		4390B8731A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8631A8353B50082B0F1 /* TNTouchesCancelTestViewController.m */; };
+		4390B8771A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8761A8353E10082B0F1 /* TNTextViewTestViewController.m */; };
+		4390B8781A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4390B8761A8353E10082B0F1 /* TNTextViewTestViewController.m */; };
+		4390B87A1A8354A20082B0F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4390B8791A8354A20082B0F1 /* QuartzCore.framework */; };
+		4390B87C1A8354A70082B0F1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4390B87B1A8354A70082B0F1 /* CoreGraphics.framework */; };
+		4390B87E1A8354B10082B0F1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4390B87D1A8354B10082B0F1 /* CoreText.framework */; };
+		4390B8831A835D540082B0F1 /* 34912115.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4390B8811A835D540082B0F1 /* 34912115.jpg */; };
+		4390B8841A835D540082B0F1 /* 34912115.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4390B8811A835D540082B0F1 /* 34912115.jpg */; };
+		4390B8851A835D540082B0F1 /* kiniromosaic001.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */; };
+		4390B8861A835D540082B0F1 /* kiniromosaic001.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */; };
+		4390B88D1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
+		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
+		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
+		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4390B7FD1A834FBF0082B0F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4390B7F71A834FBE0082B0F1 /* UIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43718E6918517B7B00850F08;
+			remoteInfo = UIKit;
+		};
+		4390B7FF1A834FBF0082B0F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4390B7F71A834FBE0082B0F1 /* UIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43718E8018517B7B00850F08;
+			remoteInfo = UIKitTests;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		437F25D01A736FA800FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +116,67 @@
 		437F25E51A736FA800FBE3E2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		437F25E61A736FA800FBE3E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		437F25FB1A736FB400FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4390B7F71A834FBE0082B0F1 /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../../UIKit.xcodeproj; sourceTree = "<group>"; };
+		4390B8021A8351470082B0F1 /* TNTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTestCase.h; sourceTree = "<group>"; };
+		4390B8031A8351470082B0F1 /* TNTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTestCase.m; sourceTree = "<group>"; };
+		4390B8041A8351470082B0F1 /* TNTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTestViewController.h; sourceTree = "<group>"; };
+		4390B8051A8351470082B0F1 /* TNTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTestViewController.m; sourceTree = "<group>"; };
+		4390B80D1A8351CA0082B0F1 /* TNCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNCustomView.h; sourceTree = "<group>"; };
+		4390B80E1A8351CA0082B0F1 /* TNCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNCustomView.m; sourceTree = "<group>"; };
+		4390B80F1A8351CA0082B0F1 /* TNViewTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNViewTestViewController.h; sourceTree = "<group>"; };
+		4390B8101A8351CA0082B0F1 /* TNViewTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNViewTestViewController.m; sourceTree = "<group>"; };
+		4390B8161A8352400082B0F1 /* TNLabelTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNLabelTestViewController.h; sourceTree = "<group>"; };
+		4390B8171A8352400082B0F1 /* TNLabelTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNLabelTestViewController.m; sourceTree = "<group>"; };
+		4390B81A1A8352500082B0F1 /* TNButtonTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNButtonTestViewController.h; sourceTree = "<group>"; };
+		4390B81B1A8352500082B0F1 /* TNButtonTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNButtonTestViewController.m; sourceTree = "<group>"; };
+		4390B81E1A8352590082B0F1 /* TNImageTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNImageTestViewController.h; sourceTree = "<group>"; };
+		4390B81F1A8352590082B0F1 /* TNImageTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNImageTestViewController.m; sourceTree = "<group>"; };
+		4390B8241A8352990082B0F1 /* TNScrollTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNScrollTestViewController.h; sourceTree = "<group>"; };
+		4390B8251A8352990082B0F1 /* TNScrollTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScrollTestViewController.m; sourceTree = "<group>"; };
+		4390B8261A8352990082B0F1 /* TNScrollViewNestingTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNScrollViewNestingTestViewController.h; sourceTree = "<group>"; };
+		4390B8271A8352990082B0F1 /* TNScrollViewNestingTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScrollViewNestingTestViewController.m; sourceTree = "<group>"; };
+		4390B8281A8352990082B0F1 /* TNClipsToBoundsTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNClipsToBoundsTestViewController.h; sourceTree = "<group>"; };
+		4390B8291A8352990082B0F1 /* TNClipsToBoundsTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNClipsToBoundsTestViewController.m; sourceTree = "<group>"; };
+		4390B82A1A8352990082B0F1 /* TNScrollViewPagingTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNScrollViewPagingTestViewController.h; sourceTree = "<group>"; };
+		4390B82B1A8352990082B0F1 /* TNScrollViewPagingTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScrollViewPagingTestViewController.m; sourceTree = "<group>"; };
+		4390B8351A8352C00082B0F1 /* TNTableViewTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTableViewTestController.h; sourceTree = "<group>"; };
+		4390B8361A8352C00082B0F1 /* TNTableViewTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTableViewTestController.m; sourceTree = "<group>"; };
+		4390B83A1A8352E30082B0F1 /* TNWebViewTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNWebViewTestViewController.h; sourceTree = "<group>"; };
+		4390B83B1A8352E30082B0F1 /* TNWebViewTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNWebViewTestViewController.m; sourceTree = "<group>"; };
+		4390B83F1A8352FB0082B0F1 /* TNAlertViewTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNAlertViewTestViewController.h; sourceTree = "<group>"; };
+		4390B8401A8352FB0082B0F1 /* TNAlertViewTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNAlertViewTestViewController.m; sourceTree = "<group>"; };
+		4390B8451A83533D0082B0F1 /* TNVCTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNVCTestViewController.h; sourceTree = "<group>"; };
+		4390B8461A83533D0082B0F1 /* TNVCTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNVCTestViewController.m; sourceTree = "<group>"; };
+		4390B8471A83533D0082B0F1 /* TNPresentedContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPresentedContentViewController.h; sourceTree = "<group>"; };
+		4390B8481A83533D0082B0F1 /* TNPresentedContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPresentedContentViewController.m; sourceTree = "<group>"; };
+		4390B84D1A8353480082B0F1 /* TNPresentTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPresentTestViewController.h; sourceTree = "<group>"; };
+		4390B84E1A8353480082B0F1 /* TNPresentTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPresentTestViewController.m; sourceTree = "<group>"; };
+		4390B8541A8353B50082B0F1 /* TNGestureRecognizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureRecognizerViewController.h; sourceTree = "<group>"; };
+		4390B8551A8353B50082B0F1 /* TNGestureRecognizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNGestureRecognizerViewController.m; sourceTree = "<group>"; };
+		4390B8561A8353B50082B0F1 /* TNPinchAndRotationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPinchAndRotationViewController.h; sourceTree = "<group>"; };
+		4390B8571A8353B50082B0F1 /* TNPinchAndRotationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPinchAndRotationViewController.m; sourceTree = "<group>"; };
+		4390B8581A8353B50082B0F1 /* TNPinchTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPinchTestViewController.h; sourceTree = "<group>"; };
+		4390B8591A8353B50082B0F1 /* TNPinchTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPinchTestViewController.m; sourceTree = "<group>"; };
+		4390B85A1A8353B50082B0F1 /* TNRotationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNRotationTestViewController.h; sourceTree = "<group>"; };
+		4390B85B1A8353B50082B0F1 /* TNRotationTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNRotationTestViewController.m; sourceTree = "<group>"; };
+		4390B85C1A8353B50082B0F1 /* TNTapGestureTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTapGestureTestViewController.h; sourceTree = "<group>"; };
+		4390B85D1A8353B50082B0F1 /* TNTapGestureTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTapGestureTestViewController.m; sourceTree = "<group>"; };
+		4390B85E1A8353B50082B0F1 /* TNMultiGestureTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiGestureTestViewController.h; sourceTree = "<group>"; };
+		4390B85F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiGestureTestViewController.m; sourceTree = "<group>"; };
+		4390B8601A8353B50082B0F1 /* TNPanGestureTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPanGestureTestViewController.h; sourceTree = "<group>"; };
+		4390B8611A8353B50082B0F1 /* TNPanGestureTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPanGestureTestViewController.m; sourceTree = "<group>"; };
+		4390B8621A8353B50082B0F1 /* TNTouchesCancelTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTouchesCancelTestViewController.h; sourceTree = "<group>"; };
+		4390B8631A8353B50082B0F1 /* TNTouchesCancelTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTouchesCancelTestViewController.m; sourceTree = "<group>"; };
+		4390B8751A8353E10082B0F1 /* TNTextViewTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTextViewTestViewController.h; sourceTree = "<group>"; };
+		4390B8761A8353E10082B0F1 /* TNTextViewTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTextViewTestViewController.m; sourceTree = "<group>"; };
+		4390B8791A8354A20082B0F1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		4390B87B1A8354A70082B0F1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		4390B87D1A8354B10082B0F1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
+		4390B8811A835D540082B0F1 /* 34912115.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 34912115.jpg; sourceTree = "<group>"; };
+		4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = kiniromosaic001.jpg; sourceTree = "<group>"; };
+		4390B88B1A85EDA10082B0F1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		4390B88C1A85EDA10082B0F1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +184,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4390B87E1A8354B10082B0F1 /* CoreText.framework in Frameworks */,
+				4390B87C1A8354A70082B0F1 /* CoreGraphics.framework in Frameworks */,
+				4390B87A1A8354A20082B0F1 /* QuartzCore.framework in Frameworks */,
 				437F25D41A736FA800FBE3E2 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,6 +223,10 @@
 		437F25D21A736FA800FBE3E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4390B87D1A8354B10082B0F1 /* CoreText.framework */,
+				4390B87B1A8354A70082B0F1 /* CoreGraphics.framework */,
+				4390B8791A8354A20082B0F1 /* QuartzCore.framework */,
+				4390B7F71A834FBE0082B0F1 /* UIKit.xcodeproj */,
 				437F25D31A736FA800FBE3E2 /* UIKit.framework */,
 			);
 			name = Frameworks;
@@ -91,6 +239,10 @@
 				437F25DB1A736FA800FBE3E2 /* AppDelegate.m */,
 				437F25E51A736FA800FBE3E2 /* ViewController.h */,
 				437F25E61A736FA800FBE3E2 /* ViewController.m */,
+				4390B80A1A83515B0082B0F1 /* Basic classes */,
+				4390B80B1A8351920082B0F1 /* View Tests */,
+				4390B8441A8353200082B0F1 /* ViewController Tests */,
+				4390B8531A83539E0082B0F1 /* Gesture Tests */,
 				437F25D61A736FA800FBE3E2 /* Supporting Files */,
 			);
 			path = UIKitDemo;
@@ -99,6 +251,10 @@
 		437F25D61A736FA800FBE3E2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4390B88B1A85EDA10082B0F1 /* Icon.png */,
+				4390B88C1A85EDA10082B0F1 /* Icon@2x.png */,
+				4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */,
+				4390B8801A835D460082B0F1 /* images */,
 				437F25D71A736FA800FBE3E2 /* Info.plist */,
 				437F25D81A736FA800FBE3E2 /* main.m */,
 				437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */,
@@ -109,6 +265,192 @@
 				437F25E41A736FA800FBE3E2 /* AndroidManifest.xml */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4390B7F81A834FBE0082B0F1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4390B7FE1A834FBF0082B0F1 /* UIKit.framework */,
+				4390B8001A834FBF0082B0F1 /* UIKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4390B80A1A83515B0082B0F1 /* Basic classes */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8021A8351470082B0F1 /* TNTestCase.h */,
+				4390B8031A8351470082B0F1 /* TNTestCase.m */,
+				4390B8041A8351470082B0F1 /* TNTestViewController.h */,
+				4390B8051A8351470082B0F1 /* TNTestViewController.m */,
+			);
+			name = "Basic classes";
+			sourceTree = "<group>";
+		};
+		4390B80B1A8351920082B0F1 /* View Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8741A8353D90082B0F1 /* UITextView */,
+				4390B8221A8352630082B0F1 /* UIImage */,
+				4390B8231A83527A0082B0F1 /* UIButton */,
+				4390B80C1A8351B90082B0F1 /* UIView */,
+				4390B8151A8352300082B0F1 /* UILabel */,
+				4390B8521A8353750082B0F1 /* UISwitch */,
+				4390B8431A8352FE0082B0F1 /* UIAlertView */,
+				4390B8341A83529D0082B0F1 /* UIScrollView */,
+				4390B8391A8352C50082B0F1 /* UITableView */,
+				4390B83E1A8352E70082B0F1 /* UIWebVIew */,
+			);
+			name = "View Tests";
+			sourceTree = "<group>";
+		};
+		4390B80C1A8351B90082B0F1 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				4390B80D1A8351CA0082B0F1 /* TNCustomView.h */,
+				4390B80E1A8351CA0082B0F1 /* TNCustomView.m */,
+				4390B80F1A8351CA0082B0F1 /* TNViewTestViewController.h */,
+				4390B8101A8351CA0082B0F1 /* TNViewTestViewController.m */,
+			);
+			name = UIView;
+			sourceTree = "<group>";
+		};
+		4390B8151A8352300082B0F1 /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8161A8352400082B0F1 /* TNLabelTestViewController.h */,
+				4390B8171A8352400082B0F1 /* TNLabelTestViewController.m */,
+			);
+			name = UILabel;
+			sourceTree = "<group>";
+		};
+		4390B8221A8352630082B0F1 /* UIImage */ = {
+			isa = PBXGroup;
+			children = (
+				4390B81E1A8352590082B0F1 /* TNImageTestViewController.h */,
+				4390B81F1A8352590082B0F1 /* TNImageTestViewController.m */,
+			);
+			name = UIImage;
+			sourceTree = "<group>";
+		};
+		4390B8231A83527A0082B0F1 /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				4390B81A1A8352500082B0F1 /* TNButtonTestViewController.h */,
+				4390B81B1A8352500082B0F1 /* TNButtonTestViewController.m */,
+			);
+			name = UIButton;
+			sourceTree = "<group>";
+		};
+		4390B8341A83529D0082B0F1 /* UIScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8241A8352990082B0F1 /* TNScrollTestViewController.h */,
+				4390B8251A8352990082B0F1 /* TNScrollTestViewController.m */,
+				4390B8261A8352990082B0F1 /* TNScrollViewNestingTestViewController.h */,
+				4390B8271A8352990082B0F1 /* TNScrollViewNestingTestViewController.m */,
+				4390B8281A8352990082B0F1 /* TNClipsToBoundsTestViewController.h */,
+				4390B8291A8352990082B0F1 /* TNClipsToBoundsTestViewController.m */,
+				4390B82A1A8352990082B0F1 /* TNScrollViewPagingTestViewController.h */,
+				4390B82B1A8352990082B0F1 /* TNScrollViewPagingTestViewController.m */,
+			);
+			name = UIScrollView;
+			sourceTree = "<group>";
+		};
+		4390B8391A8352C50082B0F1 /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8351A8352C00082B0F1 /* TNTableViewTestController.h */,
+				4390B8361A8352C00082B0F1 /* TNTableViewTestController.m */,
+			);
+			name = UITableView;
+			sourceTree = "<group>";
+		};
+		4390B83E1A8352E70082B0F1 /* UIWebVIew */ = {
+			isa = PBXGroup;
+			children = (
+				4390B83A1A8352E30082B0F1 /* TNWebViewTestViewController.h */,
+				4390B83B1A8352E30082B0F1 /* TNWebViewTestViewController.m */,
+			);
+			name = UIWebVIew;
+			sourceTree = "<group>";
+		};
+		4390B8431A8352FE0082B0F1 /* UIAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				4390B83F1A8352FB0082B0F1 /* TNAlertViewTestViewController.h */,
+				4390B8401A8352FB0082B0F1 /* TNAlertViewTestViewController.m */,
+			);
+			name = UIAlertView;
+			sourceTree = "<group>";
+		};
+		4390B8441A8353200082B0F1 /* ViewController Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8511A83534C0082B0F1 /* Present Test */,
+				4390B8451A83533D0082B0F1 /* TNVCTestViewController.h */,
+				4390B8461A83533D0082B0F1 /* TNVCTestViewController.m */,
+				4390B8471A83533D0082B0F1 /* TNPresentedContentViewController.h */,
+				4390B8481A83533D0082B0F1 /* TNPresentedContentViewController.m */,
+			);
+			name = "ViewController Tests";
+			sourceTree = "<group>";
+		};
+		4390B8511A83534C0082B0F1 /* Present Test */ = {
+			isa = PBXGroup;
+			children = (
+				4390B84D1A8353480082B0F1 /* TNPresentTestViewController.h */,
+				4390B84E1A8353480082B0F1 /* TNPresentTestViewController.m */,
+			);
+			name = "Present Test";
+			sourceTree = "<group>";
+		};
+		4390B8521A8353750082B0F1 /* UISwitch */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = UISwitch;
+			sourceTree = "<group>";
+		};
+		4390B8531A83539E0082B0F1 /* Gesture Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8541A8353B50082B0F1 /* TNGestureRecognizerViewController.h */,
+				4390B8551A8353B50082B0F1 /* TNGestureRecognizerViewController.m */,
+				4390B8561A8353B50082B0F1 /* TNPinchAndRotationViewController.h */,
+				4390B8571A8353B50082B0F1 /* TNPinchAndRotationViewController.m */,
+				4390B8581A8353B50082B0F1 /* TNPinchTestViewController.h */,
+				4390B8591A8353B50082B0F1 /* TNPinchTestViewController.m */,
+				4390B85A1A8353B50082B0F1 /* TNRotationTestViewController.h */,
+				4390B85B1A8353B50082B0F1 /* TNRotationTestViewController.m */,
+				4390B85C1A8353B50082B0F1 /* TNTapGestureTestViewController.h */,
+				4390B85D1A8353B50082B0F1 /* TNTapGestureTestViewController.m */,
+				4390B85E1A8353B50082B0F1 /* TNMultiGestureTestViewController.h */,
+				4390B85F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m */,
+				4390B8601A8353B50082B0F1 /* TNPanGestureTestViewController.h */,
+				4390B8611A8353B50082B0F1 /* TNPanGestureTestViewController.m */,
+				4390B8621A8353B50082B0F1 /* TNTouchesCancelTestViewController.h */,
+				4390B8631A8353B50082B0F1 /* TNTouchesCancelTestViewController.m */,
+			);
+			name = "Gesture Tests";
+			sourceTree = "<group>";
+		};
+		4390B8741A8353D90082B0F1 /* UITextView */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8751A8353E10082B0F1 /* TNTextViewTestViewController.h */,
+				4390B8761A8353E10082B0F1 /* TNTextViewTestViewController.m */,
+			);
+			name = UITextView;
+			sourceTree = "<group>";
+		};
+		4390B8801A835D460082B0F1 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				4390B8811A835D540082B0F1 /* 34912115.jpg */,
+				4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */,
+			);
+			name = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +481,6 @@
 				437F25EE1A736FB400FBE3E2 /* Sources */,
 				437F25F31A736FB400FBE3E2 /* Frameworks */,
 				437F25F51A736FB400FBE3E2 /* Resources */,
-				437F25F71A736FB400FBE3E2 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -174,6 +515,12 @@
 			mainGroup = 437F25C61A736FA800FBE3E2;
 			productRefGroup = 437F25D11A736FA800FBE3E2 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4390B7F81A834FBE0082B0F1 /* Products */;
+					ProjectRef = 4390B7F71A834FBE0082B0F1 /* UIKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				437F25ED1A736FB400FBE3E2 /* UIKitDemo */,
@@ -182,12 +529,33 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		4390B7FE1A834FBF0082B0F1 /* UIKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UIKit.framework;
+			remoteRef = 4390B7FD1A834FBF0082B0F1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4390B8001A834FBF0082B0F1 /* UIKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UIKitTests.xctest;
+			remoteRef = 4390B7FF1A834FBF0082B0F1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		437F25CD1A736FA800FBE3E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */,
 				437F25DE1A736FA800FBE3E2 /* TNAndroidLauncher.h in Resources */,
+				4390B8841A835D540082B0F1 /* 34912115.jpg in Resources */,
+				4390B8861A835D540082B0F1 /* kiniromosaic001.jpg in Resources */,
+				4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,7 +563,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4390B88D1A85EDA10082B0F1 /* Icon.png in Resources */,
 				437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */,
+				4390B8831A835D540082B0F1 /* 34912115.jpg in Resources */,
+				4390B8851A835D540082B0F1 /* kiniromosaic001.jpg in Resources */,
+				4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,20 +585,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT /Users/chyhfj/Development/MiraiSDK/toolchain/android/Android18.sdk/System/Library/Frameworks/CocoaActivity`\n    \n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    #build ndk\n    NDK_DEBUG=1 ndk-build\n    \n    # run if needs\n    \n    popd";
-		};
-		437F25F71A736FB400FBE3E2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT /Users/chyhfj/Development/MiraiSDK/toolchain/android/Android18.sdk/System/Library/Frameworks/CocoaActivity`\n    \n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    #build ndk\n    ndk-build\n    \n    # run if needs\n    \n    popd";
+			shellScript = "\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT /Users/chyhfj/Development/MiraiSDK/toolchain/android/Android18.sdk/System/Library/Frameworks/CocoaActivity`\n    \n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    echo \"copy jni files..\"\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    #copy resources\n    echo \"coping resources...\"\n    mkdir -p assets\n    cp -R \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/\" assets/\n    \n    #copy icon\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon@2x.png\" res/drawable-hdpi/ic_launcher.png # 72x72\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon.png\" res/drawable-ldpi/ic_launcher.png #36x36\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon@2x.png\" res/drawable-mdpi/ic_launcher.png #48x48\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon@2x.png\" res/drawable-xhdpi/ic_launcher.png #96x96\n    \n    #build ndk\n    NDK_DEBUG=1 ndk-build\n    \n    # run if needs\n    \n    popd";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -235,10 +594,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4390B82F1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */,
+				4390B8691A8353B50082B0F1 /* TNPinchTestViewController.m in Sources */,
+				4390B8731A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
+				4390B8071A8351470082B0F1 /* TNTestCase.m in Sources */,
+				4390B86B1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */,
+				4390B8331A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
+				4390B84C1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */,
+				4390B86D1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */,
+				4390B8651A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
+				4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
+				4390B8141A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
 				437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */,
+				4390B8311A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
+				4390B8211A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
+				4390B8121A8351CA0082B0F1 /* TNCustomView.m in Sources */,
 				437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */,
+				4390B8671A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
+				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
 				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
+				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
+				4390B8781A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
+				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
+				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
+				4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
+				4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
+				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
+				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
+				4390B8381A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
+				4390B8501A8353480082B0F1 /* TNPresentTestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,9 +631,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4390B8681A8353B50082B0F1 /* TNPinchTestViewController.m in Sources */,
+				4390B8771A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				437F25EF1A736FB400FBE3E2 /* AppDelegate.m in Sources */,
+				4390B8111A8351CA0082B0F1 /* TNCustomView.m in Sources */,
+				4390B83C1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
+				4390B8061A8351470082B0F1 /* TNTestCase.m in Sources */,
+				4390B8641A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
+				4390B82C1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				437F25F11A736FB400FBE3E2 /* ViewController.m in Sources */,
+				4390B8411A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
+				4390B8491A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
+				4390B86A1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */,
+				4390B8661A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
+				4390B8301A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
+				4390B82E1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */,
+				4390B8701A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
+				4390B84F1A8353480082B0F1 /* TNPresentTestViewController.m in Sources */,
+				4390B86C1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */,
 				437F25F21A736FB400FBE3E2 /* main.m in Sources */,
+				4390B8371A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
+				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
+				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
+				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
+				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
+				4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
+				4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
+				4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
+				4390B84B1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */,
+				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
