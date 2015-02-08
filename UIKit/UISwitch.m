@@ -32,7 +32,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 51, 31)];
     if (self) {
         [self _registerTouchUpEvent];
         [self _makeSubviews];
