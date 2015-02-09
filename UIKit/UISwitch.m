@@ -12,15 +12,15 @@
 #import "UILabel.h"
 
 #define LineWith 2.0
-#define ButtonMoveTime 0.7
+#define ButtonMoveTime 0.25
 #define LineColor CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1)
 #define ButtonColor [UIColor colorWithRed:1 green:1 blue:1 alpha:1]
 #define OnBackgroudColor [UIColor colorWithRed:0 green:0.7 blue:0 alpha:1]
 #define OffBackgroudColor [UIColor colorWithRed:0.5 green:0.7 blue:0.5 alpha:1]
 
 @interface UISwitch()
-@property UIView *backgroudView;
-@property UIView *buttonView;
+@property (nonatomic, strong) UIView *backgroudView;
+@property (nonatomic, strong) UIView *buttonView;
 @end
 
 @implementation UISwitch
@@ -129,16 +129,16 @@
     CGFloat radius = self.bounds.size.height;
     if(on) {
         self.backgroudView.backgroundColor = OnBackgroudColor;
-        self.buttonView.frame = [self _crateChangedOriginRectFrom:self.buttonView.frame
-                                                            withX:(self.bounds.size.width - radius)];
+        self.buttonView.frame = [self _createChangedOriginRectFrom:self.buttonView.frame
+                                                             withX:0];
     } else {
         self.backgroudView.backgroundColor = OffBackgroudColor;
-        self.buttonView.frame = [self _crateChangedOriginRectFrom:self.buttonView.frame
-                                                            withX:0];
+        self.buttonView.frame = [self _createChangedOriginRectFrom:self.buttonView.frame
+                                                             withX:(self.bounds.size.width - radius)];
     }
 }
 
-- (CGRect)_crateChangedOriginRectFrom:(CGRect)oldRect withX:(CGFloat)x
+- (CGRect)_createChangedOriginRectFrom:(CGRect)oldRect withX:(CGFloat)x
 {
     return CGRectMake(x, oldRect.origin.y, oldRect.size.width, oldRect.size.height);
 }
