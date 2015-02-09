@@ -25,11 +25,6 @@
 
 @implementation UISwitch
 
-+ (BOOL)isUnimplemented
-{
-    return NO;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 51, 31)];
