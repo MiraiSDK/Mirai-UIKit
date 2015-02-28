@@ -81,6 +81,12 @@
 		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
 		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
+		D26FC4271AA047CB0034E9CA /* TNStepperTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D26FC4261AA047CB0034E9CA /* TNStepperTestViewController.m */; };
+		D26FC4281AA047CB0034E9CA /* TNStepperTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D26FC4261AA047CB0034E9CA /* TNStepperTestViewController.m */; };
+		D26FC42C1AA04A4D0034E9CA /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D26FC42B1AA04A4D0034E9CA /* TNComponentCreator.m */; };
+		D26FC42D1AA04A4D0034E9CA /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D26FC42B1AA04A4D0034E9CA /* TNComponentCreator.m */; };
+		D26FC4341AA097AA0034E9CA /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D26FC4331AA097AA0034E9CA /* TNChangedColorButton.m */; };
+		D26FC4351AA097AA0034E9CA /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D26FC4331AA097AA0034E9CA /* TNChangedColorButton.m */; };
 		D2C7F1201A9863AE009B923B /* TNSliderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7F11F1A9863AE009B923B /* TNSliderTestViewController.m */; };
 		D2C7F1211A9863AE009B923B /* TNSliderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C7F11F1A9863AE009B923B /* TNSliderTestViewController.m */; };
 		D2C7F1231A98641B009B923B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2C7F1221A98641B009B923B /* loveheart.png */; };
@@ -181,6 +187,12 @@
 		4390B88B1A85EDA10082B0F1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		4390B88C1A85EDA10082B0F1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
+		D26FC4251AA047CB0034E9CA /* TNStepperTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNStepperTestViewController.h; sourceTree = "<group>"; };
+		D26FC4261AA047CB0034E9CA /* TNStepperTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNStepperTestViewController.m; sourceTree = "<group>"; };
+		D26FC42A1AA04A4D0034E9CA /* TNComponentCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNComponentCreator.h; sourceTree = "<group>"; };
+		D26FC42B1AA04A4D0034E9CA /* TNComponentCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNComponentCreator.m; sourceTree = "<group>"; };
+		D26FC4321AA097AA0034E9CA /* TNChangedColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangedColorButton.h; sourceTree = "<group>"; };
+		D26FC4331AA097AA0034E9CA /* TNChangedColorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangedColorButton.m; sourceTree = "<group>"; };
 		D2C7F11E1A9863AE009B923B /* TNSliderTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSliderTestViewController.h; sourceTree = "<group>"; };
 		D2C7F11F1A9863AE009B923B /* TNSliderTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSliderTestViewController.m; sourceTree = "<group>"; };
 		D2C7F1221A98641B009B923B /* loveheart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loveheart.png; sourceTree = "<group>"; };
@@ -251,6 +263,7 @@
 				4390B8441A8353200082B0F1 /* ViewController Tests */,
 				4390B8531A83539E0082B0F1 /* Gesture Tests */,
 				437F25D61A736FA800FBE3E2 /* Supporting Files */,
+				D26FC4291AA049A90034E9CA /* Uitils */,
 			);
 			path = UIKitDemo;
 			sourceTree = "<group>";
@@ -297,6 +310,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D26FC4221AA0478A0034E9CA /* UIStepper */,
 				D2C7F11B1A986391009B923B /* TNSliderTestViewController */,
 				4390B8741A8353D90082B0F1 /* UITextView */,
 				4390B8221A8352630082B0F1 /* UIImage */,
@@ -460,6 +474,26 @@
 				4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */,
 			);
 			name = images;
+			sourceTree = "<group>";
+		};
+		D26FC4221AA0478A0034E9CA /* UIStepper */ = {
+			isa = PBXGroup;
+			children = (
+				D26FC4251AA047CB0034E9CA /* TNStepperTestViewController.h */,
+				D26FC4261AA047CB0034E9CA /* TNStepperTestViewController.m */,
+			);
+			name = UIStepper;
+			sourceTree = "<group>";
+		};
+		D26FC4291AA049A90034E9CA /* Uitils */ = {
+			isa = PBXGroup;
+			children = (
+				D26FC42A1AA04A4D0034E9CA /* TNComponentCreator.h */,
+				D26FC42B1AA04A4D0034E9CA /* TNComponentCreator.m */,
+				D26FC4321AA097AA0034E9CA /* TNChangedColorButton.h */,
+				D26FC4331AA097AA0034E9CA /* TNChangedColorButton.m */,
+			);
+			name = Uitils;
 			sourceTree = "<group>";
 		};
 		D2C7F11B1A986391009B923B /* TNSliderTestViewController */ = {
@@ -634,14 +668,17 @@
 				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
 				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
+				D26FC4351AA097AA0034E9CA /* TNChangedColorButton.m in Sources */,
 				4390B8781A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
 				4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				D2C7F1211A9863AE009B923B /* TNSliderTestViewController.m in Sources */,
 				4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
+				D26FC42D1AA04A4D0034E9CA /* TNComponentCreator.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
+				D26FC4281AA047CB0034E9CA /* TNStepperTestViewController.m in Sources */,
 				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
 				4390B8381A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
 				4390B8501A8353480082B0F1 /* TNPresentTestViewController.m in Sources */,
@@ -670,8 +707,10 @@
 				4390B8701A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
 				4390B84F1A8353480082B0F1 /* TNPresentTestViewController.m in Sources */,
 				4390B86C1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */,
+				D26FC4341AA097AA0034E9CA /* TNChangedColorButton.m in Sources */,
 				437F25F21A736FB400FBE3E2 /* main.m in Sources */,
 				D2C7F1201A9863AE009B923B /* TNSliderTestViewController.m in Sources */,
+				D26FC42C1AA04A4D0034E9CA /* TNComponentCreator.m in Sources */,
 				4390B8371A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
 				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
@@ -679,6 +718,7 @@
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
 				4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
+				D26FC4271AA047CB0034E9CA /* TNStepperTestViewController.m in Sources */,
 				4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
 				4390B84B1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */,
 				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
