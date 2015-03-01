@@ -35,8 +35,9 @@
 
 + (UIButton *)createButtonWithTitle:(NSString *)title withFrame:(CGRect)rect
 {
-    UIButton *button = [[UIButton alloc] initWithFrame:rect];
-    button.titleLabel.text = title;
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button setTitle:title forState:UIControlStateNormal];
+    button.frame = rect;
     return button;
 }
 

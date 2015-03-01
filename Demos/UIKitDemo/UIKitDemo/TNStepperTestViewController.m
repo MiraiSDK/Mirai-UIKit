@@ -36,6 +36,7 @@
     [self _makeTintColorChangeButtons];
     [self _makeViewImageTestButtons];
     [self _makeSimulateButton];
+    [self _makeErrorValueButton];
 }
 
 - (void)_makeStepper
@@ -67,7 +68,7 @@
     [TNComponentCreator makeSwitchItemWithTitle:@"wraps"
                                              at:215
                                     withControl:self
-                                         action:@selector(onSwitchWrapsChanged:)];
+                                         action:@selector(_onSwitchWrapsChanged:)];
 }
 
 - (void)_makeTintColorChangeButtons
@@ -102,29 +103,62 @@
     [button.layer setBorderColor:[[UIColor redColor] CGColor]];
 }
 
+- (void)_makeErrorValueButton
+{
+    UIButton *maxinumValueErrorButton = [TNComponentCreator createButtonWithTitle:@"error maximunValue"
+                                                                        withFrame:CGRectMake(50, 400, 100, 50)];
+    [self.view addSubview:maxinumValueErrorButton];
+    [maxinumValueErrorButton addTarget:self action:@selector(_onSetErrorMaximunValue:)
+                      forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *stepErrorButton = [TNComponentCreator createButtonWithTitle:@"error stepValue"
+                                                                        withFrame:CGRectMake(220, 400, 100, 50)];
+    [self.view addSubview:stepErrorButton];
+    [stepErrorButton addTarget:self action:@selector(_onSetErrorStepValue:)
+              forControlEvents:UIControlEventTouchUpInside];
+}
+
 - (NSString *)_getValueDisplayText
 {
     return [[NSString alloc] initWithFormat:@"value == %f", self.stepper.value];
 }
 
-- (void)_onSwitchValueChanged:(id)render
+- (void)_onSwitchValueChanged:(id)sender
 {
     self.displayerLabel.text = [self _getValueDisplayText];
 }
 
-- (void)_onSwitchContinousChanged:(id)render
+- (void)_onSwitchContinousChanged:(id)sender
 {
     self.stepper.continuous = !self.stepper.continuous;
 }
 
-- (void)_onSwitchAutorepeatChanged:(id)render
+- (void)_onSwitchAutorepeatChanged:(id)sender
 {
     self.stepper.autorepeat = !self.stepper.autorepeat;
 }
 
-- (void)onSwitchWrapsChanged:(id)render
+- (void)_onSwitchWrapsChanged:(id)sender
 {
     self.stepper.wraps = !self.stepper.wraps;
+}
+
+- (void)_onSetErrorMaximunValue:(id)sender
+{
+    NSLog(@"old maximunValue == %f", self.stepper.maximumValue);
+    NSLog(@"old minimunValue == %f", self.stepper.minimumValue);
+    NSLog(@"old value == %f", self.stepper.value);
+    self.stepper.maximumValue = -1000.0;
+    NSLog(@"new maximunValue == %f", self.stepper.maximumValue);
+    NSLog(@"new minimunValue == %f", self.stepper.minimumValue);
+    NSLog(@"new value == %f", self.stepper.value);
+}
+
+- (void)_onSetErrorStepValue:(id)sender
+{
+    NSLog(@"old stepValue == %f", self.stepper.stepValue);
+    self.stepper.stepValue = -100;
+    NSLog(@"new stepValue == %f", self.stepper.stepValue);
 }
 
 @end
