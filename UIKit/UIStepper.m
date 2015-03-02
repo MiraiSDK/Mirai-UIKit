@@ -13,8 +13,8 @@
 #import <UIKit/UIKit.h>
 
 #define DefaultBorderWidth 1
-#define DefaultSegmentWidth 75
-#define DefaultSegmentHeight 35
+#define DefaultSegmentWidth 90
+#define DefaultSegmentHeight 45
 #define DefaultTintColor [UIColor blueColor]
 
 #define DefaultAutorepeatTimeMinimunInterval 0.05
@@ -37,7 +37,7 @@ static NSArray *RepeatTriggerCountArray;
 + (void)load
 {
     RepeatTimeIntervalArray = @[
-        @8, @5, @3, @1
+        @8, @5, @3, @2
     ];
     RepeatTriggerCountArray = @[
         @3, @5, @10, @0
@@ -95,6 +95,12 @@ static NSArray *RepeatTriggerCountArray;
     _stepValue = stepValue;
 }
 
+- (void)setWraps:(BOOL)wraps
+{
+    _wraps = wraps;
+    [self _refreshSegmentsEnable];
+}
+
 - (void)_triggerValueChangedEvent
 {
     [self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -106,6 +112,10 @@ static NSArray *RepeatTriggerCountArray;
     _minimumValue = 0;
     _maximumValue = 100;
     _stepValue = 1;
+    
+    _continuous = YES;
+    _autorepeat = YES;
+    _wraps = NO;
 }
 
 - (void)_setValueWithoutTriggerValueChanged:(double)value considerWraps:(BOOL)considerWraps
@@ -141,6 +151,9 @@ static NSArray *RepeatTriggerCountArray;
     
     self.subviewLeftSegment.frame = CGRectMake(0, 0, DefaultSegmentWidth, DefaultSegmentHeight);
     self.subviewRightSegment.frame = CGRectMake(DefaultSegmentWidth, 0, DefaultSegmentWidth, DefaultSegmentHeight);
+    
+    [self addSubview:self.subviewLeftSegment];
+    [self addSubview:self.subviewRightSegment];
 }
 
 - (UIButton *)_createSegmentWithSign:(NSString *)sign
@@ -180,6 +193,7 @@ static NSArray *RepeatTriggerCountArray;
     // because the self.autorepeat can be changed between TouchDown and TouchUp.
     [self _stopAutorepeatTriggerTimer];
     [self _increaseValueWithStepValue];
+    [self _triggerValueChangedEvent];
 }
 
 - (void)_startAutorepeatTriggerTimter
@@ -209,6 +223,9 @@ static NSArray *RepeatTriggerCountArray;
         [self _increaseTriggerCountAndAddLevelIfNeed];
         if (self.autorepeat) { // to make sure not change self.value when user set self.autorepeat as NO after start NSTimer.
             [self _increaseValueWithStepValue];
+            if (self.continuous) {
+                [self _triggerValueChangedEvent];
+            }
         }
     }
 }
@@ -236,20 +253,16 @@ static NSArray *RepeatTriggerCountArray;
 {
     double increaseValue = self.isCurrentPressLeftSegment? -self.stepValue: self.stepValue;
     [self _setValueWithoutTriggerValueChanged:(self.value + increaseValue) considerWraps:YES];
-    
-    if (self.continuous) {
-        [self _triggerValueChangedEvent];
-    }
 }
 
 - (NSInteger)_getCurrentRepeatTriggerCountLimit
 {
-    [((NSNumber *)[RepeatTriggerCountArray objectAtIndex:self.currentRepeatLevel]) integerValue];
+    return [((NSNumber *)[RepeatTriggerCountArray objectAtIndex:self.currentRepeatLevel]) integerValue];
 }
 
 - (NSInteger)_getCurrentRepeatTimeInterval
 {
-    [((NSNumber *)[RepeatTimeIntervalArray objectAtIndex:self.currentRepeatLevel]) integerValue];
+    return [((NSNumber *)[RepeatTimeIntervalArray objectAtIndex:self.currentRepeatLevel]) integerValue];
 }
 
 #pragma mark - basic appearance.

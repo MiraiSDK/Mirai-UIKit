@@ -41,13 +41,13 @@
 
 - (void)_makeStepper
 {
-    self.stepper = [[UIStepper alloc] initWithFrame:CGRectMake(50, 100, 400, 50)];
+    self.stepper = [[UIStepper alloc] initWithFrame:CGRectMake(50, 110, 400, 100)];
     [self.view addSubview:self.stepper];
 }
 
 - (void)_makeValueDisplayer
 {
-    self.displayerLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 125, 300, 50)];
+    self.displayerLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 155, 300, 50)];
     self.displayerLabel.text = [self _getValueDisplayText];
     [self.view addSubview:self.displayerLabel];
     [self.stepper addTarget:self action:@selector(_onSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -56,24 +56,24 @@
 - (void)_makeSwitchItemList
 {
     [TNComponentCreator makeSwitchItemWithTitle:@"continous"
-                                             at:155
+                                             at:185
                                     withControl:self
                                          action:@selector(_onSwitchContinousChanged:)];
     
     [TNComponentCreator makeSwitchItemWithTitle:@"autorepeat"
-                                             at:190
+                                             at:210
                                     withControl:self
                                          action:@selector(_onSwitchAutorepeatChanged:)];
     
     [TNComponentCreator makeSwitchItemWithTitle:@"wraps"
-                                             at:215
+                                             at:245
                                     withControl:self
                                          action:@selector(_onSwitchWrapsChanged:)];
 }
 
 - (void)_makeTintColorChangeButtons
 {
-    UIButton *changeTintColorButton = [[TNChangedColorButton alloc] initWithFrame:CGRectMake(50, 250, 100, 50) whenColorChanged:^(UIColor *color) {
+    UIButton *changeTintColorButton = [[TNChangedColorButton alloc] initWithFrame:CGRectMake(50, 280, 100, 50) whenColorChanged:^(UIColor *color) {
         self.stepper.tintColor = color;
     }];
     [changeTintColorButton setTitle:@"tintColor" forState:UIControlStateNormal];
@@ -82,7 +82,7 @@
 
 - (void)_makeViewImageTestButtons
 {
-    UIButton *changeDividerImageButton = [[TNChangedColorButton alloc] initWithFrame:CGRectMake(170, 250, 100, 50) whenColorChanged:^(UIColor *color) {
+    UIButton *changeDividerImageButton = [[TNChangedColorButton alloc] initWithFrame:CGRectMake(170, 280, 100, 50) whenColorChanged:^(UIColor *color) {
         UIImage *image = [TNComponentCreator createEllipseWithSize:CGSizeMake(5, 15) withColor:color];
         [self.stepper setDividerImage:image forLeftSegmentState:UIControlStateNormal rightSegmentState:UIControlStateNormal];
     }];
@@ -93,7 +93,7 @@
 - (void)_makeSimulateButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(50, 350, 100, 50);
+    button.frame = CGRectMake(50, 380, 100, 50);
     [self.view addSubview:button];
     
     [button setTitle:@"+" forState:UIControlStateNormal];
@@ -106,13 +106,13 @@
 - (void)_makeErrorValueButton
 {
     UIButton *maxinumValueErrorButton = [TNComponentCreator createButtonWithTitle:@"error maximunValue"
-                                                                        withFrame:CGRectMake(50, 400, 100, 50)];
+                                                                        withFrame:CGRectMake(50, 430, 100, 50)];
     [self.view addSubview:maxinumValueErrorButton];
     [maxinumValueErrorButton addTarget:self action:@selector(_onSetErrorMaximunValue:)
                       forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *stepErrorButton = [TNComponentCreator createButtonWithTitle:@"error stepValue"
-                                                                        withFrame:CGRectMake(220, 400, 100, 50)];
+                                                                        withFrame:CGRectMake(220, 430, 100, 50)];
     [self.view addSubview:stepErrorButton];
     [stepErrorButton addTarget:self action:@selector(_onSetErrorStepValue:)
               forControlEvents:UIControlEventTouchUpInside];
