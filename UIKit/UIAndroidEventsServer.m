@@ -17,6 +17,8 @@
     NSRecursiveLock *_eventQueueLock;
     
     NSMutableArray *_eventQueue;
+    
+    BOOL _paused;
 }
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event);
@@ -28,6 +30,7 @@ static UIAndroidEventsServer *eventServer;
     self = [super init];
     if (self) {
         app_state = app;
+        _paused = YES;
         
         app_state->onInputEvent = handle_input;
         
@@ -49,7 +52,11 @@ static UIAndroidEventsServer *eventServer;
         struct android_poll_source* source = NULL;
         
         BOOL hasInput = NO;
-        while ((ident=ALooper_pollAll(-1, NULL, &events, (void**)&source))) {
+        while (1) {
+            if (_paused) {continue;};
+            
+            ident=ALooper_pollAll(-1, NULL, &events, (void**)&source);
+            
             if (source != NULL) {
                 source->process(app_state,source);
 
@@ -61,6 +68,11 @@ static UIAndroidEventsServer *eventServer;
             if (hasInput) {
                 [self performSelectorOnMainThread:@selector(eventAlive) withObject:nil waitUntilDone:YES];
                 hasInput = NO;
+            }
+            
+            if (app_state->destroyRequested) {
+                NSLog(@"meet destroyRequestedroyed.");
+                break;
             }
         }
         
@@ -122,6 +134,11 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
     [event configureWithInputEvent:matchedEvent];
 }
 
+- (void)resume
+{
+    _paused = NO;
+}
+
 #pragma mark - public class access
 + (BOOL)hasEvents
 {
@@ -146,6 +163,11 @@ void UIAndroidEventsServerStart(struct android_app *app)
 {
     eventServer = [[UIAndroidEventsServer alloc] initWithAndroidApp:app];
     [eventServer run];
+}
+
+void UIAndroidEventsServerResume()
+{
+    [eventServer resume];
 }
 
 bool UIAndroidEventsServerHasEvents() {
