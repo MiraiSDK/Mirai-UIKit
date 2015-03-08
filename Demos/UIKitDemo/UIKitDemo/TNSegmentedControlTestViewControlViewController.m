@@ -34,6 +34,7 @@
     [self _makeTestCaseButton];
     [self _makeBoolValueTest];
     [self _makeSelectedIndexLabel];
+    [self _makeSetWidthButtons];
 }
 
 - (void)_makeSegmentedControl
@@ -70,6 +71,14 @@
     [self.view addSubview:self.selectIndexLabel];
     
     [self.segmentedControl addTarget:self action:@selector(_onValueChanged:) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)_makeSetWidthButtons
+{
+    UIButton *button = [TNComponentCreator createButtonWithTitle:@"set width"
+                                                       withFrame:CGRectMake(5, 270, 100, 32)];
+    [button addTarget:self action:@selector(_onClickSetWidth:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
 - (void)_testTitles:(TNTestCaseHelperButton *)helper
@@ -113,6 +122,12 @@
 - (void)_onValueChanged:(id)sender
 {
     self.selectIndexLabel.text = [NSString stringWithFormat:@"selectedSegmentIndex == %li", self.segmentedControl.selectedSegmentIndex];
+}
+
+- (void)_onClickSetWidth:(id)sender
+{
+    [self.segmentedControl setWidth:100 forSegmentAtIndex:1];
+    NSLog(@"segementedControl.widthAt[1] == %f", [self.segmentedControl widthForSegmentAtIndex:1]);
 }
 
 @end
