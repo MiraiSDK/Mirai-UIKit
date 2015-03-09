@@ -12,6 +12,7 @@
 #import "UIImage.h"
 #import "math.h"
 
+#define DefaultBorderWidth 1
 #define DefaultTintColor [UIColor blueColor]
 #define DefaultBackgroundColor [UIColor whiteColor]
 
@@ -33,17 +34,17 @@ typedef enum{
 {
     self = [super initWithFrame:CGRectMake(0, 0, 200, 44)];
     if (self) {
-        [self setDefaultMomentaryValue];
+        _tintColor = DefaultTintColor;
+        [self setDefaultValueAboutSelect];
         [self _makeSegmentArray:items];
         [self _refreshSegmentFrame];
-        self.tintColor = DefaultTintColor;
     }
     return self;
 }
 
 - (void)setTintColor:(UIColor *)tintColor
 {
-    if ([_tintColor isEqual:tintColor]) {
+    if (![_tintColor isEqual:tintColor]) {
         _tintColor = tintColor;
         [self _setAllSegmentedButtonsTintColor:tintColor];
     }
@@ -59,7 +60,6 @@ typedef enum{
 - (void)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated
 {
     UIButton *segmentedButton = [self _createSegmentedButtonWithTilte:title];
-    [self _setTitleSegmentedButton:segmentedButton tintColor:self.tintColor];
     [self _insertSegmenetedButton:segmentedButton title:title at:segment];
 }
 
@@ -100,7 +100,7 @@ typedef enum{
 
 - (SegmentedType)_getSegmentedTypeForSegmentAtIndex:(NSUInteger)segment
 {
-    return ([self.segmentArray objectAtIndex:segment] == nil)? SegmentedTypeTitle: SegmentedTypeImage;
+    return ([self.segmentTitleArray objectAtIndex:segment] == nil)? SegmentedTypeImage: SegmentedTypeTitle;
 }
 
 - (UIButton *)_getSegmentedTitleButtonAtIndex:(NSUInteger)segment
@@ -127,8 +127,11 @@ typedef enum{
 
 - (UIButton *)_createSegmentedButtonWithTilte:(NSString *)title
 {
-    UIButton *segmentedButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *segmentedButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [segmentedButton setTitle:title forState:UIControlStateNormal];
+    //Bug: call setBorderWidth will crash. I didn't find a way to fix it.
+//    [segmentedButton.layer setBorderWidth:DefaultBorderWidth];
+    [self _setSegment:segmentedButton isSelected:NO];
     [segmentedButton addTarget:self action:@selector(_onReleaseSegment:)
               forControlEvents:UIControlEventTouchUpInside];
     [segmentedButton addTarget:self action:@selector(_onPressSegment:)
@@ -164,10 +167,8 @@ typedef enum{
 - (void)_setAllSegmentedButtonsTintColor:(UIColor *)color
 {
     for (NSUInteger i=0; i<self.segmentArray.count; ++i) {
-        UIButton *titleSegmentedButton = [self _getSegmentedTitleButtonAtIndex:i];
-        if (titleSegmentedButton != nil) {
-            [self _setTitleSegmentedButton:titleSegmentedButton tintColor:color];
-        }
+        BOOL isSelected = !self.momentary &&  (self.selectedSegmentIndex == i);
+        [self _setSegmentAt:i isSelected:isSelected];
     }
 }
 
@@ -199,16 +200,17 @@ typedef enum{
 
 #pragma mark - select segement.
 
-- (void)setDefaultMomentaryValue
+- (void)setDefaultValueAboutSelect
 {
     self.momentary = NO;
+    self.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
 - (void)_onPressSegment:(id)sender
 {
     self.hasChangedSelectedSegmentIndexDuringTouch = NO;
     NSUInteger segment = [self _getIndexOfSegmentSender:sender];
-    [self _setSegment:segment isSelected:YES];
+    [self _setSegmentAt:segment isSelected:YES];
     
     if (self.momentary) {
         [self _setSelectedSegmentIndexAndTriggerEvent:segment];
@@ -217,8 +219,8 @@ typedef enum{
 
 - (void)_onReleaseSegment:(id)sender
 {
-    if (self.momentary && self.hasChangedSelectedSegmentIndexDuringTouch) {
-        [self _setSegment:self.selectedSegmentIndex isSelected:NO];
+    if (self.momentary) {
+        [self _setSegmentAt:self.selectedSegmentIndex isSelected:NO];
     }
     
     if (!self.momentary && !self.hasChangedSelectedSegmentIndexDuringTouch) {
@@ -230,11 +232,22 @@ typedef enum{
 - (void)_setSelectedSegmentIndexAndTriggerEvent:(NSUInteger)selectedIndex
 {
     if (selectedIndex != self.selectedSegmentIndex) {
-        [self _setSegment:self.selectedSegmentIndex isSelected:NO];
-        self.selectedSegmentIndex = selectedIndex;
-        self.hasChangedSelectedSegmentIndexDuringTouch = YES;
-        [self sendActionsForControlEvents:UIControlEventValueChanged];
+        [self _resumeOldSelectedSegmentAndHighlightNewSelectedSegment:selectedIndex];
     }
+}
+
+- (void)_resumeOldSelectedSegmentAndHighlightNewSelectedSegment:(NSUInteger)newSelectedIndex
+{
+    NSUInteger oldSelectedIndex = self.selectedSegmentIndex;
+    if (oldSelectedIndex != UISegmentedControlNoSegment) {
+        [self _setSegmentAt:oldSelectedIndex isSelected:NO];
+    }
+    if (!self.momentary) {
+        [self _setSegmentAt:newSelectedIndex isSelected:YES];
+    }
+    self.selectedSegmentIndex = newSelectedIndex;
+    self.hasChangedSelectedSegmentIndexDuringTouch = YES;
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 - (NSUInteger)_getIndexOfSegmentSender:(id)sender
@@ -247,14 +260,21 @@ typedef enum{
     return -1;
 }
 
-- (void)_setSegment:(NSUInteger)segment isSelected:(BOOL)selected
+- (void)_setSegmentAt:(NSUInteger)segment isSelected:(BOOL)selected
 {
     UIButton *segmentedButton = [self _getSegmentedTitleButtonAtIndex:segment];
-    UIColor *backgroundColor = selected? self.tintColor: DefaultBackgroundColor;
-    UIColor *titleColor = selected? DefaultBackgroundColor: self.tintColor;
+    [self _setSegment:segmentedButton isSelected:selected];
+}
+
+- (void)_setSegment:(UIButton *)segmentedButton isSelected:(BOOL)selected
+{
+    UIColor *backgroundColor = (selected? self.tintColor: DefaultBackgroundColor);
+    UIColor *titleColor = (selected? DefaultBackgroundColor: self.tintColor);
     
     segmentedButton.backgroundColor = backgroundColor;
+    [segmentedButton.layer setBorderColor:titleColor];
     [segmentedButton setTitleColor:titleColor forState:UIControlStateNormal];
+    [segmentedButton setTitleColor:titleColor forState:UIControlStateHighlighted];
 }
 
 #pragma mark - frame and segment size
@@ -297,7 +317,7 @@ typedef enum{
         NSNumber *width = (NSNumber *)[self.segmentWidthArray objectAtIndex:i];
         remainWidth -= [width floatValue];
     }
-    return fminf(remainWidth, 0);
+    return fmaxf(remainWidth, 0);
 }
 
 - (NSArray *)_replaceZeroWidthAsSuitableValue:(NSArray *)widthArray remainWidth:(CGFloat)remainWidth zeroWidthSegmentCount:(int)zeroWidthSegmentCount

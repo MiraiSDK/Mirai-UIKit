@@ -38,7 +38,7 @@ typedef enum {
 
 - (UIButton *)_createSubButton
 {
-    UIButton *subButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *subButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     subButton.frame = CGRectMake(0, 0, 100, 50);
     [self addSubview:subButton];
     return subButton;

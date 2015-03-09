@@ -7,6 +7,7 @@
 //
 
 #import "TNSegmentedControlTestViewControlViewController.h"
+#import "TNChangedColorButton.h"
 #import "TNTestCaseHelperButton.h"
 #import "TNComponentCreator.h"
 
@@ -35,6 +36,7 @@
     [self _makeBoolValueTest];
     [self _makeSelectedIndexLabel];
     [self _makeSetWidthButtons];
+    [self _makeChangeTintColorButton];
 }
 
 - (void)_makeSegmentedControl
@@ -42,13 +44,13 @@
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[
         @"apple", @"pear", @"peach", @"strawberry"
     ]];
-    self.segmentedControl.frame = CGRectMake(5, 80, 200, 50);
+    self.segmentedControl.frame = CGRectMake(5, 130, 200, 50);
     [self.view addSubview:self.segmentedControl];
 }
 
 - (void)_makeTestCaseButton
 {
-    TNTestCaseHelperButton *button = [[TNTestCaseHelperButton alloc] initWithPosition:CGPointMake(215, 80)];
+    TNTestCaseHelperButton *button = [[TNTestCaseHelperButton alloc] initWithPosition:CGPointMake(215, 130)];
     [self.view addSubview:button];
     button.invokeTestCaseBlock = ^(TNTestCaseHelperButton *helper) {
         [self _testTitles:helper];
@@ -58,15 +60,15 @@
 
 - (void)_makeBoolValueTest
 {
-    [TNComponentCreator makeSwitchItemWithTitle:@"momentary"  at:140
+    [TNComponentCreator makeSwitchItemWithTitle:@"momentary"  at:190
                                     withControl:self action:@selector(_onSwitchMomentary:)];
-    [TNComponentCreator makeSwitchItemWithTitle:@"apportionsSegmentWidthsByContent" at:180
+    [TNComponentCreator makeSwitchItemWithTitle:@"apportionsSegmentWidthsByContent" at:230
                                     withControl:self action:@selector(_onApportionsSegmentWidthsByContent:)];
 }
 
 - (void)_makeSelectedIndexLabel
 {
-    self.selectIndexLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 220, 400, 32)];
+    self.selectIndexLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 270, 400, 32)];
     self.selectIndexLabel.text = @"wait to select segment.";
     [self.view addSubview:self.selectIndexLabel];
     
@@ -76,9 +78,18 @@
 - (void)_makeSetWidthButtons
 {
     UIButton *button = [TNComponentCreator createButtonWithTitle:@"set width"
-                                                       withFrame:CGRectMake(5, 270, 100, 32)];
+                                                       withFrame:CGRectMake(5, 320, 100, 32)];
     [button addTarget:self action:@selector(_onClickSetWidth:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+}
+
+- (void)_makeChangeTintColorButton
+{
+    UIButton *changeTintColorButton = [[TNChangedColorButton alloc] initWithFrame:CGRectMake(5, 370, 100, 50) whenColorChanged:^(UIColor *color) {
+        self.segmentedControl.tintColor = color;
+    }];
+    [changeTintColorButton setTitle:@"tintColor" forState:UIControlStateNormal];
+    [self.view addSubview:changeTintColorButton];
 }
 
 - (void)_testTitles:(TNTestCaseHelperButton *)helper
