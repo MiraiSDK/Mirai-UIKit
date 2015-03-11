@@ -87,6 +87,10 @@
 		D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */; };
 		D2A5F4861AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */; };
 		D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */; };
+		D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */; };
+		D2A5F49B1AB084940011AF7B /* TNSliderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */; };
+		D2A5F49D1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
+		D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,6 +193,9 @@
 		D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNComponentCreator.m; sourceTree = "<group>"; };
 		D2A5F4841AB07FA40011AF7B /* TNTestCaseHelperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTestCaseHelperButton.h; sourceTree = "<group>"; };
 		D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTestCaseHelperButton.m; sourceTree = "<group>"; };
+		D2A5F4981AB084940011AF7B /* TNSliderTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSliderTestViewController.h; sourceTree = "<group>"; };
+		D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSliderTestViewController.m; sourceTree = "<group>"; };
+		D2A5F49C1AB084CD0011AF7B /* loveheart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loveheart.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -303,6 +310,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D2A5F4951AB0847C0011AF7B /* UISlider */,
 				4390B8741A8353D90082B0F1 /* UITextView */,
 				4390B8221A8352630082B0F1 /* UIImage */,
 				4390B8231A83527A0082B0F1 /* UIButton */,
@@ -460,6 +468,7 @@
 		4390B8801A835D460082B0F1 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				D2A5F49C1AB084CD0011AF7B /* loveheart.png */,
 				4390B8811A835D540082B0F1 /* 34912115.jpg */,
 				4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */,
 			);
@@ -477,6 +486,15 @@
 				D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */,
 			);
 			name = Uitils;
+			sourceTree = "<group>";
+		};
+		D2A5F4951AB0847C0011AF7B /* UISlider */ = {
+			isa = PBXGroup;
+			children = (
+				D2A5F4981AB084940011AF7B /* TNSliderTestViewController.h */,
+				D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */,
+			);
+			name = UISlider;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -577,6 +595,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */,
 				4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */,
 				437F25DE1A736FA800FBE3E2 /* TNAndroidLauncher.h in Resources */,
 				4390B8841A835D540082B0F1 /* 34912115.jpg in Resources */,
@@ -589,6 +608,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2A5F49D1AB084CD0011AF7B /* loveheart.png in Resources */,
 				4390B88D1A85EDA10082B0F1 /* Icon.png in Resources */,
 				437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */,
 				4390B8831A835D540082B0F1 /* 34912115.jpg in Resources */,
@@ -647,6 +667,7 @@
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
 				4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
+				D2A5F49B1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
@@ -682,6 +703,7 @@
 				437F25F21A736FB400FBE3E2 /* main.m in Sources */,
 				4390B8371A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
 				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
+				D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
 				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
