@@ -81,6 +81,12 @@
 		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
 		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
+		D2A5F4801AB07C830011AF7B /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */; };
+		D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */; };
+		D2A5F4821AB07C830011AF7B /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */; };
+		D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */; };
+		D2A5F4861AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */; };
+		D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +183,12 @@
 		4390B88B1A85EDA10082B0F1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		4390B88C1A85EDA10082B0F1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
+		D2A5F47C1AB07C830011AF7B /* TNChangedColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangedColorButton.h; sourceTree = "<group>"; };
+		D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangedColorButton.m; sourceTree = "<group>"; };
+		D2A5F47E1AB07C830011AF7B /* TNComponentCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNComponentCreator.h; sourceTree = "<group>"; };
+		D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNComponentCreator.m; sourceTree = "<group>"; };
+		D2A5F4841AB07FA40011AF7B /* TNTestCaseHelperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTestCaseHelperButton.h; sourceTree = "<group>"; };
+		D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTestCaseHelperButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +254,7 @@
 				4390B80A1A83515B0082B0F1 /* Basic classes */,
 				4390B80B1A8351920082B0F1 /* View Tests */,
 				4390B8441A8353200082B0F1 /* ViewController Tests */,
+				D2A5F4791AB07C5F0011AF7B /* Uitils */,
 				4390B8531A83539E0082B0F1 /* Gesture Tests */,
 				437F25D61A736FA800FBE3E2 /* Supporting Files */,
 			);
@@ -453,6 +466,19 @@
 			name = images;
 			sourceTree = "<group>";
 		};
+		D2A5F4791AB07C5F0011AF7B /* Uitils */ = {
+			isa = PBXGroup;
+			children = (
+				D2A5F4841AB07FA40011AF7B /* TNTestCaseHelperButton.h */,
+				D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */,
+				D2A5F47C1AB07C830011AF7B /* TNChangedColorButton.h */,
+				D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */,
+				D2A5F47E1AB07C830011AF7B /* TNComponentCreator.h */,
+				D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */,
+			);
+			name = Uitils;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -604,6 +630,7 @@
 				4390B86D1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */,
 				4390B8651A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
 				4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
+				D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
 				4390B8141A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
 				437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */,
 				4390B8311A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
@@ -614,6 +641,8 @@
 				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
 				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
+				D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */,
+				D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
 				4390B8781A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
@@ -644,6 +673,7 @@
 				4390B8491A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
 				4390B86A1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */,
 				4390B8661A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
+				D2A5F4861AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
 				4390B8301A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
 				4390B82E1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */,
 				4390B8701A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
@@ -655,9 +685,11 @@
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
 				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
+				D2A5F4801AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
 				4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
 				4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
+				D2A5F4821AB07C830011AF7B /* TNComponentCreator.m in Sources */,
 				4390B84B1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */,
 				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 			);
