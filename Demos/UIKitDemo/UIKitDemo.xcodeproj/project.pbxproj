@@ -830,6 +830,7 @@
 		};
 		437F25EB1A736FA800FBE3E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = UIKitDemo/Info.plist;
@@ -840,6 +841,7 @@
 		};
 		437F25EC1A736FA800FBE3E2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = UIKitDemo/Info.plist;
