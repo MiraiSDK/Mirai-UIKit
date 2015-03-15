@@ -43,4 +43,10 @@
 - (UIResponder *)_firstResponderForScreen:(UIScreen *)screen;
 - (BOOL)_firstResponderCanPerformAction:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen;
 - (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen;
+
+- (void)_appDidEnterBackground;
+- (void)_appWillResignActive;
+- (void)_appWillEnterForeground;
+- (void)_appDidBecomeActive;
+- (void)_appWillTerminate;
 @end

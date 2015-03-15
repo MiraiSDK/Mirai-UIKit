@@ -164,6 +164,7 @@ static BKRenderingService *currentService = nil;
 
 - (void)tearDown
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     [self tearDownEGL];
     
     _layer = nil;
@@ -260,6 +261,7 @@ static BKRenderingService *currentService = nil;
 
 void BKRenderingServiceBegin(struct android_app *androidApp)
 {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
     [BKRenderingService setupWithAndroidApp:androidApp];
 }
 

@@ -179,6 +179,61 @@ void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
 }
 
 
+- (void)_appDidBecomeActive
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    NSAssert([NSThread isMainThread], @"%s should been called in main thread");
+
+    if ([self.delegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
+        [self.delegate applicationDidBecomeActive:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:self];
+    
+}
+
+- (void)_appWillResignActive
+{
+    NSAssert([NSThread isMainThread], @"%s should been called in main thread");
+
+    if ([self.delegate respondsToSelector:@selector(applicationWillResignActive:)]) {
+        [self.delegate applicationWillResignActive:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:self];
+
+}
+
+- (void)_appWillEnterForeground
+{
+    NSAssert([NSThread isMainThread], @"%s should been called in main thread");
+
+    if ([self.delegate respondsToSelector:@selector(applicationWillEnterForeground:)]) {
+        [self.delegate applicationWillEnterForeground:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillEnterForegroundNotification object:self];
+    
+}
+
+- (void)_appDidEnterBackground
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    NSAssert([NSThread isMainThread], @"%s should been called in main thread");
+
+    if ([self.delegate respondsToSelector:@selector(applicationDidEnterBackground:)]) {
+        [self.delegate applicationDidEnterBackground:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:self];
+}
+
+- (void)_appWillTerminate
+{
+    NSAssert([NSThread isMainThread], @"%s should been called in main thread");
+    if ([self.delegate respondsToSelector:@selector(applicationWillTerminate:)]) {
+        [self.delegate applicationWillTerminate:self];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillTerminateNotification object:self];
+}
+
 - (id)nextEventBeforeDate:(NSDate *)limit inMode:(NSString *)mode
 {
     return nil;
@@ -205,6 +260,7 @@ void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
         
         NSLog(@"start loop");
         BKRenderingServiceRun();
+        UIAndroidEventsServerResume();
         
         NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];

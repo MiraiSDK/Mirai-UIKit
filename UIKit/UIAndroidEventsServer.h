@@ -20,3 +20,4 @@
 void UIAndroidEventsServerStart(struct android_app *app);
 bool UIAndroidEventsServerHasEvents();
 void UIAndroidEventsGetEvent(UIEvent *event);
+void UIAndroidEventsServerResume();

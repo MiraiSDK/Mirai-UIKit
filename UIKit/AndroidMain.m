@@ -16,6 +16,7 @@
 #import <ObjectiveZip/ObjectiveZip.h>
 
 #import "UIApplication.h"
+#import "UIApplication+UIPrivate.h"
 #import "UIAndroidEventsServer.h"
 #import "TNAConfiguration.h"
 
@@ -36,6 +37,9 @@
 @implementation TNAndroidLauncher
 @end
 
+@interface CAGLTexture : NSObject
++ (void)invalidate;
+@end
 
 #pragma mark -
 /**
@@ -329,6 +333,7 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
     struct engine* engine = (struct engine*)app->userData;
     switch (cmd) {
         case APP_CMD_INIT_WINDOW:
+            NSLog(@"CMD: INIT_WINDOW");
             engine_init_display(engine);
             engine->isScreenReady = true;
             if (engine->isWarnStart) {
@@ -338,63 +343,120 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
             engine->isWarnStart = true;
             break;
         case APP_CMD_TERM_WINDOW:
+            NSLog(@"CMD: TERM_WINDOW");
             // The window is being hidden or closed, clean it up.
             engine_term_display(engine);
             engine->app->window = NULL;
             engine->isScreenReady = false;
             break;
         case APP_CMD_LOST_FOCUS:
+            NSLog(@"CMD: LOST_FOCUS");
+
             // Also stop animating.
             engine->animating = 0;
+            [[UIApplication sharedApplication] performSelectorOnMainThread:@selector(_appWillResignActive) withObject:nil waitUntilDone:YES];
             break;
         case APP_CMD_GAINED_FOCUS:
+            NSLog(@"CMD: GAINED_FOCUS");
+
+            NSLog(@"will call _appDidBecomeActive");
+            [[UIApplication sharedApplication] performSelectorOnMainThread:@selector(_appDidBecomeActive) withObject:nil waitUntilDone:YES];
+            
             break;
-        case APP_CMD_INPUT_CHANGED:break;
-        case APP_CMD_WINDOW_RESIZED:break;
-        case APP_CMD_WINDOW_REDRAW_NEEDED:break;
+        case APP_CMD_INPUT_CHANGED:
+            NSLog(@"CMD: INPUT_CHANGED");
+
+            break;
+        case APP_CMD_WINDOW_RESIZED:
+            NSLog(@"CMD: WINDOW_RESIZED");
+
+            break;
+        case APP_CMD_WINDOW_REDRAW_NEEDED:
+            NSLog(@"CMD: WINDOW_REDRAW_NEEDED");
+
+            break;
         case APP_CMD_CONTENT_RECT_CHANGED:{
+            NSLog(@"CMD: CONTENT_RECT_CHANGED");
+
             ARect rect = app->contentRect;
             NSLog(@"contentRect:{%d,%d %d,%d}", rect.top,rect.left,rect.bottom,rect.right);
         } break;
         case APP_CMD_CONFIG_CHANGED: {
+            NSLog(@"CMD: CONFIG_CHANGED");
+
             TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:app->config];
             _landscaped = (config.orientation == TNAConfigurationOrientationLand);
         } break;
-        case APP_CMD_LOW_MEMORY:break;
-        case APP_CMD_START:break;
-        case APP_CMD_RESUME:break;
-        case APP_CMD_SAVE_STATE:break;
-        case APP_CMD_PAUSE:break;
-        case APP_CMD_STOP:break;
-        case APP_CMD_DESTROY:break;
+        case APP_CMD_LOW_MEMORY:
+            NSLog(@"CMD: LOW_MEMORY");
+            break;
+        case APP_CMD_START:
+            NSLog(@"CMD: START");
+
+            break;
+        case APP_CMD_RESUME:
+            NSLog(@"CMD: RESUME");
+
+            break;
+        case APP_CMD_SAVE_STATE:
+            NSLog(@"CMD: SAVE_STATE");
+
+            break;
+        case APP_CMD_PAUSE:
+            NSLog(@"CMD: APP PAUSE");
+            break;
+        case APP_CMD_STOP:
+            NSLog(@"CMD: APP STOP");
+            if ([CAGLTexture instancesRespondToSelector:@selector(invalidate)]) {
+                [CAGLTexture invalidate];
+            }
+            
+            [[UIApplication sharedApplication] performSelectorOnMainThread:@selector(_appDidEnterBackground) withObject:nil waitUntilDone:YES];
+
+            break;
+        case APP_CMD_DESTROY:
+            NSLog(@"CMD: DESTORY");
+            [[UIApplication sharedApplication] performSelectorOnMainThread:@selector(_appWillTerminate) withObject:nil waitUntilDone:YES];
+            break;
     }
 }
 
 
-
 #pragma mark - Entry point
 // Entry point from android part
+
+static bool firstEntry = YES;
+
 void android_main(struct android_app* state)
 {
     @autoreleasepool {
+        
+        int argc = 1;
         
         // Forward NSLog to android logging system
         _NSLog_printf_handler = *_NSLog_android_log_handler;
         
         app_state = state;
         
-        char buffer[1024];
-        constructExecutablePath(buffer, state);
-        
-        // Initialize process info
-        int argc = 1;
-        char * argv[] = {buffer};
-        [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
-        
-        // Make sure glue isn't stripped.
-        app_dummy();
-        
-        _configureFontconfigEnv(app_state);
+        NSString *appPath;
+        if (firstEntry) {
+            
+            
+            char buffer[1024];
+            constructExecutablePath(buffer, state);
+            appPath = [NSString stringWithUTF8String:buffer];
+            
+            // Initialize process info
+            argc = 1;
+            char * argv[] = {buffer};
+            [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
+            
+            // Make sure glue isn't stripped.
+            app_dummy();
+            
+            _configureFontconfigEnv(app_state);
+        }
+
         
         //setup engine
         struct engine engine;
@@ -426,17 +488,23 @@ void android_main(struct android_app* state)
             }
         }
         
-        // unzip assets to bundle path
-        NSString *bundlePath = [NSString stringWithUTF8String:buffer];
-        bundlePath = [bundlePath stringByDeletingLastPathComponent];
-        _prepareAsset(bundlePath);
         
-        // call launcher, launcher will call the main()
-        _argc = argc;
-        [NSThread detachNewThreadSelector:@selector(launch) toTarget:[MainThreadLaunch class] withObject:nil];
+        if (firstEntry) {
+            // unzip assets to bundle path
+            NSString *bundlePath = [appPath stringByDeletingLastPathComponent];
+            _prepareAsset(bundlePath);
+            
+            // call launcher, launcher will call the main()
+            _argc = argc;
+            [NSThread detachNewThreadSelector:@selector(launch) toTarget:[MainThreadLaunch class] withObject:nil];
+            firstEntry = NO;
+
+            // never return
+            UIAndroidEventsServerStart(app_state);
+        }
         
-        // never return
-        UIAndroidEventsServerStart(app_state);
+        NSLog(@"done android_main");
+
     }
     
 }
