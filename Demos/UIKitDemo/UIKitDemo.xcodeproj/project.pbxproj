@@ -87,12 +87,14 @@
 		D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */; };
 		D2A5F4861AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */; };
 		D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */; };
+		D2A5F48B1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */; };
+		D2A5F48C1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */; };
 		D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */; };
 		D2A5F49B1AB084940011AF7B /* TNSliderTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */; };
 		D2A5F49D1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
 		D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
-		D2A5F48B1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */; };
-		D2A5F48C1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */; };
+		D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
+		D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,11 +197,13 @@
 		D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNComponentCreator.m; sourceTree = "<group>"; };
 		D2A5F4841AB07FA40011AF7B /* TNTestCaseHelperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTestCaseHelperButton.h; sourceTree = "<group>"; };
 		D2A5F4851AB07FA40011AF7B /* TNTestCaseHelperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTestCaseHelperButton.m; sourceTree = "<group>"; };
+		D2A5F4891AB081D30011AF7B /* TNStepperTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNStepperTestViewController.h; sourceTree = "<group>"; };
+		D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNStepperTestViewController.m; sourceTree = "<group>"; };
 		D2A5F4981AB084940011AF7B /* TNSliderTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSliderTestViewController.h; sourceTree = "<group>"; };
 		D2A5F4991AB084940011AF7B /* TNSliderTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSliderTestViewController.m; sourceTree = "<group>"; };
 		D2A5F49C1AB084CD0011AF7B /* loveheart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loveheart.png; sourceTree = "<group>"; };
-		D2A5F4891AB081D30011AF7B /* TNStepperTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNStepperTestViewController.h; sourceTree = "<group>"; };
-		D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNStepperTestViewController.m; sourceTree = "<group>"; };
+		D2A5F5201AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSegmentedControlTestViewControlViewController.h; sourceTree = "<group>"; };
+		D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSegmentedControlTestViewControlViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +320,7 @@
 			children = (
 				D2A5F4951AB0847C0011AF7B /* UISlider */,
 				D2A5F4881AB081BE0011AF7B /* UIStepper */,
+				D2A5F4A31AB086170011AF7B /* UISegmentedControl */,
 				4390B8741A8353D90082B0F1 /* UITextView */,
 				4390B8221A8352630082B0F1 /* UIImage */,
 				4390B8231A83527A0082B0F1 /* UIButton */,
@@ -493,6 +498,15 @@
 			name = Uitils;
 			sourceTree = "<group>";
 		};
+		D2A5F4881AB081BE0011AF7B /* UIStepper */ = {
+			isa = PBXGroup;
+			children = (
+				D2A5F4891AB081D30011AF7B /* TNStepperTestViewController.h */,
+				D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */,
+			);
+			name = UIStepper;
+			sourceTree = "<group>";
+		};
 		D2A5F4951AB0847C0011AF7B /* UISlider */ = {
 			isa = PBXGroup;
 			children = (
@@ -502,13 +516,13 @@
 			name = UISlider;
 			sourceTree = "<group>";
 		};
-		D2A5F4881AB081BE0011AF7B /* UIStepper */ = {
+		D2A5F4A31AB086170011AF7B /* UISegmentedControl */ = {
 			isa = PBXGroup;
 			children = (
-				D2A5F4891AB081D30011AF7B /* TNStepperTestViewController.h */,
-				D2A5F48A1AB081D30011AF7B /* TNStepperTestViewController.m */,
+				D2A5F5201AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.h */,
+				D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */,
 			);
-			name = UIStepper;
+			name = UISegmentedControl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -684,6 +698,7 @@
 				4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				D2A5F49B1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
+				D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
@@ -702,6 +717,7 @@
 				4390B8111A8351CA0082B0F1 /* TNCustomView.m in Sources */,
 				4390B83C1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
 				4390B8061A8351470082B0F1 /* TNTestCase.m in Sources */,
+				D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
 				4390B8641A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
 				D2A5F48B1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */,
 				4390B82C1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
@@ -814,7 +830,6 @@
 		};
 		437F25EB1A736FA800FBE3E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = UIKitDemo/Info.plist;
@@ -825,7 +840,6 @@
 		};
 		437F25EC1A736FA800FBE3E2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = UIKitDemo/Info.plist;
