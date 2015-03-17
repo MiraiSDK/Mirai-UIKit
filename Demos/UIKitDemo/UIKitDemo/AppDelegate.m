@@ -29,8 +29,33 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
-    						
+    
+    [self checkMainBundle];
     return YES;
+}
+
+- (void)checkMainBundle
+{
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    NSString *bundlePath = [mainBundle bundlePath];
+    
+    NSLog(@"main bundle path:%@",bundlePath);
+    NSLog(@"listing main bundle contents:");
+    NSFileManager *fm =[NSFileManager defaultManager];
+    NSArray *contents = [fm contentsOfDirectoryAtPath: bundlePath error:nil];
+    NSLog(@"%@",contents);
+    
+    if (contents.count == 0) {
+        NSLog(@"[Warning] empty main bundle contents?");
+        return;
+    }
+    
+    // check pathForResource:ofType:
+    NSString *oneFile = contents[0];
+    NSString *icon = [mainBundle pathForResource:oneFile ofType:nil];
+    if (!icon) {
+        NSLog(@"[Warning] main bundle has contents, but pathForResource:ofType: return nil. this happended if you init main bundle before expand contents to main bundle directory");
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

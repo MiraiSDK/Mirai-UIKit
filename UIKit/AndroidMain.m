@@ -13,7 +13,7 @@
 #include <android/log.h>
 
 #import <TNJavaHelper/TNJavaHelper.h>
-#import <ObjectiveZip/ObjectiveZip.h>
+#import "unzip.h"
 
 #import "UIApplication.h"
 #import "UIApplication+UIPrivate.h"
@@ -163,9 +163,8 @@ static void _extractFolder(NSString *folder, NSString *path)
     
 }
 
-const char *getAPKPath()
+const char *getAPKPath(JNIEnv *env)
 {
-    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     ANativeActivity *activity = app_state->activity;
     jclass clazz = (*env)->GetObjectClass(env, activity->clazz);
     jmethodID methodID = (*env)->GetMethodID(env, clazz, "getPackageCodePath", "()Ljava/lang/String;");
@@ -180,52 +179,150 @@ const char *getAPKPath()
     return res;
 }
 
-static void _unzipAssetsToMainBundle(NSString *zipPath, NSString *path)
+
+static void _miniUnzipAssetsToMainBundle(NSString *zipPath, NSString *path)
 {
-    ZipFile *file = [[ZipFile alloc] initWithFileName:zipPath mode:ZipFileModeUnzip];
-    NSArray *fileInfos = [file listFileInZipInfos];
-    [file goToFirstFileInZip];
-    do {
-        FileInZipInfo *info = [file getCurrentFileInZipInfo];
-        NSString *fileName = [info name];
-        if (! [fileName hasPrefix:@"assets/"]) {
+#define dir_delimter '/'
+#define MAX_FILENAME 512
+#define READ_SIZE 8192
+
+    const char *zipPathUTF8 = [zipPath UTF8String];
+    
+    unzFile *zipfile = unzOpen64(zipPathUTF8);
+    
+    if (zipfile == NULL) {
+        __android_log_print(ANDROID_LOG_INFO,"NSLog","could not open file:%s\n", zipPathUTF8);
+        return;
+    }
+    
+    
+    // Get info about the zip file
+    unz_global_info global_info;
+    if ( unzGetGlobalInfo( zipfile, &global_info ) != UNZ_OK )
+    {
+        __android_log_write(ANDROID_LOG_INFO,"NSLog","could not read file global info\n");
+        unzClose( zipfile );
+        return;
+    }
+    
+    
+    // Buffer to hold data read from the zip file.
+    char read_buffer[ READ_SIZE ];
+
+    // Loop to extract all files
+    uLong i;
+    for ( i = 0; i < global_info.number_entry; ++i )
+    {
+        // Get info about current file.
+        unz_file_info file_info;
+        char filename[ MAX_FILENAME ];
+        if ( unzGetCurrentFileInfo(
+                                   zipfile,
+                                   &file_info,
+                                   filename,
+                                   MAX_FILENAME,
+                                   NULL, 0, NULL, 0 ) != UNZ_OK )
+        {
+            __android_log_write(ANDROID_LOG_INFO,"NSLog","could not read file info\n");
+            unzClose( zipfile );
+            return;
+        }
+        
+        NSString *oneFileName = [NSString stringWithUTF8String:filename];
+        if (![oneFileName hasPrefix:@"assets/"]) {
+            __android_log_print(ANDROID_LOG_INFO,"NSLog","ignore:%s\n", filename);
             continue;
         }
-        fileName = [fileName stringByDeletingPrefix:@"assets/"];
         
-        NSString *destFilePath = [path stringByAppendingPathComponent:fileName];
+        oneFileName = [oneFileName stringByDeletingPrefix:@"assets/"];
         
-        if (![[NSFileManager defaultManager] fileExistsAtPath:destFilePath]) {
-            ZipReadStream *readStream = [file readCurrentFileInZip];
-            NSMutableData *contentData = [[NSMutableData alloc] initWithLength:info.length];
-            [readStream readDataWithBuffer:contentData];
+        NSString *destFilePath = [path stringByAppendingPathComponent:oneFileName];
+        
+        // Check if this entry is a directory or file.
+        const size_t filename_length = strlen( filename );
+        if ( filename[ filename_length-1 ] == dir_delimter ) {
+            // Entry is a directory, so create it.
+            __android_log_print(ANDROID_LOG_INFO,"NSLog","dir:%s\n", filename);
+
+            [[NSFileManager defaultManager] createDirectoryAtPath:destFilePath withIntermediateDirectories:YES attributes:nil error:nil];
             
-            if ([contentData length] >0) {
-                // create directory if not exists
-                NSString *directory = [destFilePath stringByDeletingLastPathComponent];
-                BOOL directoryExists = [[NSFileManager defaultManager] fileExistsAtPath:directory];
-                if (!directoryExists) {
-                    [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+        } else {
+            // Entry is a file, so extract it.
+            __android_log_print(ANDROID_LOG_INFO,"NSLog","file:%s\n", filename);
+
+
+            if ( unzOpenCurrentFile( zipfile ) != UNZ_OK )
+            {
+                __android_log_write(ANDROID_LOG_INFO,"NSLog","could not open file\n");
+                unzClose( zipfile );
+                return;
+            }
+            
+            NSString *directory = [destFilePath stringByDeletingLastPathComponent];
+            BOOL directoryExists = [[NSFileManager defaultManager] fileExistsAtPath:directory];
+            if (!directoryExists) {
+                [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+            }
+            
+            // Open a file to write out the data.
+            FILE *out = fopen( [destFilePath UTF8String], "wb" );
+            if ( out == NULL )
+            {
+                __android_log_print(ANDROID_LOG_INFO,"NSLog","could not open destination file:%s\n",[destFilePath UTF8String]);
+                unzCloseCurrentFile( zipfile );
+                unzClose( zipfile );
+                return;
+            }
+            
+            
+            int error = UNZ_OK;
+            do
+            {
+                error = unzReadCurrentFile( zipfile, read_buffer, READ_SIZE );
+                if ( error < 0 )
+                {
+
+                    __android_log_print(ANDROID_LOG_INFO,"NSLog","error %d\n", error);
+
+                    unzCloseCurrentFile( zipfile );
+                    unzClose( zipfile );
+                    return;
                 }
                 
-                // write contents
-                NSError *writeError = nil;
-                BOOL success = [contentData writeToFile:destFilePath options:NSDataWritingAtomic error:&writeError];
-                if (!success) {
-                    NSLog(@"unzip data to path %@ failed. error:%@",destFilePath,[writeError localizedDescription]);
+                // Write data to file.
+                if ( error > 0 )
+                {
+                    fwrite( read_buffer, error, 1, out ); // You should check return of fwrite...
                 }
-            }
-            [readStream finishedReading];
+            } while ( error > 0 );
             
+            fclose( out );
         }
-    } while ([file goToNextFileInZip]);
+        
+        unzCloseCurrentFile( zipfile );
+        
+        // Go the the next entry listed in the zip file.
+        if ( ( i+1 ) < global_info.number_entry )
+        {
+            if ( unzGoToNextFile( zipfile ) != UNZ_OK )
+            {
+                __android_log_print(ANDROID_LOG_INFO,"NSLog","cound not read next file\n");
+
+                unzClose( zipfile );
+                return;
+            }
+        }
+    }
+
+
     
-    [file close];
+    unzClose(zipfile);
+    
 }
 
-static void _prepareAsset(NSString *path)
+static void _prepareAsset(NSString *path,JNIEnv *env)
 {
-    const char *apkPathUTF8 = getAPKPath();
+    const char *apkPathUTF8 = getAPKPath(env);
     NSString *apkPath = [NSString stringWithUTF8String:apkPathUTF8];
     NSDictionary *attributes = [[NSFileManager defaultManager] fileAttributesAtPath:apkPath traverseLink:NO];
     NSDate *modificationDate = attributes[NSFileModificationDate];
@@ -235,13 +332,14 @@ static void _prepareAsset(NSString *path)
         ![lastModificationDate isEqualToDate:modificationDate]) {
         
         // extract folder
-        NSLog(@"unziping apk to path:%@",path);
-        _unzipAssetsToMainBundle(apkPath, path);
+        __android_log_print(ANDROID_LOG_INFO,"NSLog","unziping apk to path:%s",[path UTF8String]);
+        
+        _miniUnzipAssetsToMainBundle(apkPath, path);
         
         [[NSUserDefaults standardUserDefaults] setObject:modificationDate forKey:@"TN_APKFileModificationDate"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     } else {
-        NSLog(@"apk unchanged, skip unzip");
+        __android_log_write(ANDROID_LOG_INFO,"NSLog","apk unchanged, skip unzip");
     }
 }
 
@@ -455,6 +553,17 @@ void android_main(struct android_app* state)
             app_dummy();
             
             _configureFontconfigEnv(app_state);
+
+            JavaVM *vm = app_state->activity->vm;
+            JNIEnv *env;
+            (*vm)->AttachCurrentThread(vm,&env,NULL);
+            
+            // unzip assets to bundle path
+            // Note: before we unzip bundle contents, we should not init main bundle
+            // means we should not direct/indirect call [NSBundle mainBundle]
+            // which means we should not call NSLog()
+            NSString *bundlePath = [appPath stringByDeletingLastPathComponent];
+            _prepareAsset(bundlePath,env);
         }
 
         
@@ -466,6 +575,7 @@ void android_main(struct android_app* state)
         engine.app = app_state;
         
         // attach current thread to java vm, so we can call java code
+        // it's safe to attach thread multiple times
         [TNJavaHelper initializeWithVM:state->activity->vm activityClass:state->activity->clazz];
         engine.env = [[TNJavaHelper sharedHelper] env];
         
@@ -490,10 +600,6 @@ void android_main(struct android_app* state)
         
         
         if (firstEntry) {
-            // unzip assets to bundle path
-            NSString *bundlePath = [appPath stringByDeletingLastPathComponent];
-            _prepareAsset(bundlePath);
-            
             // call launcher, launcher will call the main()
             _argc = argc;
             [NSThread detachNewThreadSelector:@selector(launch) toTarget:[MainThreadLaunch class] withObject:nil];

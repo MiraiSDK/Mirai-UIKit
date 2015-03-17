@@ -192,6 +192,13 @@
 		439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73CA18E84C6300B1BE40 /* UITableViewSection.m */; };
 		439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */; };
 		439A73D218E84C6300B1BE40 /* UITableViewSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */; };
+		43B447F91AB6FADF00DC1968 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B447F21AB6FADF00DC1968 /* crypt.h */; };
+		43B447FA1AB6FADF00DC1968 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 43B447F31AB6FADF00DC1968 /* ioapi.c */; };
+		43B447FB1AB6FADF00DC1968 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B447F41AB6FADF00DC1968 /* ioapi.h */; };
+		43B447FC1AB6FADF00DC1968 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 43B447F51AB6FADF00DC1968 /* unzip.c */; };
+		43B447FD1AB6FADF00DC1968 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B447F61AB6FADF00DC1968 /* unzip.h */; };
+		43B447FE1AB6FADF00DC1968 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 43B447F71AB6FADF00DC1968 /* zip.c */; };
+		43B447FF1AB6FADF00DC1968 /* zip.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B447F81AB6FADF00DC1968 /* zip.h */; };
 		43B6B64D1913A0EC005D09ED /* UIPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B6B64B1913A0EC005D09ED /* UIPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43B6B64E1913A0EC005D09ED /* UIPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B6B64C1913A0EC005D09ED /* UIPopoverController.m */; };
 		43B819CF18E27D550020624F /* UIScrollViewAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B819C918E27D550020624F /* UIScrollViewAnimation.h */; };
@@ -282,27 +289,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43718E6818517B7B00850F08;
 			remoteInfo = UIKit;
-		};
-		43CAEA5819B0CB5300B0AA8F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
-			remoteInfo = "Objective-Zip";
-		};
-		43CAEA5A19B0CB5300B0AA8F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 43CAE9FC19B0A45E00B0AA8F;
-			remoteInfo = "ObjectiveZip-Android";
-		};
-		43CAEA5C19B0CB6C00B0AA8F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 43CAE9FB19B0A45E00B0AA8F;
-			remoteInfo = "ObjectiveZip-Android";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -499,6 +485,13 @@
 		439A73CA18E84C6300B1BE40 /* UITableViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSection.m; sourceTree = "<group>"; };
 		439A73CB18E84C6300B1BE40 /* UITableViewSectionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewSectionLabel.h; sourceTree = "<group>"; };
 		439A73CC18E84C6300B1BE40 /* UITableViewSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewSectionLabel.m; sourceTree = "<group>"; };
+		43B447F21AB6FADF00DC1968 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		43B447F31AB6FADF00DC1968 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		43B447F41AB6FADF00DC1968 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		43B447F51AB6FADF00DC1968 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		43B447F61AB6FADF00DC1968 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		43B447F71AB6FADF00DC1968 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		43B447F81AB6FADF00DC1968 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		43B6B64B1913A0EC005D09ED /* UIPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverController.h; sourceTree = "<group>"; };
 		43B6B64C1913A0EC005D09ED /* UIPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverController.m; sourceTree = "<group>"; };
 		43B78C2D1A527E520037ABF3 /* UIViewController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Private.h"; sourceTree = "<group>"; };
@@ -542,7 +535,6 @@
 		43C200D918EBE57400490D59 /* UIActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIActionSheet.m; sourceTree = "<group>"; };
 		43CA2A331956CD5A00B92F2C /* TNAConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNAConfiguration.h; sourceTree = "<group>"; };
 		43CA2A341956CD5A00B92F2C /* TNAConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNAConfiguration.m; sourceTree = "<group>"; };
-		43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Objective-Zip.xcodeproj"; path = "Support/Objective-Zip/Objective-Zip.xcodeproj"; sourceTree = "<group>"; };
 		43CBC1AD1A7AA7850060B2AE /* AndroidMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidMain.h; sourceTree = "<group>"; };
 		43CBC1AE1A7AA7850060B2AE /* AndroidMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndroidMain.m; sourceTree = "<group>"; };
 		43D76279195039C9003DB7B2 /* BKRenderingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRenderingService.h; sourceTree = "<group>"; };
@@ -662,7 +654,7 @@
 		43718E6B18517B7B00850F08 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */,
+				43B447F11AB6FADF00DC1968 /* MiniZip */,
 				439487E61893B2A4004F8636 /* OpenGLES.framework */,
 				432FF09518548FDA005486C5 /* CoreText.framework */,
 				43DFBA501851D89000BA269F /* CoreFoundation.framework */,
@@ -1001,6 +993,21 @@
 			name = UITableView;
 			sourceTree = "<group>";
 		};
+		43B447F11AB6FADF00DC1968 /* MiniZip */ = {
+			isa = PBXGroup;
+			children = (
+				43B447F21AB6FADF00DC1968 /* crypt.h */,
+				43B447F31AB6FADF00DC1968 /* ioapi.c */,
+				43B447F41AB6FADF00DC1968 /* ioapi.h */,
+				43B447F51AB6FADF00DC1968 /* unzip.c */,
+				43B447F61AB6FADF00DC1968 /* unzip.h */,
+				43B447F71AB6FADF00DC1968 /* zip.c */,
+				43B447F81AB6FADF00DC1968 /* zip.h */,
+			);
+			name = MiniZip;
+			path = Support/MiniZip;
+			sourceTree = "<group>";
+		};
 		43B819F918E2B3C20020624F /* GestureRecognizer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1049,15 +1056,6 @@
 			name = UITextView;
 			sourceTree = "<group>";
 		};
-		43CAEA5419B0CB5300B0AA8F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				43CAEA5919B0CB5300B0AA8F /* Objective-Zip.app */,
-				43CAEA5B19B0CB5300B0AA8F /* ObjectiveZip.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		43EBAA1718A9F0E2005DDD8D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1099,6 +1097,7 @@
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,
 				4384631C188B3D52006DA1AA /* UIControlAction.h in Headers */,
 				432FF08B18544D7A005486C5 /* UIStringDrawing.h in Headers */,
+				43B447FB1AB6FADF00DC1968 /* ioapi.h in Headers */,
 				43718EC518518FB400850F08 /* UIKitDefines.h in Headers */,
 				43B819D618E27D710020624F /* UIScrollView+UIPrivate.h in Headers */,
 				43846302188B1ED9006DA1AA /* UIColor.h in Headers */,
@@ -1108,6 +1107,7 @@
 				43ECCF0E1851CA9A0076535C /* UIView.h in Headers */,
 				43E5ECBD1A304B8D009E624F /* InputEvent.h in Headers */,
 				434CFD291A0CB18D00B6AC9E /* UISearchDisplayController.h in Headers */,
+				43B447FF1AB6FADF00DC1968 /* zip.h in Headers */,
 				432FF07F1853645D005486C5 /* UIGraphics.h in Headers */,
 				43DD64CA19910984000884BA /* TNGestureRecognizerMath.h in Headers */,
 				43B819D318E27D550020624F /* UIScrollViewAnimationScroll.h in Headers */,
@@ -1129,6 +1129,7 @@
 				43846335188B417F006DA1AA /* UIButton.h in Headers */,
 				434CFD051A0CA40F00B6AC9E /* UITableViewHeaderFooterView.h in Headers */,
 				4384630F188B2BCD006DA1AA /* UIImage.h in Headers */,
+				43B447FD1AB6FADF00DC1968 /* unzip.h in Headers */,
 				43846348188C5977006DA1AA /* UIFontDescriptor.h in Headers */,
 				434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
@@ -1196,6 +1197,7 @@
 				432FF05F185338BD005486C5 /* UIScreen.h in Headers */,
 				434CFD111A0CA98A00B6AC9E /* UIViewControllerTransitionCoordinator.h in Headers */,
 				434CFD311A0CB24200B6AC9E /* UIRefreshControl.h in Headers */,
+				43B447F91AB6FADF00DC1968 /* crypt.h in Headers */,
 				434CFD551A0CB8B300B6AC9E /* UIStoryboardSegue.h in Headers */,
 				43C200B518EBB70B00490D59 /* UITextView.h in Headers */,
 				43718EA418517FBA00850F08 /* UIApplication.h in Headers */,
@@ -1235,7 +1237,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				43CAEA5D19B0CB6C00B0AA8F /* PBXTargetDependency */,
 			);
 			name = UIKit;
 			productName = UIKit;
@@ -1284,12 +1285,6 @@
 			mainGroup = 43718E5F18517B7B00850F08;
 			productRefGroup = 43718E6A18517B7B00850F08 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 43CAEA5419B0CB5300B0AA8F /* Products */;
-					ProjectRef = 43CAEA5319B0CB5300B0AA8F /* Objective-Zip.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				43718E6818517B7B00850F08 /* UIKit */,
@@ -1297,23 +1292,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		43CAEA5919B0CB5300B0AA8F /* Objective-Zip.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Objective-Zip.app";
-			remoteRef = 43CAEA5819B0CB5300B0AA8F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		43CAEA5B19B0CB5300B0AA8F /* ObjectiveZip.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ObjectiveZip.framework;
-			remoteRef = 43CAEA5A19B0CB5300B0AA8F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		43718E6718517B7B00850F08 /* Resources */ = {
@@ -1355,12 +1333,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43B447FE1AB6FADF00DC1968 /* zip.c in Sources */,
 				434CFCFA1A0CA0B500B6AC9E /* UILocalNotification.m in Sources */,
 				43846330188B4025006DA1AA /* UIImageView.m in Sources */,
 				434CFD021A0CA33A00B6AC9E /* UITabBarItem.m in Sources */,
 				439A73C418E84C4E00B1BE40 /* UITableViewController.m in Sources */,
 				434CFD061A0CA40F00B6AC9E /* UITableViewHeaderFooterView.m in Sources */,
 				431412DA18C0B814001AF732 /* UIViewAnimationGroup.m in Sources */,
+				43B447FC1AB6FADF00DC1968 /* unzip.c in Sources */,
 				43B819F418E2AA870020624F /* UISwipeGestureRecognizer.m in Sources */,
 				43CA2A361956CD5A00B92F2C /* TNAConfiguration.m in Sources */,
 				43C200BA18EBB71A00490D59 /* UITextLayer.m in Sources */,
@@ -1438,6 +1418,7 @@
 				434CFD2A1A0CB18D00B6AC9E /* UISearchDisplayController.m in Sources */,
 				434CFD1A1A0CAAF200B6AC9E /* NSTextAttachment.m in Sources */,
 				432F73801A08AE99009CEC64 /* UISplitViewController.m in Sources */,
+				43B447FA1AB6FADF00DC1968 /* ioapi.c in Sources */,
 				43C200C518EBBCD400490D59 /* UIPageControl.m in Sources */,
 				43EBAA7F18AB67C2005DDD8D /* UIInterface.m in Sources */,
 				434CFD3A1A0CB40400B6AC9E /* UIPasteboard.m in Sources */,
@@ -1491,11 +1472,6 @@
 			isa = PBXTargetDependency;
 			target = 43718E6818517B7B00850F08 /* UIKit */;
 			targetProxy = 43718E8418517B7B00850F08 /* PBXContainerItemProxy */;
-		};
-		43CAEA5D19B0CB6C00B0AA8F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "ObjectiveZip-Android";
-			targetProxy = 43CAEA5C19B0CB6C00B0AA8F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
