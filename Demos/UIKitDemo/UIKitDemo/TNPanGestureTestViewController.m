@@ -10,6 +10,7 @@
 
 @interface TNPanGestureTestViewController ()
 @property (nonatomic, strong) UIView *red;
+@property (nonatomic, strong) UILabel *label;
 @end
 
 @implementation TNPanGestureTestViewController
@@ -31,6 +32,20 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handle_pan:)];
     [self.view addGestureRecognizer:pan];
 
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    label.text = [NSString stringWithFormat:@"velocity:%@",NSStringFromCGPoint(CGPointZero)];
+    [label sizeToFit];
+    self.label = label;
+    [self.view addSubview:label];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    CGRect r = self.label.frame;
+    r.size.width = self.view.bounds.size.width;
+    r.origin = CGPointMake(0, self.view.bounds.size.height - r.size.height);
+    self.label.frame = r;
 }
 
 - (void)handle_pan:(UIPanGestureRecognizer *)pan
@@ -39,6 +54,10 @@
 //    NSLog(@"translation:%@",NSStringFromCGPoint(translation));
     CGPoint location = [pan locationInView:self.view];
     self.red.center = location;
+    
+    CGPoint velocity = [pan velocityInView:pan.view];
+    
+    self.label.text = [NSString stringWithFormat:@"velocity:%@",NSStringFromCGPoint(velocity)];
     
 }
 

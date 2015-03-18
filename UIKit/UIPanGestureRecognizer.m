@@ -108,7 +108,10 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (CGPoint)velocityInView:(UIView *)view
 {
-    return _velocity;
+    CGPoint p = [view convertPoint:_velocity fromView:nil];
+    p.x = -p.x;
+    p.y = -p.y;
+    return p;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
