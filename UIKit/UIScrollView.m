@@ -463,7 +463,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     if (fabsf(velocity.x) > kForceNextPageVelocity) {
         finalContentOffset.x = pageSize.width * currentPage.width;
         if  (fabsf(velocity.x) > kForceNextPageVelocity) {
-            if (velocity.x > 0 && hasHorNextPage) {
+            if (velocity.x < 0 && hasHorNextPage) {
                 finalContentOffset.x = pageSize.width * (currentPage.width + 1);
             } else {
                 finalContentOffset.x = pageSize.width * currentPage.width;
@@ -482,7 +482,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     if (fabsf(velocity.y) > kForceNextPageVelocity) {
         finalContentOffset.y = pageSize.height * currentPage.height;
         if (fabsf(velocity.y) > kForceNextPageVelocity) {
-            if (velocity.y > 0 && hasVetNextPage) {
+            if (velocity.y < 0 && hasVetNextPage) {
                 finalContentOffset.y = pageSize.height * (currentPage.height + 1);
             } else {
                 finalContentOffset.y = pageSize.height * currentPage.height;
