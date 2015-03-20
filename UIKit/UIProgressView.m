@@ -23,10 +23,20 @@
 
 - (instancetype)initWithProgressViewStyle:(UIProgressViewStyle)style
 {
-    self = [super initWithFrame:DefaultFrame];
+    return [self _initWithProgressViewStyle:style withFrame:DefaultFrame];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    return [self _initWithProgressViewStyle:UIProgressViewStyleDefault withFrame:frame];
+}
+
+- (instancetype)_initWithProgressViewStyle:(UIProgressViewStyle)style withFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
     if (self) {
         [self _makeSubview];
-        [self _initAppearanceWith:style];
+        [self setProgressViewStyle:style];
         [self _refreshSubviewSizeAndLocation];
     }
     return self;
@@ -92,9 +102,9 @@
     return self.subviewTrack.backgroundColor;
 }
 
-- (void)_initAppearanceWith:(UIProgressViewStyle)style
+- (void)setProgressViewStyle:(UIProgressViewStyle)progressViewStyle
 {
-    switch (style) {
+    switch (progressViewStyle) {
         case UIProgressViewStyleDefault:
             self.progressTintColor = [UIColor blueColor];
             self.trackTintColor = [UIColor grayColor];
