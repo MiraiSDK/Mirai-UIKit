@@ -58,7 +58,7 @@ typedef enum {
     BOOL _cancelsTouchesInView;
     BOOL _enabled;
     UIGestureRecognizerState _state;
-    UIView *_view;
+    __unsafe_unretained UIView *_view;
     NSMutableArray *_registeredActions;
     NSMutableArray *_trackingTouches;
     
