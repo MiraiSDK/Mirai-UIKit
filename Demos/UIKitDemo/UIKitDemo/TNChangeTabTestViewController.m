@@ -23,9 +23,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self _printViewControllerPropertesDefaultValues];
     [self _makeControllers];
     [self _makeTabs];
     [self _makeTestCaseButton];
+}
+
+- (void)_printViewControllerPropertesDefaultValues
+{
+    NSLog(@"selectedIndex : %li", self.selectedIndex);
 }
 
 - (void)_makeControllers
@@ -34,6 +40,7 @@
         [self _createViewControllerWithDescription:@"Controller(1)"],
         [self _createViewControllerWithDescription:@"Controller(2)"],
         [self _createOperateController],
+        [self _createViewControllerWithDescription:@"Other"],
     ];
 }
 
@@ -56,14 +63,14 @@
 - (void)_setTabBarItem:(UITabBarItem *)item withImageName:(NSString *)imageName
 {
     UIImage *image = [UIImage imageNamed:imageName];
-    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item.image = image;
+    item.selectedImage = image;
 }
 
 - (UIViewController *)_createViewControllerWithDescription:(NSString *)description
 {
     UIViewController *controller = [[UIViewController alloc] init];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 300, 50)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 110, 300, 50)];
     label.text = description;
     label.textColor = [UIColor blueColor];
     
@@ -83,9 +90,9 @@
 - (void)_makeImageZoomChangeButtonsForController:(UIViewController *)controller
 {
     UIButton *imageZoomUp = [TNComponentCreator createButtonWithTitle:@"ING++"
-                                                            withFrame:CGRectMake(5, 100, 50, 25)];
+                                                            withFrame:CGRectMake(5, 210, 50, 25)];
     UIButton *imageZoomOut = [TNComponentCreator createButtonWithTitle:@"IMG--"
-                                                             withFrame:CGRectMake(120, 100, 50, 25)];
+                                                             withFrame:CGRectMake(120, 210, 50, 25)];
     [imageZoomUp addTarget:self action:@selector(_onClickImageZoomUp:)
           forControlEvents:UIControlEventTouchUpInside];
     [imageZoomOut addTarget:self action:@selector(_onClickImageZoomOut:)
@@ -110,17 +117,20 @@
     [self _doForEachTabBarItems:^(UITabBarItem *item, NSUInteger index) {
         item.image = [self _createResizedImageWithSourceImage:item.image withScale:scale];
         item.selectedImage = [self _createResizedImageWithSourceImage:item.selectedImage
-                                                                       withScale:scale];
+                                                            withScale:scale];
     }];
 }
 
 - (UIImage *)_createResizedImageWithSourceImage:(UIImage *)sourceImage withScale:(float)scale
 {
-    CGSize size = sourceImage.size;
-    size = CGSizeMake(size.width*scale, size.height*scale);
-    UIImage *image = [TNComponentCreator imageWithImage:sourceImage
-                                scaledToSize:size];
-    return [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *targetImage = nil;
+    if (sourceImage) {
+        CGSize size = sourceImage.size;
+        size = CGSizeMake(size.width*scale, size.height*scale);
+        targetImage = [TNComponentCreator imageWithImage:sourceImage
+                                            scaledToSize:size];
+    }
+    return targetImage;
 }
 
 - (void)_doForEachTabBarItems:(void (^)(UITabBarItem *item, NSUInteger index))callback
@@ -137,10 +147,21 @@
 
 - (void)_runTestCaseCode:(TNTestCaseHelperButton *)helper
 {
+    [self _testIsSelectedImageEqualsImageWhenNotAssignSelectedImage:helper];
+    [self _testDefaultValueOfTabBarItemDelegateIsSuperViewController:helper];
+}
+
+- (void)_testIsSelectedImageEqualsImageWhenNotAssignSelectedImage:(TNTestCaseHelperButton *)helper
+{
     UIImage *image = [[UIImage imageNamed:@"loveheart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"haha" image:image tag:7];
     
     [helper assert:(item.selectedImage == item.image) forTest:@"initWithTitle:image:tag: function setting images."];
+}
+
+- (void)_testDefaultValueOfTabBarItemDelegateIsSuperViewController:(TNTestCaseHelperButton *)helper
+{
+    [helper assert:(self.tabBar.delegate == self) forTest:@"default delegate'value is super viewController."];
 }
 
 @end

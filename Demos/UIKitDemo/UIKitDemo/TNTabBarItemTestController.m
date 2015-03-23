@@ -26,7 +26,6 @@
     [self _makeTabBarItems];
     [self _makeTabBar];
     [self _makeChangeValueSliders];
-    [self _printUITabBarDefaultSize];
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -48,7 +47,6 @@
 - (void)_makeTabBar
 {
     self.bar =  [[UITabBar alloc] initWithFrame:CGRectMake(5, 130, 250, 50)];
-    self.bar.backgroundColor = [UIColor grayColor];
     [self.view addSubview:self.bar];
     [self.bar setItems:self.items];
 }
@@ -85,11 +83,6 @@
         UITabBarItem *item = (UITabBarItem *)[self.items objectAtIndex:index];
         callback(item, index);
     }
-}
-
-- (void)_printUITabBarDefaultSize
-{
-    NSLog(@"UITabBar's default size is (%f, %f).", self.bar.frame.size.width, self.bar.frame.size.height);
 }
 
 @end

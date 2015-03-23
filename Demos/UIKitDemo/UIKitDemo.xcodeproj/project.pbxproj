@@ -536,6 +536,17 @@
 			name = UITabBarController;
 			sourceTree = "<group>";
 		};
+        D2726A651ABE6DB60010F435 /* UITabBarController */ = {
+            isa = PBXGroup;
+            children = (
+            D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */,
+            D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */,
+            D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */,
+            D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */,
+            );
+            name = UITabBarController;
+            sourceTree = "<group>";
+        };
 		D2A5F4791AB07C5F0011AF7B /* Uitils */ = {
 			isa = PBXGroup;
 			children = (
