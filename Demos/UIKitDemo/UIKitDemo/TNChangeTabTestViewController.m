@@ -7,7 +7,7 @@
 //
 
 #import "TNChangeTabTestViewController.h"
-#import "TNComponentCreator.h"ß
+#import "TNComponentCreator.h"
 
 @interface TNChangeTabTestViewController ()
 
@@ -38,9 +38,16 @@
 
 - (void)_makeTabs
 {
-    UITabBarItem *item0 = [self.tabBar.items objectAtIndex:0];
-    item0.image = [[UIImage imageNamed:@"tabicon0.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    
+    [self _setTabBarItem:[self _getTabBarItemAt:1] withImageName:@"loveheart.png"];
+    [self _setTabBarItem:[self _getTabBarItemAt:0] withImageName:@"loveheart.png"];
+    [self _setTabBarItem:[self _getTabBarItemAt:2] withImageName:@"tabicon0.png"];
+}
+
+- (void)_setTabBarItem:(UITabBarItem *)item withImageName:(NSString *)imageName
+{
+    UIImage *image = [UIImage imageNamed:imageName];
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item.image = image;
 }
 
 - (UIViewController *)_createViewControllerWithDescription:(NSString *)description
@@ -58,23 +65,47 @@
 
 -(UIViewController *)_createOperateController
 {
-    UIButton *imageZoomUp = [TNComponentCreator createButtonWithTitle:@"image++"
-                                                            withFrame:CGRectMake(5, 75, 50, 25)];
-    UIButton *imageZoomOut = [TNComponentCreator createButtonWithTitle:@"image --"
-                                                             withFrame:CGRectMake(5, 75, 50, 25)];
+    UIViewController *controller = [self _createViewControllerWithDescription:@"test"];
+    [self _makeImageZoomChangeButtonsForController:controller];
+    return controller;
+}
+
+- (void)_makeImageZoomChangeButtonsForController:(UIViewController *)controller
+{
+    UIButton *imageZoomUp = [TNComponentCreator createButtonWithTitle:@"ING++"
+                                                            withFrame:CGRectMake(5, 100, 50, 25)];
+    UIButton *imageZoomOut = [TNComponentCreator createButtonWithTitle:@"IMG--"
+                                                             withFrame:CGRectMake(120, 100, 50, 25)];
+    [imageZoomUp addTarget:self action:@selector(_onClickImageZoomUp:)
+          forControlEvents:UIControlEventTouchUpInside];
+    [imageZoomOut addTarget:self action:@selector(_onClickImageZoomOut:)
+           forControlEvents:UIControlEventTouchUpInside];
     
-    
-    return nil;
+    [controller.view addSubview:imageZoomUp];
+    [controller.view addSubview:imageZoomOut];
 }
 
 - (void)_onClickImageZoomUp:(id)sender
 {
-    [self _doForEachTabBarItems:^(UITabBarItem *item, NSUInteger index) {
-        CGSize size = item.image.size;
-        size = CGSizeMake(size.width*1.25, size.height*1.25);
-    }];
+    [self _resizeItemImageWithScale:1.25];
 }
 
+- (void)_onClickImageZoomOut:(id)sender
+{
+    [self _resizeItemImageWithScale:0.8];
+}
+
+- (void)_resizeItemImageWithScale:(float)scale
+{
+    [self _doForEachTabBarItems:^(UITabBarItem *item, NSUInteger index) {
+        CGSize size = item.image.size;
+        size = CGSizeMake(size.width*scale, size.height*scale);
+        UIImage *resizedImage = [TNComponentCreator imageWithImage:item.image
+                                                      scaledToSize:size];
+        resizedImage = [resizedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [item setImage:resizedImage];
+    }];
+}
 
 - (void)_doForEachTabBarItems:(void (^)(UITabBarItem *item, NSUInteger index))callback
 {
