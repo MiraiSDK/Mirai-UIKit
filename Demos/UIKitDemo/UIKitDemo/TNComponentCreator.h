@@ -17,4 +17,5 @@
 + (UIButton *)createButtonWithTitle:(NSString *)title withFrame:(CGRect)rect;
 + (UIImage *)createRectangleWithSize:(CGSize)size withColor:(UIColor *)color;
 + (UIImage *)createEllipseWithSize:(CGSize)size withColor:(UIColor *)color;
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
 @end
