@@ -81,6 +81,12 @@
 		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
 		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
+		D2726A6E1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */; };
+		D2726A6F1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */; };
+		D2726A721ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */; };
+		D2726A731ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */; };
+		D2726A7B1ABE95500010F435 /* tabicon0.png in Resources */ = {isa = PBXBuildFile; fileRef = D2726A7A1ABE95500010F435 /* tabicon0.png */; };
+		D2726A7C1ABE95500010F435 /* tabicon0.png in Resources */ = {isa = PBXBuildFile; fileRef = D2726A7A1ABE95500010F435 /* tabicon0.png */; };
 		D2A5F4801AB07C830011AF7B /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */; };
 		D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */; };
 		D2A5F4821AB07C830011AF7B /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */; };
@@ -193,6 +199,11 @@
 		4390B88B1A85EDA10082B0F1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		4390B88C1A85EDA10082B0F1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
+		D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangeTabTestViewController.h; sourceTree = "<group>"; };
+		D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeTabTestViewController.m; sourceTree = "<group>"; };
+		D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarControlTestViewController.h; sourceTree = "<group>"; };
+		D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTabBarControlTestViewController.m; sourceTree = "<group>"; };
+		D2726A7A1ABE95500010F435 /* tabicon0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabicon0.png; sourceTree = "<group>"; };
 		D2A5F47C1AB07C830011AF7B /* TNChangedColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangedColorButton.h; sourceTree = "<group>"; };
 		D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangedColorButton.m; sourceTree = "<group>"; };
 		D2A5F47E1AB07C830011AF7B /* TNComponentCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNComponentCreator.h; sourceTree = "<group>"; };
@@ -322,6 +333,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D2726A651ABE6DB60010F435 /* UITabBarController */,
 				D2A5F4951AB0847C0011AF7B /* UISlider */,
 				D2A5F4881AB081BE0011AF7B /* UIStepper */,
 				D2A5F4A31AB086170011AF7B /* UISegmentedControl */,
@@ -483,6 +495,7 @@
 		4390B8801A835D460082B0F1 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				D2726A7A1ABE95500010F435 /* tabicon0.png */,
 				D2A5F49C1AB084CD0011AF7B /* loveheart.png */,
 				4390B8811A835D540082B0F1 /* 34912115.jpg */,
 				4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */,
@@ -497,6 +510,17 @@
 			name = UIImageView;
 			sourceTree = "<group>";
 		};
+        D2726A651ABE6DB60010F435 /* UITabBarController */ = {
+            isa = PBXGroup;
+            children = (
+            D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */,
+            D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */,
+            D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */,
+            D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */,
+            );
+            name = UITabBarController;
+            sourceTree = "<group>";
+        };
 		D2A5F4791AB07C5F0011AF7B /* Uitils */ = {
 			isa = PBXGroup;
 			children = (
@@ -640,6 +664,7 @@
 				437F25DE1A736FA800FBE3E2 /* TNAndroidLauncher.h in Resources */,
 				4390B8841A835D540082B0F1 /* 34912115.jpg in Resources */,
 				4390B8861A835D540082B0F1 /* kiniromosaic001.jpg in Resources */,
+				D2726A7C1ABE95500010F435 /* tabicon0.png in Resources */,
 				4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -653,6 +678,7 @@
 				437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */,
 				4390B8831A835D540082B0F1 /* 34912115.jpg in Resources */,
 				4390B8851A835D540082B0F1 /* kiniromosaic001.jpg in Resources */,
+				D2726A7B1ABE95500010F435 /* tabicon0.png in Resources */,
 				4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -688,6 +714,7 @@
 				4390B86B1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */,
 				4390B8331A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
 				4390B84C1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */,
+				D2726A6F1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */,
 				4390B86D1A8353B50082B0F1 /* TNTapGestureTestViewController.m in Sources */,
 				4390B8651A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
 				4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
@@ -715,6 +742,7 @@
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
 				4390B8381A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
+				D2726A731ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */,
 				4390B8501A8353480082B0F1 /* TNPresentTestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -738,7 +766,9 @@
 				4390B8491A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
 				4390B86A1A8353B50082B0F1 /* TNRotationTestViewController.m in Sources */,
 				4390B8661A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
+				D2726A6E1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */,
 				D2A5F4861AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
+				D2726A721ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */,
 				4390B8301A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
 				4390B82E1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */,
 				4390B8701A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
