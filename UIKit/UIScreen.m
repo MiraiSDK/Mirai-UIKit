@@ -45,6 +45,11 @@ static UIScreen *_mainScreen = nil;
 {
     self = [super init];
     if (self) {
+        // about __pixelLayer and __windowLayer:
+        // on iOS, a window always is portrait.
+        // on android, surface size changed on orientation change
+        //  __pixelLayer always pixel-equal screen pixel size
+        //  __windowLayer is been used to simulate iOS screen
         __pixelLayer = [CALayer layer];
         __pixelLayer.masksToBounds = YES;
 //        __pixelLayer.backgroundColor =[UIColor redColor].CGColor;
@@ -179,9 +184,14 @@ static UIScreen *_mainScreen = nil;
     NSLog(@"pixel bounds:%@",NSStringFromCGRect(_pixelBounds));
     NSLog(@"set screen bounds:%@ scale:%.2f",NSStringFromCGRect(bounds),scale);
     _scale = scale;
-    _bounds = bounds;
-    _applicationFrame = bounds;
-    __windowLayer.bounds = bounds;
+    CGRect portraitBounds = bounds;
+    if (bounds.size.width > bounds.size.height) {
+        portraitBounds.size.width = bounds.size.height;
+        portraitBounds.size.height = bounds.size.width;
+    }
+    _bounds = portraitBounds;
+    _applicationFrame = portraitBounds;
+    __windowLayer.bounds = portraitBounds;
     __windowLayer.position = CGPointMake(_pixelBounds.size.width/2, _pixelBounds.size.height/2);
     __windowLayer.transform = CATransform3DMakeScale(scale, scale, 1);
 }
