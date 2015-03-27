@@ -58,11 +58,6 @@ LOCAL_SRC_FILES := $(TN_LIBRARY_PATH)/libQuartzCore.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := ObjectiveZip
-LOCAL_SRC_FILES := $(TN_LIBRARY_PATH)/libObjectiveZip.so
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE    := UIKit
 LOCAL_SRC_FILES := $(TN_LIBRARY_PATH)/libUIKit.so
 include $(PREBUILT_SHARED_LIBRARY)
