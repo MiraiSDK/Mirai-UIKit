@@ -13,11 +13,8 @@ DEPLOYMENT_LOCATION = YES
 DSTROOT = /
 INSTALL_PATH =$(SDK_ROOT)/System/Library/Frameworks/
 
-ARCHFLAGS=-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16
-ARCHLDFLAGS=-march=armv7-a -Wl,--fix-cortex-a8
-
-OTHER_LDFLAGS= $(ARCHLDFLAGS) -shared $(inherited) -Wl,-z,defs -lgnustl_shared -ldispatch -lobjc
-OTHER_CFLAGS= $(ARCHFLAGS) $(inherited) -DANDROID=1 -fblocks
+OTHER_LDFLAGS= -shared $(inherited) -Wl,-z,defs -lgnustl_shared -ldispatch -lobjc
+OTHER_CFLAGS= $(inherited) -DANDROID=1 -fblocks
 
 LD_DEPENDENCY_INFO_FILE=
 MACOSX_DEPLOYMENT_TARGET =

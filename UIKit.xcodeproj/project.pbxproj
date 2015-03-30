@@ -386,6 +386,8 @@
 		434CFD5D1A0CB9A800B6AC9E /* UIStateRestoration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIStateRestoration.m; sourceTree = "<group>"; };
 		434CFD601A0CBAB400B6AC9E /* UIVideoEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIVideoEditorController.h; sourceTree = "<group>"; };
 		434CFD611A0CBAB400B6AC9E /* UIVideoEditorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIVideoEditorController.m; sourceTree = "<group>"; };
+		436060F61AC940B100303792 /* Android-arm.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Android-arm.xcconfig"; path = "TNJavaHelper/xcconfig/Android-arm.xcconfig"; sourceTree = "<group>"; };
+		436060F71AC940B100303792 /* Android-x86.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Android-x86.xcconfig"; path = "TNJavaHelper/xcconfig/Android-x86.xcconfig"; sourceTree = "<group>"; };
 		436D4A6419F2621300F6F8F9 /* UIAndroidWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidWebView.h; sourceTree = "<group>"; };
 		436D4A6519F2621300F6F8F9 /* UIAndroidWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidWebView.m; sourceTree = "<group>"; };
 		436D4AD219F52E0300F6F8F9 /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISwitch.h; sourceTree = "<group>"; };
@@ -765,6 +767,8 @@
 		43718EC218518EB600850F08 /* xcconfig */ = {
 			isa = PBXGroup;
 			children = (
+				436060F61AC940B100303792 /* Android-arm.xcconfig */,
+				436060F71AC940B100303792 /* Android-x86.xcconfig */,
 				43718EC318518EE300850F08 /* Android.xcconfig */,
 			);
 			name = xcconfig;

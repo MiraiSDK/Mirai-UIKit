@@ -17,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		436060F31AC93AB700303792 /* Android-arm.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-arm.xcconfig"; sourceTree = "<group>"; };
+		436060F41AC93AB700303792 /* Android-x86.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-x86.xcconfig"; sourceTree = "<group>"; };
+		436060F51AC93AB700303792 /* Android.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Android.xcconfig; sourceTree = "<group>"; };
 		43F962AE19824CFE00530F4F /* TNJavaHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TNJavaHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43F962B119824CFE00530F4F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		43F962B419824CFE00530F4F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -28,7 +31,6 @@
 		43F962BE19824CFE00530F4F /* TNJavaHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TNJavaHelper.h; sourceTree = "<group>"; };
 		43F962BF19824CFE00530F4F /* TNJavaHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TNJavaHelper.m; sourceTree = "<group>"; };
 		43F962E719824D1000530F4F /* TNJavaHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TNJavaHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43F962E919824D6900530F4F /* Android.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Android.xcconfig; path = TNJavaHelper/Android.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,10 +53,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		436060F21AC93AB700303792 /* xcconfig */ = {
+			isa = PBXGroup;
+			children = (
+				436060F31AC93AB700303792 /* Android-arm.xcconfig */,
+				436060F41AC93AB700303792 /* Android-x86.xcconfig */,
+				436060F51AC93AB700303792 /* Android.xcconfig */,
+			);
+			path = xcconfig;
+			sourceTree = "<group>";
+		};
 		43F962A419824CFE00530F4F = {
 			isa = PBXGroup;
 			children = (
-				43F962EA19824D6E00530F4F /* xcconfig */,
+				436060F21AC93AB700303792 /* xcconfig */,
 				43F962B719824CFE00530F4F /* TNJavaHelper */,
 				43F962B019824CFE00530F4F /* Frameworks */,
 				43F962AF19824CFE00530F4F /* Products */,
@@ -108,14 +120,6 @@
 				43F962BD19824CFE00530F4F /* TNJavaHelper-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		43F962EA19824D6E00530F4F /* xcconfig */ = {
-			isa = PBXGroup;
-			children = (
-				43F962E919824D6900530F4F /* Android.xcconfig */,
-			);
-			name = xcconfig;
 			sourceTree = "<group>";
 		};
 		43F962EB19824DDF00530F4F /* Android */ = {
@@ -378,7 +382,7 @@
 		};
 		43F962E519824D1000530F4F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43F962E919824D6900530F4F /* Android.xcconfig */;
+			baseConfigurationReference = 436060F51AC93AB700303792 /* Android.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -395,7 +399,7 @@
 		};
 		43F962E619824D1000530F4F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43F962E919824D6900530F4F /* Android.xcconfig */;
+			baseConfigurationReference = 436060F51AC93AB700303792 /* Android.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;

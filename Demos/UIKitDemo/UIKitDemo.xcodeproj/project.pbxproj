@@ -115,6 +115,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		436060D61AC9231000303792 /* Android-arm.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-arm.xcconfig"; sourceTree = "<group>"; };
+		436060D71AC9231000303792 /* Android-x86.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-x86.xcconfig"; sourceTree = "<group>"; };
 		437F25D01A736FA800FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437F25D31A736FA800FBE3E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		437F25D71A736FA800FBE3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -288,6 +290,8 @@
 				437F25DD1A736FA800FBE3E2 /* TNAndroidLauncher.h */,
 				437F25DF1A736FA800FBE3E2 /* TNAndroidLauncher.m */,
 				437F25E11A736FA800FBE3E2 /* Android.xcconfig */,
+				436060D61AC9231000303792 /* Android-arm.xcconfig */,
+				436060D71AC9231000303792 /* Android-x86.xcconfig */,
 				437F25E21A736FA800FBE3E2 /* Android.mk */,
 				437F25E31A736FA800FBE3E2 /* MainActivity.java */,
 				437F25E41A736FA800FBE3E2 /* AndroidManifest.xml */,
@@ -330,6 +334,7 @@
 				4390B8431A8352FE0082B0F1 /* UIAlertView */,
 				4390B8341A83529D0082B0F1 /* UIScrollView */,
 				4390B8391A8352C50082B0F1 /* UITableView */,
+				43B448121AB9CEDF00DC1968 /* UIImageView */,
 				4390B83E1A8352E70082B0F1 /* UIWebVIew */,
 			);
 			name = "View Tests";
@@ -483,6 +488,13 @@
 				4390B8821A835D540082B0F1 /* kiniromosaic001.jpg */,
 			);
 			name = images;
+			sourceTree = "<group>";
+		};
+		43B448121AB9CEDF00DC1968 /* UIImageView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = UIImageView;
 			sourceTree = "<group>";
 		};
 		D2A5F4791AB07C5F0011AF7B /* Uitils */ = {
@@ -659,7 +671,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    echo \"patching MainActivity.java..\"\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    \n    SDK_REAL_PATH=`readlink /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk`\n    \n    CocoaActivity_PATH=$SDK_REAL_PATH/System/Library/Frameworks/CocoaActivity\n    \n    ##check CocoaActivity exist\n    \n    if [[ ! -d $CocoaActivity_PATH ]]; then\n        echo \"CocoaActivity doesn't exist. please build UIKIt first\"\n        ##clean\n        rm -rf $TN_ANDROID_PROJECT_PATH\n        exit 1\n    fi\n    \n    echo \"Resolving CocoaActivity relative path...\"\n\n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT $CocoaActivity_PATH`\n    \n    echo \"add CocoaActivity as library...\"\n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    echo \"copy jni files..\"\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    #copy resources\n    echo \"coping resources...\"\n    mkdir -p assets\n    cp -R \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/\" assets/\n    \n    #copy icon\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon@2x.png\" res/drawable-hdpi/ic_launcher.png # 72x72\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon.png\" res/drawable-ldpi/ic_launcher.png #36x36\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon@2x.png\" res/drawable-mdpi/ic_launcher.png #48x48\n    cp \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Icon@2x.png\" res/drawable-xhdpi/ic_launcher.png #96x96\n    \n    #build ndk\n    NDK_DEBUG=1 ndk-build\n    \n    # run if needs\n    \n    popd";
+			shellScript = "\nset -e\n\nrelpath()\n{\n    s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ \"${d#$s/}\" == \"${d}\" ]\n    do s=$(dirname $s);b=\"../${b}\"; done; echo ${b}${d#$s/}\n    }\n    \n    #setting PATH\n    PATH=$(bash -l -c 'echo $PATH')\n    \n    echo \"current direct\"\n    pwd\n    \n    TN_EXEC_PATH=\"$TARGET_BUILD_DIR/$EXECUTABLE_PATH\"\n    echo $TN_EXEC_PATH\n    \n    #Temp Android Project Path\n    TN_ANDROID_PROJECT_PATH=\"$TARGET_BUILD_DIR/android\"\n    \n    PRODUCT_IDENTIFIER=`/usr/libexec/PlistBuddy -c \"Print :CFBundleIdentifier\" $TARGET_BUILD_DIR/$INFOPLIST_PATH`\n    echo $ROOT_PRODUCT_IDENTIFIER_PLIST\n    \n    if [[ ! -d $TN_ANDROID_PROJECT_PATH ]]; then\n    mkdir -p $TN_ANDROID_PROJECT_PATH\n    fi\n    \n    pushd $TN_ANDROID_PROJECT_PATH\n    \n    ## create project if needs\n    if [[ ! -f AndroidManifest.xml ]]; then\n    android create project --target 1 --name $PRODUCT_NAME --path ./ --activity MainActivity --package $PRODUCT_IDENTIFIER\n    mkdir -p jni\n    \n    \n    # patch AndroidManifest.xml\n    echo \"patching AndroidManifest.xml..\"\n    cp \"$SRCROOT/$PRODUCT_NAME/AndroidManifest.xml\" ./\n    \n    # patch MainActivity.java\n    echo \"patching MainActivity.java..\"\n    java_dest=`find . -name MainActivity.java`\n    cp \"$SRCROOT/$PRODUCT_NAME/MainActivity.java\" \"$java_dest\"\n    \n    # include CocoaActivity lib\n    \n    SDK_REAL_PATH=`readlink /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk`\n    \n    CocoaActivity_PATH=$SDK_REAL_PATH/System/Library/Frameworks/CocoaActivity\n    \n    ##check CocoaActivity exist\n    \n    if [[ ! -d $CocoaActivity_PATH ]]; then\n    echo \"CocoaActivity doesn't exist. please build UIKIt first\"\n    ##clean\n    rm -rf $TN_ANDROID_PROJECT_PATH\n    exit 1\n    fi\n    \n    echo \"Resolving CocoaActivity relative path...\"\n    \n    TN_CURRENT=`pwd`\n    Relative_Library_Path=`relpath $TN_CURRENT $CocoaActivity_PATH`\n    \n    echo \"add CocoaActivity as library...\"\n    android update project --target 1 --path . --library $Relative_Library_Path\n    \n    #update app name\n    sed -i .bak -e \"s/>MainActivity</>$PRODUCT_NAME</\" res/values/strings.xml\n    rm res/values/strings.xml.bak\n    \n    fi\n    \n    #copy jni files\n    echo \"coping jni files..\"\n    cp \"$TN_EXEC_PATH\" \"jni/$EXECUTABLE_NAME.so\"\n    cp \"$SRCROOT/$PRODUCT_NAME/Android.mk\" jni/\n    \n    APP_ABI=armeabi\n    case $TOOLCHAIN_ARCH in\n    arm* | arm)\n    APP_ABI=armeabi\n    ;;\n    x86)\n    APP_ABI=x86\n    ;;\n    *)\n    echo \"Unknow TOOLCHAIN_ARCH:$TOOLCHAIN_ARCH, fallback to arm\"\n    esac\n    \n    echo \"APP_ABI := $APP_ABI\" > jni/Application.mk\n    \n    \n    #copy resources\n    echo \"coping resources...\"\n    mkdir -p assets\n    cp -R \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/\" assets/\n    \n    #build ndk\n    ndk-build\n    \n    popd\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -830,7 +842,7 @@
 		};
 		437F25EB1A736FA800FBE3E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
+			baseConfigurationReference = 436060D61AC9231000303792 /* Android-arm.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = UIKitDemo/Info.plist;
@@ -841,7 +853,7 @@
 		};
 		437F25EC1A736FA800FBE3E2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 437F25E11A736FA800FBE3E2 /* Android.xcconfig */;
+			baseConfigurationReference = 436060D61AC9231000303792 /* Android-arm.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = UIKitDemo/Info.plist;
