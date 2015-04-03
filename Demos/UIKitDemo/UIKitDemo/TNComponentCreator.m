@@ -8,6 +8,7 @@
 
 #import "TNComponentCreator.h"
 #import "TNTestViewController.h"
+#import "TNChangeValueSlider.h"
 
 #define DefaultLineWidth 2.0
 #define DefaultLineColor [UIColor blackColor]
@@ -24,6 +25,20 @@
     
     [testControl.view addSubview:switchItem];
     [testControl.view addSubview:titleLabel];
+}
+
++ (void)makeChangeValueSliderWithTitle:(NSString *)title at:(CGFloat)yLocation withControl:(UIViewController *)controller withMaxValue:(CGFloat)maxValue whenValueChanged:(void (^)(float value))action
+{
+    CGPoint point = CGPointMake(200, yLocation);
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5, yLocation, 175, 35)];
+    TNChangeValueSlider *slider = [[TNChangeValueSlider alloc] initAt:point withMaxValue:maxValue whenValueChanged:^(float value) {
+        NSString *titleContent = [NSString stringWithFormat:@"%@:%f", title, value];
+        [label setText:titleContent];
+        action(value);
+    }];
+    [controller.view addSubview:label];
+    [controller.view addSubview:slider];
+    [label setText:title];
 }
 
 + (UIButton *)createButtonWithTitle:(NSString *)title withFrame:(CGRect)rect withBackgroundColor:(UIColor *)backgroundColor
