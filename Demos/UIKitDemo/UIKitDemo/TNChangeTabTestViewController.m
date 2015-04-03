@@ -98,13 +98,19 @@
 - (void)_resizeItemImageWithScale:(float)scale
 {
     [self _doForEachTabBarItems:^(UITabBarItem *item, NSUInteger index) {
-        CGSize size = item.image.size;
-        size = CGSizeMake(size.width*scale, size.height*scale);
-        UIImage *resizedImage = [TNComponentCreator imageWithImage:item.image
-                                                      scaledToSize:size];
-        resizedImage = [resizedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [item setImage:resizedImage];
+        item.image = [self _createResizedImageWithSourceImage:item.image withScale:scale];
+        item.selectedImage = [self _createResizedImageWithSourceImage:item.selectedImage
+                                                                       withScale:scale];
     }];
+}
+
+- (UIImage *)_createResizedImageWithSourceImage:(UIImage *)sourceImage withScale:(float)scale
+{
+    CGSize size = sourceImage.size;
+    size = CGSizeMake(size.width*scale, size.height*scale);
+    UIImage *image = [TNComponentCreator imageWithImage:sourceImage
+                                scaledToSize:size];
+    return [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 
 - (void)_doForEachTabBarItems:(void (^)(UITabBarItem *item, NSUInteger index))callback
