@@ -17,8 +17,8 @@
 #define NilIndex NSUIntegerMax
 #define ItemTitleHeight 35
 
-#define NormalTitleColor [UIColor blackColor]
-#define SelectedTitleColor [UIColor grayColor]
+#define NormalTitleColor [UIColor grayColor]
+#define SelectedTitleColor [UIColor blueColor]
 
 @interface UITabBar()
 @property NSUInteger selectedIndex;
@@ -43,6 +43,8 @@
     self.selectedIndex = NilIndex;
 }
 
+#pragma mark - properties operation.
+
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
@@ -57,25 +59,25 @@
     return (UITabBarItem *)[self.items objectAtIndex:self.selectedIndex];
 }
 
+- (void)setSelectedIndex:(NSUInteger)selectedIndex
+{
+    if (_selectedIndex != selectedIndex) {
+        _selectedIndex = selectedIndex;
+        [self _refreshItemsAppearanceAndLocation];
+        [self.delegate tabBar:self didSelectItem:[self selectedItem]];
+    }
+}
+
 - (void)setSelectedItem:(UITabBarItem *)selectedItem
 {
-    NSUInteger index = [self _findIndexWithItem:selectedItem];
+    NSUInteger index = [self _findIndexOfItem:selectedItem];
     if (index == self.selectedIndex) {
         self.selectedIndex = index;
         [self _refreshItemsAppearanceAndLocation];
     }
 }
 
-- (NSUInteger)_findIndexWithItem:(UITabBarItem *)choosedItem
-{
-    for (NSUInteger i = 0; i < [self.items count]; i++) {
-        UITabBarItem *item = [self.items objectAtIndex:i];
-        if (item == choosedItem) {
-            return i;
-        }
-    }
-    return NilIndex;
-}
+#pragma mark - subviews management.
 
 - (void)setItems:(NSArray *)items
 {
@@ -141,7 +143,16 @@
         UIControl *touchArea = [[UIControl alloc] initWithFrame:CGRectZero];
         [self.itemTouchAreaBuffered insertObject:touchArea atIndex:i];
         [self addSubview:touchArea];
+        
+        [touchArea addTarget:self
+                      action:@selector(_onClickTouchArea:)
+            forControlEvents:UIControlEventTouchUpInside];
     }
+}
+
+- (void)_onClickTouchArea:(id)sender
+{
+    self.selectedIndex = [self _findIndexOfTouchArea:(UIControl *)sender];
 }
 
 - (void)_makeItemImageBufferedWithItems:(NSArray *)items
@@ -161,8 +172,8 @@
 {
     self.itemTitleBuffered = [self _createArrayWith:items andGenerateElementWith:^UIView *(UITabBarItem *item) {
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectZero];
-        NSLog(@"found item's title : %@", item.title);
         [title setText:item.title];
+        title.backgroundColor = [UIColor clearColor];
         return title;
     }];
 }
@@ -198,7 +209,7 @@
 
 - (void)_refreshAppearanceForItem:(UITabBarItem *)item
 {
-    NSUInteger index = [self _findIndexWithItem:item];
+    NSUInteger index = [self _findIndexOfItem:item];
     [self _setSubviewAppearanceAt:index];
 }
 
@@ -222,8 +233,8 @@
 {
     // make the UILabel on the bottom of frame, and the UIImageView on the center of the rest of area.
     CGRect frame = [self _getTouchAreaAt:index].frame;
-    CGFloat titleTopLine = frame.origin.y + frame.size.height - ItemTitleHeight;
-    title.frame = CGRectMake(0, titleTopLine, frame.size.width, ItemTitleHeight);
+    CGFloat titleTopLine = frame.size.height - ItemTitleHeight;
+    title.frame = CGRectMake(0, frame.size.height - ItemTitleHeight, frame.size.width, ItemTitleHeight);
     
     CGFloat gapWidth = (frame.size.width - imageView.image.size.width)/2;
     CGFloat gapHeight = (frame.size.height - ItemTitleHeight - imageView.image.size.height)/2;
@@ -236,6 +247,7 @@
 - (void)_checkIsSelectedAndSetAppearanceWithImage:(UIImageView *)imageView withTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
 {
     [self _setProperAppearanceForImage:imageView withItem:item at:index];
+    [self _setProperColorForTitle:title withItem:item at:index];
 }
 
 - (void)_setProperAppearanceForImage:(UIImageView *)imageView withItem:(UITabBarItem *)item at:(NSUInteger)index
@@ -272,6 +284,16 @@
 
 #pragma mark - items operation.
 
+- (NSUInteger)_findIndexOfItem:(UITabBarItem *)choosedItem
+{
+    return [self _findIndexOfObject:choosedItem from:self.items];
+}
+
+- (NSUInteger)_findIndexOfTouchArea:(UIControl *)touchArea
+{
+    return [self _findIndexOfObject:touchArea from:self.itemTouchAreaBuffered];
+}
+
 - (UIControl *)_getTouchAreaAt:(NSUInteger)index
 {
     return (UIControl *)[self.itemTouchAreaBuffered objectAtIndex:index];
@@ -304,6 +326,16 @@
 - (BOOL)_isSelectedAt:(NSUInteger)index
 {
     return self.selectedIndex == index;
+}
+
+- (NSUInteger)_findIndexOfObject:(id)object from:(NSArray *)array
+{
+    for (NSUInteger i = 0; i < array.count; i++) {
+        if ([array objectAtIndex:i] == object) {
+            return i;
+        }
+    }
+    return NilIndex;
 }
 
 @end
