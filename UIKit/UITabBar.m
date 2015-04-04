@@ -7,18 +7,20 @@
 //
 
 #import "UITabBar.h"
+#import "UITabBarItem+UIPrivate.h"
 #import "UIImage.h"
 #import "UIColor.h"
+#import "UIStringDrawing.h"
 #import "UIImageView.h"
 #import "UITabBarItem.h"
 #import "UILabel.h"
 #import "UIView.h"
 
-#define NilIndex NSUIntegerMax
 #define ItemTitleHeight 35
 
-#define NormalTitleColor [UIColor grayColor]
+#define NormalTitleColor [UIColor blackColor]
 #define SelectedTitleColor [UIColor blueColor]
+#define DefaultBackgroundColor [UIColor grayColor]
 
 @interface UITabBar()
 @property NSUInteger selectedIndex;
@@ -34,13 +36,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self _initDefaultValues];
+        self.backgroundColor = DefaultBackgroundColor;
     }
     return self;
 }
 
 - (void)_initDefaultValues
 {
-    self.selectedIndex = NilIndex;
+    self.selectedIndex = NSNotFound;
 }
 
 #pragma mark - properties operation.
@@ -53,7 +56,7 @@
 
 - (UITabBarItem *)selectedItem
 {
-    if (self.selectedIndex == NilIndex) {
+    if (self.selectedIndex == NSNotFound) {
         return nil;
     }
     return (UITabBarItem *)[self.items objectAtIndex:self.selectedIndex];
@@ -70,11 +73,7 @@
 
 - (void)setSelectedItem:(UITabBarItem *)selectedItem
 {
-    NSUInteger index = [self _findIndexOfItem:selectedItem];
-    if (index == self.selectedIndex) {
-        self.selectedIndex = index;
-        [self _refreshItemsAppearanceAndLocation];
-    }
+    self.selectedIndex = [self _findIndexOfItem:selectedItem];
 }
 
 #pragma mark - subviews management.
@@ -97,7 +96,7 @@
     if (self.items != nil) {
         [self _clearCallbackForAllItems];
     }
-    _items = items;
+    _items = [[NSArray alloc] initWithArray:items];
     [self _addCallbackForAllItems];
 }
 
@@ -172,6 +171,7 @@
 {
     self.itemTitleBuffered = [self _createArrayWith:items andGenerateElementWith:^UIView *(UITabBarItem *item) {
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectZero];
+        title.textAlignment = UITextAlignmentCenter;
         [title setText:item.title];
         title.backgroundColor = [UIColor clearColor];
         return title;
@@ -222,42 +222,43 @@
 - (void)_setSubviewAppearanceAt:(NSUInteger)index
 {
     UITabBarItem *item = [self _getItemAt:index];
-    UIImageView *imageView = [self _getItemImageAt:index];
-    UILabel *title = [self _getItemTitleAt:index];
+    [self _checkIsSelectedAndSetAppearanceWithItem:item at:index];
     
-    [self _setSizeAndLocationWithImage:imageView withTitle:title withItem:item at:index];
-    [self _checkIsSelectedAndSetAppearanceWithImage:imageView withTitle:title withItem:item at:index];
+    UIImageView *imageView = [self _getItemImageAt:index];
+    [self _setSizeAndLocationWithImage:imageView withItem:item at:index];
 }
 
-- (void)_setSizeAndLocationWithImage:(UIImageView *)imageView withTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
+- (void)_setSizeAndLocationWithImage:(UIImageView *)imageView withItem:(UITabBarItem *)item at:(NSUInteger)index
 {
     // make the UILabel on the bottom of frame, and the UIImageView on the center of the rest of area.
     CGRect frame = [self _getTouchAreaAt:index].frame;
     CGFloat titleTopLine = frame.size.height - ItemTitleHeight;
-    title.frame = CGRectMake(0, frame.size.height - ItemTitleHeight, frame.size.width, ItemTitleHeight);
+    UILabel *title = [self _getItemTitleAt:index];
+    title.frame = CGRectMake(0, titleTopLine, frame.size.width, ItemTitleHeight);
     
     CGFloat gapWidth = (frame.size.width - imageView.image.size.width)/2;
-    CGFloat gapHeight = (frame.size.height - ItemTitleHeight - imageView.image.size.height)/2;
+    CGFloat gapHeight = (titleTopLine - imageView.image.size.height)/2;
     
     imageView.frame = CGRectMake(gapWidth + item.titlePositionAdjustment.horizontal,
                                  gapHeight + item.titlePositionAdjustment.vertical,
                                  imageView.image.size.width, imageView.image.size.height);
 }
 
-- (void)_checkIsSelectedAndSetAppearanceWithImage:(UIImageView *)imageView withTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
+- (void)_checkIsSelectedAndSetAppearanceWithItem:(UITabBarItem *)item at:(NSUInteger)index
 {
-    [self _setProperAppearanceForImage:imageView withItem:item at:index];
-    [self _setProperColorForTitle:title withItem:item at:index];
+    [self _setProperAppearanceForItem:item at:index];
+    [self _setProperColorForTitleWithItem:item at:index];
 }
 
-- (void)_setProperAppearanceForImage:(UIImageView *)imageView withItem:(UITabBarItem *)item at:(NSUInteger)index
+- (void)_setProperAppearanceForItem:(UITabBarItem *)item at:(NSUInteger)index
 {
     UIImage *properImage = [self _getProperImageFromItem:item at:index];
     [self _checkImageEqualsAndReplaceIfNotWith:properImage at:index];
 }
 
-- (void)_setProperColorForTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
+- (void)_setProperColorForTitleWithItem:(UITabBarItem *)item at:(NSUInteger)index
 {
+    UILabel *title = [self _getItemTitleAt:index];
     if ([self _isSelectedAt:index]) {
         [title setTextColor:SelectedTitleColor];
     } else {
@@ -320,7 +321,7 @@
     
     UIImageView *newImageView = [[UIImageView alloc] initWithImage:image];
     [self.itemImageBuffered replaceObjectAtIndex:index withObject:newImageView];
-    [self addSubview:newImageView];
+    [[self _getTouchAreaAt:index] addSubview:newImageView];
 }
 
 - (BOOL)_isSelectedAt:(NSUInteger)index
@@ -335,7 +336,7 @@
             return i;
         }
     }
-    return NilIndex;
+    return NSNotFound;
 }
 
 @end
