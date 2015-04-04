@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIImage.h"
-#import "UIImageView.h"
 #import "UITabBar.h"
+#import "UIImage.h"
+#import "UIColor.h"
+#import "UIImageView.h"
 #import "UITabBarItem.h"
 #import "UILabel.h"
 #import "UIView.h"
@@ -16,8 +17,12 @@
 #define NilIndex NSUIntegerMax
 #define ItemTitleHeight 35
 
+#define NormalTitleColor [UIColor blackColor]
+#define SelectedTitleColor [UIColor grayColor]
+
 @interface UITabBar()
 @property NSUInteger selectedIndex;
+@property (nonatomic, strong) NSMutableArray *itemTouchAreaBuffered;
 @property (nonatomic, strong) NSMutableArray *itemImageBuffered;
 @property (nonatomic, strong) NSMutableArray *itemTitleBuffered;
 @end
@@ -79,12 +84,26 @@
 
 - (void)setItems:(NSArray *)items animated:(BOOL)animated
 {
+    [self _clearOldAndAddNewCallbackAndReplaceItems:items];
+    [self _removeAllSubviewFrom:self.itemTouchAreaBuffered];
+    [self _makeAllSubviewForEachItems:items];
+    [self _refreshItemsAppearanceAndLocation];
+}
+
+- (void)_clearOldAndAddNewCallbackAndReplaceItems:(NSArray *)items
+{
+    if (self.items != nil) {
+        [self _clearCallbackForAllItems];
+    }
     _items = items;
-    [self _removeAllSubviewFrom:self.itemImageBuffered];
-    [self _removeAllSubviewFrom:self.itemTitleBuffered];
+    [self _addCallbackForAllItems];
+}
+
+- (void)_makeAllSubviewForEachItems:(NSArray *)items
+{
+    [self _makeItemTouchAreaWithItems:items];
     [self _makeItemImageBufferedWithItems:items];
     [self _makeItemTitleBufferedWithItems:items];
-    [self _refreshItemsAppearanceAndLocation];
 }
 
 - (void)_clearCallbackForAllItems
@@ -110,8 +129,18 @@
         return;
     }
     for (NSUInteger i = 0; i < [array count]; i++) {
-        UIView *subview = [array objectAtIndex:i];
+        UIControl *subview = [array objectAtIndex:i];
         [subview removeFromSuperview];
+    }
+}
+
+- (void)_makeItemTouchAreaWithItems:(NSArray *)items
+{
+    self.itemTouchAreaBuffered = [[NSMutableArray alloc] init];
+    for (NSUInteger i = 0; i < [items count]; i++) {
+        UIControl *touchArea = [[UIControl alloc] initWithFrame:CGRectZero];
+        [self.itemTouchAreaBuffered insertObject:touchArea atIndex:i];
+        [self addSubview:touchArea];
     }
 }
 
@@ -132,6 +161,7 @@
 {
     self.itemTitleBuffered = [self _createArrayWith:items andGenerateElementWith:^UIView *(UITabBarItem *item) {
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectZero];
+        NSLog(@"found item's title : %@", item.title);
         [title setText:item.title];
         return title;
     }];
@@ -144,25 +174,32 @@
         UITabBarItem *item = [sourceArray objectAtIndex:i];
         UIView *result = handler(item);
         [results insertObject:result atIndex:i];
-        [self addSubview:result];
+        UIControl *touchArea = [self _getTouchAreaAt:i];
+        [touchArea addSubview:result];
     }
     return results;
 }
 
+#pragma mark - appearance.
+
 - (void)_refreshItemsAppearanceAndLocation
 {
     for (NSUInteger i = 0; i < self.items.count; i++) {
-        CGRect cellFrame = [self _createCellFrameForIndex:i];
-        UITabBarItem *item = [self.items objectAtIndex:i];
-        [self _setAppearanceOfItem:item withFrame:cellFrame at:i];
+        [self _setTouchAreaApperanceAt:i];
+        [self _setSubviewAppearanceAt:i];
     }
+}
+
+- (void)_setTouchAreaApperanceAt:(NSUInteger)index
+{
+    UIControl *touchArea = [self _getTouchAreaAt:index];
+    touchArea.frame = [self _createCellFrameForIndex:index];
 }
 
 - (void)_refreshAppearanceForItem:(UITabBarItem *)item
 {
     NSUInteger index = [self _findIndexWithItem:item];
-    CGRect cellFrame = [self _createCellFrameForIndex:index];
-    [self _setAppearanceOfItem:item withFrame:cellFrame at:index];
+    [self _setSubviewAppearanceAt:index];
 }
 
 - (CGRect)_createCellFrameForIndex:(NSUInteger)index
@@ -171,23 +208,74 @@
     return CGRectMake(index*cellWidth, 0, cellWidth, self.frame.size.height);
 }
 
-- (void)_setAppearanceOfItem:(UITabBarItem *)item withFrame:(CGRect)frame at:(NSUInteger)index
+- (void)_setSubviewAppearanceAt:(NSUInteger)index
 {
-    // make the UILabel on the bottom of frame, and the UIImageView on the center of the rest of area.
+    UITabBarItem *item = [self _getItemAt:index];
     UIImageView *imageView = [self _getItemImageAt:index];
     UILabel *title = [self _getItemTitleAt:index];
     
+    [self _setSizeAndLocationWithImage:imageView withTitle:title withItem:item at:index];
+    [self _checkIsSelectedAndSetAppearanceWithImage:imageView withTitle:title withItem:item at:index];
+}
+
+- (void)_setSizeAndLocationWithImage:(UIImageView *)imageView withTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
+{
+    // make the UILabel on the bottom of frame, and the UIImageView on the center of the rest of area.
+    CGRect frame = [self _getTouchAreaAt:index].frame;
     CGFloat titleTopLine = frame.origin.y + frame.size.height - ItemTitleHeight;
-    title.frame = CGRectMake(frame.origin.x, titleTopLine, frame.size.width, ItemTitleHeight);
+    title.frame = CGRectMake(0, titleTopLine, frame.size.width, ItemTitleHeight);
     
     CGFloat gapWidth = (frame.size.width - imageView.image.size.width)/2;
     CGFloat gapHeight = (frame.size.height - ItemTitleHeight - imageView.image.size.height)/2;
     
-    imageView.frame = CGRectMake(frame.origin.x + gapWidth, frame.origin.y + gapHeight,
+    imageView.frame = CGRectMake(gapWidth + item.titlePositionAdjustment.horizontal,
+                                 gapHeight + item.titlePositionAdjustment.vertical,
                                  imageView.image.size.width, imageView.image.size.height);
 }
 
+- (void)_checkIsSelectedAndSetAppearanceWithImage:(UIImageView *)imageView withTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
+{
+    [self _setProperAppearanceForImage:imageView withItem:item at:index];
+}
+
+- (void)_setProperAppearanceForImage:(UIImageView *)imageView withItem:(UITabBarItem *)item at:(NSUInteger)index
+{
+    UIImage *properImage = [self _getProperImageFromItem:item at:index];
+    [self _checkImageEqualsAndReplaceIfNotWith:properImage at:index];
+}
+
+- (void)_setProperColorForTitle:(UILabel *)title withItem:(UITabBarItem *)item at:(NSUInteger)index
+{
+    if ([self _isSelectedAt:index]) {
+        [title setTextColor:SelectedTitleColor];
+    } else {
+        [title setTextColor:NormalTitleColor];
+    }
+}
+
+- (UIImage *)_getProperImageFromItem:(UITabBarItem *)item at:(NSUInteger)index
+{
+    if ([self _isSelectedAt:index]) {
+        return item.selectedImage;
+    } else {
+        return item.image;
+    }
+}
+
+- (void)_checkImageEqualsAndReplaceIfNotWith:(UIImage *)checktedImage at:(NSUInteger)index
+{
+    UIImageView *imageView = [self _getItemImageAt:index];
+    if (imageView.image != checktedImage) {
+        [self _replaceItemImage:checktedImage at:index];
+    }
+}
+
 #pragma mark - items operation.
+
+- (UIControl *)_getTouchAreaAt:(NSUInteger)index
+{
+    return (UIControl *)[self.itemTouchAreaBuffered objectAtIndex:index];
+}
 
 - (UITabBarItem *)_getItemAt:(NSUInteger)index
 {
@@ -211,6 +299,11 @@
     UIImageView *newImageView = [[UIImageView alloc] initWithImage:image];
     [self.itemImageBuffered replaceObjectAtIndex:index withObject:newImageView];
     [self addSubview:newImageView];
+}
+
+- (BOOL)_isSelectedAt:(NSUInteger)index
+{
+    return self.selectedIndex == index;
 }
 
 @end
