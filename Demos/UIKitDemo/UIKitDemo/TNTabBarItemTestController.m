@@ -64,6 +64,26 @@
         self.bar.frame = CGRectMake(oldFrame.origin.x, oldFrame.origin.y,
                                     oldFrame.size.width, value);
     }];
+    [TNComponentCreator makeChangeValueSliderWithTitle:@"position hoprizontal" at:390
+                                           withControl:self withMaxValue:50 whenValueChanged:^(float value) {
+        [self _doForEachTabBarItems:^(UITabBarItem *item, NSUInteger index) {
+            item.titlePositionAdjustment = UIOffsetMake(value, item.titlePositionAdjustment.vertical);
+        }];
+    }];
+    [TNComponentCreator makeChangeValueSliderWithTitle:@"position vertical" at:440
+                                           withControl:self withMaxValue:50 whenValueChanged:^(float value) {
+        [self _doForEachTabBarItems:^(UITabBarItem *item, NSUInteger index) {
+            item.titlePositionAdjustment = UIOffsetMake(item.titlePositionAdjustment.horizontal, value);
+        }];
+    }];
+}
+
+- (void)_doForEachTabBarItems:(void (^)(UITabBarItem *item, NSUInteger index))callback
+{
+    for (NSUInteger index = 0; index < [self.items count]; index++) {
+        UITabBarItem *item = (UITabBarItem *)[self.items objectAtIndex:index];
+        callback(item, index);
+    }
 }
 
 @end
