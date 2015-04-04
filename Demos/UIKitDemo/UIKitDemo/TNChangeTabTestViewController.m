@@ -8,6 +8,7 @@
 
 #import "TNChangeTabTestViewController.h"
 #import "TNComponentCreator.h"
+#import "TNTestCaseHelperButton.h"
 
 @interface TNChangeTabTestViewController ()
 
@@ -24,7 +25,7 @@
     [super viewDidLoad];
     [self _makeControllers];
     [self _makeTabs];
-    
+    [self _makeTestCaseButton];
 }
 
 - (void)_makeControllers
@@ -41,6 +42,15 @@
     [self _setTabBarItem:[self _getTabBarItemAt:1] withImageName:@"loveheart.png"];
     [self _setTabBarItem:[self _getTabBarItemAt:0] withImageName:@"loveheart.png"];
     [self _setTabBarItem:[self _getTabBarItemAt:2] withImageName:@"tabicon0.png"];
+}
+
+- (void)_makeTestCaseButton
+{
+    TNTestCaseHelperButton *helperButton = [[TNTestCaseHelperButton alloc] initWithPosition:CGPointMake(5, 300)];
+    [helperButton setInvokeTestCaseBlock:^(TNTestCaseHelperButton *helper) {
+        [self _runTestCaseCode:helper];
+    }];
+    [self.view addSubview:helperButton];
 }
 
 - (void)_setTabBarItem:(UITabBarItem *)item withImageName:(NSString *)imageName
@@ -123,6 +133,14 @@
 - (UITabBarItem *)_getTabBarItemAt:(NSUInteger)index
 {
     return (UITabBarItem *)[self.tabBar.items objectAtIndex:index];
+}
+
+- (void)_runTestCaseCode:(TNTestCaseHelperButton *)helper
+{
+    UIImage *image = [[UIImage imageNamed:@"loveheart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"haha" image:image tag:7];
+    
+    [helper assert:(item.selectedImage == item.image) forTest:@"initWithTitle:image:tag: function setting images."];
 }
 
 @end
