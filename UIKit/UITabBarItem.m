@@ -10,6 +10,8 @@
 #import "UIImage.h"
 
 @interface UITabBarItem()
+@property (nonatomic, strong) id displayRefreshCallbackTarget;
+@property (nonatomic) SEL displayRefreshCallbackAction;
 @end
 
 static NSArray *systemItemImageNameArray;
@@ -17,21 +19,12 @@ static NSArray *systemItemTitleArray;
 
 @implementation UITabBarItem
 
+#pragma mark - initialize.
+
 + (void)initialize
 {
-    [self initializeSystemItemResources];
-}
-
-- (instancetype)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag
-{
-    self = [super init];
-    return self;
-}
-
-- (instancetype)initWithTitle:(NSString *)title image:(UIImage *)image selectedImage:(UIImage *)selectedImage
-{
-    self = [super init];
-    return self;
+    [self _initializeSystemItemImageNames];
+    [self _initializeSystemItemTitiles];
 }
 
 - (instancetype)initWithTabBarSystemItem:(UITabBarSystemItem)systemItem tag:(NSInteger)tag
@@ -39,6 +32,64 @@ static NSArray *systemItemTitleArray;
     NSString *title = [self.class _findImageTitleWithSystemItem:systemItem];
     UIImage *image = [self.class _findImageWithSystemItem:systemItem];
     return [self initWithTitle:title image:image tag:tag];
+}
+
+- (instancetype)initWithTitle:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag
+{
+    self = [self initWithTitle:title image:image selectedImage:image];
+    if (self) {
+        self.tag = tag;
+    }
+    return self;
+}
+
+- (instancetype)initWithTitle:(NSString *)title image:(UIImage *)image selectedImage:(UIImage *)selectedImage
+{
+    self = [super init];
+    if (self) {
+        self.image = image;
+        self.selectedImage = selectedImage;
+    }
+    return self;
+}
+
+- (void)setCallbackWhenNeedRefreshDisplayWithTarget:(id)target action:(SEL)action
+{
+    self.displayRefreshCallbackTarget = target;
+    self.displayRefreshCallbackAction = action;
+}
+
+- (void)clearCallbackWhenNeedRefreshDisplay
+{
+    self.displayRefreshCallbackTarget = nil;
+    self.displayRefreshCallbackAction = NULL;
+}
+
+#pragma mark - setting images.
+
+- (void)setImage:(UIImage *)image
+{
+    [super setImage:image];
+    [self _needRefreshDisplay];
+}
+
+- (void)setSelectedImage:(UIImage *)selectedImage
+{
+    _selectedImage = selectedImage;
+    [self _needRefreshDisplay];
+}
+
+- (void)setTitlePositionAdjustment:(UIOffset)adjustment
+{
+    _titlePositionAdjustment = adjustment;
+    [self _needRefreshDisplay];
+}
+
+- (void)_needRefreshDisplay
+{
+    if (self.displayRefreshCallbackTarget) {
+        [self.displayRefreshCallbackTarget performSelector:self.displayRefreshCallbackAction withObject:self];
+    }
 }
 
 - (void)setFinishedSelectedImage:(UIImage *)selectedImage withFinishedUnselectedImage:(UIImage *)unselectedImage
@@ -56,19 +107,9 @@ static NSArray *systemItemTitleArray;
     return nil;
 }
 
-- (void)setTitlePositionAdjustment:(UIOffset)adjustment
-{
-    
-}
-
-- (UIOffset)titlePositionAdjustment
-{
-    return UIOffsetZero;
-}
-
 #pragma mark - system items.
 
-+ (void)initializeSystemItemResources
++ (void)_initializeSystemItemImageNames
 {
     // I have't prepared any images for UITabBarSystemItem icons.
     systemItemImageNameArray = @[
@@ -84,7 +125,10 @@ static NSArray *systemItemTitleArray;
                                  @"tabicon0.png",
                                  @"tabicon0.png",
                                  @"tabicon0.png",
-                                 ];
+                                 ];}
+
++ (void)_initializeSystemItemTitiles
+{
     systemItemTitleArray = @[
                              @"more",
                              @"favorites",
