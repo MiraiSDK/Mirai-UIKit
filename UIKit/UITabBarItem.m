@@ -49,6 +49,7 @@ static NSArray *systemItemTitleArray;
     if (self) {
         self.image = image;
         self.selectedImage = selectedImage;
+        self.title = title;
     }
     return self;
 }
