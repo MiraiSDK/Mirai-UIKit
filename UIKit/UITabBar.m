@@ -17,8 +17,9 @@
 #define NilIndex NSUIntegerMax
 #define ItemTitleHeight 35
 
-#define NormalTitleColor [UIColor grayColor]
+#define NormalTitleColor [UIColor blackColor]
 #define SelectedTitleColor [UIColor blueColor]
+#define DefaultBackgroundColor [UIColor grayColor]
 
 @interface UITabBar()
 @property NSUInteger selectedIndex;
@@ -34,6 +35,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self _initDefaultValues];
+        self.backgroundColor = DefaultBackgroundColor;
     }
     return self;
 }
@@ -97,7 +99,7 @@
     if (self.items != nil) {
         [self _clearCallbackForAllItems];
     }
-    _items = items;
+    _items = [[NSArray alloc] initWithArray:items];
     [self _addCallbackForAllItems];
 }
 

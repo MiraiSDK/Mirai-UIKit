@@ -34,6 +34,7 @@
         [self _createViewControllerWithDescription:@"Controller(1)"],
         [self _createViewControllerWithDescription:@"Controller(2)"],
         [self _createOperateController],
+        [self _createViewControllerWithDescription:@"Other"],
     ];
 }
 
