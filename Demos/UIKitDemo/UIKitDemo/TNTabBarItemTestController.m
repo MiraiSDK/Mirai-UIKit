@@ -47,7 +47,6 @@
 - (void)_makeTabBar
 {
     self.bar =  [[UITabBar alloc] initWithFrame:CGRectMake(5, 130, 250, 50)];
-    self.bar.backgroundColor = [UIColor grayColor];
     [self.view addSubview:self.bar];
     [self.bar setItems:self.items];
 }

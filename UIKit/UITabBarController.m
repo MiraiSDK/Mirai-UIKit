@@ -9,12 +9,14 @@
 #import "UITabBarController.h"
 #import "UITabBar.h"
 #import "UITabBarItem.h"
+#import "UIImage.h"
 #import "UIView.h"
+#import "UIControl.h"
 
-#define DefaultTabBarHeight 50
+#define DefaultTabBarHeight 135
 
 @interface UITabBarController ()
-@property (nonatomic, strong) UIView *viewControllerContainer;
+@property (nonatomic, strong) UIControl *viewControllerContainer;
 @property (nonatomic, strong) NSArray *tabBarItemsBuffered;
 @end
 
@@ -36,10 +38,43 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self _refreshSubviewsSizeToAdaptScreen];
+    [self _addSubviewsToSelf];
+}
+
 - (void)_initViewControllersAndSubviews
 {
     [self _initAllPropertiesDefaultValues];
     [self _makeTabBarAndControllerContainer];
+}
+
+- (void)_refreshSubviewsSizeToAdaptScreen
+{
+    [self _refreshTabBarSizeToAdaptScreen];
+    [self _refreshContainerSizeToAdaptScreen];
+}
+
+- (void)_addSubviewsToSelf
+{
+    [self.view addSubview:_viewControllerContainer];
+    [self.view addSubview:_tabBar];
+}
+
+- (void)_refreshTabBarSizeToAdaptScreen
+{
+    CGRect frame = self.view.frame;
+    self.tabBar.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - DefaultTabBarHeight,
+                                   frame.size.width, DefaultTabBarHeight);
+}
+
+- (void)_refreshContainerSizeToAdaptScreen
+{
+    CGRect frame = self.view.frame;
+    self.viewControllerContainer.frame = CGRectMake(frame.origin.x, frame.origin.y,
+                                           frame.size.width, frame.size.height - DefaultTabBarHeight);
 }
 
 - (void)_initAllPropertiesDefaultValues
@@ -52,26 +87,18 @@
 {
     _viewControllerContainer = [self _createViewControllerContainer];
     _tabBar = [self _createDefaultTabBar];
-    [self.view addSubview:_viewControllerContainer];
-    [self.view addSubview:_tabBar];
 }
 
 - (UITabBar *)_createDefaultTabBar
 {
-    CGRect frame = self.view.frame;
-    CGRect tabBarFrame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - DefaultTabBarHeight,
-                      frame.size.width, DefaultTabBarHeight);
-    UITabBar *tabBar = [[UITabBar alloc] initWithFrame:tabBarFrame];
+    UITabBar *tabBar = [[UITabBar alloc] initWithFrame:CGRectZero];
     tabBar.delegate = self;
     return tabBar;
 }
 
-- (UIView *)_createViewControllerContainer
+- (UIControl *)_createViewControllerContainer
 {
-    CGRect frame = self.view.frame;
-    CGRect containerFrame = CGRectMake(frame.origin.x, frame.origin.y,
-                                       frame.size.width, frame.size.height - DefaultTabBarHeight);
-    return [[UIView alloc] initWithFrame:containerFrame];
+    return [[UIControl alloc] initWithFrame:CGRectZero];
 }
 
 - (void)setCustomizableViewControllers:(NSArray *)customizableViewControllers
@@ -88,6 +115,7 @@
 {
     _viewControllers = viewControllers;
     self.tabBarItemsBuffered = [self _createTabBarItemsByViewControllers:viewControllers];
+    self.tabBarItemsBuffered = [self _createItemsByHands];
     [self.tabBar setItems:self.tabBarItemsBuffered animated:animated];
     [self _showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting];
 }
@@ -126,7 +154,9 @@
 
 - (UITabBarItem *)_createTabBarItemWithTitle:(NSString *)title at:(NSUInteger)index
 {
-    return [[UITabBarItem alloc] initWithTitle:title image:nil tag:index];
+    UIImage *image = [UIImage imageNamed:@"loveheart.png"];
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    return [[UITabBarItem alloc] initWithTitle:title image:image tag:index];
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex
