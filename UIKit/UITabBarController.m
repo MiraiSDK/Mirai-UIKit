@@ -21,22 +21,10 @@
 
 @implementation UITabBarController
 
-- (instancetype)init
+- (void)viewDidLoad
 {
-    self = [super init];
-    if (self) {
-        [self _initViewControllersAndSubviews];
-    }
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self _initViewControllersAndSubviews];
-    }
-    return self;
+    [super viewDidLoad];
+    [self _initViewControllersAndSubviews];
 }
 
 - (void)_initViewControllersAndSubviews
@@ -50,11 +38,8 @@
 {
     _viewControllerContainer = [self _createViewControllerContainer];
     _tabBar = [self _createDefaultTabBar];
-    
     [self.view addSubview:_viewControllerContainer];
     [self.view addSubview:_tabBar];
-    
-    NSLog(@"%f,%f,%f,%f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 - (UITabBar *)_createDefaultTabBar
@@ -89,7 +74,6 @@
 {
     self.tabBarItemsBuffered = [self _createTabBarItemsByViewControllers:viewControllers];
     [self.tabBar setItems:self.tabBarItemsBuffered animated:animated];
-    self.customizableViewControllers = viewControllers;
 }
 
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
@@ -139,37 +123,6 @@
         [self _changeSelectedIndex:selectedIndex notifyTabBar:NO];
     }
 }
-
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-    
-}
-
-- (void)tabBarController:(UITabBarController *)tabBarController willBeginCustomizingViewControllers:(NSArray *)viewControllers
-{
-    
-}
-
-- (void)tabBarController:(UITabBarController *)tabBarController willEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
-{
-    
-}
-
-- (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
-{
-    
-}
-
-- (NSUInteger)tabBarControllerSupportedInterfaceOrientations:(UITabBarController *)tabBarController
-{
-    return 0;
-}
-
-- (UIInterfaceOrientation)tabBarControllerPreferredInterfaceOrientationForPresentation:(UITabBarController *)tabBarController
-{
-    return UIInterfaceOrientationMaskAll;
-}
-
 
 - (void)_changeSelectedIndex:(NSUInteger)selectedIndex notifyTabBar:(BOOL)willNotify
 {

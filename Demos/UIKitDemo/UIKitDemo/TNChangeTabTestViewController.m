@@ -138,10 +138,21 @@
 
 - (void)_runTestCaseCode:(TNTestCaseHelperButton *)helper
 {
+    [self _testIsSelectedImageEqualsImageWhenNotAssignSelectedImage:helper];
+    [self _testDefaultValueOfTabBarItemDelegateIsSuperViewController:helper];
+}
+
+- (void)_testIsSelectedImageEqualsImageWhenNotAssignSelectedImage:(TNTestCaseHelperButton *)helper
+{
     UIImage *image = [[UIImage imageNamed:@"loveheart.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"haha" image:image tag:7];
     
     [helper assert:(item.selectedImage == item.image) forTest:@"initWithTitle:image:tag: function setting images."];
+}
+
+- (void)_testDefaultValueOfTabBarItemDelegateIsSuperViewController:(TNTestCaseHelperButton *)helper
+{
+    [helper assert:(self.tabBar.delegate == self) forTest:@"default delegate'value is super viewController."];
 }
 
 @end
