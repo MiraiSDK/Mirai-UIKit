@@ -11,7 +11,6 @@
 #import "UITabBarItem.h"
 #import "UIView.h"
 
-#define IndexNotFound NSIntegerMax
 #define DefaultTabBarHeight 50
 
 @interface UITabBarController ()
@@ -21,17 +20,32 @@
 
 @implementation UITabBarController
 
-- (void)viewDidLoad
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    [super viewDidLoad];
-    [self _initViewControllersAndSubviews];
+    if (self = [super initWithCoder:aDecoder]) {
+        [self _initViewControllersAndSubviews];
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self _initViewControllersAndSubviews];
+    }
+    return self;
 }
 
 - (void)_initViewControllersAndSubviews
 {
-    _viewControllers = @[];
+    [self _initAllPropertiesDefaultValues];
     [self _makeTabBarAndControllerContainer];
-    [self _showSubViewControllerWithIndex:0];
+}
+
+- (void)_initAllPropertiesDefaultValues
+{
+    _selectedIndex = NSNotFound;
+    _viewControllers = @[];
 }
 
 - (void)_makeTabBarAndControllerContainer
@@ -72,15 +86,17 @@
 
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated
 {
+    _viewControllers = viewControllers;
     self.tabBarItemsBuffered = [self _createTabBarItemsByViewControllers:viewControllers];
     [self.tabBar setItems:self.tabBarItemsBuffered animated:animated];
+    [self _showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting];
 }
 
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
 {
     NSUInteger selectedIndex = [self _findIndexFromArray:self.customizableViewControllers
                                               withObject:selectedViewController];
-    if (selectedIndex != IndexNotFound) {
+    if (selectedIndex != NSNotFound) {
         self.selectedIndex = selectedIndex;
     }
 }
@@ -101,6 +117,13 @@
     return tabBarItems;
 }
 
+- (void)_showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting
+{
+    if (self.selectedIndex == NSNotFound && [self _numberOfViewControllers] > 0) {
+        [self _showSubViewControllerWithIndex:0];
+    }
+}
+
 - (UITabBarItem *)_createTabBarItemWithTitle:(NSString *)title at:(NSUInteger)index
 {
     return [[UITabBarItem alloc] initWithTitle:title image:nil tag:index];
@@ -118,7 +141,7 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     NSUInteger selectedIndex = [self _findIndexFromArray:self.tabBarItemsBuffered withObject:item];
-    if (selectedIndex != IndexNotFound && self.selectedIndex != selectedIndex) {
+    if (selectedIndex != NSNotFound && self.selectedIndex != selectedIndex) {
         [self _showSubViewControllerWithIndex:selectedIndex];
         [self _changeSelectedIndex:selectedIndex notifyTabBar:NO];
     }
@@ -134,12 +157,12 @@
 
 - (void)_showSubViewControllerWithIndex:(NSUInteger)index
 {
-    UIViewController *oldController = [self _getViewControllerAt:self.selectedIndex];
+    if (self.selectedIndex != NSNotFound) {
+        UIViewController *oldController = [self _getViewControllerAt:self.selectedIndex];
+        [oldController.view removeFromSuperview];
+    }
     UIViewController *newController = [self _getViewControllerAt:index];
-    
-    [oldController.view removeFromSuperview];
     [self.viewControllerContainer addSubview:newController.view];
-    
     CGSize containerSize = self.viewControllerContainer.frame.size;
     newController.view.frame = CGRectMake(0, 0, containerSize.width, containerSize.height);
 }
@@ -153,7 +176,7 @@
             return i;
         }
     }
-    return IndexNotFound;
+    return NSNotFound;
 }
 
 - (UITabBarItem *)_getTabBarItemAt:(NSUInteger)index
@@ -164,6 +187,11 @@
 - (UIViewController *)_getViewControllerAt:(NSUInteger)index
 {
     return (UIViewController *)[self.viewControllers objectAtIndex:index];
+}
+
+- (NSUInteger)_numberOfViewControllers
+{
+    return self.tabBarItemsBuffered.count;
 }
 
 @end

@@ -23,9 +23,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self _printViewControllerPropertesDefaultValues];
     [self _makeControllers];
     [self _makeTabs];
     [self _makeTestCaseButton];
+}
+
+- (void)_printViewControllerPropertesDefaultValues
+{
+    NSLog(@"selectedIndex : %li", self.selectedIndex);
 }
 
 - (void)_makeControllers

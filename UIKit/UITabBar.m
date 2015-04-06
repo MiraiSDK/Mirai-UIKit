@@ -14,7 +14,6 @@
 #import "UILabel.h"
 #import "UIView.h"
 
-#define NilIndex NSUIntegerMax
 #define ItemTitleHeight 35
 
 #define NormalTitleColor [UIColor blackColor]
@@ -42,7 +41,7 @@
 
 - (void)_initDefaultValues
 {
-    self.selectedIndex = NilIndex;
+    self.selectedIndex = NSNotFound;
 }
 
 #pragma mark - properties operation.
@@ -55,7 +54,7 @@
 
 - (UITabBarItem *)selectedItem
 {
-    if (self.selectedIndex == NilIndex) {
+    if (self.selectedIndex == NSNotFound) {
         return nil;
     }
     return (UITabBarItem *)[self.items objectAtIndex:self.selectedIndex];
@@ -337,7 +336,7 @@
             return i;
         }
     }
-    return NilIndex;
+    return NSNotFound;
 }
 
 @end
