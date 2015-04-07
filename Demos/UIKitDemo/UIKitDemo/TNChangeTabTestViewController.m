@@ -63,14 +63,14 @@
 - (void)_setTabBarItem:(UITabBarItem *)item withImageName:(NSString *)imageName
 {
     UIImage *image = [UIImage imageNamed:imageName];
-    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item.image = image;
+    item.selectedImage = image;
 }
 
 - (UIViewController *)_createViewControllerWithDescription:(NSString *)description
 {
     UIViewController *controller = [[UIViewController alloc] init];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 300, 50)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 110, 300, 50)];
     label.text = description;
     label.textColor = [UIColor blueColor];
     
@@ -90,9 +90,9 @@
 - (void)_makeImageZoomChangeButtonsForController:(UIViewController *)controller
 {
     UIButton *imageZoomUp = [TNComponentCreator createButtonWithTitle:@"ING++"
-                                                            withFrame:CGRectMake(5, 100, 50, 25)];
+                                                            withFrame:CGRectMake(5, 210, 50, 25)];
     UIButton *imageZoomOut = [TNComponentCreator createButtonWithTitle:@"IMG--"
-                                                             withFrame:CGRectMake(120, 100, 50, 25)];
+                                                             withFrame:CGRectMake(120, 210, 50, 25)];
     [imageZoomUp addTarget:self action:@selector(_onClickImageZoomUp:)
           forControlEvents:UIControlEventTouchUpInside];
     [imageZoomOut addTarget:self action:@selector(_onClickImageZoomOut:)
