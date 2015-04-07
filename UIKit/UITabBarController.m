@@ -115,7 +115,6 @@
 {
     _viewControllers = viewControllers;
     self.tabBarItemsBuffered = [self _createTabBarItemsByViewControllers:viewControllers];
-    self.tabBarItemsBuffered = [self _createItemsByHands];
     [self.tabBar setItems:self.tabBarItemsBuffered animated:animated];
     [self _showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting];
 }
