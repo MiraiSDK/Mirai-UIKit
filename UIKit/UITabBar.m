@@ -7,8 +7,10 @@
 //
 
 #import "UITabBar.h"
+#import "UITabBarItem+UIPrivate.h"
 #import "UIImage.h"
 #import "UIColor.h"
+#import "UIStringDrawing.h"
 #import "UIImageView.h"
 #import "UITabBarItem.h"
 #import "UILabel.h"
@@ -173,6 +175,7 @@
 {
     self.itemTitleBuffered = [self _createArrayWith:items andGenerateElementWith:^UIView *(UITabBarItem *item) {
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectZero];
+        title.textAlignment = UITextAlignmentCenter;
         [title setText:item.title];
         title.backgroundColor = [UIColor clearColor];
         return title;
