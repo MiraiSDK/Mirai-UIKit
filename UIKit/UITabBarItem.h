@@ -45,7 +45,4 @@ typedef NS_ENUM(NSInteger, UITabBarSystemItem) {
 - (UIImage *)finishedSelectedImage;// NS_DEPRECATED_IOS(5_0,7_0);
 - (UIImage *)finishedUnselectedImage;// NS_DEPRECATED_IOS(5_0,7_0);
 
-- (void)setCallbackWhenNeedRefreshDisplayWithTarget:(id)target action:(SEL)action;
-- (void)clearCallbackWhenNeedRefreshDisplay;
-
 @end

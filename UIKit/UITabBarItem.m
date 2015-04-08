@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UITabBarItem.h"
+#import "UITabBarItem+UIPrivate.h"
 #import "UIImage.h"
 
 @interface UITabBarItem()

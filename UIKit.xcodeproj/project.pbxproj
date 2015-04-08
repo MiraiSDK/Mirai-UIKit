@@ -280,6 +280,7 @@
 		43ECCF131851CAA80076535C /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF111851CAA80076535C /* UIWindow.m */; };
 		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
 		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
+		D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -578,6 +579,7 @@
 		43ECCF111851CAA80076535C /* UIWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIWindow.m; sourceTree = "<group>"; };
 		43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidEventsServer.h; sourceTree = "<group>"; };
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
+		D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+UIPrivate.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -921,6 +923,7 @@
 				434CFCFB1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.h */,
 				434CFCFC1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.m */,
 				434CFCFF1A0CA33A00B6AC9E /* UITabBarItem.h */,
+				D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */,
 				434CFD001A0CA33A00B6AC9E /* UITabBarItem.m */,
 				434CFD031A0CA40F00B6AC9E /* UITableViewHeaderFooterView.h */,
 				434CFD041A0CA40F00B6AC9E /* UITableViewHeaderFooterView.m */,
@@ -1208,6 +1211,7 @@
 				439A73C618E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h in Headers */,
 				43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */,
 				434CFD4D1A0CB7A000B6AC9E /* UINibLoading.h in Headers */,
+				D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */,
 				434CFD2D1A0CB20E00B6AC9E /* UIScreenEdgePanGestureRecognizer.h in Headers */,
 				434CFD621A0CBAB400B6AC9E /* UIVideoEditorController.h in Headers */,
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
