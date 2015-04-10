@@ -851,6 +851,7 @@
 		4384632C188B3F7A006DA1AA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D24BB0451AD7BCB2006BD749 /* UITabBarController */,
 				43ECCF0C1851CA9A0076535C /* UIView.h */,
 				43ECCF0D1851CA9A0076535C /* UIView.m */,
 				431412D518C0AA77001AF732 /* UIView+UIPrivate.h */,
@@ -901,10 +902,6 @@
 				436D4B0919F54FCB00F6F8F9 /* UISearchController.m */,
 				436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */,
 				436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */,
-				436D4B1419F5547900F6F8F9 /* UITabBar.h */,
-				436D4B1519F5547900F6F8F9 /* UITabBar.m */,
-				436D4B1019F553D300F6F8F9 /* UITabBarController.h */,
-				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
 				432F73781A08AC9C009CEC64 /* UIMenuController.h */,
 				432F73791A08AC9C009CEC64 /* UIMenuController.m */,
 				432F737D1A08AE99009CEC64 /* UISplitViewController.h */,
@@ -922,9 +919,6 @@
 				434CFCF81A0CA0B500B6AC9E /* UILocalNotification.m */,
 				434CFCFB1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.h */,
 				434CFCFC1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.m */,
-				434CFCFF1A0CA33A00B6AC9E /* UITabBarItem.h */,
-				D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */,
-				434CFD001A0CA33A00B6AC9E /* UITabBarItem.m */,
 				434CFD031A0CA40F00B6AC9E /* UITableViewHeaderFooterView.h */,
 				434CFD041A0CA40F00B6AC9E /* UITableViewHeaderFooterView.m */,
 				434CFD071A0CA87400B6AC9E /* UITextChecker.h */,
@@ -1075,6 +1069,20 @@
 				43B6B64C1913A0EC005D09ED /* UIPopoverController.m */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D24BB0451AD7BCB2006BD749 /* UITabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				434CFCFF1A0CA33A00B6AC9E /* UITabBarItem.h */,
+				D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */,
+				434CFD001A0CA33A00B6AC9E /* UITabBarItem.m */,
+				436D4B1419F5547900F6F8F9 /* UITabBar.h */,
+				436D4B1519F5547900F6F8F9 /* UITabBar.m */,
+				436D4B1019F553D300F6F8F9 /* UITabBarController.h */,
+				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
+			);
+			name = UITabBarController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
