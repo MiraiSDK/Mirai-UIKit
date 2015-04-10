@@ -83,6 +83,8 @@
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		D243F09B1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
+		D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
+		D24BB0411AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
 		D2726A6E1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */; };
 		D2726A6F1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */; };
 		D2726A721ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */; };
@@ -205,6 +207,8 @@
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
 		D243F0991AC6F10F00CBD2D9 /* TNChangeValueSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangeValueSlider.h; sourceTree = "<group>"; };
 		D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeValueSlider.m; sourceTree = "<group>"; };
+		D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreNavigationTestViewController.h; sourceTree = "<group>"; };
+		D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMoreNavigationTestViewController.m; sourceTree = "<group>"; };
 		D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangeTabTestViewController.h; sourceTree = "<group>"; };
 		D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeTabTestViewController.m; sourceTree = "<group>"; };
 		D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarControlTestViewController.h; sourceTree = "<group>"; };
@@ -511,26 +515,28 @@
 			name = images;
 			sourceTree = "<group>";
 		};
-        43B448121AB9CEDF00DC1968 /* UIImageView */ = {
-            isa = PBXGroup;
-            children = (
-            );
-            name = UIImageView;
-            sourceTree = "<group>";
-        };
-        D2726A651ABE6DB60010F435 /* UITabBarController */ = {
-            isa = PBXGroup;
-            children = (
-                D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */,
-                D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */,
-                D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */,
-                D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */,
-                D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */,
-                D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */,
-            );
-            name = UITabBarController;
-            sourceTree = "<group>";
-        };
+		43B448121AB9CEDF00DC1968 /* UIImageView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = UIImageView;
+			sourceTree = "<group>";
+		};
+		D2726A651ABE6DB60010F435 /* UITabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */,
+				D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */,
+				D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */,
+				D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */,
+				D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */,
+				D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */,
+				D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */,
+				D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */,
+			);
+			name = UITabBarController;
+			sourceTree = "<group>";
+		};
 		D2A5F4791AB07C5F0011AF7B /* Uitils */ = {
 			isa = PBXGroup;
 			children = (
@@ -745,6 +751,7 @@
 				D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */,
 				D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */,
 				D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
+				D24BB0411AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
 				4390B8781A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
@@ -800,6 +807,7 @@
 				D2A5F4801AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
 				4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
+				D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
 				4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
 				D2A5F4821AB07C830011AF7B /* TNComponentCreator.m in Sources */,
 				4390B84B1A83533D0082B0F1 /* TNPresentedContentViewController.m in Sources */,
