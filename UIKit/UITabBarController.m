@@ -241,6 +241,11 @@
     return viewControllers.count > MaxShowedTabBarCount;
 }
 
+- (BOOL)_isIndexAtMoreList:(NSUInteger)index withViewControllers:(NSArray *)viewControllers
+{
+    return index >= [self _getCountOfShowedOnTabBarFromViewControllers:viewControllers];
+}
+
 #pragma mark - delegate methods.
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
@@ -292,10 +297,14 @@
 {
     _selectedIndex = selectedIndex;
     if (willNotify) {
-        if (selectedIndex == NSNotFound) {
-            selectedIndex = [self _getCountOfShowedOnTabBarFromViewControllers:self.viewControllers];
+        if ([self _isIndexAtMoreList:selectedIndex withViewControllers:self.viewControllers]) {
+            [self _showSubViewController:[self.viewControllers objectAtIndex:selectedIndex]];
+        } else {
+            if (selectedIndex == NSNotFound) {
+                selectedIndex = [self _getCountOfShowedOnTabBarFromViewControllers:self.viewControllers];
+            }
+            [self.tabBar setSelectedItem:[self _getTabBarItemAt:selectedIndex]];
         }
-        [self.tabBar setSelectedItem:[self _getTabBarItemAt:selectedIndex]];
     }
 }
 
@@ -307,7 +316,7 @@
 - (UIViewController *)_getCustomizedViewControllerWithSelectedIndex:(NSUInteger)selectedIndex
 {
     if (selectedIndex == NSNotFound) {
-        return self.hasShowedAnyViewController? self.moreNavigationController: nil;
+        return self.hasShowedAnyViewController? self.moreListController: nil;
     } else {
         return [self _getViewControllerAt:selectedIndex];
     }
@@ -329,6 +338,8 @@
     if (_moreListController == nil) {
         _moreListController = [self _createMoreListController];
         _moreListController.viewControllers = [self _getMoreListNeedsViewControllers];
+        [_moreListController setSelectIndexCallbackWithTarget:self
+                                                       action:@selector(_onSelectedIndexOfMoreListController:)];
     }
     return _moreListController;
 }
@@ -336,6 +347,13 @@
 - (UIMoreListController *)_createMoreListController
 {
     return [[UIMoreListController alloc] init];
+}
+
+- (void)_onSelectedIndexOfMoreListController:(NSNumber *)selectedIndexNumber
+{
+    NSUInteger selectedIndexAtMoreList = [selectedIndexNumber unsignedIntegerValue];
+    NSUInteger firstIndexAtMoreList = [self _getCountOfShowedOnTabBarFromViewControllers:self.viewControllers];
+    self.selectedIndex = selectedIndexAtMoreList + firstIndexAtMoreList;
 }
 
 #pragma mark - items operation.
