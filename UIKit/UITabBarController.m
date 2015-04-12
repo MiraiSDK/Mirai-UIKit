@@ -125,7 +125,7 @@
 
 - (void)setCustomizableViewControllers:(NSArray *)customizableViewControllers
 {
-    [self setViewControllers:customizableViewControllers animated:NO];
+    //TODO
 }
 
 # pragma mark - viewControllers setting.
@@ -162,26 +162,26 @@
 {
     NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
     [self _addShowedTabsIntoArray:tabBarItems from:viewControlelrs];
-    [self _addMoreTabIfNeedIntoArray:tabBarItems];
+    [self _addMoreTabIfNeedIntoArray:tabBarItems withViewControllers:viewControlelrs];
     return tabBarItems;
 }
 
 - (void)_addShowedTabsIntoArray:(NSMutableArray *)tabBarItems from:(NSArray *)viewControllers
 {
-    NSUInteger showedTabBarItemCount = [self _getCountOfViewControllersWhichWillShowOnTabBar];
+    NSUInteger showedTabBarItemCount = [self _getCountOfShowedOnTabBarFromViewControllers:viewControllers];
     for (NSUInteger i = 0; i < showedTabBarItemCount; i++) {
         UIViewController *controller = [viewControllers objectAtIndex:i];
         UITabBarItem *tabBarItem = [self _createTabBarItemWithTitle:controller.title at:i];
-        [tabBarItems insertObject:tabBarItem atIndex:i];
+        [tabBarItems addObject:tabBarItem];
     }
 }
 
-- (void)_addMoreTabIfNeedIntoArray:(NSMutableArray *)tabBarItems
+- (void)_addMoreTabIfNeedIntoArray:(NSMutableArray *)tabBarItems withViewControllers:(NSArray *)viewControllers
 {
     UITabBarItem *moreTabItem = nil;
     
-    if ([self _willShowMoreItemsOnTabBar]) {
-        NSUInteger moreTabIndex = [self _getCountOfViewControllersWhichWillShowOnTabBar];
+    if ([self _willShowMoreItemsOnTabBarWithViewControllers:viewControllers]) {
+        NSUInteger moreTabIndex = [self _getCountOfShowedOnTabBarFromViewControllers:viewControllers];
         moreTabItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore
                                                                               tag:moreTabIndex];
         [tabBarItems addObject:moreTabItem];
@@ -191,7 +191,7 @@
 
 - (void)_setContentsForMoreListViewControllers
 {
-    if ([self _willShowMoreItemsOnTabBar]) {
+    if ([self _willShowMoreItemsOnTabBarWithViewControllers:self.viewControllers]) {
         self.moreListController.viewControllers = [self.viewControllers subarrayWithRange:[self _getRangeOfMoreViewControllerIndexes]];
     } else {
         self.moreListController.viewControllers = @[];
@@ -200,23 +200,21 @@
 
 - (NSRange)_getRangeOfMoreViewControllerIndexes
 {
-    NSUInteger startIndex = [self _getCountOfViewControllersWhichWillShowOnTabBar];
+    NSUInteger startIndex = [self _getCountOfShowedOnTabBarFromViewControllers:self.viewControllers];
     return NSMakeRange(startIndex, self.viewControllers.count - startIndex);
 }
 
 - (void)_showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting
 {
-    if ([self _getCurrentShowedViewController] != nil && [self _numberOfViewControllers] > 0) {
-        UIViewController *firstController = [self _getViewControllerAt:0];
-        [self _showSubViewController:firstController];
+    if ([self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex] == nil &&
+        [self _numberOfViewControllers] > 0) {
+        self.tabBar.selectedItem = [self.tabBarItemsBuffered objectAtIndex:0];
     }
 }
 
 - (UITabBarItem *)_createTabBarItemWithTitle:(NSString *)title at:(NSUInteger)index
 {
-    UIImage *image = [UIImage imageNamed:@"loveheart.png"];
-    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    return [[UITabBarItem alloc] initWithTitle:title image:image tag:index];
+    return [[UITabBarItem alloc] initWithTitle:title image:nil tag:index];
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex
@@ -226,31 +224,20 @@
     }
 }
 
-- (NSUInteger)_getCountOfViewControllersWhichWillShowOnMoreListController
+- (NSUInteger)_getCountOfShowedOnTabBarFromViewControllers:(NSArray *)viewControllers
 {
-    NSUInteger viewControllersCount = self.viewControllers.count;
-    NSUInteger countWillShowOnTabBar = [self _getCountOfViewControllersWhichWillShowOnTabBar];
-    
-    if (viewControllersCount < countWillShowOnTabBar) {
-        return 0;
-    }
-    return viewControllersCount - countWillShowOnTabBar;
-}
-
-- (NSUInteger)_getCountOfViewControllersWhichWillShowOnTabBar
-{
-    if ([self _willShowMoreItemsOnTabBar]) {
+    if ([self _willShowMoreItemsOnTabBarWithViewControllers:viewControllers]) {
         //The "more" tab which will show moreNavigationController. It will take up a position.
         //So, there are one less positions for customized tabs.
         return MaxShowedTabBarCount - 1;
     } else {
-        return self.viewControllers.count;
+        return viewControllers.count;
     }
 }
 
-- (BOOL)_willShowMoreItemsOnTabBar
+- (BOOL)_willShowMoreItemsOnTabBarWithViewControllers:(NSArray *)viewControllers
 {
-    return self.viewControllers.count > MaxShowedTabBarCount;
+    return viewControllers.count > MaxShowedTabBarCount;
 }
 
 #pragma mark - delegate methods.
@@ -263,7 +250,8 @@
         return;
     }
     
-    if (selectedIndex != self.selectedIndex) {
+    if ([self _isShowedViewControllerChangedWithOldSelectedIndex:self.selectedIndex
+                                            withNewSelectedIndex:selectedIndex]) {
         [self _clearOldShowedViewController];
         [self _changeSelectedIndex:selectedIndex notifyTabBar:NO];
         [self _resetCurrentSelectedViewController];
@@ -275,9 +263,17 @@
     return selectedIndex == NSNotFound && item != self.moreTabItem;
 }
 
+- (BOOL)_isShowedViewControllerChangedWithOldSelectedIndex:(NSUInteger)oldIndex withNewSelectedIndex:(NSUInteger)newIndex
+{
+    UIViewController *oldController = [self _getCustomizedViewControllerWithSelectedIndex:oldIndex];
+    UIViewController *newController = [self _getCustomizedViewControllerWithSelectedIndex:newIndex];
+    
+    return oldController != newController;
+}
+
 - (void)_clearOldShowedViewController
 {
-    UIViewController *oldController = [self _getCurrentShowedViewController];
+    UIViewController *oldController = [self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex];
     if (oldController) {
         [oldController.view removeFromSuperview];
     }
@@ -296,7 +292,7 @@
     _selectedIndex = selectedIndex;
     if (willNotify) {
         if (selectedIndex == NSNotFound) {
-            selectedIndex = [self _getCountOfViewControllersWhichWillShowOnTabBar];
+            selectedIndex = [self _getCountOfShowedOnTabBarFromViewControllers:self.viewControllers];
         }
         [self.tabBar setSelectedItem:[self _getTabBarItemAt:selectedIndex]];
     }
@@ -313,14 +309,12 @@
     [self _showSubViewController: selectedViewController];
 }
 
-- (UIViewController *)_getCurrentShowedViewController
+- (UIViewController *)_getCustomizedViewControllerWithSelectedIndex:(NSUInteger)selectedIndex
 {
-    if (!self.hasShowedAnyViewController) {
-        return nil;
-    } else if (self.selectedIndex == NSNotFound) {
-        return self.moreNavigationController;
+    if (selectedIndex == NSNotFound) {
+        return self.hasShowedAnyViewController? self.moreNavigationController: nil;
     } else {
-        return [self _getViewControllerAt:self.selectedIndex];
+        return [self _getViewControllerAt:selectedIndex];
     }
 }
 
