@@ -9,6 +9,12 @@
 #import "UIMoreListController.h"
 #import "UITableView.h"
 #import "UITableViewCell.h"
+#import "UITapGestureRecognizer.h"
+
+@interface UIMoreListController()
+@property (nonatomic, strong) id selectIndexCallbackTarget;
+@property SEL selectIndexCallbackAction;
+@end
 
 @implementation UIMoreListController
 
@@ -18,6 +24,12 @@
         _viewControllers = @[];
     }
     return self;
+}
+
+- (void)setSelectIndexCallbackWithTarget:(id)target action:(SEL)action
+{
+    self.selectIndexCallbackTarget = target;
+    self.selectIndexCallbackAction = action;
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers
@@ -33,21 +45,45 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self _getCellWithTableView:tableView];
+    UITableViewCell *cell = [self _getCellWithTableView:tableView with:indexPath.row];
     UIViewController *controller = [self.viewControllers objectAtIndex:indexPath.row];
     [cell.textLabel setText:controller.title];
     return cell;
 }
 
-- (UITableViewCell *)_getCellWithTableView:(UITableView *)tableView
+- (UITableViewCell *)_getCellWithTableView:(UITableView *)tableView with:(NSUInteger)index
 {
     NSString *identifier = @"UIMoreListControllerCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        [cell addGestureRecognizer:[self _createTapGestureRecognizer]];
+        cell.tag = index;
     }
     return cell;
+}
+
+- (UITapGestureRecognizer *)_createTapGestureRecognizer
+{
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_onClickCell:)];
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    tapGestureRecognizer.numberOfTouchesRequired = 1;
+    return tapGestureRecognizer;
+}
+
+- (void)_onClickCell:(id)sender
+{
+    NSUInteger selectedIndex = [self _getCellIndexFromEvent:sender];
+    [self.selectIndexCallbackTarget performSelector:self.selectIndexCallbackAction
+                                         withObject:[NSNumber numberWithUnsignedInteger:selectedIndex]];
+}
+
+-(NSUInteger)_getCellIndexFromEvent:(UIGestureRecognizer *)tapEvent
+{
+    CGPoint touchPoint = [tapEvent locationInView:self.view];
+    NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:touchPoint];
+    return indexPath.row;
 }
 
 @end

@@ -11,5 +11,6 @@
 @interface UIMoreListController : UITableViewController
 
 @property (nonatomic, copy) NSArray *viewControllers;
+- (void)setSelectIndexCallbackWithTarget:(id)target action:(SEL)action;
 
 @end
