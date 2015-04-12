@@ -73,11 +73,7 @@
 
 - (void)setSelectedItem:(UITabBarItem *)selectedItem
 {
-    NSUInteger index = [self _findIndexOfItem:selectedItem];
-    if (index == self.selectedIndex) {
-        self.selectedIndex = index;
-        [self _refreshItemsAppearanceAndLocation];
-    }
+    self.selectedIndex = [self _findIndexOfItem:selectedItem];
 }
 
 #pragma mark - subviews management.
