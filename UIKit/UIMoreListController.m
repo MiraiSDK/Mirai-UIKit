@@ -14,7 +14,7 @@
 
 - (instancetype)init
 {
-    if (self = [super init]) {
+    if (self = [super initWithNibName:nil bundle:nil]) {
         _viewControllers = @[];
     }
     return self;
@@ -24,6 +24,11 @@
 {
     _viewControllers = viewControllers;
     [self.tableView reloadData];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.viewControllers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

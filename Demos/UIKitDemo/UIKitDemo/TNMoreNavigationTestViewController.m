@@ -9,7 +9,7 @@
 #import "TNMoreNavigationTestViewController.h"
 #import <UIKit/UIKit.h>
 
-#define ViewControllersCount 6
+#define ViewControllersCount 12
 
 @implementation TNMoreNavigationTestViewController
 
@@ -73,6 +73,7 @@
 - (void)_onClickShowSelectedViewController:(id)sender
 {
     NSLog(@"selectedViewController title = %@", self.selectedViewController.title);
+    NSLog(@"selectedViewController class = %@", self.selectedViewController.class);
 }
 
 - (void)_onClickSelectNextIndex:(id)sender
