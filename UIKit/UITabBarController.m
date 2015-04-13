@@ -62,6 +62,11 @@
     [self _addSubviewsToSelf];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [self _refreshSubviewsSizeToAdaptScreen];
+}
+
 - (void)_initDefaultValues
 {
     self.hasShowedAnyViewController = NO;
@@ -77,6 +82,7 @@
 {
     [self _refreshTabBarSizeToAdaptScreen];
     [self _refreshContainerSizeToAdaptScreen];
+    [self _refreshCurrentViewToAdaptContainer];
 }
 
 - (void)_addSubviewsToSelf
@@ -88,15 +94,22 @@
 - (void)_refreshTabBarSizeToAdaptScreen
 {
     CGRect frame = self.view.frame;
-    self.tabBar.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - DefaultTabBarHeight,
-                                   frame.size.width, DefaultTabBarHeight);
+    self.tabBar.frame = CGRectMake(0, frame.size.height - DefaultTabBarHeight, frame.size.width, DefaultTabBarHeight);
 }
 
 - (void)_refreshContainerSizeToAdaptScreen
 {
     CGRect frame = self.view.frame;
-    self.viewControllerContainer.frame = CGRectMake(frame.origin.x, frame.origin.y,
-                                           frame.size.width, frame.size.height - DefaultTabBarHeight);
+    self.viewControllerContainer.frame = CGRectMake(0, 0, frame.size.width, frame.size.height - DefaultTabBarHeight);
+}
+
+- (void)_refreshCurrentViewToAdaptContainer
+{
+    UIViewController *controller = [self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex];
+    CGSize containerSize = self.viewControllerContainer.frame.size;
+    if (controller) {
+        controller.view.frame = CGRectMake(0, 0, containerSize.width, containerSize.height);
+    }
 }
 
 - (void)_initAllPropertiesDefaultValues
