@@ -257,11 +257,16 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     NSUInteger selectedIndex = [self _findSelectedIndexWithSelectedItem:item];
-    if ([self _isShowedViewControllerChangedWithOldSelectedIndex:self.selectedIndex
-                                            withNewSelectedIndex:selectedIndex]) {
-        [self _clearOldShowedViewController];
+    UIViewController *oldController = [self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex];
+    UIViewController *newController = [self _getCustomizedViewControllerWithSelectedIndex:selectedIndex];
+    
+    if (oldController != newController) {
+        
+        [self _notifyWillAppearWithOldController:oldController withNewController:newController];
+        [self _clearOldControllerFromScreenWith:oldController];
         [self _changeSelectedIndex:selectedIndex notifyTabBar:NO];
         [self _resetCurrentSelectedViewController];
+        [self _notifyDidAppearWithOldController:oldController withNewController:newController];
     }
 }
 
@@ -274,17 +279,24 @@
     }
 }
 
-- (BOOL)_isShowedViewControllerChangedWithOldSelectedIndex:(NSUInteger)oldIndex withNewSelectedIndex:(NSUInteger)newIndex
+- (void)_notifyWillAppearWithOldController:(UIViewController *)oldController withNewController:(UIViewController *)newController
 {
-    UIViewController *oldController = [self _getCustomizedViewControllerWithSelectedIndex:oldIndex];
-    UIViewController *newController = [self _getCustomizedViewControllerWithSelectedIndex:newIndex];
-    
-    return oldController != newController;
+    if (oldController) {
+        [oldController viewWillDisappear:NO];
+    }
+    [newController viewWillAppear:NO];
 }
 
-- (void)_clearOldShowedViewController
+- (void)_notifyDidAppearWithOldController:(UIViewController *)oldController withNewController:(UIViewController *)newController
 {
-    UIViewController *oldController = [self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex];
+    if (oldController) {
+        [oldController viewDidDisappear:NO];
+    }
+    [newController viewDidAppear:NO];
+}
+
+- (void)_clearOldControllerFromScreenWith:(UIViewController *)oldController
+{
     if (oldController) {
         [oldController.view removeFromSuperview];
     }
@@ -333,6 +345,10 @@
 {
     if (_moreNavigationController == nil) {
         _moreNavigationController = [[UIMoreNavigationController alloc] initWithTitle:self.moreTabItem.title];
+        // I have to invoke viewWillAppear here, otherwise, the rootViewController won't appear.
+        // because, once the UINavigationController's instance method "view" was invoked, viewWillApear would
+        // not work.
+        [_moreNavigationController viewWillAppear:NO];
     }
     return _moreNavigationController;
 }
