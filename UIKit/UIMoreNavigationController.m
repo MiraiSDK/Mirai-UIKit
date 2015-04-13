@@ -25,11 +25,6 @@
     return self;
 }
 
-- (UIView *)view
-{
-    return [super view];
-}
-
 - (void)setMoreListViewControllers:(NSArray *)moreListViewControllers
 {
     self.moreListController.viewControllers = moreListViewControllers;
@@ -51,6 +46,8 @@
 - (void)_onSelectedIndexOfMoreListController:(NSNumber *)selectedIndexNumber
 {
     NSUInteger selectedIndexAtMoreList = [selectedIndexNumber unsignedIntegerValue];
+    UIViewController *viewController = [self.moreListController.viewControllers objectAtIndex:selectedIndexAtMoreList];
+    [self pushViewController:viewController animated:YES];
 }
 
 @end
