@@ -105,6 +105,8 @@
 		D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
 		D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
 		D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
+		D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
+		D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2D454AF1AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 		D2D454B01AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 /* End PBXBuildFile section */
@@ -227,6 +229,8 @@
 		D2A5F49C1AB084CD0011AF7B /* loveheart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loveheart.png; sourceTree = "<group>"; };
 		D2A5F5201AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSegmentedControlTestViewControlViewController.h; sourceTree = "<group>"; };
 		D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSegmentedControlTestViewControlViewController.m; sourceTree = "<group>"; };
+		D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNViewWillAppearListenerTestViewController.h; sourceTree = "<group>"; };
+		D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNViewWillAppearListenerTestViewController.m; sourceTree = "<group>"; };
 		D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarItemTestController.h; sourceTree = "<group>"; };
 		D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTabBarItemTestController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -533,6 +537,8 @@
 				D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */,
 				D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */,
 				D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */,
+				D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */,
+				D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */,
 			);
 			name = UITabBarController;
 			sourceTree = "<group>";
@@ -746,6 +752,7 @@
 				437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */,
 				4390B8671A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
 				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
+				D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
 				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 				D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */,
@@ -801,6 +808,7 @@
 				4390B8371A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
 				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
 				D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
+				D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
 				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
