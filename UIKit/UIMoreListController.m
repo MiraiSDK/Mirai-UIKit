@@ -12,7 +12,7 @@
 #import "UITapGestureRecognizer.h"
 
 @interface UIMoreListController()
-@property (nonatomic, strong) id selectIndexCallbackTarget;
+@property (nonatomic, weak) id selectIndexCallbackTarget;
 @property SEL selectIndexCallbackAction;
 @end
 
