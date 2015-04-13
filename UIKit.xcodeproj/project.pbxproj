@@ -283,6 +283,9 @@
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
+		D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */; };
+		D2C2E6381ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
+		D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
 		D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */; };
 /* End PBXBuildFile section */
 
@@ -584,6 +587,8 @@
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
+		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
+		D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreNavigationController.m; sourceTree = "<group>"; };
 		D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+UIPrivate.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1088,6 +1093,8 @@
 				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
 				D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */,
 				D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */,
+				D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */,
+				D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */,
 			);
 			name = UITabBarController;
 			sourceTree = "<group>";
@@ -1186,6 +1193,7 @@
 				439A73C118E84C4E00B1BE40 /* UITableViewCell.h in Headers */,
 				439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */,
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
+				D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */,
 				434CFCEB1A0C9DA100B6AC9E /* UIScreenMode.h in Headers */,
 				436D4AFC19F548FA00F6F8F9 /* UIPickerView.h in Headers */,
 				439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */,
@@ -1469,6 +1477,7 @@
 				434CFD5A1A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.m in Sources */,
 				4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */,
 				43C200A518EBB58300490D59 /* UIWebView.m in Sources */,
+				D2C2E6381ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
 				434CFD321A0CB24200B6AC9E /* UIRefreshControl.m in Sources */,
@@ -1487,6 +1496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
+				D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

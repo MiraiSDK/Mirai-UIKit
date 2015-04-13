@@ -10,7 +10,7 @@
 #import "UITabBar.h"
 #import "UITabBarItem.h"
 #import "UINavigationController.h"
-#import "UIMoreListController.h"
+#import "UIMoreNavigationController.h"
 #import "UIImage.h"
 #import "UIView.h"
 #import "UIControl.h"
@@ -24,7 +24,6 @@
 @property (nonatomic, strong) UIControl *viewControllerContainer;
 @property (nonatomic, strong) NSArray *tabBarItemsBuffered;
 @property (nonatomic, strong) UITabBarItem *moreTabItem;
-@property (nonatomic, strong) UIMoreListController *moreListController;
 @end
 
 @implementation UITabBarController
@@ -56,9 +55,9 @@
     return self;
 }
 
-- (void)viewDidLoad
+- (void)loadView
 {
-    [super viewDidLoad];
+    [super loadView];
     [self _refreshSubviewsSizeToAdaptScreen];
     [self _addSubviewsToSelf];
 }
@@ -126,7 +125,7 @@
 
 - (void)setCustomizableViewControllers:(NSArray *)customizableViewControllers
 {
-    //TODO
+    [[self _getMoreNavigationControllerOperator] setCustomizableViewControllers:customizableViewControllers];
 }
 
 # pragma mark - viewControllers setting.
@@ -141,7 +140,7 @@
     _viewControllers = viewControllers;
     self.tabBarItemsBuffered = [self _createTabBarItemsByViewControllers:viewControllers];
     [self.tabBar setItems:self.tabBarItemsBuffered animated:animated];
-    self.moreListController.viewControllers = [self _getMoreListNeedsViewControllers];
+    [self _refreshMoreListOfMoreNavigationControllerWith];
     [self _showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting];
 }
 
@@ -165,6 +164,21 @@
     [self _addShowedTabsIntoArray:tabBarItems from:viewControlelrs];
     [self _addMoreTabIfNeedIntoArray:tabBarItems withViewControllers:viewControlelrs];
     return tabBarItems;
+}
+
+- (void)_refreshMoreListOfMoreNavigationControllerWith
+{
+    UIMoreNavigationController *moreNavigationController = [self _getMoreNavigationControllerOperator];
+    NSArray *moreListViewControllers = [self _getMoreListNeedsViewControllers];
+    [moreNavigationController setMoreListViewControllers:moreListViewControllers];
+}
+
+- (void)_showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting
+{
+    if ([self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex] == nil &&
+        [self _numberOfViewControllers] > 0) {
+        self.tabBar.selectedItem = [self.tabBarItemsBuffered objectAtIndex:0];
+    }
 }
 
 - (void)_addShowedTabsIntoArray:(NSMutableArray *)tabBarItems from:(NSArray *)viewControllers
@@ -205,14 +219,6 @@
     return NSMakeRange(startIndex, self.viewControllers.count - startIndex);
 }
 
-- (void)_showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting
-{
-    if ([self _getCustomizedViewControllerWithSelectedIndex:self.selectedIndex] == nil &&
-        [self _numberOfViewControllers] > 0) {
-        self.tabBar.selectedItem = [self.tabBarItemsBuffered objectAtIndex:0];
-    }
-}
-
 - (UITabBarItem *)_createTabBarItemWithTitle:(NSString *)title at:(NSUInteger)index
 {
     return [[UITabBarItem alloc] initWithTitle:title image:nil tag:index];
@@ -251,7 +257,6 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     NSUInteger selectedIndex = [self _findSelectedIndexWithSelectedItem:item];
-    
     if ([self _isShowedViewControllerChangedWithOldSelectedIndex:self.selectedIndex
                                             withNewSelectedIndex:selectedIndex]) {
         [self _clearOldShowedViewController];
@@ -316,7 +321,7 @@
 - (UIViewController *)_getCustomizedViewControllerWithSelectedIndex:(NSUInteger)selectedIndex
 {
     if (selectedIndex == NSNotFound) {
-        return self.hasShowedAnyViewController? self.moreListController: nil;
+        return self.hasShowedAnyViewController? self.moreNavigationController: nil;
     } else {
         return [self _getViewControllerAt:selectedIndex];
     }
@@ -327,26 +332,14 @@
 - (UINavigationController *)moreNavigationController
 {
     if (_moreNavigationController == nil) {
-        _moreNavigationController = [[UINavigationController alloc] initWithRootViewController:self.moreListController];
-        _moreNavigationController.title = self.moreTabItem.title;
+        _moreNavigationController = [[UIMoreNavigationController alloc] initWithTitle:self.moreTabItem.title];
     }
     return _moreNavigationController;
 }
 
-- (UIMoreListController *)moreListController
+- (UIMoreNavigationController *)_getMoreNavigationControllerOperator
 {
-    if (_moreListController == nil) {
-        _moreListController = [self _createMoreListController];
-        _moreListController.viewControllers = [self _getMoreListNeedsViewControllers];
-        [_moreListController setSelectIndexCallbackWithTarget:self
-                                                       action:@selector(_onSelectedIndexOfMoreListController:)];
-    }
-    return _moreListController;
-}
-
-- (UIMoreListController *)_createMoreListController
-{
-    return [[UIMoreListController alloc] init];
+    return (UIMoreNavigationController *) self.moreNavigationController;
 }
 
 - (void)_onSelectedIndexOfMoreListController:(NSNumber *)selectedIndexNumber
