@@ -11,6 +11,7 @@
 #import "TNTabBarItemTestController.h"
 #import "TNMoreNavigationTestViewController.h"
 #import "TNViewWillAppearListenerTestViewController.h"
+#import "TNMoreListEditorTestViewController.h"
 
 @interface TNTabBarControlTestViewController ()
 
@@ -35,6 +36,7 @@
              [TNTabBarItemTestController class],
              [TNMoreNavigationTestViewController class],
              [TNViewWillAppearListenerTestViewController class],
+             [TNMoreListEditorTestViewController class],
              ];
 }
 
