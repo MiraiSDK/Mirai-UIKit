@@ -109,6 +109,8 @@
 		D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */; };
 		D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
+		D2CEEEA11ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
+		D2CEEEA21ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
 		D2D454AF1AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 		D2D454B01AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 /* End PBXBuildFile section */
@@ -235,6 +237,8 @@
 		D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNProgressTestViewController.m; sourceTree = "<group>"; };
 		D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNViewWillAppearListenerTestViewController.h; sourceTree = "<group>"; };
 		D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNViewWillAppearListenerTestViewController.m; sourceTree = "<group>"; };
+		D2CEEE9F1ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreListEditorTestViewController.h; sourceTree = "<group>"; };
+		D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMoreListEditorTestViewController.m; sourceTree = "<group>"; };
 		D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarItemTestController.h; sourceTree = "<group>"; };
 		D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTabBarItemTestController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -550,6 +554,8 @@
 				D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */,
 				D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */,
 				D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */,
+				D2CEEE9F1ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.h */,
+				D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */,
 			);
 			name = UITabBarController;
 			sourceTree = "<group>";
@@ -783,6 +789,7 @@
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
 				4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
+				D2CEEEA21ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */,
 				D2A5F49B1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
 				D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
@@ -800,6 +807,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2CEEEA11ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */,
 				4390B8681A8353B50082B0F1 /* TNPinchTestViewController.m in Sources */,
 				4390B8771A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				437F25EF1A736FB400FBE3E2 /* AppDelegate.m in Sources */,
