@@ -155,6 +155,7 @@
     [self.tabBar setItems:self.tabBarItemsBuffered animated:animated];
     [self _refreshMoreListOfMoreNavigationControllerWith];
     [self _showFirstViewControllerIfThereIsNotAnyViewControllerBeforeSetting];
+    self.customizableViewControllers = viewControllers;
 }
 
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
