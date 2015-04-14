@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, UITabBarSystemItem) {
 - (instancetype)initWithTabBarSystemItem:(UITabBarSystemItem)systemItem tag:(NSInteger)tag;
 
 @property(nonatomic,retain) UIImage *selectedImage;
+@property (nonatomic) UIOffset titlePositionAdjustment;
 
 @property(nonatomic,copy) NSString *badgeValue;    // default is nil
 
@@ -43,8 +44,5 @@ typedef NS_ENUM(NSInteger, UITabBarSystemItem) {
 - (void)setFinishedSelectedImage:(UIImage *)selectedImage withFinishedUnselectedImage:(UIImage *)unselectedImage;// NS_DEPRECATED_IOS(5_0,7_0);
 - (UIImage *)finishedSelectedImage;// NS_DEPRECATED_IOS(5_0,7_0);
 - (UIImage *)finishedUnselectedImage;// NS_DEPRECATED_IOS(5_0,7_0);
-
-- (void)setTitlePositionAdjustment:(UIOffset)adjustment;
-- (UIOffset)titlePositionAdjustment;
 
 @end
