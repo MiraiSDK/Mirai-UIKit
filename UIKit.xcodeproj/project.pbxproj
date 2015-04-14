@@ -280,6 +280,13 @@
 		43ECCF131851CAA80076535C /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF111851CAA80076535C /* UIWindow.m */; };
 		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
 		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
+		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
+		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
+		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
+		D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */; };
+		D2C2E6381ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
+		D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
+		D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -578,6 +585,11 @@
 		43ECCF111851CAA80076535C /* UIWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIWindow.m; sourceTree = "<group>"; };
 		43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidEventsServer.h; sourceTree = "<group>"; };
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
+		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
+		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
+		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
+		D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreNavigationController.m; sourceTree = "<group>"; };
+		D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+UIPrivate.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -849,6 +861,7 @@
 		4384632C188B3F7A006DA1AA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D24BB0451AD7BCB2006BD749 /* UITabBarController */,
 				43ECCF0C1851CA9A0076535C /* UIView.h */,
 				43ECCF0D1851CA9A0076535C /* UIView.m */,
 				431412D518C0AA77001AF732 /* UIView+UIPrivate.h */,
@@ -899,10 +912,6 @@
 				436D4B0919F54FCB00F6F8F9 /* UISearchController.m */,
 				436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */,
 				436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */,
-				436D4B1419F5547900F6F8F9 /* UITabBar.h */,
-				436D4B1519F5547900F6F8F9 /* UITabBar.m */,
-				436D4B1019F553D300F6F8F9 /* UITabBarController.h */,
-				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
 				432F73781A08AC9C009CEC64 /* UIMenuController.h */,
 				432F73791A08AC9C009CEC64 /* UIMenuController.m */,
 				432F737D1A08AE99009CEC64 /* UISplitViewController.h */,
@@ -920,8 +929,6 @@
 				434CFCF81A0CA0B500B6AC9E /* UILocalNotification.m */,
 				434CFCFB1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.h */,
 				434CFCFC1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.m */,
-				434CFCFF1A0CA33A00B6AC9E /* UITabBarItem.h */,
-				434CFD001A0CA33A00B6AC9E /* UITabBarItem.m */,
 				434CFD031A0CA40F00B6AC9E /* UITableViewHeaderFooterView.h */,
 				434CFD041A0CA40F00B6AC9E /* UITableViewHeaderFooterView.m */,
 				434CFD071A0CA87400B6AC9E /* UITextChecker.h */,
@@ -1074,6 +1081,24 @@
 			name = ViewControllers;
 			sourceTree = "<group>";
 		};
+		D24BB0451AD7BCB2006BD749 /* UITabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				434CFCFF1A0CA33A00B6AC9E /* UITabBarItem.h */,
+				D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */,
+				434CFD001A0CA33A00B6AC9E /* UITabBarItem.m */,
+				436D4B1419F5547900F6F8F9 /* UITabBar.h */,
+				436D4B1519F5547900F6F8F9 /* UITabBar.m */,
+				436D4B1019F553D300F6F8F9 /* UITabBarController.h */,
+				436D4B1119F553D300F6F8F9 /* UITabBarController.m */,
+				D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */,
+				D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */,
+				D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */,
+				D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */,
+			);
+			name = UITabBarController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1134,6 +1159,7 @@
 				434CFD051A0CA40F00B6AC9E /* UITableViewHeaderFooterView.h in Headers */,
 				4384630F188B2BCD006DA1AA /* UIImage.h in Headers */,
 				43B447FD1AB6FADF00DC1968 /* unzip.h in Headers */,
+				D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */,
 				43846348188C5977006DA1AA /* UIFontDescriptor.h in Headers */,
 				434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
@@ -1167,6 +1193,7 @@
 				439A73C118E84C4E00B1BE40 /* UITableViewCell.h in Headers */,
 				439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */,
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
+				D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */,
 				434CFCEB1A0C9DA100B6AC9E /* UIScreenMode.h in Headers */,
 				436D4AFC19F548FA00F6F8F9 /* UIPickerView.h in Headers */,
 				439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */,
@@ -1208,6 +1235,7 @@
 				439A73C618E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h in Headers */,
 				43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */,
 				434CFD4D1A0CB7A000B6AC9E /* UINibLoading.h in Headers */,
+				D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */,
 				434CFD2D1A0CB20E00B6AC9E /* UIScreenEdgePanGestureRecognizer.h in Headers */,
 				434CFD621A0CBAB400B6AC9E /* UIVideoEditorController.h in Headers */,
 				43718EC118518AB200850F08 /* android_native_app_glue.h in Headers */,
@@ -1415,6 +1443,7 @@
 				434CFD631A0CBAB400B6AC9E /* UIVideoEditorController.m in Sources */,
 				436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */,
 				434CFD5F1A0CB9A800B6AC9E /* UIStateRestoration.m in Sources */,
+				D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
 				43B819D018E27D550020624F /* UIScrollViewAnimation.m in Sources */,
 				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
@@ -1448,6 +1477,7 @@
 				434CFD5A1A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.m in Sources */,
 				4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */,
 				43C200A518EBB58300490D59 /* UIWebView.m in Sources */,
+				D2C2E6381ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
 				434CFD321A0CB24200B6AC9E /* UIRefreshControl.m in Sources */,
@@ -1465,6 +1495,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
+				D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

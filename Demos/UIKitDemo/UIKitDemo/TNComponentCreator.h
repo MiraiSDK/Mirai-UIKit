@@ -13,8 +13,10 @@
 
 @interface TNComponentCreator : NSObject
 + (void)makeSwitchItemWithTitle:(NSString *)title at:(CGFloat)yLocation withControl:(TNTestViewController *)testControl action:(SEL)action;
++ (void)makeChangeValueSliderWithTitle:(NSString *)title at:(CGFloat)yLocation withControl:(UIViewController *)controller withMaxValue:(CGFloat)maxValue whenValueChanged:(void (^)(float value))action;
 + (UIButton *)createButtonWithTitle:(NSString *)title withFrame:(CGRect)rect withBackgroundColor:(UIColor *)backgroundColor;
 + (UIButton *)createButtonWithTitle:(NSString *)title withFrame:(CGRect)rect;
 + (UIImage *)createRectangleWithSize:(CGSize)size withColor:(UIColor *)color;
 + (UIImage *)createEllipseWithSize:(CGSize)size withColor:(UIColor *)color;
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
 @end
