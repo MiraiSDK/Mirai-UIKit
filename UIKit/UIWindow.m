@@ -323,6 +323,15 @@ NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotific
         }
     }
     
+    // remove disabled gesture recognizer
+    NSMutableSet *disabled = [NSMutableSet set];
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if (!recognizer.isEnabled) {
+            [disabled addObject:recognizer];
+        }
+    }
+    [_effectRecognizers minusSet:disabled];
+    
     // send event to effect gesture recognizers
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         [recognizer _recognizeTouches:touches withEvent:event];
