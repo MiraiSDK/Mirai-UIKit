@@ -560,6 +560,25 @@
 			name = UITabBarController;
 			sourceTree = "<group>";
 		};
+		D2726A651ABE6DB60010F435 /* UITabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */,
+				D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */,
+				D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */,
+				D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */,
+				D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */,
+				D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */,
+				D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */,
+				D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */,
+				D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */,
+				D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */,
+				D2CEEE9F1ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.h */,
+				D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */,
+			);
+			name = UITabBarController;
+			sourceTree = "<group>";
+		};
 		D2A5F4791AB07C5F0011AF7B /* Uitils */ = {
 			isa = PBXGroup;
 			children = (
