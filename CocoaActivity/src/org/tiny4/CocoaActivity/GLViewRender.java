@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import java.lang.Throwable;
+
 /**
  * Created by Yonghui Chen on 10/31/14.
  */
@@ -133,15 +135,23 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
     public int updateTextureIfNeeds(float [] matrix) {
         //Log.i(TAG,"updateTextureIfNeeds");
 
-        synchronized (this) {
-            if (needsUpdateSurface) {
-                surfaceTexture.updateTexImage();
-                surfaceTexture.getTransformMatrix(matrix);
+        try {
+            synchronized (this) {
+                if (needsUpdateSurface) {
+                    surfaceTexture.updateTexImage();
+                    surfaceTexture.getTransformMatrix(matrix);
 
-                needsUpdateSurface = false;
+                    needsUpdateSurface = false;
 
-                return 1;
+                    return 1;
+                }
             }
+
+        } catch (Throwable t) {
+
+        }
+        finally {
+
         }
 
         return 0;
