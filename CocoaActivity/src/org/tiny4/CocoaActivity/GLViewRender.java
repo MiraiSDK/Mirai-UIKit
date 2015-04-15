@@ -165,6 +165,7 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
                 _popUp.setClippingEnabled(true);
                 _popUp.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 _popUp.setTouchable(false);
+                _popUp.setFocusable(true);
 
                 LinearLayout layout = new LinearLayout(mActivity);
                 LinearLayout mainLayout = new LinearLayout(mActivity);
