@@ -60,8 +60,17 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
 
     public void onDestory() {
         Log.i(TAG, "onDestory");
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                _popUp.dismiss();
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
 
-        _popUp.dismiss();
+        runOnUiThreadAndWait(aRunnable);
     }
 
     private void recreateSurface()
