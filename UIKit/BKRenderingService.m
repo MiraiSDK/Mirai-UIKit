@@ -229,6 +229,20 @@ static BKRenderingService *currentService = nil;
             eglSwapBuffers(_display, _surface);
         }
         
+        // call animation stopped callbacks after end a frame
+        @autoreleasepool {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                if (![CALayer instancesRespondToSelector:@selector(callAnimationsFinishedCallback)]) {
+                    NSLog(@"[ERROR] QuartzCore version too old. please upgrade QuartzCore");
+                    abort();
+                }
+            });
+            
+            CALayer *modelLayer = [_renderer.layer modelLayer];
+            [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallback) withObject:nil waitUntilDone:YES];
+        }
+        
     }
 
 }

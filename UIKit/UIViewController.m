@@ -45,6 +45,9 @@ static NSMutableArray *_viewControllerInstances;
 
 - (void)dealloc
 {
+    if (![NSThread isMainThread]) {
+        NSLog(@"[ERROR] view controller doesn't dealloc on mainthread");
+    }
     [_viewControllerInstances removeObject:_instanceValue];
 }
 
