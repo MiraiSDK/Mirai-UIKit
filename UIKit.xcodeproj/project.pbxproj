@@ -36,6 +36,8 @@
 		432FF09618548FDA005486C5 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432FF09518548FDA005486C5 /* CoreText.framework */; };
 		4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336782018F1476D00F1D556 /* UIKit+Android.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */ = {isa = PBXBuildFile; fileRef = 4336782118F1476D00F1D556 /* UIKit+Android.m */; };
+		433C4A321AD11754005D06BB /* UIAndroidTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 433C4A301AD11754005D06BB /* UIAndroidTextView.h */; };
+		433C4A331AD11754005D06BB /* UIAndroidTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 433C4A311AD11754005D06BB /* UIAndroidTextView.m */; };
 		434BC9CA18D58A4300BECD47 /* UIImage+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */; };
 		434BC9CB18D58A4300BECD47 /* UIImage+UIPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */; };
 		434CFCE61A0C9CDB00B6AC9E /* UIProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 434CFCE41A0C9CDB00B6AC9E /* UIProgressView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -332,6 +334,13 @@
 		432FF09518548FDA005486C5 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4336782018F1476D00F1D556 /* UIKit+Android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKit+Android.h"; sourceTree = "<group>"; };
 		4336782118F1476D00F1D556 /* UIKit+Android.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIKit+Android.m"; sourceTree = "<group>"; };
+		433C4A261AD0FC20005D06BB /* CocoaActivity.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = CocoaActivity.java; sourceTree = "<group>"; };
+		433C4A271AD0FC20005D06BB /* GLViewRender.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GLViewRender.java; sourceTree = "<group>"; };
+		433C4A281AD0FC20005D06BB /* GLWebView.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GLWebView.java; sourceTree = "<group>"; };
+		433C4A291AD0FC20005D06BB /* GLWebViewRender.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GLWebViewRender.java; sourceTree = "<group>"; };
+		433C4A2A1AD0FC20005D06BB /* MovieRender.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = MovieRender.java; sourceTree = "<group>"; };
+		433C4A301AD11754005D06BB /* UIAndroidTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidTextView.h; sourceTree = "<group>"; };
+		433C4A311AD11754005D06BB /* UIAndroidTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidTextView.m; sourceTree = "<group>"; };
 		434BC9C818D58A4300BECD47 /* UIImage+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIPrivate.h"; sourceTree = "<group>"; };
 		434BC9C918D58A4300BECD47 /* UIImage+UIPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIPrivate.m"; sourceTree = "<group>"; };
 		434CFCE41A0C9CDB00B6AC9E /* UIProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIProgressView.h; sourceTree = "<group>"; };
@@ -398,6 +407,8 @@
 		434CFD611A0CBAB400B6AC9E /* UIVideoEditorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIVideoEditorController.m; sourceTree = "<group>"; };
 		436060F61AC940B100303792 /* Android-arm.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Android-arm.xcconfig"; path = "TNJavaHelper/xcconfig/Android-arm.xcconfig"; sourceTree = "<group>"; };
 		436060F71AC940B100303792 /* Android-x86.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Android-x86.xcconfig"; path = "TNJavaHelper/xcconfig/Android-x86.xcconfig"; sourceTree = "<group>"; };
+		436CD83A1ADE639D002CBF94 /* GLTextView.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GLTextView.java; sourceTree = "<group>"; };
+		436CD83B1ADE639D002CBF94 /* GLTextViewRender.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GLTextViewRender.java; sourceTree = "<group>"; };
 		436D4A6419F2621300F6F8F9 /* UIAndroidWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidWebView.h; sourceTree = "<group>"; };
 		436D4A6519F2621300F6F8F9 /* UIAndroidWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidWebView.m; sourceTree = "<group>"; };
 		436D4AD219F52E0300F6F8F9 /* UISwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISwitch.h; sourceTree = "<group>"; };
@@ -623,6 +634,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		433C4A251AD0FC20005D06BB /* CocoaActivity */ = {
+			isa = PBXGroup;
+			children = (
+				433C4A261AD0FC20005D06BB /* CocoaActivity.java */,
+				433C4A271AD0FC20005D06BB /* GLViewRender.java */,
+				433C4A281AD0FC20005D06BB /* GLWebView.java */,
+				433C4A291AD0FC20005D06BB /* GLWebViewRender.java */,
+				433C4A2A1AD0FC20005D06BB /* MovieRender.java */,
+				436CD83A1ADE639D002CBF94 /* GLTextView.java */,
+				436CD83B1ADE639D002CBF94 /* GLTextViewRender.java */,
+			);
+			name = CocoaActivity;
+			path = CocoaActivity/src/org/tiny4/CocoaActivity;
+			sourceTree = SOURCE_ROOT;
+		};
 		434CFD5B1A0CB96400B6AC9E /* Interface Builder */ = {
 			isa = PBXGroup;
 			children = (
@@ -746,6 +772,7 @@
 		43718E7318517B7B00850F08 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				433C4A251AD0FC20005D06BB /* CocoaActivity */,
 				4336782018F1476D00F1D556 /* UIKit+Android.h */,
 				4336782118F1476D00F1D556 /* UIKit+Android.m */,
 				43718EBF18518AB200850F08 /* android_native_app_glue.h */,
@@ -1070,6 +1097,8 @@
 				43C200B118EBB70B00490D59 /* UITextInputTraits.h */,
 				43C200B218EBB70B00490D59 /* UITextView.h */,
 				43C200B318EBB70B00490D59 /* UITextView.m */,
+				433C4A301AD11754005D06BB /* UIAndroidTextView.h */,
+				433C4A311AD11754005D06BB /* UIAndroidTextView.m */,
 			);
 			name = UITextView;
 			sourceTree = "<group>";
@@ -1178,6 +1207,7 @@
 				4384634D188C636C006DA1AA /* UIDevice.h in Headers */,
 				436D4AD419F52E0300F6F8F9 /* UISwitch.h in Headers */,
 				43B6B64D1913A0EC005D09ED /* UIPopoverController.h in Headers */,
+				433C4A321AD11754005D06BB /* UIAndroidTextView.h in Headers */,
 				434CFD511A0CB85800B6AC9E /* UIStoryboard.h in Headers */,
 				D2BA4C851AEF3109003D4A35 /* TNImageBuffer.h in Headers */,
 				434CFD491A0CB77B00B6AC9E /* UINibDeclarations.h in Headers */,
@@ -1408,6 +1438,7 @@
 				439A73CE18E84C6300B1BE40 /* UITableViewCellSeparator.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
+				433C4A331AD11754005D06BB /* UIAndroidTextView.m in Sources */,
 				436D4AE219F5314700F6F8F9 /* UIAlertView.m in Sources */,
 				432FF08C18544D7A005486C5 /* UIStringDrawing.m in Sources */,
 				43B819EE18E2AA870020624F /* UIPanGestureRecognizer.m in Sources */,

@@ -30,31 +30,53 @@
 #import "UITextView.h"
 #import "UIColor.h"
 #import "UIFont.h"
+
+#define USE_ANDROID_BACKEND 1
+#if USE_ANDROID_BACKEND
+#import "UIAndroidTextView.h"
+#else
 #import "UITextLayer.h"
+#endif
+
 #import "UIScrollView.h"
 //#import <AppKit/NSCursor.h>
+
 
 NSString *const UITextViewTextDidBeginEditingNotification = @"UITextViewTextDidBeginEditingNotification";
 NSString *const UITextViewTextDidChangeNotification = @"UITextViewTextDidChangeNotification";
 NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEndEditingNotification";
 
+#if !USE_ANDROID_BACKEND
 @interface UIScrollView () <UITextLayerContainerViewProtocol>
 @end
+#endif
 
+#if USE_ANDROID_BACKEND
+@interface UITextView ()
+@property (nonatomic, strong) UIAndroidTextView *backend;
+#else
 @interface UITextView () <UITextLayerTextDelegate>
+@property (nonatomic, strong) UITextLayer *backend;
+#endif
 @end
 
 
 @implementation UITextView
-@synthesize dataDetectorTypes=_dataDetectorTypes, inputAccessoryView=_inputAccessoryView, inputView=_inputView;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        _textLayer = [[UITextLayer alloc] initWithContainer:self isField:NO];
-        [self.layer insertSublayer:_textLayer atIndex:0];
-
+#if USE_ANDROID_BACKEND
+        UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds];
+        [self addSubview:atv];
+        _backend = atv;
+        self.panGestureRecognizer.enabled = NO;
+#else
+        
+        _backend = [[UITextLayer alloc] initWithContainer:self isField:NO];
+        [self.layer insertSublayer:_backend atIndex:0];
+#endif
         self.textColor = [UIColor blackColor];
         self.font = [UIFont systemFontOfSize:17];
         self.dataDetectorTypes = UIDataDetectorTypeAll;
@@ -67,24 +89,26 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (void)dealloc
 {
-    [_textLayer removeFromSuperlayer];
+#if !USE_ANDROID_BACKEND
+    [_backend removeFromSuperlayer];
+#endif
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _textLayer.frame = self.bounds;
+    _backend.frame = self.bounds;
 }
 
 - (void)setContentOffset:(CGPoint)theOffset animated:(BOOL)animated
 {
     [super setContentOffset:theOffset animated:animated];
-    [_textLayer setContentOffset:theOffset];
+    [_backend setContentOffset:theOffset];
 }
 
 - (void)scrollRangeToVisible:(NSRange)range
 {
-    [_textLayer scrollRangeToVisible:range];
+    [_backend scrollRangeToVisible:range];
 }
 
 - (UITextAutocapitalizationType)autocapitalizationType
@@ -143,12 +167,12 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (BOOL)isSecureTextEntry
 {
-    return [_textLayer isSecureTextEntry];
+    return [_backend isSecureTextEntry];
 }
 
 - (void)setSecureTextEntry:(BOOL)secure
 {
-    [_textLayer setSecureTextEntry:secure];
+    [_backend setSecureTextEntry:secure];
 }
 
 
@@ -160,7 +184,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (BOOL)becomeFirstResponder
 {
     if ([super becomeFirstResponder] ){
-        return [_textLayer becomeFirstResponder];
+        return [_backend becomeFirstResponder];
     } else {
         return NO;
     }
@@ -169,7 +193,7 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 - (BOOL)resignFirstResponder
 {
     if ([super resignFirstResponder]) {
-        return [_textLayer resignFirstResponder];
+        return [_backend resignFirstResponder];
     } else {
         return NO;
     }
@@ -177,67 +201,67 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
 
 - (UIFont *)font
 {
-    return _textLayer.font;
+    return _backend.font;
 }
 
 - (void)setFont:(UIFont *)newFont
 {
-    _textLayer.font = newFont;
+    _backend.font = newFont;
 }
 
 - (UIColor *)textColor
 {
-    return _textLayer.textColor;
+    return _backend.textColor;
 }
 
 - (void)setTextColor:(UIColor *)newColor
 {
-    _textLayer.textColor = newColor;
+    _backend.textColor = newColor;
 }
 
 - (UITextAlignment)textAlignment
 {
-    return _textLayer.textAlignment;
+    return _backend.textAlignment;
 }
 
 - (void)setTextAlignment:(UITextAlignment)textAlignment
 {
-    _textLayer.textAlignment = textAlignment;
+    _backend.textAlignment = textAlignment;
 }
 
 - (NSString *)text
 {
-    return _textLayer.text;
+    return _backend.text;
 }
 
 - (void)setText:(NSString *)newText
 {
-    _textLayer.text = newText;
+    _backend.text = newText;
 }
 
 - (BOOL)isEditable
 {
-    return _textLayer.editable;
+    return _backend.isEditable;
 }
 
 - (void)setEditable:(BOOL)editable
 {
-    _textLayer.editable = editable;
+    _backend.editable = editable;
 }
 
 - (NSRange)selectedRange
 {
-    return _textLayer.selectedRange;
+    return _backend.selectedRange;
 }
 
 - (void)setSelectedRange:(NSRange)range
 {
-    _textLayer.selectedRange = range;
+    _backend.selectedRange = range;
 }
 
 - (BOOL)hasText
 {
-  return [_textLayer.text length] > 0;
+  return [_backend.text length] > 0;
 }
 
 
@@ -324,4 +348,31 @@ NSString *const UITextViewTextDidEndEditingNotification = @"UITextViewTextDidEnd
     return nil;// self.editable? [NSCursor IBeamCursor] : nil;
 }
 
+#pragma mark -
+#if USE_ANDROID_BACKEND
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    [_backend touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+
+    [_backend touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+
+    [_backend touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_backend touchesCancelled:touches withEvent:event];
+}
+#endif
 @end
