@@ -271,26 +271,38 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (CGPoint)_confinedContentOffset:(CGPoint)contentOffset
 {
     const CGRect scrollerBounds = UIEdgeInsetsInsetRect(self.bounds, _contentInset);
+    CGFloat minX = -_contentInset.left;
+    CGFloat maxX = _contentInset.right + _contentSize.width- self.bounds.size.width;
+    CGFloat minY = -_contentInset.top;
+    CGFloat maxY = _contentInset.bottom + _contentSize.height - self.bounds.size.height;
     
+//    NSLog(@"contentOffset:%@ minX:%.2f minY:%.2f",NSStringFromCGPoint(contentOffset),minX,minY);
+//    NSLog(@"contentSize:%@ scrollerBounds:%@",NSStringFromCGSize(_contentSize),NSStringFromCGRect(scrollerBounds));
+
     if ((_contentSize.width-contentOffset.x) < scrollerBounds.size.width) {
         contentOffset.x = (_contentSize.width - scrollerBounds.size.width);
     }
     
     if ((_contentSize.height-contentOffset.y) < scrollerBounds.size.height) {
         contentOffset.y = (_contentSize.height - scrollerBounds.size.height);
+
     }
     
-    contentOffset.x = MAX(contentOffset.x,0);
-    contentOffset.y = MAX(contentOffset.y,0);
+    contentOffset.x = MAX(contentOffset.x,minX);
+    contentOffset.y = MAX(contentOffset.y,minY);
+
+    contentOffset.x = MIN(contentOffset.x,maxX);
+    contentOffset.y = MIN(contentOffset.y,maxY);
     
     if (_contentSize.width <= scrollerBounds.size.width) {
-        contentOffset.x = 0;
+        contentOffset.x = minX;
     }
     
     if (_contentSize.height <= scrollerBounds.size.height) {
-        contentOffset.y = 0;
+        contentOffset.y = minY;
     }
     
+//    NSLog(@"fixed offset:%@",NSStringFromCGPoint(contentOffset));
     return contentOffset;
 }
 
@@ -376,8 +388,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _contentOffset.y = roundf(theOffset.y);
         
         CGRect bounds = self.bounds;
-        bounds.origin.x = _contentOffset.x-_contentInset.left;
-        bounds.origin.y = _contentOffset.y-_contentInset.top;
+        bounds.origin.x = _contentOffset.x;//-_contentInset.left;
+        bounds.origin.y = _contentOffset.y;//-_contentInset.top;
         self.bounds = bounds;
         
         [self _updateScrollers];

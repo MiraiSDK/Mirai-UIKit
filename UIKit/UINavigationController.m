@@ -140,7 +140,9 @@ typedef enum {
             }
         }
         
-        viewToAdjust.contentInset = UIEdgeInsetsMake(NavBarHeight, 0, 0, 0);
+        UIEdgeInsets inset = viewToAdjust.contentInset;
+        inset.top += NavBarHeight;
+        viewToAdjust.contentInset = inset;
     }
 }
 
