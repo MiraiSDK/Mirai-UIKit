@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		432D2BFF1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */; };
+		432D2C001AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */; };
 		437F25D41A736FA800FBE3E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437F25D31A736FA800FBE3E2 /* UIKit.framework */; };
 		437F25D91A736FA800FBE3E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25D81A736FA800FBE3E2 /* main.m */; };
 		437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25DB1A736FA800FBE3E2 /* AppDelegate.m */; };
@@ -133,6 +135,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		432D2BFD1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNScrollViewContentInsetTestViewController.h; sourceTree = "<group>"; };
+		432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScrollViewContentInsetTestViewController.m; sourceTree = "<group>"; };
 		436060D61AC9231000303792 /* Android-arm.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-arm.xcconfig"; sourceTree = "<group>"; };
 		436060D71AC9231000303792 /* Android-x86.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-x86.xcconfig"; sourceTree = "<group>"; };
 		437F25D01A736FA800FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -426,6 +430,8 @@
 				4390B8291A8352990082B0F1 /* TNClipsToBoundsTestViewController.m */,
 				4390B82A1A8352990082B0F1 /* TNScrollViewPagingTestViewController.h */,
 				4390B82B1A8352990082B0F1 /* TNScrollViewPagingTestViewController.m */,
+				432D2BFD1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.h */,
+				432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */,
 			);
 			name = UIScrollView;
 			sourceTree = "<group>";
@@ -779,6 +785,7 @@
 				D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */,
 				D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
 				D24BB0411AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
+				432D2C001AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */,
 				4390B8781A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
@@ -810,6 +817,7 @@
 				4390B8061A8351470082B0F1 /* TNTestCase.m in Sources */,
 				D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
 				4390B8641A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
+				432D2BFF1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */,
 				D2A5F48B1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */,
 				4390B82C1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				437F25F11A736FB400FBE3E2 /* ViewController.m in Sources */,
