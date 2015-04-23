@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import java.lang.Throwable;
+
 /**
  * Created by Yonghui Chen on 10/31/14.
  */
@@ -60,8 +62,17 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
 
     public void onDestory() {
         Log.i(TAG, "onDestory");
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                _popUp.dismiss();
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
 
-        _popUp.dismiss();
+        runOnUiThreadAndWait(aRunnable);
     }
 
     private void recreateSurface()
@@ -124,15 +135,23 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
     public int updateTextureIfNeeds(float [] matrix) {
         //Log.i(TAG,"updateTextureIfNeeds");
 
-        synchronized (this) {
-            if (needsUpdateSurface) {
-                surfaceTexture.updateTexImage();
-                surfaceTexture.getTransformMatrix(matrix);
+        try {
+            synchronized (this) {
+                if (needsUpdateSurface) {
+                    surfaceTexture.updateTexImage();
+                    surfaceTexture.getTransformMatrix(matrix);
 
-                needsUpdateSurface = false;
+                    needsUpdateSurface = false;
 
-                return 1;
+                    return 1;
+                }
             }
+
+        } catch (Throwable t) {
+
+        }
+        finally {
+
         }
 
         return 0;
@@ -156,6 +175,7 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
                 _popUp.setClippingEnabled(true);
                 _popUp.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 _popUp.setTouchable(false);
+                _popUp.setFocusable(true);
 
                 LinearLayout layout = new LinearLayout(mActivity);
                 LinearLayout mainLayout = new LinearLayout(mActivity);

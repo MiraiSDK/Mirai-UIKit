@@ -344,16 +344,47 @@ void HSVtoRGB(float h, float s, float v,
 
 - (BOOL)getWhite:(CGFloat *)white alpha:(CGFloat *)alpha
 {
-    return 0;
+    NS_UNIMPLEMENTED_LOG;
+    return NO;
 }
 
 - (BOOL)getHue:(CGFloat *)hue saturation:(CGFloat *)saturation brightness:(CGFloat *)brightness alpha:(CGFloat *)alpha
 {
+    NS_UNIMPLEMENTED_LOG;
     return NO;
 }
 
+//FIXME: should consider convert color space
 - (BOOL)getRed:(CGFloat *)red green:(CGFloat *)green blue:(CGFloat *)blue alpha:(CGFloat *)alpha
 {
+    size_t numberOfComponents = CGColorGetNumberOfComponents(_color);
+    const CGFloat *components = CGColorGetComponents(_color);
+    if (numberOfComponents == 4) {
+        //assume it's rgba
+        *red = components[0];
+        *green = components[1];
+        *blue = components[2];
+        *alpha = components[3];
+        return YES;
+    } else if (numberOfComponents == 3) {
+        *red = components[0];
+        *green = components[1];
+        *blue = components[2];
+        *alpha = 1;
+        return YES;
+    } else if (numberOfComponents == 2) {
+        // gray whith alpha
+        *red = components[0];
+        *green = components[0];
+        *blue = components[0];
+        *alpha = components[1];
+    } else if (numberOfComponents == 1) {
+        *red = components[0];
+        *green = components[0];
+        *blue = components[0];
+        *alpha = 1;
+    }
+    
     return NO;
 }
 
