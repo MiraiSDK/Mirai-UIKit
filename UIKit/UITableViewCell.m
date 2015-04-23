@@ -140,7 +140,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
 {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeCenter;
+        _imageView.contentMode = UIViewContentModeScaleToFill;
         [self.contentView addSubview:_imageView];
         [self layoutIfNeeded];
     }
