@@ -201,11 +201,14 @@ static NSMutableDictionary *cache;
     self = [super init];
     if (self) {
         _imageRef = cgImage;
+        if (scale == 0) {
+            scale = 1;
+        }
         _scale = scale;
         _imageOrientation = orientation;
         size_t width = CGImageGetWidth(cgImage);
         size_t height = CGImageGetHeight(cgImage);
-        _size = CGSizeMake(width, height);
+        _size = CGSizeMake(width/scale, height/scale);
     }
     return self;
 }

@@ -85,8 +85,9 @@ void     UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloa
 UIImage* UIGraphicsGetImageFromCurrentImageContext(void)
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGFloat scale = [[imageContextStack() lastObject] floatValue];
     CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
-    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    UIImage *image = [UIImage imageWithCGImage:cgImage scale:scale orientation:UIImageOrientationUp];
     CGImageRelease(cgImage);
     return image;
 }
