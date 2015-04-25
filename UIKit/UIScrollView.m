@@ -260,7 +260,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_setScrollAnimation:(UIScrollViewAnimation *)animation
 {
-    [self _cancelScrollAnimation];
+    if (_scrollAnimation) {
+        [self _cancelScrollAnimation];
+    }
     _scrollAnimation = animation;
     
     if (!_scrollTimer) {
@@ -555,7 +557,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _horizontalScroller.alwaysVisible = YES;
         _verticalScroller.alwaysVisible = YES;
         
-        [self _cancelScrollAnimation];
+        if (_scrollAnimation) {
+            [self _cancelScrollAnimation];
+        }
         
         if (_delegateCan.scrollViewWillBeginDragging) {
             [_delegate scrollViewWillBeginDragging:self];
