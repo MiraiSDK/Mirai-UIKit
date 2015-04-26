@@ -524,7 +524,7 @@ typedef enum {
 static void * const UINavigationItemContext = "UINavigationItemContext";
 
 @implementation UINavigationItem {
-    UINavigationBar *_navigationBar;
+    __weak UINavigationBar *_navigationBar;
 }
 
 + (NSSet *)_keyPathsTriggeringUIUpdates
