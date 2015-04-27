@@ -1,0 +1,14 @@
+//
+//  TNPageControlTestViewController.h
+//  UIKitDemo
+//
+//  Created by TaoZeyu on 15/4/27.
+//  Copyright (c) 2015年 Shanghai TinyNetwork Inc. All rights reserved.
+//
+
+#import "TNTestViewController.h"
+#import <UIKit/UIKit.h>
+
+@interface TNPageControlTestViewController : TNTestViewController <UIScrollViewDelegate>
+
+@end
