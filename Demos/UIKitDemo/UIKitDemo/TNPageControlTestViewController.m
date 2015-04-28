@@ -162,6 +162,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:[self _getCentreFrameWithSize:CGSizeMake(80, 50) inArea:area]];
     [label setText:[NSString stringWithFormat:@"view(%li)", index + 1]];
     label.textColor = [TNPageControlTestViewController _getSubviewTextColorAt:index];
+    label.backgroundColor = [TNPageControlTestViewController _getSubviewBackgroundColorAt:index];
     
     UIView *rect = [[UIView alloc] initWithFrame:area];
     rect.backgroundColor = [TNPageControlTestViewController _getSubviewBackgroundColorAt:index];
@@ -195,7 +196,7 @@
 - (UIView *)_createControlPanelAndSettingAppearance
 {
     CGSize boundsSize = self.view.bounds.size;
-    UIView *panel = [[UIView alloc] initWithFrame:CGRectMake(8, 78,
+    UIView *panel = [[UIView alloc] initWithFrame:CGRectMake(8, 108,
                                                              0.8*boundsSize.width, 0.3*boundsSize.height)];
     panel.layer.borderWidth = 2;
     panel.layer.borderColor = [UIColor blackColor].CGColor;
@@ -257,6 +258,7 @@
     CGRect frame = CGRectMake(5, location, 200, 25);
     TNChangedColorButton *button = [[TNChangedColorButton alloc] initWithFrame:frame
                                                               whenColorChanged:^(UIColor *color) {
+        NSLog(@"change %@'s color to %@", propertyName, color);
         [pageControl setValue:color forKey:propertyName];
     }];
     [button setTitle:propertyName forState:UIControlStateNormal];

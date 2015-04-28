@@ -87,6 +87,8 @@
 		D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
 		D24BB0411AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
+		D270F49F1AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D270F49E1AEE25A40047D100 /* TNPageControlTestViewController.m */; };
+		D270F4A01AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D270F49E1AEE25A40047D100 /* TNPageControlTestViewController.m */; };
 		D2726A6E1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */; };
 		D2726A6F1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */; };
 		D2726A721ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2726A711ABE707A0010F435 /* TNTabBarControlTestViewController.m */; };
@@ -107,14 +109,14 @@
 		D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
 		D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
 		D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
-		D2DB8D1E1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */; };
-		D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */; };
 		D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2CEEEA11ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
 		D2CEEEA21ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
 		D2D454AF1AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 		D2D454B01AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
+		D2DB8D1E1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */; };
+		D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,6 +221,8 @@
 		D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeValueSlider.m; sourceTree = "<group>"; };
 		D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreNavigationTestViewController.h; sourceTree = "<group>"; };
 		D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMoreNavigationTestViewController.m; sourceTree = "<group>"; };
+		D270F49D1AEE25A40047D100 /* TNPageControlTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPageControlTestViewController.h; sourceTree = "<group>"; };
+		D270F49E1AEE25A40047D100 /* TNPageControlTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPageControlTestViewController.m; sourceTree = "<group>"; };
 		D2726A6C1ABE70010010F435 /* TNChangeTabTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangeTabTestViewController.h; sourceTree = "<group>"; };
 		D2726A6D1ABE70010010F435 /* TNChangeTabTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeTabTestViewController.m; sourceTree = "<group>"; };
 		D2726A701ABE707A0010F435 /* TNTabBarControlTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarControlTestViewController.h; sourceTree = "<group>"; };
@@ -237,14 +241,14 @@
 		D2A5F49C1AB084CD0011AF7B /* loveheart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loveheart.png; sourceTree = "<group>"; };
 		D2A5F5201AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSegmentedControlTestViewControlViewController.h; sourceTree = "<group>"; };
 		D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSegmentedControlTestViewControlViewController.m; sourceTree = "<group>"; };
-		D2DB8D1C1AB7280C007BA560 /* TNProgressTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNProgressTestViewController.h; sourceTree = "<group>"; };
-		D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNProgressTestViewController.m; sourceTree = "<group>"; };
 		D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNViewWillAppearListenerTestViewController.h; sourceTree = "<group>"; };
 		D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNViewWillAppearListenerTestViewController.m; sourceTree = "<group>"; };
 		D2CEEE9F1ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreListEditorTestViewController.h; sourceTree = "<group>"; };
 		D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMoreListEditorTestViewController.m; sourceTree = "<group>"; };
 		D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarItemTestController.h; sourceTree = "<group>"; };
 		D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTabBarItemTestController.m; sourceTree = "<group>"; };
+		D2DB8D1C1AB7280C007BA560 /* TNProgressTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNProgressTestViewController.h; sourceTree = "<group>"; };
+		D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNProgressTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,6 +365,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D270F49A1AEE25840047D100 /* UIPageControl */,
 				D2DB8D191AB727D0007BA560 /* UIProgressView */,
 				D2726A651ABE6DB60010F435 /* UITabBarController */,
 				D2A5F4951AB0847C0011AF7B /* UISlider */,
@@ -539,6 +544,15 @@
 			children = (
 			);
 			name = UIImageView;
+			sourceTree = "<group>";
+		};
+		D270F49A1AEE25840047D100 /* UIPageControl */ = {
+			isa = PBXGroup;
+			children = (
+				D270F49D1AEE25A40047D100 /* TNPageControlTestViewController.h */,
+				D270F49E1AEE25A40047D100 /* TNPageControlTestViewController.m */,
+			);
+			name = UIPageControl;
 			sourceTree = "<group>";
 		};
 		D2726A651ABE6DB60010F435 /* UITabBarController */ = {
@@ -771,6 +785,7 @@
 				4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
 				D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
 				4390B8141A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
+				D270F4A01AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */,
 				437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */,
 				4390B8311A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
 				4390B8211A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
@@ -841,6 +856,7 @@
 				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
 				D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
+				D270F49F1AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */,
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
 				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
