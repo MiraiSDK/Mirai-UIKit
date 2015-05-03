@@ -169,7 +169,7 @@
 
 - (void)_onThumbTouchDown:(id)render withEvent:(UIEvent *)event
 {
-    [self _handleAllTouchEvents:event handle:^(UITouch *touch) {
+    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch *touch) {
         self.hasDragThumbLastTouch = NO;
         self.wasContinuousBeforeDrag = self.continuous;
         self.valueBeforeBeginDrag = self.value;
@@ -179,7 +179,7 @@
 
 - (void)_onThumbDraged:(id)render withEvent:(UIEvent *)event
 {
-    [self _handleAllTouchEvents:event handle:^(UITouch *touch){
+    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch *touch){
         float value = [self _getValueOfCurrentDragTouch:touch];
         [self _setValueButNotTriggerValueChanged:value animated:NO];
         self.hasDragThumbLastTouch = YES;
@@ -192,7 +192,7 @@
 
 - (void)_onReleaseThumbDrag:(id)render widthEvent:(UIEvent *)event
 {
-    [self _handleAllTouchEvents:event handle:^(UITouch * touch){
+    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch * touch){
         if (self.hasDragThumbLastTouch) {
             float value = [self _getValueOfCurrentDragTouch:touch];
             [self _setValueButNotTriggerValueChanged:value animated:NO];
@@ -217,10 +217,12 @@
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
-- (void)_handleAllTouchEvents:(UIEvent *)event handle:(void (^)(UITouch *))handler
+- (void)_handleAllTouchEventsIfEnableWithEvent:(UIEvent *)event handle:(void (^)(UITouch *))handler
 {
-    for (id touch in [event allTouches]) {
-        handler((UITouch *)touch);
+    if (self.enabled) {
+        for (id touch in [event allTouches]) {
+            handler((UITouch *)touch);
+        }
     }
 }
 
