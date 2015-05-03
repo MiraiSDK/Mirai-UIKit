@@ -191,14 +191,9 @@
 
 - (void)_drawImageIntoImageContext:(CGContextRef)context withColor:(UIColor *)color
 {
-    // I can't draw any ellipse, I so replace it with a rectangle.
-    
-//    CGContextSetFillColorWithColor(context, [color CGColor]);
-//    CGContextAddEllipseInRect(context, CGRectMake(0, 0, kDefaultDotWidth, kDefaultDotWidth));
-//    CGContextDrawPath(context, kCGPathFillStroke);
-    
     CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, CGRectMake(0, 0, kDefaultDotWidth, kDefaultDotWidth));
+    CGContextAddEllipseInRect(context, CGRectMake(0, 0, kDefaultDotWidth, kDefaultDotWidth));
+    CGContextFillPath(context);
 }
 
 @end
