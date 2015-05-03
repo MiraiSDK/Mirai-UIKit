@@ -20,7 +20,7 @@
 #define TintState 0xFFFFFFFF
 
 #define DefaultSubviewIsOpaque NO
-#define DefaultLineWith 4.0
+#define DefaultLineWith 2.0
 #define DefaultStrokeColor CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1.0)
 
 #define DefaultThumbColor [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0]
@@ -169,7 +169,7 @@
 
 - (void)_onThumbTouchDown:(id)render withEvent:(UIEvent *)event
 {
-    [self _handleAllTouchEvents:event handle:^(UITouch *touch) {
+    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch *touch) {
         self.hasDragThumbLastTouch = NO;
         self.wasContinuousBeforeDrag = self.continuous;
         self.valueBeforeBeginDrag = self.value;
@@ -179,7 +179,7 @@
 
 - (void)_onThumbDraged:(id)render withEvent:(UIEvent *)event
 {
-    [self _handleAllTouchEvents:event handle:^(UITouch *touch){
+    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch *touch){
         float value = [self _getValueOfCurrentDragTouch:touch];
         [self _setValueButNotTriggerValueChanged:value animated:NO];
         self.hasDragThumbLastTouch = YES;
@@ -192,7 +192,7 @@
 
 - (void)_onReleaseThumbDrag:(id)render widthEvent:(UIEvent *)event
 {
-    [self _handleAllTouchEvents:event handle:^(UITouch * touch){
+    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch * touch){
         if (self.hasDragThumbLastTouch) {
             float value = [self _getValueOfCurrentDragTouch:touch];
             [self _setValueButNotTriggerValueChanged:value animated:NO];
@@ -217,10 +217,12 @@
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
-- (void)_handleAllTouchEvents:(UIEvent *)event handle:(void (^)(UITouch *))handler
+- (void)_handleAllTouchEventsIfEnableWithEvent:(UIEvent *)event handle:(void (^)(UITouch *))handler
 {
-    for (id touch in [event allTouches]) {
-        handler((UITouch *)touch);
+    if (self.enabled) {
+        for (id touch in [event allTouches]) {
+            handler((UITouch *)touch);
+        }
     }
 }
 
@@ -483,21 +485,14 @@ static UIImage *DefaultMaximumTrack = nil;
 {
     CGSize imageSize = DefaultThumbImageSize;
     return [UISlider _createImageWithSize:imageSize andDrawIn:^(CGContextRef context) {
-        
-        // I can't draw any ellipse, I so replace it with a rectangle.
         CGContextSetFillColorWithColor(context, [color CGColor]);
         CGContextSetStrokeColorWithColor(context, DefaultStrokeColor);
         CGContextSetLineWidth(context, DefaultLineWith);
-        CGContextFillRect(context, CGRectMake(0.0, 0.0, imageSize.width, imageSize.height));
-        CGContextStrokeRect(context, CGRectMake(0.0, 0.0, imageSize.width, imageSize.height));
         
-        //        CGContextSetFillColorWithColor(context, [color CGColor]);
-        //        CGContextSetStrokeColorWithColor(context, DefaultStrokeColor);
-        //        CGContextSetLineWidth(context, DefaultLineWith);
-        //
-        //        CGRect rect = CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
-        //        CGContextAddEllipseInRect(context, rect);
-        //        CGContextDrawPath(context, kCGPathFillStroke);
+        CGRect rect = CGRectMake(DefaultLineWith, DefaultLineWith,
+                                 imageSize.width - 2*DefaultLineWith, imageSize.height - 2*DefaultLineWith);
+        CGContextAddEllipseInRect(context, rect);
+        CGContextDrawPath(context, kCGPathFillStroke);
     }];
 }
 
