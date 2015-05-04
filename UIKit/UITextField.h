@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, UITextFieldViewMode) {
     UITextFieldViewModeAlways
 };
 
-@interface UITextField : UIControl
+@interface UITextField : UIControl  <UITextInput, NSCoding>
 
 @property(nonatomic,copy)   NSString               *text;                 // default is nil
 @property(nonatomic,copy)   NSAttributedString     *attributedText;// NS_AVAILABLE_IOS(6_0); // default is nil
