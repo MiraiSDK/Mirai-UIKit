@@ -349,6 +349,70 @@ typedef enum{
 }
 
 #pragma mark -
+- (void)insertSegmentWithImage:(UIImage *)image  atIndex:(NSUInteger)segment animated:(BOOL)animated
+{
+    
+}
+
+- (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment
+{
+    
+}
+
+- (UIImage *)imageForSegmentAtIndex:(NSUInteger)segment
+{
+    return nil;
+}
+
+- (void)setContentOffset:(CGSize)offset forSegmentAtIndex:(NSUInteger)segment
+{
+    
+}
+
+- (CGSize)contentOffsetForSegmentAtIndex:(NSUInteger)segment
+{
+    return CGSizeZero;
+}
+
+- (void)setBackgroundImage:(UIImage *)backgroundImage forState:(UIControlState)state barMetrics:(UIBarMetrics)barMetrics
+{
+    
+}
+
+- (UIImage *)backgroundImageForState:(UIControlState)state barMetrics:(UIBarMetrics)barMetrics
+{
+    return nil;
+}
+
+- (void)setDividerImage:(UIImage *)dividerImage forLeftSegmentState:(UIControlState)leftState rightSegmentState:(UIControlState)rightState barMetrics:(UIBarMetrics)barMetrics
+{
+    
+}
+- (UIImage *)dividerImageForLeftSegmentState:(UIControlState)leftState rightSegmentState:(UIControlState)rightState barMetrics:(UIBarMetrics)barMetrics
+{
+    return nil;
+}
+
+- (void)setTitleTextAttributes:(NSDictionary *)attributes forState:(UIControlState)state
+{
+    
+}
+
+- (NSDictionary *)titleTextAttributesForState:(UIControlState)state
+{
+    return nil;
+}
+
+- (void)setContentPositionAdjustment:(UIOffset)adjustment forSegmentType:(UISegmentedControlSegment)leftCenterRightOrAlone barMetrics:(UIBarMetrics)barMetrics
+{
+    
+}
+
+- (UIOffset)contentPositionAdjustmentForSegmentType:(UISegmentedControlSegment)leftCenterRightOrAlone barMetrics:(UIBarMetrics)barMetrics
+{
+    return UIOffsetZero;
+}
+#pragma mark -
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     

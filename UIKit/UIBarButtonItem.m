@@ -87,6 +87,13 @@
     return self;
 }
 
+- (instancetype)initWithImage:(UIImage *)image landscapeImagePhone:(UIImage *)landscapeImagePhone style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
+{
+    NS_UNIMPLEMENTED_LOG;
+    self = [self init];
+    return self;
+}
+
 - (UIView *)customView
 {
     return _isSystemItem? nil : _customView;
@@ -169,4 +176,16 @@
     return 0.0f;
 }
 
+#pragma mark - NSCoding
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    NS_UNIMPLEMENTED_LOG;
+    self = [super init];
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    NS_UNIMPLEMENTED_LOG;
+}
 @end

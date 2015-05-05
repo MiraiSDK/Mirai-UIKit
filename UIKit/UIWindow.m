@@ -24,6 +24,19 @@ NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenN
 NSString *const UIWindowDidBecomeKeyNotification = @"UIWindowDidBecomeKeyNotification";
 NSString *const UIWindowDidResignKeyNotification = @"UIWindowDidResignKeyNotification";
 
+NSString *const UIKeyboardWillShowNotification = @"UIKeyboardWillShowNotification";
+NSString *const UIKeyboardDidShowNotification = @"UIKeyboardDidShowNotification";
+NSString *const UIKeyboardWillHideNotification = @"UIKeyboardWillHideNotification";
+NSString *const UIKeyboardDidHideNotification = @"UIKeyboardDidHideNotification";
+
+NSString *const UIKeyboardFrameBeginUserInfoKey = @"UIKeyboardFrameBeginUserInfoKey";
+NSString *const UIKeyboardFrameEndUserInfoKey = @"UIKeyboardFrameEndUserInfoKey";
+NSString *const UIKeyboardAnimationDurationUserInfoKey = @"UIKeyboardAnimationDurationUserInfoKey";
+NSString *const UIKeyboardAnimationCurveUserInfoKey = @"UIKeyboardAnimationCurveUserInfoKey";
+
+NSString *const UIKeyboardWillChangeFrameNotification = @"UIKeyboardWillChangeFrameNotification";
+NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFrameNotification";
+
 @implementation UIWindow
 {
     NSMutableSet *_touches;

@@ -8,10 +8,209 @@
 
 #import "UITextField.h"
 
+@interface UITextField ()
+
+@end
+
 @implementation UITextField
+//UITextInputTraits
+@synthesize autocapitalizationType = _autocapitalizationType;
+@synthesize autocorrectionType = _autocorrectionType;
+@synthesize enablesReturnKeyAutomatically = _enablesReturnKeyAutomatically;
+@synthesize keyboardAppearance = _keyboardAppearance;
+@synthesize keyboardType = _keyboardType;
+@synthesize returnKeyType = _returnKeyType;
+@synthesize secureTextEntry = _secureTextEntry;
+
+// UITextInput
+@synthesize selectedTextRange = _selectedTextRange;
+@synthesize markedTextRange = _markedTextRange;
+@synthesize markedTextStyle = _markedTextStyle;
+@synthesize beginningOfDocument = _beginningOfDocument;
+@synthesize endOfDocument = _endOfDocument;
+@synthesize inputDelegate = _inputDelegate;
+@synthesize tokenizer = _tokenizer;
 
 + (BOOL)isUnimplemented
 {
     return YES;
 }
+
+- (CGRect)borderRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (CGRect)textRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (CGRect)placeholderRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (CGRect)editingRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (CGRect)clearButtonRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (CGRect)leftViewRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (CGRect)rightViewRectForBounds:(CGRect)bounds
+{
+    return CGRectZero;
+}
+
+- (void)drawTextInRect:(CGRect)rect
+{
+    
+}
+
+- (void)drawPlaceholderInRect:(CGRect)rect
+{
+    
+}
+
+#pragma mark - UITextInputTraits
+
+#pragma mark - UIKeyInput
+- (BOOL)hasText
+{
+    return NO;
+}
+
+- (void)insertText:(NSString *)text
+{
+    
+}
+
+- (void)deleteBackward
+{
+    
+}
+#pragma mark - UITextInput protocol
+- (NSString *)textInRange:(UITextRange *)range
+{
+    return nil;
+}
+
+- (void)replaceRange:(UITextRange *)range withText:(NSString *)text
+{
+    
+}
+
+- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
+{
+    
+}
+- (void)unmarkText
+{
+    
+}
+
+- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    return nil;
+}
+
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
+{
+    return nil;
+}
+
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset
+{
+    return nil;
+}
+
+- (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other
+{
+    return NSOrderedSame;
+}
+
+- (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition
+{
+    return 0;
+}
+
+- (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
+{
+    return nil;
+}
+
+- (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+{
+    return nil;
+}
+
+- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+{
+    return UITextWritingDirectionLeftToRight;
+}
+
+- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range
+{
+    
+}
+
+- (CGRect)firstRectForRange:(UITextRange *)range
+{
+    return CGRectZero;
+}
+
+- (CGRect)caretRectForPosition:(UITextPosition *)position
+{
+    return CGRectZero;
+}
+
+- (NSArray *)selectionRectsForRange:(UITextRange *)range
+{
+    return nil;
+}
+
+- (UITextPosition *)closestPositionToPoint:(CGPoint)point
+{
+    return nil;
+}
+
+- (UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range
+{
+    return nil;
+}
+
+- (UITextRange *)characterRangeAtPoint:(CGPoint)point
+{
+    return nil;
+}
+
+#pragma mark - NSCoding
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [self init];
+    if (self) {
+        
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    
+}
+
 @end
+
+NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
+NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidEndEditingNotification";
+NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";

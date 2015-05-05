@@ -30,4 +30,4 @@ NSString * const UINibExternalObjects = @"UINibExternalObjects";
 }
 @end
 
-UIKIT_EXTERN NSString * const UINibProxiedObjectsKey = @"UINibProxiedObjectsKey";
+NSString * const UINibProxiedObjectsKey = @"UINibProxiedObjectsKey";
