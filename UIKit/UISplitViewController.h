@@ -25,24 +25,24 @@ UIKIT_EXTERN CGFloat const UISplitViewControllerAutomaticDimension;// NS_AVAILAB
 
 @property (nonatomic) BOOL presentsWithGesture;
 
-//@property(nonatomic, readonly, getter=isCollapsed) BOOL collapsed  NS_AVAILABLE_IOS(8_0);
+@property(nonatomic, readonly, getter=isCollapsed) BOOL collapsed;// NS_AVAILABLE_IOS(8_0);
 
-//@property (nonatomic) UISplitViewControllerDisplayMode preferredDisplayMode NS_AVAILABLE_IOS(8_0);
+@property (nonatomic) UISplitViewControllerDisplayMode preferredDisplayMode;// NS_AVAILABLE_IOS(8_0);
 
-//@property (nonatomic, readonly) UISplitViewControllerDisplayMode displayMode NS_AVAILABLE_IOS(8_0);
+@property (nonatomic, readonly) UISplitViewControllerDisplayMode displayMode;// NS_AVAILABLE_IOS(8_0);
 
-//- (UIBarButtonItem *)displayModeButtonItem NS_AVAILABLE_IOS(8_0);
+- (UIBarButtonItem *)displayModeButtonItem;// NS_AVAILABLE_IOS(8_0);
 
-//@property(nonatomic, assign) CGFloat preferredPrimaryColumnWidthFraction NS_AVAILABLE_IOS(8_0);
+@property(nonatomic, assign) CGFloat preferredPrimaryColumnWidthFraction;// NS_AVAILABLE_IOS(8_0);
 
-//@property(nonatomic, assign) CGFloat minimumPrimaryColumnWidth NS_AVAILABLE_IOS(8_0);
-//@property(nonatomic, assign) CGFloat maximumPrimaryColumnWidth NS_AVAILABLE_IOS(8_0);
+@property(nonatomic, assign) CGFloat minimumPrimaryColumnWidth;// NS_AVAILABLE_IOS(8_0);
+@property(nonatomic, assign) CGFloat maximumPrimaryColumnWidth;// NS_AVAILABLE_IOS(8_0);
 
-//@property(nonatomic,readonly) CGFloat primaryColumnWidth NS_AVAILABLE_IOS(8_0);
+@property(nonatomic,readonly) CGFloat primaryColumnWidth;// NS_AVAILABLE_IOS(8_0);
 
-//- (void)showViewController:(UIViewController *)vc sender:(id)sender NS_AVAILABLE_IOS(8_0);
+- (void)showViewController:(UIViewController *)vc sender:(id)sender;// NS_AVAILABLE_IOS(8_0);
 
-//- (void)showDetailViewController:(UIViewController *)vc sender:(id)sender NS_AVAILABLE_IOS(8_0);
+- (void)showDetailViewController:(UIViewController *)vc sender:(id)sender;// NS_AVAILABLE_IOS(8_0);
 
 @end
 
