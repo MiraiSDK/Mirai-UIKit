@@ -82,3 +82,8 @@ typedef NS_OPTIONS(NSUInteger, NSAttributedStringEnumerationOptions) {
 
 CFIndex CFStringGetHyphenationLocationBeforeIndex(CFStringRef string, CFIndex location, CFRange limitRange, CFOptionFlags options, CFLocaleRef locale, UTF32Char *character);
 
+#define DISPATCH_QUEUE_SERIAL NULL
+#define DISPATCH_QUEUE_CONCURRENT NULL //FIXME
+
+typedef struct __CFFileDescriptor * CFFileDescriptorRef;
+
