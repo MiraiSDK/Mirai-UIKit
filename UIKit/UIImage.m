@@ -54,7 +54,22 @@ static NSMutableDictionary *cache;
     
     UIImage *cachedImage = cache[name];
     if (!cachedImage) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@""];
+        
+        NSString *type = @"png";
+        NSString *suffixed = name;
+        CGFloat scale = 2;
+        if (name.pathExtension.length >0) {
+            type = name.pathExtension;
+            suffixed = [name stringByDeletingPathExtension];
+        }
+        suffixed = [suffixed stringByAppendingString:@"@2x"];
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:suffixed ofType:type];
+
+        if (!path) {
+            scale = 1;
+            path = [[NSBundle mainBundle] pathForResource:name ofType:@""];
+        }
         
         if (!path) {
             path = [[NSBundle mainBundle] pathForResource:name ofType:@"png"];
@@ -62,7 +77,7 @@ static NSMutableDictionary *cache;
         
         if (path) {
             NSData *data = [[NSData alloc] initWithContentsOfFile:path];
-            cachedImage = [[UIImage alloc] initWithData:data];
+            cachedImage = [[UIImage alloc] initWithData:data scale:scale];
         }
         
         if (cachedImage) {
