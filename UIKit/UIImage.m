@@ -159,7 +159,7 @@ static NSMutableDictionary *cache;
     return nil;
 }
 
-- (id)initWithData:(NSData *)data
+- (id)initWithData:(NSData *)data scale:(CGFloat)scale
 {
     self = [super init];
     if (self) {
@@ -189,16 +189,14 @@ static NSMutableDictionary *cache;
             return nil;
         }
         
-        return [self initWithCGImage:imageRef];
+        return [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
     }
     return self;
 }
 
-- (id)initWithData:(NSData *)data scale:(CGFloat)scale
+- (id)initWithData:(NSData *)data
 {
-    NSLog(@"Unimplemeted method: %s",__PRETTY_FUNCTION__);
-
-    return [self initWithData:data];
+    return [self initWithData:data scale:1];
     
     self = [super init];
     if (self) {
