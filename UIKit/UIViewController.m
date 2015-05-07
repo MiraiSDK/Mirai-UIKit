@@ -438,8 +438,10 @@ static NSMutableArray *_viewControllerInstances;
         [_presentedViewController viewDidDisappear:animated];
         [self viewDidAppear:animated];
         
-        _presentedViewController->_presentingViewController = nil;
-        _presentedViewController = nil;
+        if (_presentedViewController) {
+            _presentedViewController->_presentingViewController = nil;
+            _presentedViewController = nil;            
+        }
         
         if (completion) {
             completion();
@@ -574,6 +576,17 @@ static NSMutableArray *_viewControllerInstances;
 
 - (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^)(BOOL))completion
 {
+    //FIXME: options?
+    UIView *superView = fromViewController.view.superview;
+    [UIView animateWithDuration:duration animations:^{
+        [fromViewController.view removeFromSuperview];
+        [superView addSubview:toViewController.view];
+        toViewController.view.frame = fromViewController.view.frame;
+    } completion:^(BOOL finished) {
+        if (completion) {
+            completion(finished);
+        }
+    }];
     NS_UNIMPLEMENTED_LOG;
 }
 
