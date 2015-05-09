@@ -18,7 +18,7 @@
 @property (nonatomic, retain) UIFont *font;
 //@property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 @property (nonatomic, getter=isSecureTextEntry) BOOL secureTextEntry;
-
+@property(nonatomic,copy)   NSString               *placeholder;
 - (void)setContentOffset:(CGPoint)theOffset;
 - (void)scrollRangeToVisible:(NSRange)range;
 - (BOOL)becomeFirstResponder;

@@ -277,6 +277,23 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 
 }
 
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    _placeholder = [placeholder copy];
+    
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"setHint","(Ljava/lang/CharSequence;)V");
+    if (mid == NULL) {
+        NSLog(@"method id not found: setHint()");
+        return;
+    }
+    
+    jstring hint = (*env)->NewStringUTF(env,[placeholder UTF8String]);
+    (*env)->CallVoidMethod(env,_jTextView,mid,hint);
+    (*env)->DeleteLocalRef(env,hint);
+
+}
+
 - (UITextAlignment)textAlignment
 {
     return _textAlignment;
@@ -285,6 +302,22 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 - (void)setFont:(UIFont *)font
 {
     _font = font;
+    
+    NSString *fontName = [font fontName];
+    CGFloat fontSize = 4;//font.xHeight;
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"setFont","(Ljava/lang/String;I)V");
+    if (mid == NULL) {
+        NSLog(@"method id not found: setFont()");
+        return;
+    }
+    
+    jstring jstr = (*env)->NewStringUTF(env,fontName.UTF8String);
+    jint jfs = fontSize;
+    NSLog(@"set fontName:%@ size:%d",fontName,jfs);
+    (*env)->CallVoidMethod(env,_jTextView,mid,jstr,jfs);
+    
+    (*env)->DeleteLocalRef(env,jstr);
 }
 
 - (UIFont *)font

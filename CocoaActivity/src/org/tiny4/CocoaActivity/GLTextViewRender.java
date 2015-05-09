@@ -3,10 +3,13 @@ package org.tiny4.CocoaActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.View;
+import android.widget.EditText;
 
 import java.lang.CharSequence;
 import java.lang.Override;
+import java.lang.String;
 
 public class GLTextViewRender extends GLViewRender {
     private GLTextView _view;
@@ -73,6 +76,37 @@ public class GLTextViewRender extends GLViewRender {
             @Override
             public void run() {
                 _view.setGravity(gravity);
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
+
+        runOnUiThreadAndWait(aRunnable);
+    }
+
+    public void setHint(final java.lang.CharSequence hint) {
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                _view.setHint(hint);
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
+
+        runOnUiThreadAndWait(aRunnable);
+    }
+
+    public void setFont(final String fontName, final int fontSize) {
+        final Typeface tf = Typeface.create(fontName, 0);
+
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                //_view.setTypeface(tf);
+                _view.setTextSize(fontSize);
                 synchronized (this) {
                     this.notify() ;
                 }

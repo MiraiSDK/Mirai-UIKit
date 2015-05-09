@@ -8,8 +8,9 @@
 
 #import "UITextField.h"
 
+#import "UIAndroidTextView.h"
 @interface UITextField ()
-
+@property (nonatomic, strong) UIAndroidTextView *backend;
 @end
 
 @implementation UITextField
@@ -31,9 +32,38 @@
 @synthesize inputDelegate = _inputDelegate;
 @synthesize tokenizer = _tokenizer;
 
-+ (BOOL)isUnimplemented
+#pragma mark - 
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    return YES;
+    self = [super initWithFrame:frame];
+    if (self) {
+        UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds];
+        [atv setFont:[UIFont systemFontOfSize:12]];
+        [self addSubview:atv];
+        _backend = atv;
+        [self addSubview:atv];
+    }
+    return self;
+}
+
+- (void)setText:(NSString *)text
+{
+    [_backend setText:text];
+}
+
+- (NSString *)text
+{
+    return [_backend text];
+}
+
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    _backend.placeholder = placeholder;
+}
+
+- (NSString *)placeholder
+{
+    return _backend.placeholder;
 }
 
 - (CGRect)borderRectForBounds:(CGRect)bounds
