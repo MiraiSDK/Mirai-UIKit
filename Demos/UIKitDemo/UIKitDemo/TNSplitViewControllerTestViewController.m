@@ -9,6 +9,7 @@
 #import "TNSplitViewControllerTestViewController.h"
 #import "TNShowedSplitViewController.h"
 #import "TNSplitNavigationTestViewController.h"
+#import "TNDisplayModeTestViewController.h"
 #import "AppDelegate.h"
 
 @implementation TNSplitViewControllerTestViewController
@@ -28,6 +29,7 @@
     return @[
              TNShowedSplitViewController.class,
              TNSplitNavigationTestViewController.class,
+             TNDisplayModeTestViewController.class,
              ];
 }
 

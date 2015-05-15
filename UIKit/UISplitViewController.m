@@ -8,8 +8,19 @@
 
 #import "UISplitViewController.h"
 
+#define kChangeSplitAppearanceNeedTime 0.7
+
+typedef enum {
+    UISplitViewControllerSplitAppearncePrimaryHidden    = 1 << 0,
+    UISplitViewControllerSplitAppearncePrimaryOverlay   = 1 << 1,
+    UISplitViewControllerSplitAppearnceBoth             = 1 << 2,
+} UISplitViewControllerSplitAppearnce;
+
 @interface UISplitViewController ()
 @property (nonatomic) CGFloat primaryColumnWidth;
+@property (nonatomic) UISplitViewControllerSplitAppearnce splitAppearance;
+@property (nonatomic) UISplitViewControllerDisplayMode displayMode;
+@property (nonatomic, strong) UIBarButtonItem *displayModeButtonItem;
 @property (nonatomic, strong) UIViewController *primaryViewController;
 @property (nonatomic, strong) UIViewController *secondaryViewController;
 @end
@@ -30,6 +41,9 @@
     _preferredPrimaryColumnWidthFraction = 0.4;
     _maximumPrimaryColumnWidth = 400.0;
     _minimumPrimaryColumnWidth = 0.0;
+    _preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
+    _displayMode = UISplitViewControllerDisplayModeAutomatic;
+    _splitAppearance = UISplitViewControllerSplitAppearncePrimaryOverlay;
 }
 
 - (void)loadView
@@ -40,13 +54,14 @@
     [super loadView];
     [self _refreshPrimaryColumnWidth];
     [self _synchronizeSubViewControllerAppearnce];
+    [self _makeSplitAppearanceChangeGesture];
 }
 
 # pragma mark - setting about primary size.
 
-- (BOOL)collapsed
+- (BOOL)isCollapsed
 {
-    return self.viewControllers.count <= 1;
+    return self.viewControllers.count <= 1 || _splitAppearance == UISplitViewControllerSplitAppearncePrimaryHidden;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size
@@ -98,7 +113,11 @@
 - (void)setViewControllers:(NSArray *)viewControllers
 {
     [self _synchronizeSubViewControllerPropertiesWithArray:viewControllers];
-    [self _synchronizeSubViewControllerAppearnce];
+    // this method must be called before loadView:
+    // so, when call this method, self.view may be probable not ready to invoke.
+    if (self.isViewLoaded) {
+        [self _synchronizeSubViewControllerAppearnce];
+    }
 }
 
 - (void)_synchronizeSubViewControllerPropertiesWithArray:(NSArray *)viewControllers
@@ -112,10 +131,10 @@
 
 - (void)_synchronizeSubViewControllerAppearnce
 {
-    [self _letViewController:_primaryViewController onStage:YES
-                   withFrame:[self _getPrimaryViewControllerFrame]];
-    [self _letViewController:_secondaryViewController onStage:!self.collapsed
-                    withFrame:[self _getSecondaryViewControllerFrame]];
+    [self _letViewController:_primaryViewController onStage:!self.collapsed
+                   withFrame:[self _getPrimaryViewControllerFrameWithSplitAppearnce:_splitAppearance]];
+    [self _letViewController:_secondaryViewController onStage:YES
+                   withFrame:[self _getSecondaryViewControllerFrameWithSplitAppearnce:_splitAppearance]];
 }
 
 - (void)_clearOldViewController:(UIViewController *)oldViewController
@@ -125,23 +144,48 @@
     }
 }
 
-- (CGRect)_getPrimaryViewControllerFrame
+- (CGRect)_getPrimaryViewControllerFrameWithSplitAppearnce:(UISplitViewControllerSplitAppearnce)splitAppearance
 {
-    return [self _getAreaWithRangeFrom:0 to:self.primaryColumnWidth];
+    switch (splitAppearance) {
+        case UISplitViewControllerSplitAppearncePrimaryHidden:
+            return [self _getAreaWithRangeFrom:-self.primaryColumnWidth to:0];
+            
+        case UISplitViewControllerSplitAppearncePrimaryOverlay:
+        case UISplitViewControllerSplitAppearnceBoth:
+            return [self _getAreaWithRangeFrom:0 to:self.primaryColumnWidth];
+    }
 }
 
-- (CGRect)_getSecondaryViewControllerFrame
+- (CGRect)_getSecondaryViewControllerFrameWithSplitAppearnce:(UISplitViewControllerSplitAppearnce)splitAppearance
 {
-    return [self _getAreaWithRangeFrom:self.primaryColumnWidth to:self.view.bounds.size.width];
+    switch (splitAppearance) {
+        case UISplitViewControllerSplitAppearncePrimaryHidden:
+        case UISplitViewControllerSplitAppearncePrimaryOverlay:
+            return [self _getAreaWithRangeFrom:0 to:self.view.bounds.size.width];
+            
+        case UISplitViewControllerSplitAppearnceBoth:
+            return [self _getAreaWithRangeFrom:self.primaryColumnWidth to:self.view.bounds.size.width];
+    }
 }
 
-- (void)_letViewController:(UIViewController *)viewController onStage:(BOOL)onStage withFrame:(CGRect)frame
+- (CGRect)_getSecondaryVisibleAreaWithSplitAppearance:(UISplitViewControllerSplitAppearnce)splitApperance
 {
+    switch (splitApperance) {
+        case UISplitViewControllerSplitAppearncePrimaryHidden:
+            return [self _getAreaWithRangeFrom:0 to:self.view.bounds.size.width];
+            
+        case UISplitViewControllerSplitAppearncePrimaryOverlay:
+        case UISplitViewControllerSplitAppearnceBoth:
+            return [self _getAreaWithRangeFrom:self.primaryColumnWidth to:self.view.bounds.size.width];
+    }
+}
+
+- (void)_letViewController:(UIViewController *)viewController onStage:(BOOL)onStage withFrame:(CGRect)frame{
     if (viewController) {
-        [self _synchronizeView:viewController.view onStage:onStage];
         if (onStage) {
             viewController.view.frame = frame;
         }
+        [self _synchronizeView:viewController.view onStage:onStage];
     }
 }
 
@@ -161,9 +205,184 @@
 - (void)_synchronizeView:(UIView *)view onStage:(BOOL)onStage
 {
     if (onStage && view.superview != self.view) {
-        [self.view addSubview:view];
+        if (view == _primaryViewController.view) {
+            [self.view insertSubview:view aboveSubview:_secondaryViewController.view];
+        } else if (view == _secondaryViewController.view) {
+            [self.view insertSubview:view belowSubview:_primaryViewController.view];
+        }
     } else if (!onStage && view.superview == self.view) {
         [view removeFromSuperview];
+    }
+}
+
+- (void)_addSubview:(UIView *)subview withPositionOnViewControllers:(NSUInteger)index
+{
+    if (subview == _primaryViewController.view) {
+        [self.view insertSubview:subview aboveSubview:_secondaryViewController.view];
+    } else if (subview == _secondaryViewController.view) {
+        [self.view insertSubview:subview belowSubview:_primaryViewController.view];
+    }
+}
+
+#pragma mark - displayMode
+
+- (void)setPreferredDisplayMode:(UISplitViewControllerDisplayMode)preferredDisplayMode
+{
+    if (_preferredDisplayMode != preferredDisplayMode) {
+        _preferredDisplayMode = preferredDisplayMode;
+        _displayMode = preferredDisplayMode;
+        [self setSplitAppearance:[self _getSplitAppearanceWithDisplayMode:preferredDisplayMode]
+                   tryToAnimated:NO];
+    }
+}
+
+- (UIBarButtonItem *)displayModeButtonItem
+{
+    if (_displayModeButtonItem == nil) {
+        _displayModeButtonItem = [self _createDisplayModeButtonItem];
+    }
+    return _displayModeButtonItem;
+}
+
+- (void)_makeSplitAppearanceChangeGesture
+{
+    [self.view addGestureRecognizer:[self _createTapGestureRecognizer]];
+    [self.view addGestureRecognizer:[self _createSwipeGestureRecognizer]];
+}
+
+- (UITapGestureRecognizer *)_createTapGestureRecognizer
+{
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc]
+                                                    initWithTarget:self action:@selector(_onTappedSelf:)];
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    tapGestureRecognizer.numberOfTouchesRequired = 1;
+    return tapGestureRecognizer;
+}
+
+- (UISwipeGestureRecognizer *)_createSwipeGestureRecognizer
+{
+    UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]
+                                                      initWithTarget:self action:@selector(_onSwipeSelf:)];
+    swipeGestureRecognizer.numberOfTouchesRequired = 1;
+    return swipeGestureRecognizer;
+}
+
+- (UIBarButtonItem *)_createDisplayModeButtonItem
+{
+    return [[UIBarButtonItem alloc] initWithTitle:@"<<"
+                                            style:UIBarButtonItemStyleBordered
+                                           target:self
+                                           action:@selector(_onTappedDisplayModeButtonItem:)];
+}
+
+- (void)_onTappedSelf:(UITapGestureRecognizer *)tapGestureRecognizer
+{
+    if (!self.collapsed && [self _isOperateAtVaildArea:tapGestureRecognizer]) {
+        [self _hidePrimaryViewController];
+    }
+}
+
+- (void)_onSwipeSelf:(UISwipeGestureRecognizer *)swipeGestureRecognizer
+{
+    if (self.collapsed && [self _isOperateAtVaildArea:swipeGestureRecognizer]) {
+        [self _recoverPrimaryViewController];
+    }
+}
+
+- (void)_onTappedDisplayModeButtonItem:(id)sender
+{
+    if (self.collapsed) {
+        [self _recoverPrimaryViewController];
+    } else {
+        [self _hidePrimaryViewController];
+    }
+}
+
+- (BOOL)_isOperateAtVaildArea:(UIGestureRecognizer *)gestureRecognizer
+{
+    CGPoint location = [gestureRecognizer locationInView:self.view];
+    CGRect vaildArea = [self _getSecondaryVisibleAreaWithSplitAppearance:_splitAppearance];
+    return CGRectContainsPoint(vaildArea, location);
+}
+
+- (void)_hidePrimaryViewController
+{
+    self.displayMode = UISplitViewControllerDisplayModePrimaryHidden;
+    self.splitAppearance = UISplitViewControllerSplitAppearncePrimaryHidden;
+}
+
+- (void)_recoverPrimaryViewController
+{
+    NSLog(@"displayMode : %li when call %s", _preferredDisplayMode, __FUNCTION__);
+    switch (_preferredDisplayMode) {
+        case UISplitViewControllerDisplayModeAllVisible:
+            self.displayMode = _preferredDisplayMode;
+            self.splitAppearance = UISplitViewControllerSplitAppearnceBoth;
+            break;
+            
+        case UISplitViewControllerDisplayModePrimaryOverlay:
+        case UISplitViewControllerDisplayModeAutomatic:
+            self.displayMode = _preferredDisplayMode;
+            self.splitAppearance = UISplitViewControllerSplitAppearncePrimaryOverlay;
+            break;
+            
+        case UISplitViewControllerDisplayModePrimaryHidden:
+            self.displayMode = UISplitViewControllerDisplayModePrimaryOverlay;
+            self.splitAppearance = UISplitViewControllerSplitAppearncePrimaryOverlay;
+            break;
+    }
+}
+
+#pragma mark - split appearance changes.
+
+- (void)setSplitAppearance:(UISplitViewControllerSplitAppearnce)splitAppearance
+{
+    [self setSplitAppearance:splitAppearance tryToAnimated:YES];
+}
+
+- (void)setSplitAppearance:(UISplitViewControllerSplitAppearnce)splitAppearance tryToAnimated:(BOOL)animated
+{
+    if (_splitAppearance == splitAppearance) {
+        return;
+    }
+    BOOL willNeedPlayAnimation = [self _willNeedPlayAnimationWhenChangeSplitAppearanceFrom:_splitAppearance
+                                                                                        to:splitAppearance];
+    _splitAppearance = splitAppearance;
+    [self _refreshPrimaryColumnWidth];
+    
+    if (willNeedPlayAnimation && animated) {
+        [UIView animateWithDuration:kChangeSplitAppearanceNeedTime animations:^{
+            [self _synchronizeSubViewControllerAppearnce];
+        }];
+    } else {
+        [self _synchronizeSubViewControllerAppearnce];
+    }
+}
+
+- (BOOL)_willNeedPlayAnimationWhenChangeSplitAppearanceFrom:(UISplitViewControllerSplitAppearnce)oldSplitAppearance
+                                                         to:(UISplitViewControllerSplitAppearnce)newSplitAppearance
+{
+    switch (oldSplitAppearance | newSplitAppearance) {
+        case UISplitViewControllerSplitAppearncePrimaryHidden | UISplitViewControllerSplitAppearncePrimaryOverlay:
+        case UISplitViewControllerSplitAppearncePrimaryHidden | UISplitViewControllerSplitAppearnceBoth:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (UISplitViewControllerSplitAppearnce)_getSplitAppearanceWithDisplayMode:(UISplitViewControllerDisplayMode)mode
+{
+    switch (mode) {
+        case UISplitViewControllerDisplayModeAutomatic:
+        case UISplitViewControllerDisplayModePrimaryOverlay:
+            return UISplitViewControllerSplitAppearncePrimaryOverlay;
+            
+        case UISplitViewControllerDisplayModeAllVisible:
+            return UISplitViewControllerSplitAppearnceBoth;
+            
+        case UISplitViewControllerDisplayModePrimaryHidden:
+            return UISplitViewControllerSplitAppearncePrimaryHidden;
     }
 }
 
