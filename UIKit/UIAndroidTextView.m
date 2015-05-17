@@ -133,9 +133,10 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     
     jclass clazz = [[TNJavaHelper sharedHelper] clazz];
     
-    jint width = self.bounds.size.width;
-    jint height = self.bounds.size.height;
-    
+    CGFloat scale = [UIScreen mainScreen].scale;
+    jint width = self.bounds.size.width * scale;
+    jint height = self.bounds.size.height * scale;
+    NSLog(@"size:%@ scale:%.2f,w:%dh:%d",NSStringFromCGSize(self.bounds.size),scale, width,height);
     jobject object = (*env)->NewObject(env,class,mid,clazz,texID,width,height);
     
     if (object == NULL) {
@@ -304,7 +305,7 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     _font = font;
     
     NSString *fontName = [font fontName];
-    CGFloat fontSize = 4;//font.xHeight;
+    CGFloat fontSize = 12;//font.xHeight;
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"setFont","(Ljava/lang/String;I)V");
     if (mid == NULL) {
