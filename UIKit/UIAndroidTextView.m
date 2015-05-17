@@ -399,6 +399,11 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     (*env)->CallVoidMethod(env,_jTextView,mid,jeventTime,jdownTime,jtrueAction,x,y);
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    return nil;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     NSLog(@"%s",__PRETTY_FUNCTION__);

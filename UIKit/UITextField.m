@@ -239,6 +239,40 @@
     
 }
 
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+#pragma mark -
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    if (![self isFirstResponder]) {
+        [self becomeFirstResponder];
+    }
+    [_backend touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    
+    [_backend touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    
+    [_backend touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_backend touchesCancelled:touches withEvent:event];
+}
 @end
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
