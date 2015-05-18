@@ -35,6 +35,8 @@
 #import "UIStringDrawing.h"
 #import "UIBezierPath.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImageView.h"
+#import "UIScreen.h"
 
 static CGSize UIActivityIndicatorViewStyleSize(UIActivityIndicatorViewStyle style)
 {
@@ -82,7 +84,9 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     return frameImage;
 }
 
-@implementation UIActivityIndicatorView
+@implementation UIActivityIndicatorView {
+    UIImageView *_imageView;
+}
 
 - (id)initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style
 {
@@ -94,6 +98,9 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         self.activityIndicatorViewStyle = style;
         self.hidesWhenStopped = YES;
         self.opaque = NO;
+        _imageView = [[UIImageView alloc] init];
+        [self addSubview:_imageView];
+        
     }
 
     return self;
@@ -171,28 +178,42 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 - (void)_startAnimation
 {
     const NSInteger numberOfFrames = 12;
-    const CFTimeInterval animationDuration = 0.8;
+    const CFTimeInterval animationDuration = 1.0 * 12;
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    _imageView.image = UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, 0, numberOfFrames, scale);
+    [_imageView sizeToFit];
     
-    NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = @(M_PI * 2.0 /* full rotation*/ * 1 * animationDuration);
+    rotationAnimation.duration = animationDuration;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = HUGE_VALF;
     
-    for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
-        [images addObject:UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames, self.contentScaleFactor).CGImage];
-    }
-    
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
-    animation.calculationMode = kCAAnimationDiscrete;
-    animation.duration = animationDuration;
-    animation.repeatCount = HUGE_VALF;
-    animation.values = images;
-    animation.removedOnCompletion = NO;
-    animation.fillMode = kCAFillModeBoth;
-    
-    [self.layer addAnimation:animation forKey:@"contents"];
+    [_imageView.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+
+    //FIXME: CAKeyframeAnimation with contents not working?
+//    NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
+//    
+//    for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
+//        [images addObject:UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames, self.contentScaleFactor).CGImage];
+//    }
+//
+//    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+//    animation.calculationMode = kCAAnimationDiscrete;
+//    animation.duration = animationDuration;
+//    animation.repeatCount = HUGE_VALF;
+//    animation.values = images;
+//    animation.removedOnCompletion = NO;
+//    animation.fillMode = kCAFillModeBoth;
+//    
+//    [self.layer addAnimation:animation forKey:@"contents"];
 }
 
 - (void)_stopAnimation
 {
-    [self.layer removeAnimationForKey:@"contents"];
+//    [self.layer removeAnimationForKey:@"contents"];
+    [_imageView.layer removeAnimationForKey:@"rotationAnimation"];
     
     if (self.hidesWhenStopped) {
         self.hidden = YES;
@@ -227,15 +248,15 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     return animating;
 }
 
-- (void)drawRect:(CGRect)rect
-{
-    UIActivityIndicatorViewStyle style;
-
-    @synchronized (self) {
-        style = _activityIndicatorViewStyle;
-    }
-    
-    [UIActivityIndicatorViewFrameImage(style, 0, 1, self.contentScaleFactor) drawInRect:self.bounds];
-}
+//- (void)drawRect:(CGRect)rect
+//{
+//    UIActivityIndicatorViewStyle style;
+//
+//    @synchronized (self) {
+//        style = _activityIndicatorViewStyle;
+//    }
+//    
+//    [UIActivityIndicatorViewFrameImage(style, 0, 1, self.contentScaleFactor) drawInRect:self.bounds];
+//}
 
 @end
