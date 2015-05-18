@@ -100,15 +100,16 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+    if (self.state == UIGestureRecognizerStatePossible) {
         UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];        
         const CGFloat distance = DistanceBetweenTwoPoints([touch locationInView:self.view], _beginLocation);
         
-        if (distance <= self.allowableMovement) {
-            self.state = UIGestureRecognizerStateChanged;
-        } else {
-            self.state = UIGestureRecognizerStateCancelled;
+        if (distance > self.allowableMovement) {
+            self.state = UIGestureRecognizerStateFailed;
         }
+    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged)
+    {
+        self.state = UIGestureRecognizerStateChanged;
     }
 }
 
