@@ -166,7 +166,7 @@ typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
     [UIViewController _performMemoryWarning];
     
 }
-void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
+void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(JNIEnv *env, jobject obj, int level) {
     //onTrimMemory
     NSLog(@"%s",__PRETTY_FUNCTION__);
     
@@ -177,7 +177,6 @@ void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(int level) {
     }
     
 }
-
 
 - (void)_appDidBecomeActive
 {
