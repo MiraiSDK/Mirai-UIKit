@@ -133,18 +133,19 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
     }
 
     public int updateTextureIfNeeds(float [] matrix) {
-        //Log.i(TAG,"updateTextureIfNeeds");
+//        Log.i(TAG,"updateTextureIfNeeds textid:"+_glTexId);
 
         try {
             synchronized (this) {
-                if (needsUpdateSurface) {
+//                if (needsUpdateSurface) {
+//                    Log.v(TAG,"updateTexImage: texid:"+_glTexId);
                     surfaceTexture.updateTexImage();
                     surfaceTexture.getTransformMatrix(matrix);
 
                     needsUpdateSurface = false;
 
                     return 1;
-                }
+//                }
             }
 
         } catch (Throwable t) {
