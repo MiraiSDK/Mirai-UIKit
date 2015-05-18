@@ -88,6 +88,7 @@ static BKRenderingService *currentService = nil;
 //    _layer.frame = _bounds;
     
     _renderer = [CARenderer rendererWithEAGLContext:context options:nil];
+    [CARenderer setCurrentRenderer:_renderer];
     _renderer.bounds = _bounds;
     
 }
