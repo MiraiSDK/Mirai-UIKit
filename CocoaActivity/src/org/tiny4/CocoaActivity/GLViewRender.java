@@ -12,10 +12,10 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-
-import java.lang.Throwable;
 
 /**
  * Created by Yonghui Chen on 10/31/14.
@@ -23,9 +23,11 @@ import java.lang.Throwable;
 
 public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = "GLViewRender";
-    private final Activity mActivity;
+    private static Activity mActivity;
     private View mTarget;
-    private PopupWindow _popUp;
+    private static PopupWindow _popUp;
+    private static LinearLayout _windowContentLayout;
+    private ViewGroup.LayoutParams _layoutParams;
 
     private int mWidth;
     private int mHeight;
@@ -41,7 +43,14 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
         super();
 
         _glTexId = glTexID;
-        mActivity = (Activity)context;
+        Log.v(TAG,"glTextureID:"+glTexID);
+        if (mActivity == null) {
+            mActivity = (Activity)context;
+        }
+        if (mActivity != context) {
+            Log.e(TAG,"activity not equale!");
+        }
+
 
         setSize(width,height);
 
@@ -77,10 +86,12 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
 
     private void recreateSurface()
     {
+        Log.v(TAG,"recreate surface, textid:"+_glTexId);
         mSurface = null;
         surfaceTexture = null;
 
         if (_glTexId > 0) {
+            Log.v(TAG,"glTextureID:"+ _glTexId+" width:"+mWidth+" height:"+mHeight);
             surfaceTexture = new SurfaceTexture(_glTexId);
             surfaceTexture.setDefaultBufferSize(mWidth,mHeight);
             surfaceTexture.setOnFrameAvailableListener(this);
@@ -99,23 +110,23 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
 
         recreateSurface();
 
-        if (_popUp != null) {
+        if (_layoutParams != null) {
             Runnable aRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);
-                    _popUp.getContentView().setLayoutParams(params);
-                    
+                    _layoutParams.width = width;
+                    _layoutParams.height = height;
+
                     synchronized (this) {
                         this.notify() ;
                     }
                 }
             };
-            
+
             runOnUiThreadAndWait(aRunnable);
         }
     }
-
+            
     protected void runOnUiThreadAndWait(Runnable aRunnable) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             throw new IllegalStateException("This method should only be called off the Android UI thread");
@@ -170,25 +181,38 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
                 View target = onCreateTargetView(mActivity);
                 mTarget = target;
 
-                _popUp = new PopupWindow(mActivity);
+                boolean shouldShowPopup = false;
+                if (_popUp == null) {
+                    _popUp = new PopupWindow(mActivity);
 
-                _popUp.setWindowLayoutMode(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                _popUp.setClippingEnabled(true);
-                _popUp.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                _popUp.setTouchable(false);
-                _popUp.setFocusable(true);
+                    _popUp.setWindowLayoutMode(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    _popUp.setClippingEnabled(true);
+                    _popUp.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    _popUp.setTouchable(false);
+                    _popUp.setFocusable(true);
+                    _popUp.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-                LinearLayout layout = new LinearLayout(mActivity);
-                LinearLayout mainLayout = new LinearLayout(mActivity);
+                    LinearLayout layout = new LinearLayout(mActivity);
 
+                    layout.setOrientation(LinearLayout.VERTICAL);
+
+                    _popUp.setContentView(layout);
+                    _windowContentLayout = layout;
+                    shouldShowPopup = true;
+
+                }
+
+                LinearLayout layout = _windowContentLayout;
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(mWidth,mHeight);
+                _layoutParams = params;
 
-                layout.setOrientation(LinearLayout.VERTICAL);
-                layout.addView(target,params);
+                layout.addView(target, params);
 
-                _popUp.setContentView(layout);
+                if (shouldShowPopup) {
+                    LinearLayout mainLayout = new LinearLayout(mActivity);
 
-                _popUp.showAtLocation(mainLayout, Gravity.BOTTOM,0,0);
+                    _popUp.showAtLocation(mainLayout, Gravity.BOTTOM,0,0);
+                }
                 _popUp.update();
 
                 synchronized (this) {
