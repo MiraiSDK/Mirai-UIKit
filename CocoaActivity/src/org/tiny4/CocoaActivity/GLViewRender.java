@@ -3,15 +3,18 @@ package org.tiny4.CocoaActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -28,6 +31,7 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
     private static PopupWindow _popUp;
     private static LinearLayout _windowContentLayout;
     private ViewGroup.LayoutParams _layoutParams;
+    private static Window _rootWindow;
 
     private int mWidth;
     private int mHeight;
@@ -38,6 +42,8 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
 
     private boolean isTargetDirty = true;
     private boolean needsUpdateSurface = false;
+    private native void nativeOnKeyboardShowHide(int shown, int height);
+    
 
     public GLViewRender(Context context, int glTexID, int width, int height) {
         super();
@@ -46,6 +52,39 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
         Log.v(TAG,"glTextureID:"+glTexID);
         if (mActivity == null) {
             mActivity = (Activity)context;
+
+            _rootWindow = mActivity.getWindow();
+
+            View rootView = _rootWindow.getDecorView().findViewById(android.R.id.content);
+
+            rootView.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener() {
+                        public void onGlobalLayout(){
+                            Rect r = new Rect();
+
+                            View view = _rootWindow.getDecorView();
+                            view.getWindowVisibleDisplayFrame(r);
+                            Display display = view.getDisplay();
+                            Rect displayRect = new Rect();
+                            display.getRectSize(displayRect);
+                            // r.left, r.top, r.right, r.bottom
+                            Log.v(TAG,"displayRect:"+displayRect+" decorViewRect:"+r);
+
+                            int height = r.height();
+                            if (displayRect.height() == r.height()) {
+                                //keyboard hidden
+                                Log.v(TAG,"Keyboard is hidden");
+                                nativeOnKeyboardShowHide(0,height);
+
+                            } else {
+                                // keyboard show
+                                Log.v(TAG,"Keyboard is shown");
+                                nativeOnKeyboardShowHide(1,height);
+                            }
+
+
+                        }
+                    });
         }
         if (mActivity != context) {
             Log.e(TAG,"activity not equale!");

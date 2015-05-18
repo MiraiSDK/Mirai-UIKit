@@ -178,6 +178,59 @@ void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeOnTrimMemory(JNIEnv *env, 
     
 }
 
+- (void)_performKeyboardEvent:(BOOL)show keyboardHeight:(CGFloat)keyboarHeight
+{
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGSize keyboardSize = CGSizeMake(CGRectGetWidth(screenBounds), keyboarHeight);
+    
+    CGRect showFrame = CGRectMake(0, screenBounds.size.height - keyboarHeight,
+                                  keyboardSize.width, keyboarHeight);
+    CGRect hiddenFrame = CGRectMake(0, screenBounds.size.height,
+                                    keyboardSize.width, keyboarHeight);
+    showFrame = [_app.keyWindow.rootViewController.view convertRect:showFrame toView:nil];
+    hiddenFrame = [_app.keyWindow.rootViewController.view convertRect:hiddenFrame toView:nil];
+    
+    CGRect frameBegin = CGRectZero;
+    CGRect frameEnd = CGRectZero;
+    NSString *notificationName = nil;
+    //FIXME: android event only has keyboard did show/hide event
+    // should we post event twice here?
+    if (show) {
+        frameBegin = hiddenFrame;
+        frameEnd = showFrame;
+        notificationName = UIKeyboardWillShowNotification;
+    } else {
+        frameBegin = showFrame;
+        frameEnd = hiddenFrame;
+        notificationName = UIKeyboardWillHideNotification;
+    }
+    NSLog(@"send notification:%@",notificationName);
+    
+    
+    NSTimeInterval duration = 0.25;
+    UIViewAnimationCurve curve = UIViewAnimationCurveEaseInOut;
+    
+    NSDictionary *userInfo =
+    @{
+      UIKeyboardFrameBeginUserInfoKey : [NSValue valueWithCGRect:frameBegin],
+      UIKeyboardFrameEndUserInfoKey : [NSValue valueWithCGRect:frameEnd],
+      UIKeyboardAnimationCurveUserInfoKey:@(curve),
+      UIKeyboardAnimationDurationUserInfoKey:@(duration)
+      };
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil userInfo:userInfo];
+}
+
+void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *env, jobject obj, int shown,int height) {
+    NSLog(@"%s, shown:%d height:%d",__PRETTY_FUNCTION__,shown,height);
+    @autoreleasepool {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [_app _performKeyboardEvent:shown keyboardHeight:height];
+        }];
+    }
+}
+
 - (void)_appDidBecomeActive
 {
     NSLog(@"%s",__PRETTY_FUNCTION__);
