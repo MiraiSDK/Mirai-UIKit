@@ -563,6 +563,13 @@ void android_main(struct android_app* state)
             // which means we should not call NSLog()
             NSString *bundlePath = [appPath stringByDeletingLastPathComponent];
             _prepareAsset(bundlePath,env);
+            
+            //create Documentes folder
+            NSString *documentsPath = [[bundlePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Documents"];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+                NSLog(@"create documents path:%@",documentsPath);
+                [[NSFileManager defaultManager] createDirectoryAtPath:documentsPath attributes:nil];
+            }
         }
 
         
