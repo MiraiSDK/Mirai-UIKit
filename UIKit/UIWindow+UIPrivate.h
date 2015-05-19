@@ -35,5 +35,6 @@
 - (void)_makeHidden;
 - (void)_makeVisible;
 - (void)_setLandscaped:(BOOL)landscaped;
+- (void)_addMenuBubbleView:(UIMenuBubbleView *)subview;
 - (UIInterfaceOrientation)_currentOrientation;
 @end

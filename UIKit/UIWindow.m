@@ -17,6 +17,7 @@
 #import "UIScreenPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UIMenuBubbleView.h"
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
@@ -39,6 +40,8 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 @implementation UIWindow
 {
+    __weak UIMenuBubbleView *_menuBubbleView;
+    
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
     NSMutableSet *_effectRecognizers;
@@ -97,10 +100,32 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         _rootViewController = rootViewController;
         _rootViewController.view.frame = self.bounds;    // unsure about this
         _rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self addSubview:_rootViewController.view];
+        [self _addBelowMenuBubbleView:_rootViewController.view];
     }
 }
 
+- (void)willRemoveSubview:(UIView *)subview
+{
+    [super willRemoveSubview:subview];
+    if (subview != nil && subview == _menuBubbleView) {
+        _menuBubbleView = nil;
+    }
+}
+
+- (void)_addBelowMenuBubbleView:(UIView *)view
+{
+    if (_menuBubbleView != nil) {
+        [self insertSubview:view belowSubview:_menuBubbleView];
+    } else {
+        [super addSubview:view];
+    }
+}
+
+- (void)_addMenuBubbleView:(UIMenuBubbleView *)subview
+{
+    _menuBubbleView = subview;
+    [self insertSubview:subview atIndex:self.subviews.count];
+}
 
 - (void)setScreen:(UIScreen *)theScreen
 {
@@ -440,8 +465,9 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     if (event.type == UIEventTypeTouches) {
         [self _sendGesturesForEvent:event];
         
-        
         NSMutableSet *touches = [[event touchesForWindow:self] mutableCopy];
+        [self _notifyMenuBubbleTappedEventWithTouchesSet:touches];
+        
         NSMutableSet *eaten = [NSMutableSet set];
         for (UITouch *touch in touches) {
             for (UIGestureRecognizer *recognizer in _effectRecognizers) {
@@ -509,6 +535,20 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         }
     }
 }
+
+- (void)_notifyMenuBubbleTappedEventWithTouchesSet:(NSSet *)touches
+{
+    if (!_menuBubbleView) {
+        return;
+    }
+    for (UITouch *touch in touches) {
+        if (touch.phase == UITouchPhaseEnded) {
+            [_menuBubbleView _onTappedSpaceOnCurrentWindow];
+            break;
+        }
+    }
+}
+
 @end
 
 const UIWindowLevel UIWindowLevelNormal = 0;

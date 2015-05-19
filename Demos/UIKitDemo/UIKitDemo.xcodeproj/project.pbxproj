@@ -131,6 +131,10 @@
 		D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */; };
 		D2E2D7CC1AFEFC6E0098552D /* TNSplitNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E2D7CB1AFEFC6E0098552D /* TNSplitNavigationTestViewController.m */; };
 		D2E2D7CD1AFEFC6E0098552D /* TNSplitNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E2D7CB1AFEFC6E0098552D /* TNSplitNavigationTestViewController.m */; };
+		D2EB64311B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64301B09FA2400C28DA8 /* TNMenuTestViewController.m */; };
+		D2EB64321B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64301B09FA2400C28DA8 /* TNMenuTestViewController.m */; };
+		D2EB64351B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */; };
+		D2EB64361B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -277,6 +281,10 @@
 		D2DB8D1D1AB7280C007BA560 /* TNProgressTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNProgressTestViewController.m; sourceTree = "<group>"; };
 		D2E2D7CA1AFEFC6E0098552D /* TNSplitNavigationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSplitNavigationTestViewController.h; sourceTree = "<group>"; };
 		D2E2D7CB1AFEFC6E0098552D /* TNSplitNavigationTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSplitNavigationTestViewController.m; sourceTree = "<group>"; };
+		D2EB642F1B09FA2400C28DA8 /* TNMenuTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMenuTestViewController.h; sourceTree = "<group>"; };
+		D2EB64301B09FA2400C28DA8 /* TNMenuTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMenuTestViewController.m; sourceTree = "<group>"; };
+		D2EB64331B09FA4900C28DA8 /* TNMenuPositionTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMenuPositionTestViewController.h; sourceTree = "<group>"; };
+		D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMenuPositionTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,6 +412,7 @@
 			children = (
 				438FAEA61AFB8D370069983F /* UITextField */,
 				D210A8D91AFA0DB900AB6F10 /* UISplitViewController */,
+				D2EB642C1B09F9FE00C28DA8 /* UIMenuControl */,
 				D270F49A1AEE25840047D100 /* UIPageControl */,
 				D2DB8D191AB727D0007BA560 /* UIProgressView */,
 				D2726A651ABE6DB60010F435 /* UITabBarController */,
@@ -683,6 +692,17 @@
 			name = UIProgressView;
 			sourceTree = "<group>";
 		};
+		D2EB642C1B09F9FE00C28DA8 /* UIMenuControl */ = {
+			isa = PBXGroup;
+			children = (
+				D2EB642F1B09FA2400C28DA8 /* TNMenuTestViewController.h */,
+				D2EB64301B09FA2400C28DA8 /* TNMenuTestViewController.m */,
+				D2EB64331B09FA4900C28DA8 /* TNMenuPositionTestViewController.h */,
+				D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */,
+			);
+			name = UIMenuControl;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -855,6 +875,7 @@
 				437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */,
 				4390B8671A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
 				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
+				D2EB64321B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */,
 				D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
 				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
@@ -873,6 +894,7 @@
 				D2239E311B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */,
 				4390B84A1A83533D0082B0F1 /* TNVCTestViewController.m in Sources */,
 				D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
+				D2EB64361B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */,
 				D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
@@ -919,6 +941,7 @@
 				437F25F21A736FB400FBE3E2 /* main.m in Sources */,
 				4390B8371A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
 				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
+				D2EB64311B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */,
 				D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				D2239E3B1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */,
 				D291282D1AFA1A19009FA62F /* TNShowedSplitViewController.m in Sources */,
@@ -927,6 +950,7 @@
 				438FAEAB1AFB8D550069983F /* TNTextFieldTestViewController.m in Sources */,
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
 				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
+				D2EB64351B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */,
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
 				D2A5F4801AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
 				D210A8DE1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */,
