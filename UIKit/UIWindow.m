@@ -345,6 +345,14 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     }
     [_effectRecognizers minusSet:disabled];
     
+    
+    // before send event to recognizer, send pending actions
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if ([recognizer _shouldSendActions]) {
+            [recognizer _sendActions];
+        }
+    }
+    
     // send event to effect gesture recognizers
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         [recognizer _recognizeTouches:touches withEvent:event];
