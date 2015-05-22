@@ -275,6 +275,32 @@
     return nil;
 }
 
+- (void)enumerateRangesUsingBlock:(void (^)(NSRange range, BOOL *stop))block
+{
+    const NSUInteger firstIndex = [self firstIndex];
+    const NSUInteger lastIndex = [self lastIndex];
+    
+    __block NSUInteger prevIdx = firstIndex;
+    __block NSUInteger rangeStart = firstIndex;
+    [self enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *idxStop) {
+        if (idx > firstIndex ) {
+            if (idx > prevIdx+1 || idx == lastIndex) {
+                // meet new range
+                
+                NSRange prevRange = NSMakeRange(rangeStart, prevIdx - rangeStart + 1);
+                BOOL shouldStop = NO;
+                block(prevRange,&shouldStop);
+                if (shouldStop) {
+                    *idxStop = shouldStop;
+                }
+                
+                rangeStart = idx;
+            }
+            
+            prevIdx = idx;
+        }
+    }];
+}
 @end
 
 @implementation NSObject (Android)

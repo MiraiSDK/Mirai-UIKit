@@ -73,6 +73,7 @@ typedef NS_OPTIONS(NSUInteger, NSAttributedStringEnumerationOptions) {
 
 @interface NSIndexSet (Android)
 - (NSIndexSet *)indexesInRange:(NSRange)range options:(NSEnumerationOptions)opts passingTest:(BOOL (^)(NSUInteger idx, BOOL *stop))predicate;
+- (void)enumerateRangesUsingBlock:(void (^)(NSRange range, BOOL *stop))block;
 
 @end
 
