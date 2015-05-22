@@ -156,6 +156,27 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 }
 
 #pragma mark -
+- (NSString *)text
+{
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"getTextString","()Ljava/lang/String;");
+    if (mid == NULL) {
+        NSLog(@"method id not found:getTextString()");
+        return nil;
+    }
+
+    jstring *c = (*env)->CallObjectMethod(env,_jTextView,mid);
+
+    const char *utf8 = (*env)->GetStringUTFChars(env,c,NULL);
+    NSString *text = [NSString stringWithUTF8String:utf8];
+    
+    
+    (*env)->ReleaseStringUTFChars(env,c,utf8);
+    (*env)->DeleteLocalRef(env,c);
+    
+    return text;
+}
 
 - (void)setText:(NSString *)text
 {

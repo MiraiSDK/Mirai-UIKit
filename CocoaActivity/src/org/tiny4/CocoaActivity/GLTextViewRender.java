@@ -116,6 +116,21 @@ public class GLTextViewRender extends GLViewRender {
         runOnUiThreadAndWait(aRunnable);
     }
 
+    private String mText = null;
+    public String getTextString() {
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mText = _view.getText().toString();
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
+
+        runOnUiThreadAndWait(aRunnable);
+        return  mText;
+    }
     @Override
     public void onDestory() {
         super.onDestory();
