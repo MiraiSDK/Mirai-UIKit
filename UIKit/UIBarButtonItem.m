@@ -94,6 +94,64 @@
     return self;
 }
 
+- (NSString *)title
+{
+    if (_isSystemItem) {
+        switch (_systemItem) {
+            case UIBarButtonSystemItemDone:
+                return @"Done";
+                break;
+            case UIBarButtonSystemItemCancel:
+                return @"Cancel";
+                break;
+            case UIBarButtonSystemItemEdit:
+                return @"Edit";
+                break;
+            case UIBarButtonSystemItemSave:
+                return @"Save";
+                break;
+            case UIBarButtonSystemItemAdd:
+                return @"Add";
+                break;
+            case UIBarButtonSystemItemFlexibleSpace:
+            case UIBarButtonSystemItemFixedSpace:
+            case UIBarButtonSystemItemCompose:
+            case UIBarButtonSystemItemReply:
+            case UIBarButtonSystemItemAction:
+                return @"⤴︎";
+                break;
+            case UIBarButtonSystemItemOrganize:
+            case UIBarButtonSystemItemBookmarks:
+            case UIBarButtonSystemItemSearch:
+            case UIBarButtonSystemItemRefresh:
+            case UIBarButtonSystemItemStop:
+            case UIBarButtonSystemItemCamera:
+            case UIBarButtonSystemItemTrash:
+            case UIBarButtonSystemItemPlay:
+                return @"▶︎";
+                break;
+            case UIBarButtonSystemItemPause:
+                return @"||";
+                break;
+            case UIBarButtonSystemItemRewind:
+                break;
+            case UIBarButtonSystemItemFastForward:
+                break;
+            case UIBarButtonSystemItemUndo:
+                break;
+            case UIBarButtonSystemItemRedo:
+                break;
+            case UIBarButtonSystemItemPageCurl:
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return [super title];
+}
+
 - (UIView *)customView
 {
     return _isSystemItem? nil : _customView;
