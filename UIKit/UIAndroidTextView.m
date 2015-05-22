@@ -204,6 +204,35 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     return _textColor;
 }
 
+- (void)updateJavaSize:(CGSize)size
+{
+    if (_jTextView && _jTextViewClass) {
+        JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+        
+        jint width = size.width;
+        jint height = size.height;
+        
+        jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"setSize","(II)V");
+        if (mid == NULL) {
+            NSLog(@"can't get method setSize()");
+        }
+        (*env)->CallVoidMethod(env,_jTextView,mid,width,height);
+    }
+}
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    
+    [self updateJavaSize:frame.size];
+}
+
+- (void)setBounds:(CGRect)bounds
+{
+    [super setBounds:bounds];
+    
+    [self updateJavaSize:bounds.size];
+}
+
 #define GRAVITY_TOP 48
 #define GRAVITY_BOTTOM 80
 #define GRAVITY_LEFT 3

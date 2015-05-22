@@ -113,7 +113,12 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
         Runnable aRunnable = new Runnable() {
             @Override
             public void run() {
-                _popUp.dismiss();
+
+                _windowContentLayout.removeView(mTarget);
+                mTarget = null;
+                
+                //FIXME: dismiss popUp while there is 0 target view
+                //_popUp.dismiss();
                 synchronized (this) {
                     this.notify() ;
                 }
@@ -153,8 +158,10 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
             Runnable aRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    _layoutParams.width = width;
-                    _layoutParams.height = height;
+                    ViewGroup.LayoutParams params = mTarget.getLayoutParams();
+                    params.width = width;
+                    params.height = height;
+                    mTarget.setLayoutParams(params);
 
                     synchronized (this) {
                         this.notify() ;
