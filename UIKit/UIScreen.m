@@ -113,8 +113,11 @@ static UIScreen *_mainScreen = nil;
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent
 {
 //    NSLog(@"screen point:%@",NSStringFromCGPoint(clickPoint));
-    for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
-        if (window.screen == self) {
+//  FIXME: originally use [[UIApplication sharedApplication].windows reverseObjectEnumerator] here, but it seems that the windows order is incorrect
+    NSEnumerator *wls = [[__windowLayer sublayers] reverseObjectEnumerator];
+    for (CALayer *l in wls) {
+        UIWindow *window = l.delegate;
+                if (window.screen == self) {
             CGPoint windowPoint = [__pixelLayer convertPoint:clickPoint toLayer:window.layer];
 //            NSLog(@"window point:%@",NSStringFromCGPoint(windowPoint));
             UIView *clickedView = [window hitTest:windowPoint withEvent:theEvent];
