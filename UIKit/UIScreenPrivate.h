@@ -22,6 +22,7 @@
 - (CALayer *)_pixelLayer;
 - (CALayer *)_windowLayer;
 - (void)_setLandscaped:(BOOL)landscaped;
+- (BOOL)_isLandscaped;
 
 typedef NS_ENUM(NSInteger, UIScreenFitMode) {
     UIScreenFitModeCenter,

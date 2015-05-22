@@ -365,7 +365,6 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
                     
                     CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
                     [[UIScreen mainScreen] _setLandscaped:AMIsLandscaped()];
-                    [keyWindow _setLandscaped:AMIsLandscaped()];
                     
                     [pixelLayer _recursionLayoutAndDisplayIfNeeds];
                     

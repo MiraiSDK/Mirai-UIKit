@@ -10,6 +10,7 @@
 #import "UIScreenPrivate.h"
 #import "UIApplication.h"
 #import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 #import "UIGeometry.h"
 #import "UIColor.h"
 
@@ -146,6 +147,11 @@ static UIScreen *_mainScreen = nil;
     }
 }
 
+- (BOOL)_isLandscaped
+{
+    return _landscaped;
+}
+
 - (void)_setLandscaped:(BOOL)landscaped
 {
     if (_landscaped != landscaped) {
@@ -161,6 +167,11 @@ static UIScreen *_mainScreen = nil;
             __windowLayer.transform = t;
         } else {
             __windowLayer.transform = CATransform3DMakeScale(_scale, _scale, 1);
+        }
+        
+        NSArray *windows =  [UIApplication sharedApplication].windows;
+        for (UIWindow *window in windows) {
+            [window _setLandscaped:landscaped];
         }
         _landscaped = landscaped;
     }

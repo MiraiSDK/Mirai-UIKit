@@ -8,6 +8,7 @@
 
 #import "UIWindow.h"
 #import "UIScreen.h"
+#import "UIScreenPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIViewController.h"
 #import "UIEvent.h"
@@ -98,6 +99,10 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         _rootViewController.view.frame = self.bounds;    // unsure about this
         _rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview:_rootViewController.view];
+        
+        UIViewController *vc = rootViewController;
+        vc.view.transform = _landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
+        vc.view.frame = self.window.bounds;
     }
 }
 
@@ -112,6 +117,8 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         
         [self.layer removeFromSuperlayer];
         _screen = theScreen;
+        [self _setLandscaped:[theScreen _isLandscaped]];
+        
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
         [[_screen _windowLayer] addSublayer:self.layer];
         
