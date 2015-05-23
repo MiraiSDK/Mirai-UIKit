@@ -536,16 +536,30 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     }
 }
 
-- (void)_notifyMenuBubbleTappedEventWithTouchesSet:(NSSet *)touches
+- (void)_notifyMenuBubbleTappedEventWithTouchesSet:(NSMutableSet *)touches
 {
     if (!_menuBubbleView) {
         return;
     }
     for (UITouch *touch in touches) {
-        if (touch.phase == UITouchPhaseEnded) {
-            [_menuBubbleView _onTappedSpaceOnCurrentWindow];
+        if (touch.phase == UITouchPhaseBegan) {
+            [_menuBubbleView _onTappedSpaceOnCurrentWindowWithEvent:touch];
             break;
         }
+    }
+    [self _clearTouchWhichHasNilView:touches];
+}
+
+- (void)_clearTouchWhichHasNilView:(NSMutableSet *)touches
+{
+    NSMutableArray *toRemovedTouchesList = [[NSMutableArray alloc] init];
+    for (UITouch *touch in touches) {
+        if (!touch.view) {
+            [toRemovedTouchesList addObject:touch];
+        }
+    }
+    for (UITouch *touch in toRemovedTouchesList) {
+        [touches removeObject:touch];
     }
 }
 

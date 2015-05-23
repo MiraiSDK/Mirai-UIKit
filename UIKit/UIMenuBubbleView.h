@@ -11,9 +11,10 @@
 @interface UIMenuBubbleView : UIView
 
 @property (nonatomic) CGRect keyWindowTargetRect;
+@property (nonatomic, readonly) CGRect menuFrame;
 
 - (instancetype)initWithParent:(UIMenuController *)parentMenuController;
-- (void)setMenuItems:(NSArray *)menuItems;
-- (void)_onTappedSpaceOnCurrentWindow;
+- (void) setMenuItems:(NSArray *)menuItems;
+- (void)_onTappedSpaceOnCurrentWindowWithEvent:(UITouch *)touch;
 
 @end

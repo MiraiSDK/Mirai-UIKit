@@ -11,11 +11,13 @@
 #define kArrowWidth 5
 #define kArrowHeight 26
 
+#define kMinimumMenuItemButtonWidth 100
+#define kMaximumMenuItemButtonWidth 500
+#define kMenuItemButtonHeight 34
+
 @interface UIMenuBubbleView ()
-@property (nonatomic, strong) NSArray *menuItems;
 @property (nonatomic) UIMenuControllerArrowDirection arrowAppearanceDirection;
 @property (nonatomic, weak) UIMenuController *parentMenuController;
-@property (nonatomic, weak) UIWindow *currentWindow;
 @property (nonatomic, strong) UIView *bodyView;
 @property (nonatomic, strong) UIView *arrowView;
 @end
@@ -26,21 +28,17 @@
 {
     if (self = [super initWithFrame:CGRectZero]) {
         self.parentMenuController = parentMenuController;
-        [self _setDefaultValues];
-        [self _setAutoresizeMask];
         [self _makeSubviews];
     }
     return self;
 }
 
-- (void)_setDefaultValues
+- (void)layoutSubviews
 {
-    _menuItems = @[];
-}
-
-- (void)_setAutoresizeMask
-{
-    self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    if (self.superview) {
+        CGSize superViewSize = self.superview.bounds.size;
+        self.frame = CGRectMake(0, 0, superViewSize.width, superViewSize.height);
+    }
 }
 
 - (void)setKeyWindowTargetRect:(CGRect)targetRect
@@ -49,14 +47,96 @@
     [self _setDirectionAndArrowPositionByGapSpace];
 }
 
-- (void)_onTappedSpaceOnCurrentWindow
+- (CGRect)menuFrame
 {
-    [self.parentMenuController setMenuVisible:NO animated:YES];
+    return CGRectUnion(_bodyView.frame, _arrowView.frame);
+}
+
+- (void)_onTappedSpaceOnCurrentWindowWithEvent:(UITouch *)touch
+{
+    if (![self _touchedSelf:touch] && [self _isVisible]) {
+        [self.parentMenuController setMenuVisible:NO animated:YES];
+    }
 }
 
 - (UIView *)_getScreen
 {
     return self.superview;
+}
+
+- (BOOL)_touchedSelf:(UITouch *)touch
+{
+    CGPoint touchedLocation = [touch locationInView:self];
+    return  CGRectContainsPoint(_bodyView.frame, touchedLocation) ||
+            CGRectContainsPoint(_arrowView.frame, touchedLocation);
+}
+
+- (BOOL)_isVisible
+{
+    return self.superview != nil;
+}
+
+#pragma mark - menu items
+
+- (void)setMenuItems:(NSArray *)menuItems
+{
+    [self _clearAllOldMenuItems];
+    [self _makeMenuItemButtonsAndAddToSelfWithArray:menuItems];
+    [self _setDirectionAndArrowPositionByGapSpace];
+}
+
+- (void)_clearAllOldMenuItems
+{
+    while (_bodyView.subviews.count > 0) {
+        UIView *subview = [_bodyView.subviews objectAtIndex:0];
+        [subview removeFromSuperview];
+    }
+}
+
+- (void)_makeMenuItemButtonsAndAddToSelfWithArray:(NSArray *)menuItems
+{
+    CGFloat nextButtonXPosition = 0;
+    for (NSUInteger i = 0; i < menuItems.count; i++) {
+        UIButton *menuItemButton = [self _createButtonWith:[menuItems objectAtIndex:i] at:i];
+        menuItemButton.frame = [self _getFrameWithMenuItemButton:menuItemButton
+                                              withStartXLocation:nextButtonXPosition];
+        nextButtonXPosition += menuItemButton.bounds.size.width;
+        [_bodyView addSubview:menuItemButton];
+    }
+    _bodyView.frame = CGRectMake(0, 0, nextButtonXPosition, kMenuItemButtonHeight);
+}
+
+- (UIButton *)_createButtonWith:(UIMenuItem *)menuItem at:(NSUInteger)index
+{
+    UIButton *menuItemButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [menuItemButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [menuItemButton setTitle:menuItem.title forState:UIControlStateNormal];
+    [menuItemButton setBackgroundColor:[UIColor blackColor]];
+    menuItemButton.tag = index;
+    
+    [menuItemButton addTarget:self action:@selector(_onTappedMenuItemButton:)
+             forControlEvents:UIControlEventTouchUpInside];
+    return menuItemButton;
+}
+
+- (CGRect)_getFrameWithMenuItemButton:(UIButton *)menuItemButton withStartXLocation:(CGFloat)x
+{
+    CGFloat menuItemButtonWidth = [self _getWithWithMenuItemButton:menuItemButton];
+    return CGRectMake(x, 0, menuItemButtonWidth, kMenuItemButtonHeight);
+}
+
+- (CGFloat)_getWithWithMenuItemButton:(UIButton *)menuItemButton
+{
+    CGFloat width = menuItemButton.titleLabel.preferredMaxLayoutWidth;
+    width = MIN(kMaximumMenuItemButtonWidth, width);
+    width = MAX(kMinimumMenuItemButtonWidth, width);
+    return width;
+}
+
+- (void)_onTappedMenuItemButton:(UIButton *)menuItemButton
+{
+    NSNumber *index = [NSNumber numberWithUnsignedInteger:menuItemButton.tag];
+    [self.parentMenuController performSelector:@selector(_onTappedMenuItemWithIndex:) withObject:index];
 }
 
 #pragma mark - choose appropriate arrow location and direction.

@@ -28,6 +28,7 @@
  */
 
 #import "UIWindow.h"
+#import "UIMenuBubbleView.h"
 
 @interface UIWindow (UIPrivate)
 - (UIResponder *)_firstResponder;

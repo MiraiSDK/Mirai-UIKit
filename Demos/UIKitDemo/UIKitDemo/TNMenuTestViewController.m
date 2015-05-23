@@ -8,7 +8,7 @@
 
 #import "TNMenuTestViewController.h"
 #import "TNMenuPositionTestViewController.h"
-
+#import "TNMenuNotificationTestViewController.h"
 
 @implementation TNMenuTestViewController
 
@@ -26,6 +26,7 @@
 {
     return @[
              TNMenuPositionTestViewController.class,
+             TNMenuNotificationTestViewController.class,
              ];
 }
 
