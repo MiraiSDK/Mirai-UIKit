@@ -90,6 +90,8 @@
     CTFrameDraw(frame, ctx);
     
     CGPathRelease(path);
+    CFRelease(frameseter);
+    CFRelease(frame);
     
     CGContextRestoreGState(ctx);
 }
@@ -132,6 +134,7 @@
     
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(self));
     result.size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, size, NULL);
+    CFRelease(framesetter);
     
     return result;
 }
