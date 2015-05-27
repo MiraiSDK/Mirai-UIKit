@@ -43,6 +43,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
     NSMutableSet *_effectRecognizers;
+    NSMutableSet *_touchingViews;
     BOOL _hasGestureRecognized;
     
     BOOL _landscaped;
@@ -58,6 +59,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         _touches = [NSMutableSet set];
         _excludedRecognizers = [NSMutableSet set];
         _effectRecognizers = [NSMutableSet set];
+        _touchingViews = [NSMutableSet set];
     }
     return self;
 }
@@ -511,19 +513,44 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
             NSLog(@"phase:%@",[map objectForKey:@(phase)]);
             
             if (phase == UITouchPhaseBegan) {
+                [_touchingViews addObject:view];
                 [view touchesBegan:touches withEvent:event];
             } else if (phase == UITouchPhaseMoved) {
-                [view touchesMoved:touches withEvent:event];
+                [self _sendMovedEvent:event forView:view withTouches:touches];
             } else if (phase == UITouchPhaseEnded) {
                 [view touchesEnded:touches withEvent:event];
+                [self _sendEndedEvent:event forView:view withTouches:touches];
+                [_touchingViews removeAllObjects];
             } else if (phase == UITouchPhaseCancelled) {
                 [view touchesCancelled:touches withEvent:event];
+                [_touchingViews removeAllObjects];
             } else {
                 NSLog(@"Unknow touch phase:%d",phase);
             }
         }
     }
 }
+
+- (void)_sendMovedEvent:(UIEvent *)event forView:(UIView *)view withTouches:(NSSet *)touches
+{
+    [view touchesMoved:touches withEvent:event];
+    for (UIView *otherView in _touchingViews) {
+        if (otherView != view) {
+            [otherView touchesMoved:touches withEvent:event];
+        }
+    }
+}
+
+- (void)_sendEndedEvent:(UIEvent *)event forView:(UIView *)view withTouches:(NSSet *)touches
+{
+    [view touchesEnded:touches withEvent:event];
+    for (UIView *otherView in _touchingViews) {
+        if (otherView != view) {
+            [otherView touchesEnded:touches withEvent:event];
+        }
+    }
+}
+
 @end
 
 const UIWindowLevel UIWindowLevelNormal = 0;
