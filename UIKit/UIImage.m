@@ -11,7 +11,7 @@
 #import "UIApplication.h"
 
 @interface UIImage ()
-@property (nonatomic, strong) CGImageRef imageRef;
+@property (nonatomic, assign) CGImageRef imageRef;
 
 
 @end
@@ -130,6 +130,7 @@ static NSMutableDictionary *cache;
             NSLog(@"unsupported image type:%@",type);
         }
         
+        CGDataProviderRelease(source);
     } else {
         NSLog(@"[WARNING]Can't find file: %@.%@",name,type);
     }
@@ -148,10 +149,14 @@ static NSMutableDictionary *cache;
         imageRef = CGImageCreateWithJPEGDataProvider(source, NULL, NO, kCGRenderingIntentDefault);
     } else {
         NSLog(@"method: %s, unsupported image type:%@",__PRETTY_FUNCTION__,lowercasePathExtension);
+        CGDataProviderRelease(source);
         return nil;
     }
     if (imageRef) {
-        return [self initWithCGImage:imageRef];
+        self = [self initWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        CGDataProviderRelease(source);
+        return self;
     } else {
         NSLog(@"[UIImage]Create backend CGImage failed");
     }
@@ -186,10 +191,13 @@ static NSMutableDictionary *cache;
             imageRef = CGImageCreateWithPNGDataProvider(source, NULL, false, kCGRenderingIntentDefault);
         } else {
             NSLog(@"unknow image data, head:%02x%02x%02x%02x",buffer[0],buffer[1],buffer[2],buffer[3]);
+            CGDataProviderRelease(source);
             return nil;
         }
+        CGDataProviderRelease(source);
         
-        return [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
+        self = [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
+        CGImageRelease(imageRef);
     }
     return self;
 }
@@ -197,11 +205,6 @@ static NSMutableDictionary *cache;
 - (id)initWithData:(NSData *)data
 {
     return [self initWithData:data scale:1];
-    
-    self = [super init];
-    if (self) {
-    }
-    return self;
 }
 
 - (id)initWithCGImage:(CGImageRef)cgImage
@@ -213,7 +216,7 @@ static NSMutableDictionary *cache;
 {
     self = [super init];
     if (self) {
-        _imageRef = cgImage;
+        _imageRef = CGImageRetain(cgImage);
         if (scale == 0) {
             scale = 1;
         }
@@ -224,6 +227,11 @@ static NSMutableDictionary *cache;
         _size = CGSizeMake(width/scale, height/scale);
     }
     return self;
+}
+
+- (void)dealloc
+{
+    CGImageRelease(_imageRef);
 }
 
 - (CGImageRef)CGImage

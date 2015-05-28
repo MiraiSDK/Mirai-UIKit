@@ -36,12 +36,12 @@ static NSMutableArray* imageContextStack()
 
 CGContextRef UIGraphicsGetCurrentContext(void)
 {
-    return [contextStack() lastObject];
+    return (__bridge CGContextRef)([contextStack() lastObject]);
 }
 
 void UIGraphicsPushContext(CGContextRef context)
 {
-    [contextStack() addObject:context];
+    [contextStack() addObject:(__bridge id)(context)];
 }
 
 void UIGraphicsPopContext(void)
