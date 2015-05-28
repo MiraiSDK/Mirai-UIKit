@@ -28,6 +28,7 @@
  */
 
 #import "UIWindow.h"
+#import "UIMenuBubbleView.h"
 
 @interface UIWindow (UIPrivate)
 - (UIResponder *)_firstResponder;
@@ -35,5 +36,6 @@
 - (void)_makeHidden;
 - (void)_makeVisible;
 - (void)_setLandscaped:(BOOL)landscaped;
+- (void)_addMenuBubbleView:(UIMenuBubbleView *)subview;
 - (UIInterfaceOrientation)_currentOrientation;
 @end
