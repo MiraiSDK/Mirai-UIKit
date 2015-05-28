@@ -24,7 +24,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
     
     if (font) {
         CFMutableDictionaryRef attributes = CFDictionaryCreateMutable(NULL, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        CFDictionarySetValue(attributes, kCTFontAttributeName,(__bridge const void *)(font->_font));
+        CFDictionarySetValue(attributes, kCTFontAttributeName,(font->_font));
         CFDictionarySetValue(attributes, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
         
         CFAttributedStringRef attributedString = CFAttributedStringCreate(NULL, (__bridge CFStringRef)string, attributes);
@@ -65,9 +65,9 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
                     CTLineRef ellipsisLine = CTLineCreateWithAttributedString(ellipsisString);
                     CTLineRef tempLine = CTTypesetterCreateLine(typesetter, CFRangeMake(start, usedCharacters));
                     line = CTLineCreateTruncatedLine(tempLine, constrainedToSize.width, truncType, ellipsisLine);
-//                    CFRelease(tempLine);
-//                    CFRelease(ellipsisLine);
-//                    CFRelease(ellipsisString);
+                    CFRelease(tempLine);
+                    CFRelease(ellipsisLine);
+                    CFRelease(ellipsisString);
                 }
             } else {
                 if (lineBreakMode == UILineBreakModeCharacterWrap) {
@@ -81,16 +81,16 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
             if (line) {
                 drawSize.width = MAX(drawSize.width, ceilf(CTLineGetTypographicBounds(line,NULL,NULL,NULL)));
                 
-                CFArrayAppendValue(lines, (__bridge const void *)(line));
-//                CFRelease(line);
+                CFArrayAppendValue(lines, line);
+                CFRelease(line);
             }
             
             start += usedCharacters;
         }
         
-//        CFRelease(typesetter);
-//        CFRelease(attributedString);
-//        CFRelease(attributes);
+        CFRelease(typesetter);
+        CFRelease(attributedString);
+        CFRelease(attributes);
     }
     
     if (renderSize) {
@@ -143,6 +143,7 @@ static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToS
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)(att));
     CFRange fitRange;
     resultingSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, size, &fitRange);
+    CFRelease(framesetter);
     
     return resultingSize;
 }

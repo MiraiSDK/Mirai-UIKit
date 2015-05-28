@@ -25,7 +25,9 @@
 + (UIFont *)fontWithName:(NSString *)fontName size:(CGFloat)fontSize
 {
     CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef)(fontName), fontSize, NULL);
-    return [UIFont _fontWithCTFont:ctFont];
+    UIFont *f = [UIFont _fontWithCTFont:ctFont];
+    CFRelease(ctFont);
+    return f;
 }
 
 static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFStringRef nameAttr)
@@ -36,16 +38,16 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
         if (descriptors) {
             NSInteger count = CFArrayGetCount(descriptors);
             for (NSInteger i = 0; i < count; i++) {
-                CTFontDescriptorRef descriptor =  (__bridge CTFontDescriptorRef)(CFArrayGetValueAtIndex(descriptors, i));
+                CTFontDescriptorRef descriptor =  (CTFontDescriptorRef)(CFArrayGetValueAtIndex(descriptors, i));
                 CFTypeRef name = CTFontDescriptorCopyAttribute(descriptor, nameAttr);
                 if(name) {
                     if (CFGetTypeID(name) == CFStringGetTypeID()) {
                         [names addObject:(__bridge NSString*)name];
                     }
-//                    CFRelease(name);
+                    CFRelease(name);
                 }
             }
-//            CFRelease(descriptors);
+            CFRelease(descriptors);
         }
     }
     return [names allObjects];
@@ -55,9 +57,9 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 {
     CTFontCollectionRef collection = CTFontCollectionCreateFromAvailableFonts(NULL);
     NSArray* names = _getFontCollectionNames(collection, kCTFontFamilyNameAttribute);
-//    if (collection) {
-//        CFRelease(collection);
-//    }
+    if (collection) {
+        CFRelease(collection);
+    }
     return names;
 }
 
@@ -89,9 +91,13 @@ static NSString *kPlatformDefaultFontName = @"Droid Sans Fallback";
 + (UIFont *)_fontWithCTFont:(CTFontRef)aFont
 {
     UIFont *theFont = [[UIFont alloc] init];
-//    theFont->_font = CFRetain(aFont);
-    theFont->_font = aFont;
+    theFont->_font = CFRetain(aFont);
     return theFont;
+}
+
+- (void)dealloc
+{
+    CFRelease(_font);
 }
 
 - (UIFont *)fontWithSize:(CGFloat)fontSize
@@ -99,7 +105,7 @@ static NSString *kPlatformDefaultFontName = @"Droid Sans Fallback";
     CTFontRef newFont = CTFontCreateCopyWithAttributes(_font, fontSize, NULL, NULL);
     if (newFont) {
         UIFont *theFont = [[self class] _fontWithCTFont:newFont];
-//        CFRelease(newFont);
+        CFRelease(newFont);
         return theFont;
     } else {
         return nil;
@@ -108,7 +114,7 @@ static NSString *kPlatformDefaultFontName = @"Droid Sans Fallback";
 
 - (NSString *)fontName
 {
-    return (__bridge NSString *)CTFontCopyFullName(_font);
+    return (__bridge_transfer NSString *)CTFontCopyFullName(_font);
 }
 
 - (CGFloat)ascender
@@ -147,7 +153,7 @@ static NSString *kPlatformDefaultFontName = @"Droid Sans Fallback";
 
 - (NSString *)familyName
 {
-    return (__bridge NSString *)CTFontCopyFamilyName(_font);
+    return (__bridge_transfer NSString *)CTFontCopyFamilyName(_font);
 }
 
 + (UIFont *)fontWithDescriptor:(UIFontDescriptor *)descriptor size:(CGFloat)pointSize

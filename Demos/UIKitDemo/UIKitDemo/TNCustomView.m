@@ -34,7 +34,7 @@
     CGColorRef redColor = CGColorCreateGenericRGB(1, 0, 0, 1);
     CGFontRef font = CGFontCreateWithFontName(@"Roboto");
     return @{
-             (__bridge NSString *)kCTForegroundColorAttributeName:(id)redColor,
+             (__bridge NSString *)kCTForegroundColorAttributeName:(__bridge id)redColor,
              //(__bridge NSString *)kCTFontAttributeName:font
              };
 #else

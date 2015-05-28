@@ -12,7 +12,7 @@
 #import "UIGraphics.h"
 
 @interface UIColor ()
-@property (nonatomic, strong) CGColorRef color;
+@property (nonatomic, assign) CGColorRef color;
 @end
 
 @implementation UIColor
@@ -52,6 +52,11 @@
         _color = CGColorCreateGenericGray(white, alpha);
     }
     return self;
+}
+
+- (void)dealloc
+{
+    CGColorRelease(_color);
 }
 
 static CGFloat HueToRgb(float p, float q, float t)
@@ -158,7 +163,7 @@ void HSVtoRGB(float h, float s, float v,
 {
     self = [super init];
     if (self) {
-        _color = cgColor;
+        _color = CGColorRetain(cgColor);
     }
     return self;
 }
@@ -391,7 +396,9 @@ void HSVtoRGB(float h, float s, float v,
 - (UIColor *)colorWithAlphaComponent:(CGFloat)alpha
 {
     CGColorRef clr = CGColorCreateCopyWithAlpha(_color, alpha);
-    return [UIColor colorWithCGColor:clr];
+    UIColor *c = [UIColor colorWithCGColor:clr];
+    CGColorRelease(clr);
+    return c;
 }
 
 - (CGColorRef)CGColor

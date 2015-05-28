@@ -166,7 +166,8 @@
         { kCTParagraphStyleSpecifierAlignment,sizeof(CTTextAlignment), &textAlign },
     };
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, 1);
-    attributes[(NSString *)kCTParagraphStyleAttributeName] = paragraphStyle;
+    attributes[(NSString *)kCTParagraphStyleAttributeName] = (__bridge id)(paragraphStyle);
+    CFRelease(paragraphStyle);
 
     return attributes;
 }

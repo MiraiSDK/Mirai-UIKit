@@ -272,7 +272,7 @@ typedef enum{
     UIColor *titleColor = (selected? DefaultBackgroundColor: self.tintColor);
     
     segmentedButton.backgroundColor = backgroundColor;
-    [segmentedButton.layer setBorderColor:titleColor];
+    [segmentedButton.layer setBorderColor:titleColor.CGColor];
     [segmentedButton setTitleColor:titleColor forState:UIControlStateNormal];
     [segmentedButton setTitleColor:titleColor forState:UIControlStateHighlighted];
 }
