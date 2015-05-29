@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 #import "UIScreen.h"
 #import "UIScreenPrivate.h"
 #import <QuartzCore/QuartzCore.h>
@@ -18,7 +18,7 @@
 #import "UIScreenPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UIMenuBubbleView.h"
+#import "UITopFloatViewContainer.h"
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
@@ -41,7 +41,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 @implementation UIWindow
 {
-    __weak UIMenuBubbleView *_menuBubbleView;
+    UITopFloatViewContainer *_topFloatViewContainer;
     
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
@@ -58,6 +58,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         [self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
         self.screen = [UIScreen mainScreen];
         self.opaque = NO;
+        _topFloatViewContainer = [self _newTopFloatViewContainer];
         _touches = [NSMutableSet set];
         _excludedRecognizers = [NSMutableSet set];
         _effectRecognizers = [NSMutableSet set];
@@ -102,7 +103,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         _rootViewController.view.frame = self.bounds;    // unsure about this
         _rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         //[self addSubview:_rootViewController.view];
-        [self _addBelowMenuBubbleView:_rootViewController.view];
+        [self _addBelowTopFloatView:_rootViewController.view];
         
         UIViewController *vc = rootViewController;
         vc.view.transform = _landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
@@ -110,27 +111,9 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     }
 }
 
-- (void)willRemoveSubview:(UIView *)subview
+- (void)_addBelowTopFloatView:(UIView *)view
 {
-    [super willRemoveSubview:subview];
-    if (subview != nil && subview == _menuBubbleView) {
-        _menuBubbleView = nil;
-    }
-}
-
-- (void)_addBelowMenuBubbleView:(UIView *)view
-{
-    if (_menuBubbleView != nil) {
-        [self insertSubview:view belowSubview:_menuBubbleView];
-    } else {
-        [super addSubview:view];
-    }
-}
-
-- (void)_addMenuBubbleView:(UIMenuBubbleView *)subview
-{
-    _menuBubbleView = subview;
-    [self insertSubview:subview atIndex:self.subviews.count];
+    [self insertSubview:view belowSubview:_topFloatViewContainer];
 }
 
 - (void)setScreen:(UIScreen *)theScreen
@@ -482,7 +465,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         [self _sendGesturesForEvent:event];
         
         NSMutableSet *touches = [[event touchesForWindow:self] mutableCopy];
-        [self _notifyMenuBubbleTappedEventWithTouchesSet:touches];
         
         NSMutableSet *eaten = [NSMutableSet set];
         for (UITouch *touch in touches) {
@@ -490,6 +472,16 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
                 if ([recognizer _isEatenTouche:touch]) {
                     [eaten addObject:touch];
                     break;
+                }
+            }
+        }
+        if ([self _anyTopFloatViewHere]) {
+            for (UITouch *touch in touches) {
+                if ([self _everyTopFloatViewWillMaskTouchWithView:touch.view]) {\
+                    [eaten addObject:touch];
+                    if (touch.phase == UITouchPhaseBegan) {
+                        [self _letEveryTopFloatViewReciveMaskTouch:touch];
+                    }
                 }
             }
         }
@@ -552,30 +544,53 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     }
 }
 
-- (void)_notifyMenuBubbleTappedEventWithTouchesSet:(NSMutableSet *)touches
+- (UITopFloatViewContainer *)_newTopFloatViewContainer
 {
-    if (!_menuBubbleView) {
-        return;
-    }
-    for (UITouch *touch in touches) {
-        if (touch.phase == UITouchPhaseBegan) {
-            [_menuBubbleView _onTappedSpaceOnCurrentWindowWithEvent:touch];
-            break;
-        }
-    }
-    [self _clearTouchWhichHasNilView:touches];
+    UITopFloatViewContainer *topFloatViewContainer = [[UITopFloatViewContainer alloc] initWithSuperWindow:self];
+    [self addSubview:topFloatViewContainer];
+    return topFloatViewContainer;
 }
 
-- (void)_clearTouchWhichHasNilView:(NSMutableSet *)touches
+- (BOOL)_hasAddedTopFloatView:(UITopFloatView *)topFloatView
 {
-    NSMutableArray *toRemovedTouchesList = [[NSMutableArray alloc] init];
-    for (UITouch *touch in touches) {
-        if (!touch.view) {
-            [toRemovedTouchesList addObject:touch];
+    return topFloatView.superview == _topFloatViewContainer;
+}
+
+- (void)_addTopFloatView:(UITopFloatView *)topFloatView
+{
+    [_topFloatViewContainer addSubview:topFloatView];
+}
+
+- (BOOL)_anyTopFloatViewHere
+{
+    return _topFloatViewContainer.subviews.count > 0;
+}
+
+- (BOOL)_everyTopFloatViewWillMaskTouchWithView:(UIView *)checkedView
+{
+    for (UITopFloatView *topFloatView in _topFloatViewContainer.subviews) {
+        if (![self _topFloatView:topFloatView willMaskTouchWithView:checkedView]) {
+            return NO;
         }
     }
-    for (UITouch *touch in toRemovedTouchesList) {
-        [touches removeObject:touch];
+    return YES;
+}
+
+- (BOOL)_topFloatView:(UITopFloatView *)topFloatView willMaskTouchWithView:(UIView *)checkedView
+{
+    while (checkedView) {
+        if ([topFloatView allowedReceiveViewAndItsSubviews:checkedView]) {
+            return NO;
+        }
+        checkedView = checkedView.superview;
+    }
+    return YES;
+}
+
+- (void)_letEveryTopFloatViewReciveMaskTouch:(UITouch *)touch
+{
+    for (UITopFloatView *topFloatView in _topFloatViewContainer.subviews) {
+        [topFloatView reciveMaskedTouch:touch];
     }
 }
 
