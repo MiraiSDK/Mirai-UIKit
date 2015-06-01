@@ -15,10 +15,81 @@
 #define kDefaultArrowPosition CGPointZero
 #define kDefaultArrowPossitionOnRect [UIPositionOnRect positionOnRectWithPositionScale:1.0 withBorderDirection:UIPositionOnRectDirectionUp]
 
+
+@interface UIArrowBodyView : UIView
+
+@property (nonatomic) UIPositionOnRectDirection direction;
+
+@end
+
+@implementation UIArrowBodyView
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _direction = UIPositionOnRectDirectionDown;
+    }
+    return self;
+}
+
+- (void)setDirection:(UIPositionOnRectDirection)direction
+{
+    if (_direction != direction) {
+        _direction = direction;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextBeginPath(context);
+    [self _drawArrowPathWithContext:context withRect:rect];
+    CGContextClosePath(context);
+    [self.tintColor setFill];
+    CGContextDrawPath(context,kCGPathFillStroke);
+}
+
+- (void)_drawArrowPathWithContext:(CGContextRef)context withRect:(CGRect)rect
+{
+    switch (_direction) {
+        case UIPositionOnRectDirectionUp:
+            CGContextMoveToPoint(context, rect.origin.x, rect.origin.y + rect.size.height);
+            CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+            CGContextAddLineToPoint(context, rect.origin.x + rect.size.width/2, rect.origin.y);
+            break;
+            
+        case UIPositionOnRectDirectionDown:
+            CGContextMoveToPoint(context, rect.origin.x + rect.size.width, rect.origin.y);
+            CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y);
+            CGContextAddLineToPoint(context, rect.origin.x + rect.size.width/2, rect.origin.y + rect.size.height);
+            break;
+            
+        case UIPositionOnRectDirectionLeft:
+            CGContextMoveToPoint(context, rect.origin.x + rect.size.width, rect.origin.y);
+            CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+            CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height/2);
+            break;
+            
+        case UIPositionOnRectDirectionRight:
+            CGContextMoveToPoint(context, rect.origin.x, rect.origin.y);
+            CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height/2);
+            CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height);
+            break;
+            
+        default:
+            NSLog(@"unknow direction %li", _direction);
+            break;
+    }
+}
+
+@end
+
 @interface UIBubbleView ()
 {
     UIView *_bubbleBodyView;
-    UIView *_arrowBodyView;
+    UIArrowBodyView *_arrowBodyView;
 }
 @end
 
@@ -98,6 +169,8 @@
 {
     if (![_arrowPossitionOnRect isEqual:arrowPossitionOnRect]) {
         _arrowPossitionOnRect = arrowPossitionOnRect;
+        NSLog(@"->%@", _arrowBodyView);
+        [_arrowBodyView setDirection:arrowPossitionOnRect.borderDirection];
         [self refreshBubbleAppearance];
     }
 }
@@ -113,7 +186,7 @@
 - (void)setTintColor:(UIColor *)tintColor
 {
     _bubbleBodyView.backgroundColor = tintColor;
-    _arrowBodyView.backgroundColor = tintColor;
+    _arrowBodyView.tintColor = tintColor;
 }
 
 #pragma mark - reader
@@ -155,7 +228,7 @@
 - (void)_configureSubviews
 {
     _bubbleBodyView = [[UIView alloc] init];
-    _arrowBodyView = [[UIView alloc] init];
+    _arrowBodyView = [[UIArrowBodyView alloc] init];
     
     [self addSubview:_bubbleBodyView];
     [self addSubview:_arrowBodyView];
