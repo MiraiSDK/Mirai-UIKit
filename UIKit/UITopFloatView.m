@@ -10,6 +10,8 @@
 #import "UITopFloatView.h"
 #import "UIWindow+UIPrivate.h"
 
+#define kMinimumOverlapSize 35
+
 @interface UITopFloatView ()
 {
     __weak UIWindow *_currentKeyWindow;
@@ -65,42 +67,215 @@
     if (CGRectIsNull(floatCloseToTarget)) {
         return;
     }
-    for (UIPositionOnRect *targetPoR in [self testListForTargetPositionOnBorder]) {
-        for (UIPositionOnRect *selfPoR in [self testListForSelfPositionOnBorderWhileTargetIs:targetPoR]) {
-            CGRect testBubbleRect = [self bubbleBodyRectangleWithPositionOnRect:selfPoR
-                                                                         inArea:floatCloseToTarget areaPositionOnRect:targetPoR];
-            if ([self _suitableWithTestBubbleRect:testBubbleRect withFloatCloseToTarget:floatCloseToTarget]) {
-                [self setArrowPossitionOnRect:selfPoR];
-                [self setPositionCloseToArea:floatCloseToTarget areaPositionOnRect:targetPoR];
-                return;
-            }
+    floatCloseToTarget = CGRectIntersection(_currentKeyWindow.bounds, floatCloseToTarget);
+    for (NSNumber *directionNumber in [self testPositionOnBorderDirectionList]) {
+        UIPositionOnRectDirection direction = directionNumber.unsignedIntegerValue;
+        BOOL foundSuitable = NO;
+        if (direction == UIPositionOnRectDirectionNone) {
+            [self _showToCenterOnFloatCloseToTargetRect:floatCloseToTarget];
+            foundSuitable = YES;
+        } else {
+            foundSuitable = [self _chooseAndReturnYesIfSuccessWithDirection:direction
+                                                 withFloatCloseToTargetRect:floatCloseToTarget];
         }
-    }
-    // not found any suitable situations.
-    CGPoint centerPosition = [self _centerPositionOnRect:floatCloseToTarget];
-    UIPositionOnRect *choosedSelfPoR = nil;
-    for (UIPositionOnRect *selfPoR in [self testListForSelfPositionOnBorderWhilePositionAtTargetCenter]) {
-        choosedSelfPoR = selfPoR;
-        CGRect testBubbleRect = [self bubbleBodyRectangleWithPositionOnRect:selfPoR atPosition:centerPosition];
-        if (CGRectContainsRect(_currentKeyWindow.bounds, testBubbleRect)) {
+        if (foundSuitable) {
             break;
         }
     }
-    [self setArrowPossitionOnRect:choosedSelfPoR];
-    [self setArrowPosition:centerPosition];
 }
 
-- (NSArray *)testListForTargetPositionOnBorder
+- (void)_showToCenterOnFloatCloseToTargetRect:(CGRect)floatCloseToTarget
 {
-    return @[];// to be override.
+    UIPositionOnRect *topFloatViewPoR = [UIPositionOnRect positionOnRectWithPositionScale:0.5
+                                                                      withBorderDirection:UIPositionOnRectDirectionDown];
+    CGPoint arrowPosition = CGPointMake(floatCloseToTarget.origin.x + floatCloseToTarget.size.width/2,
+                                        floatCloseToTarget.origin.y + floatCloseToTarget.size.height/2);
+    
+    [self setArrowPossitionOnRect:topFloatViewPoR];
+    [self setArrowPosition:arrowPosition];
 }
 
-- (NSArray *)testListForSelfPositionOnBorderWhilePositionAtTargetCenter
+- (BOOL)_chooseAndReturnYesIfSuccessWithDirection:(UIPositionOnRectDirection)direction
+                                              withFloatCloseToTargetRect:(CGRect)floatCloseToTarget
 {
-    return @[];// to be override.
+    CGRect topFloatViewContainerRect = [self _topFloatViewContainerRectWithDirection:direction
+                                                          withFloatCloseToTargetRect:floatCloseToTarget];
+    if (CGRectIsNull(topFloatViewContainerRect)) {
+        return NO;
+    }
+    CGPoint arrowPosition = [self _arrowPositionWithFloatCloseToTargetRect:floatCloseToTarget
+                                                             withDirection:direction];
+    
+    CGRect visibleTargetRect = CGRectIntersection(_currentKeyWindow.bounds, floatCloseToTarget);
+    CGFloat windowSize, limit0, limit1, size, suitableCenterLine;
+    
+    switch (direction) {
+        case UIPositionOnRectDirectionUp:
+        case UIPositionOnRectDirectionDown:
+            windowSize = _currentKeyWindow.bounds.size.width;
+            limit0 = visibleTargetRect.origin.x;
+            limit1 = limit0 + visibleTargetRect.size.width;
+            size = self.bubbleSize.width;
+            suitableCenterLine = arrowPosition.x;
+            break;
+            
+        case UIPositionOnRectDirectionLeft:
+        case UIPositionOnRectDirectionRight:
+            windowSize = _currentKeyWindow.bounds.size.height;
+            limit0 = visibleTargetRect.origin.y;
+            limit1 = limit0 + visibleTargetRect.size.height;
+            size = self.bubbleSize.height;
+            suitableCenterLine = arrowPosition.y;
+            break;
+            
+        default:
+            return NO;
+    }
+    
+    CGFloat suitableStartPosition = [self _suitableStartPositionWithWindowSize:windowSize
+                                                                    withLimit0:limit0 withLimit1:limit1
+                                                                  withSize:size
+                                                    withSuitableCenterLine:suitableCenterLine];
+    if (isnan(suitableStartPosition)) {
+        return NO;
+    }
+    
+    CGFloat suitableArrowPosition = [self _suitableArrowPositionWithLimit0:limit0 withLimit1:limit1
+                                                                  withSize:size
+                                            withFinalSuitableStartPosition:suitableStartPosition];
+    if (isnan(suitableArrowPosition)) {
+        return NO;
+    }
+    
+    switch (direction) {
+        case UIPositionOnRectDirectionUp:
+        case UIPositionOnRectDirectionDown:
+            arrowPosition.x = suitableArrowPosition;
+            break;
+            
+        case UIPositionOnRectDirectionLeft:
+        case UIPositionOnRectDirectionRight:
+            arrowPosition.y = suitableArrowPosition;
+            break;
+            
+        default:
+            return NO;
+    }
+    
+    CGFloat basicScaleOnBorder = (suitableArrowPosition - suitableStartPosition)/size;
+    CGFloat topFloatViewScaleOnBorder;
+    UIPositionOnRectDirection topFloatViewDirection = [UIPositionOnRect reverseDirectionOf:direction];
+    
+    switch (topFloatViewDirection) {
+        case UIPositionOnRectDirectionUp:
+        case UIPositionOnRectDirectionRight:
+            topFloatViewScaleOnBorder = 1.0 - basicScaleOnBorder;
+            break;
+            
+        case UIPositionOnRectDirectionDown:
+        case UIPositionOnRectDirectionLeft:
+            topFloatViewScaleOnBorder = basicScaleOnBorder;
+            break;
+            
+        default:
+            return NO;
+    }
+    UIPositionOnRect *topFloatViewPoR = [UIPositionOnRect positionOnRectWithPositionScale:topFloatViewScaleOnBorder withBorderDirection:topFloatViewDirection];
+    
+    CGRect testBubbleRect = [self bubbleBodyRectangleWithPositionOnRect:topFloatViewPoR
+                                                             atPosition:arrowPosition];
+    
+    if (![self _suitableWithTestBubbleRect:testBubbleRect withFloatCloseToTarget:floatCloseToTarget]) {
+        return NO;
+    }
+    
+    [self setArrowPossitionOnRect:topFloatViewPoR];
+    [self setArrowPosition:arrowPosition];
+    
+    return YES;
+    
 }
 
-- (NSArray *)testListForSelfPositionOnBorderWhileTargetIs:(UIPositionOnRect *)targetPoR
+- (CGPoint)_arrowPositionWithFloatCloseToTargetRect:(CGRect)floatCloseToTarget
+                                      withDirection:(UIPositionOnRectDirection)direction
+{
+    static const CGFloat centerScale = 0.5;
+    UIPositionOnRect *targetPoR = [UIPositionOnRect positionOnRectWithPositionScale:centerScale
+                                                                withBorderDirection:direction];
+    return [targetPoR findPositionLinkedToRectangle:floatCloseToTarget];
+}
+
+- (CGRect)_topFloatViewContainerRectWithDirection:(UIPositionOnRectDirection)direction
+                       withFloatCloseToTargetRect:(CGRect)floatCloseToTarget
+{
+    CGPoint leftTopPoint = _currentKeyWindow.bounds.origin;
+    CGPoint rightBottomPoint = CGPointMake(
+                                           leftTopPoint.x + _currentKeyWindow.bounds.size.width,
+                                           leftTopPoint.y + _currentKeyWindow.bounds.size.height);
+    
+    switch (direction) {
+        case UIPositionOnRectDirectionUp:
+            rightBottomPoint.y = CGRectGetMinY(floatCloseToTarget);
+            break;
+            
+        case UIPositionOnRectDirectionDown:
+            leftTopPoint.y = CGRectGetMaxY(floatCloseToTarget);
+            break;
+            
+        case UIPositionOnRectDirectionLeft:
+            rightBottomPoint.x = CGRectGetMinX(floatCloseToTarget);
+            break;
+            
+        case UIPositionOnRectDirectionRight:
+            leftTopPoint.x = CGRectGetMaxX(floatCloseToTarget);
+            break;
+            
+        default:
+            break;
+    }
+    if (leftTopPoint.x == rightBottomPoint.x || leftTopPoint.y == rightBottomPoint.y) {
+        return CGRectNull;
+    }
+    return CGRectMake(leftTopPoint.x, leftTopPoint.y,
+                      rightBottomPoint.x - leftTopPoint.x, rightBottomPoint.y - leftTopPoint.y);
+}
+
+- (CGFloat)_suitableStartPositionWithWindowSize:(CGFloat)windowSize
+                                     withLimit0:(CGFloat)limit0 withLimit1:(CGFloat)limit1
+                                   withSize:(CGFloat)size withSuitableCenterLine:(CGFloat)suitableCenterLine
+{
+    CGFloat suitableStartPosition = suitableCenterLine - size/2;
+    if (suitableStartPosition < 0) {
+        suitableStartPosition = 0;
+    } else if (suitableStartPosition + size > windowSize) {
+        suitableStartPosition = windowSize - size;
+    }
+    limit0 = MAX(suitableStartPosition, limit0);
+    limit1 = MIN(suitableStartPosition + size, limit1);
+    
+    if (limit1 - limit0 < kMinimumOverlapSize) {
+        return NAN;
+    }
+    return suitableStartPosition;
+}
+
+- (CGFloat)_suitableArrowPositionWithLimit0:(CGFloat)limit0 withLimit1:(CGFloat)limit1
+                                   withSize:(CGFloat)size
+             withFinalSuitableStartPosition:(CGFloat)finalsuitableStartPosition
+{
+    CGFloat startPosition = finalsuitableStartPosition;
+    CGFloat endPosition = startPosition + size;
+    
+    startPosition = MAX(limit0, startPosition);
+    endPosition = MIN(limit1, endPosition);
+    
+    if (endPosition < startPosition) {
+        return NAN;
+    }
+    return (startPosition + endPosition)/2;
+}
+
+- (NSArray *)testPositionOnBorderDirectionList
 {
     return @[];// to be override.
 }

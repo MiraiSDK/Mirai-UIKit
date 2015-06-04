@@ -10,10 +10,11 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, UIPositionOnRectDirection) {
-    UIPositionOnRectDirectionUp = 1 << 0,
-    UIPositionOnRectDirectionDown = 1 << 1,
-    UIPositionOnRectDirectionLeft = 1 << 2,
-    UIPositionOnRectDirectionRight = 1 << 3,
+    UIPositionOnRectDirectionNone = 1 << 0,
+    UIPositionOnRectDirectionUp = 1 << 1,
+    UIPositionOnRectDirectionDown = 1 << 2,
+    UIPositionOnRectDirectionLeft = 1 << 3,
+    UIPositionOnRectDirectionRight = 1 << 4,
     UIPositionOnRectDirectionAny = UIPositionOnRectDirectionUp | UIPositionOnRectDirectionDown |
     UIPositionOnRectDirectionLeft | UIPositionOnRectDirectionRight,
     UIPositionOnRectDirectionUnknow = NSUIntegerMax,

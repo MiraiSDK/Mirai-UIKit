@@ -17,8 +17,6 @@
 @property (nonatomic) CGRect floatCloseToTarget;
 
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated;
-- (NSArray *)testListForTargetPositionOnBorder;
-- (NSArray *)testListForSelfPositionOnBorderWhileTargetIs:(UIPositionOnRect *)targetPoR;
-- (NSArray *)testListForSelfPositionOnBorderWhilePositionAtTargetCenter;
+- (NSArray *)testPositionOnBorderDirectionList;
 
 @end

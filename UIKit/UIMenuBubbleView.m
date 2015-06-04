@@ -13,7 +13,7 @@
 
 #define kMinimumMenuItemButtonWidth 100
 #define kMaximumMenuItemButtonWidth 500
-#define kMenuItemButtonHeight 34
+#define kMenuItemButtonHeight 40
 
 #define kCenterOnBorderScale 0.5
 
@@ -112,73 +112,15 @@
 
 #pragma mark - choose appropriate arrow location and direction.
 
-- (NSArray *)testListForTargetPositionOnBorder
+- (NSArray *)testPositionOnBorderDirectionList
 {
-    static NSDictionary *switchDictionary;
-    if (!switchDictionary) {
-        switchDictionary = @{
-                             @(UIMenuControllerArrowUp):
-                                 @[
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionUp],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionDown],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionRight],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionLeft],
-                                     ],
-                             
-                             @(UIMenuControllerArrowDown):
-                                 @[
-                                 [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionDown],
-                                 [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionUp],
-                                 [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionRight],
-                                 [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionLeft],
-                                 ],
-                             
-                             @(UIMenuControllerArrowLeft):
-                                 @[
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionLeft],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionRight],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionDown],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionUp],
-                                     ],
-                             
-                             @(UIMenuControllerArrowRight):
-                                 @[
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionRight],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionLeft],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionDown],
-                                     [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionUp],
-                                     ],
-                             };
+    static NSArray *directionList;
+    if (!directionList) {
+        directionList = @[@(UIPositionOnRectDirectionUp), @(UIPositionOnRectDirectionDown),
+                          @(UIPositionOnRectDirectionLeft), @(UIPositionOnRectDirectionRight),
+                          @(UIPositionOnRectDirectionNone)];
     }
-    UIMenuControllerArrowDirection direction = _parentMenuController.arrowDirection;
-    if (direction == UIMenuControllerArrowDefault) {
-        direction = UIMenuControllerArrowUp;
-    }
-    NSArray *list = [switchDictionary objectForKey:@(direction)];
-    if (!list) {
-        list = @[];
-    }
-    return list;
-}
-
-- (NSArray *)testListForSelfPositionOnBorderWhileTargetIs:(UIPositionOnRect *)targetPoR
-{
-    return @[
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionDown],
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionUp],
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionRight],
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionLeft],
-             ];
-}
-
-- (NSArray *)testListForSelfPositionOnBorderWhilePositionAtTargetCenter
-{
-    return @[
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionDown],
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionUp],
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionRight],
-             [UIPositionOnRect positionOnRectWithPositionScale:kCenterOnBorderScale withBorderDirection:UIPositionOnRectDirectionLeft],
-             ];
+    return directionList;
 }
 
 @end

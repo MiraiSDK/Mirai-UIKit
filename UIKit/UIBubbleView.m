@@ -169,7 +169,6 @@
 {
     if (![_arrowPossitionOnRect isEqual:arrowPossitionOnRect]) {
         _arrowPossitionOnRect = arrowPossitionOnRect;
-        NSLog(@"->%@", _arrowBodyView);
         [_arrowBodyView setDirection:arrowPossitionOnRect.borderDirection];
         [self refreshBubbleAppearance];
     }
