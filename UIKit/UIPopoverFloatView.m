@@ -43,9 +43,7 @@
                                      };
     }
     UIPopoverArrowDirection arrowDirection = [_parent popoverArrowDirection];
-    NSArray *rs = [arrowDirectionDictionary objectForKey:@(arrowDirection)];
-    NSLog(@"->%@ %@", rs, @(arrowDirection));
-    return rs;
+    return [arrowDirectionDictionary objectForKey:@(arrowDirection)];
 }
 
 - (void)reciveMaskedTouch:(UITouch *)touch

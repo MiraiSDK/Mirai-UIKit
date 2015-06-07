@@ -13,7 +13,9 @@
 #define kMinimumOverlapSize 35
 #define kAnimationDuration 0.5
 
-typedef struct {CGFloat windowSize, limit0, limit1, size, suitableCenterLine;} SuitableRange;
+typedef struct {
+    CGFloat windowSize, limit0, limit1, size, suitableCenterLine;
+} SuitableRange;
 
 @interface UITopFloatView ()
 {
@@ -70,10 +72,14 @@ typedef struct {CGFloat windowSize, limit0, limit1, size, suitableCenterLine;} S
     if (CGRectIsNull(floatCloseToTarget)) {
         return;
     }
+    BOOL foundSuitable = NO;
+    UIPositionOnRectDirection lastDirection = UIPositionOnRectDirectionUp;
+    
     floatCloseToTarget = CGRectIntersection(_currentKeyWindow.bounds, floatCloseToTarget);
+    
     for (NSNumber *directionNumber in [self testPositionOnBorderDirectionList]) {
         UIPositionOnRectDirection direction = directionNumber.unsignedIntegerValue;
-        BOOL foundSuitable = NO;
+        lastDirection = direction;
         if (direction == UIPositionOnRectDirectionNone) {
             [self _showToCenterOnFloatCloseToTargetRect:floatCloseToTarget];
             foundSuitable = YES;
@@ -84,6 +90,10 @@ typedef struct {CGFloat windowSize, limit0, limit1, size, suitableCenterLine;} S
         if (foundSuitable) {
             break;
         }
+    }
+    if (!foundSuitable) {
+        [self _showButNotConsiderSuitableLocationWithDirection:lastDirection
+                                    withFloatCloseToTargetRect:floatCloseToTarget];
     }
 }
 
@@ -141,6 +151,21 @@ typedef struct {CGFloat windowSize, limit0, limit1, size, suitableCenterLine;} S
     [self setArrowPosition:arrowPosition];
     
     return YES;
+}
+
+
+- (void)_showButNotConsiderSuitableLocationWithDirection:(UIPositionOnRectDirection)direction
+                              withFloatCloseToTargetRect:(CGRect)floatCloseToTarget
+{
+    static const CGFloat CenterOfBorderScale = 0.5;
+    UIPositionOnRectDirection reverseDirection = [UIPositionOnRect reverseDirectionOf:direction];
+    CGPoint arrowPosition = [self _arrowPositionWithFloatCloseToTargetRect:floatCloseToTarget
+                                                             withDirection:direction];
+    UIPositionOnRect *topFloatViewPoR = [UIPositionOnRect positionOnRectWithPositionScale:CenterOfBorderScale
+                                                                      withBorderDirection:reverseDirection];
+    
+    [self setArrowPossitionOnRect:topFloatViewPoR];
+    [self setArrowPosition:arrowPosition];
 }
 
 - (SuitableRange)_suitableRangeWithDirection:(UIPositionOnRectDirection)direction
@@ -285,7 +310,7 @@ typedef struct {CGFloat windowSize, limit0, limit1, size, suitableCenterLine;} S
                              withSuitableStartPosition:(CGFloat)suitableStartPosition with:(CGFloat)size
 {
     CGFloat basicScaleOnBorder = (suitableArrowPosition - suitableStartPosition)/size;
-    CGFloat topFloatViewScaleOnBorder;
+    CGFloat topFloatViewScaleOnBorder = 0.0;
     UIPositionOnRectDirection topFloatViewDirection = [UIPositionOnRect reverseDirectionOf:direction];
     
     switch (topFloatViewDirection) {
@@ -302,7 +327,8 @@ typedef struct {CGFloat windowSize, limit0, limit1, size, suitableCenterLine;} S
         default:
             break;
     }
-    return [UIPositionOnRect positionOnRectWithPositionScale:topFloatViewScaleOnBorder withBorderDirection:topFloatViewDirection];
+    return [UIPositionOnRect positionOnRectWithPositionScale:topFloatViewScaleOnBorder
+                                         withBorderDirection:topFloatViewDirection];
 }
 
 - (NSArray *)testPositionOnBorderDirectionList

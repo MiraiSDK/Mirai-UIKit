@@ -30,7 +30,7 @@
 {
     [_popoverController presentPopoverFromRect:_targetRectBuffer
                                         inView:_targetViewBuffer
-                      permittedArrowDirections:UIPopoverArrowDirectionAny
+                      permittedArrowDirections:UIPopoverArrowDirectionUp
                                       animated:NO];
 }
 
