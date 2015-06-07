@@ -14,7 +14,7 @@
 #define kDefaultContainerSize CGSizeMake(100, 100)
 #define kDefaultArrowPosition CGPointZero
 #define kDefaultArrowPossitionOnRect [UIPositionOnRect positionOnRectWithPositionScale:1.0 withBorderDirection:UIPositionOnRectDirectionUp]
-
+#define kAnimateDuration 0.5
 
 @interface UIArrowBodyView : UIView
 
@@ -159,9 +159,20 @@
 
 - (void)setContainerSize:(CGSize)containerSize
 {
+    [self setContainerSize:containerSize animated:NO];
+}
+
+- (void)setContainerSize:(CGSize)containerSize animated:(BOOL)animated
+{
     if (!CGSizeEqualToSize(_containerSize, containerSize)) {
         _containerSize = containerSize;
-        [self refreshBubbleAppearance];
+        if (animated) {
+            [UIView animateWithDuration:kAnimateDuration animations:^{
+                [self refreshBubbleAppearance];
+            }];
+        } else {
+            [self refreshBubbleAppearance];
+        }
     }
 }
 

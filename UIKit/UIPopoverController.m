@@ -12,6 +12,9 @@
 #import "UIPopoverFloatView.h"
 #import <UIKit/UIKit.h>
 
+#define kMinimumPopoverWidth 320
+#define kMaximumPopoverWidth 600
+
 @implementation UIPopoverController
 {
     UIPopoverFloatView *_floatView;
@@ -22,10 +25,17 @@
     self = [super init];
     if (self) {
         _contentViewController = viewController;
-        _popoverArrowDirection = UIPopoverArrowDirectionAny;
         _floatView = [[UIPopoverFloatView alloc] initWithParent:self withContainer:viewController.view];
+        [self _settingDefaultValues];
     }
     return self;
+}
+
+- (void)_settingDefaultValues
+{
+    _popoverContentSize = CGSizeMake(320, 320);
+    _floatView.containerSize = _popoverContentSize;
+    _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
 }
 
 - (void)setContentViewController:(UIViewController *)viewController animated:(BOOL)animated;
@@ -38,12 +48,17 @@
 
 - (void)setPopoverContentSize:(CGSize)size animated:(BOOL)animated
 {
-    _popoverContentSize = size;
+    size.width = MAX(MIN(size.width, kMaximumPopoverWidth), kMinimumPopoverWidth);
+    if (!CGSizeEqualToSize(_popoverContentSize, size)) {
+        _popoverContentSize = size;
+        [_floatView setContainerSize:size];
+    }
 }
 
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view
       permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
+    _popoverArrowDirection = arrowDirections;
     _floatView.floatCloseToTarget = [view convertRect:rect toView:[[UIApplication sharedApplication] keyWindow]];
     [_floatView setVisible:YES animated:animated];
 }
