@@ -11,6 +11,7 @@
 
 @interface UIPopoverFloatView : UITopFloatView
 
+@property (nonatomic) UIPopoverArrowDirection presentArrowDirections;
 - (instancetype)initWithParent:(UIPopoverController *)parent withContainer:(UIView *)container;
 
 @end

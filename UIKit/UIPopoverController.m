@@ -10,6 +10,7 @@
 #import "UITopFloatView.h"
 #import "UIPositionOnRect.h"
 #import "UIPopoverFloatView.h"
+#import "UIPositionOnRect.h"
 #import <UIKit/UIKit.h>
 
 #define kMinimumPopoverWidth 320
@@ -35,14 +36,43 @@
 {
     _popoverContentSize = CGSizeMake(320, 320);
     _floatView.containerSize = _popoverContentSize;
-    _popoverArrowDirection = UIPopoverArrowDirectionUnknown;
+}
+
+- (BOOL)isPopoverVisible
+{
+    return _floatView.visible;
+}
+
+- (UIPopoverArrowDirection)popoverArrowDirection
+{
+    if (!self.popoverVisible) {
+        return UIPopoverArrowDirectionUnknown;
+    }
+    switch (_floatView.arrowPossitionOnRect.borderDirection) {
+        case UIPositionOnRectDirectionUp:
+            return UIPopoverArrowDirectionUp;
+            
+        case UIPositionOnRectDirectionDown:
+            return UIPopoverArrowDirectionDown;
+            
+        case UIPositionOnRectDirectionLeft:
+            return UIPopoverArrowDirectionLeft;
+            
+        case UIPositionOnRectDirectionRight:
+            return UIPopoverArrowDirectionRight;
+            
+        default:
+            return UIPositionOnRectDirectionUnknow;
+    }
 }
 
 - (void)setContentViewController:(UIViewController *)viewController animated:(BOOL)animated;
 {
     if (_contentViewController != viewController) {
         _contentViewController = viewController;
-        _floatView.container = viewController.view;
+        NSLog(@"-> change content to %@", viewController);
+        [_floatView setContainer:viewController.view animated:animated];
+        [self setPopoverContentSize:viewController.view.frame.size];
     }
 }
 
@@ -58,7 +88,7 @@
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view
       permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
-    _popoverArrowDirection = arrowDirections;
+    _floatView.presentArrowDirections = arrowDirections;
     _floatView.floatCloseToTarget = [view convertRect:rect toView:[[UIApplication sharedApplication] keyWindow]];
     [_floatView setVisible:YES animated:animated];
 }

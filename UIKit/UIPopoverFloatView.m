@@ -24,26 +24,21 @@
 
 - (NSArray *)testPositionOnBorderDirectionList
 {
-    NSDictionary *arrowDirectionDictionary;
-    if (!arrowDirectionDictionary) {
-        arrowDirectionDictionary = @{
-                                     @(UIPopoverArrowDirectionUp):
-                                         @[@(UIPositionOnRectDirectionUp)],
-                                     @(UIPopoverArrowDirectionDown):
-                                         @[@(UIPositionOnRectDirectionDown)],
-                                     @(UIPopoverArrowDirectionLeft):
-                                         @[@(UIPositionOnRectDirectionLeft)],
-                                     @(UIPopoverArrowDirectionRight):
-                                         @[@(UIPositionOnRectDirectionRight)],
-                                     @(UIPopoverArrowDirectionAny):
-                                         @[@(UIPositionOnRectDirectionUp),
-                                           @(UIPositionOnRectDirectionDown),
-                                           @(UIPositionOnRectDirectionLeft),
-                                           @(UIPositionOnRectDirectionRight),],
-                                     };
+    NSMutableArray *testList = [[NSMutableArray alloc] init];
+    
+    if (_presentArrowDirections & UIPopoverArrowDirectionUp) {
+        [testList addObject:@(UIPositionOnRectDirectionUp)];
     }
-    UIPopoverArrowDirection arrowDirection = [_parent popoverArrowDirection];
-    return [arrowDirectionDictionary objectForKey:@(arrowDirection)];
+    if (_presentArrowDirections & UIPopoverArrowDirectionDown) {
+        [testList addObject:@(UIPositionOnRectDirectionDown)];
+    }
+    if (_presentArrowDirections & UIPopoverArrowDirectionLeft) {
+        [testList addObject:@(UIPositionOnRectDirectionLeft)];
+    }
+    if (_presentArrowDirections & UIPopoverArrowDirectionRight) {
+        [testList addObject:@(UIPositionOnRectDirectionRight)];
+    }
+    return testList;
 }
 
 - (void)reciveMaskedTouch:(UITouch *)touch

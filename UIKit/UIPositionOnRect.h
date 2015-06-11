@@ -15,8 +15,6 @@ typedef NS_ENUM(NSUInteger, UIPositionOnRectDirection) {
     UIPositionOnRectDirectionDown = 1 << 2,
     UIPositionOnRectDirectionLeft = 1 << 3,
     UIPositionOnRectDirectionRight = 1 << 4,
-    UIPositionOnRectDirectionAny = UIPositionOnRectDirectionUp | UIPositionOnRectDirectionDown |
-    UIPositionOnRectDirectionLeft | UIPositionOnRectDirectionRight,
     UIPositionOnRectDirectionUnknow = NSUIntegerMax,
 };
 

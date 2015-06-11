@@ -133,6 +133,11 @@
 
 - (void)setContainer:(UIView *)container
 {
+    [self setContainer:container animated:NO];
+}
+
+- (void)setContainer:(UIView *)container animated:(BOOL)animated
+{
     if (_container != container) {
         [_container removeFromSuperview];
         _container = container;

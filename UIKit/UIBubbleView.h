@@ -27,6 +27,7 @@
 - (CGRect)bubbleBodyRectangleWithPositionOnRect:(UIPositionOnRect *)arrowPossitionOnRect
                                      inArea:(CGRect)area
                          areaPositionOnRect:(UIPositionOnRect *)areaPossitionOnRect;
+- (void)setContainer:(UIView *)container animated:(BOOL)animated;
 - (void)setContainerSize:(CGSize)containerSize animated:(BOOL)animated;
 - (void)setPositionCloseToArea:(CGRect)area areaPositionOnRect:(UIPositionOnRect *)areaPossitionOnRect;
 - (void)refreshBubbleAppearance;
