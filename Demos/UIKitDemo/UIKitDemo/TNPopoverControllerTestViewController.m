@@ -8,6 +8,7 @@
 
 #import "TNPopoverControllerTestViewController.h"
 #import "TNPopoverPositionTestViewController.h"
+#import "TNPopoverPropertiesTestViewController.h"
 
 @interface TNPopoverControllerTestViewController ()
 
@@ -29,6 +30,7 @@
 {
     return @[
              TNPopoverPositionTestViewController.class,
+             TNPopoverPropertiesTestViewController.class,
              ];
 }
 

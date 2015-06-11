@@ -87,6 +87,8 @@
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		D210A8DE1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
 		D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
+		D221B3331B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */; };
+		D221B3341B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */; };
 		D2239E301B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E2F1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m */; };
 		D2239E311B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E2F1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m */; };
 		D2239E3B1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E3A1B048AF700810377 /* TNDisplayModeTestViewController.m */; };
@@ -247,6 +249,8 @@
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
 		D210A8DC1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSplitViewControllerTestViewController.h; sourceTree = "<group>"; };
 		D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSplitViewControllerTestViewController.m; sourceTree = "<group>"; };
+		D221B3311B292CA800C15C63 /* TNPopoverPropertiesTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPopoverPropertiesTestViewController.h; sourceTree = "<group>"; };
+		D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPopoverPropertiesTestViewController.m; sourceTree = "<group>"; };
 		D2239E2E1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPrintSplitViewControllerDelegateMessage.h; sourceTree = "<group>"; };
 		D2239E2F1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPrintSplitViewControllerDelegateMessage.m; sourceTree = "<group>"; };
 		D2239E391B048AF700810377 /* TNDisplayModeTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNDisplayModeTestViewController.h; sourceTree = "<group>"; };
@@ -709,6 +713,8 @@
 				D2A9FB9A1B1FF3AE00C88751 /* TNPopoverControllerTestViewController.m */,
 				D2A9FB9D1B1FF3EC00C88751 /* TNPopoverPositionTestViewController.h */,
 				D2A9FB9E1B1FF3EC00C88751 /* TNPopoverPositionTestViewController.m */,
+				D221B3311B292CA800C15C63 /* TNPopoverPropertiesTestViewController.h */,
+				D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */,
 			);
 			name = UIPopoverController;
 			sourceTree = "<group>";
@@ -907,6 +913,7 @@
 				4390B8211A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
 				4390B8121A8351CA0082B0F1 /* TNCustomView.m in Sources */,
 				437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */,
+				D221B3341B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */,
 				4390B8671A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
 				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
 				D2EB64321B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */,
@@ -969,6 +976,7 @@
 				D2726A6E1ABE70010010F435 /* TNChangeTabTestViewController.m in Sources */,
 				D2A5F4861AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
 				D2726A721ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */,
+				D221B3331B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */,
 				D2A9FB9F1B1FF3EC00C88751 /* TNPopoverPositionTestViewController.m in Sources */,
 				4390B8301A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
 				4390B82E1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */,

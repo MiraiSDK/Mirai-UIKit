@@ -19,6 +19,11 @@
 
 @implementation TNPopoverPositionTestViewController
 
++ (NSString *)testName
+{
+    return @"Position Test";
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -30,7 +35,7 @@
 {
     [_popoverController presentPopoverFromRect:_targetRectBuffer
                                         inView:_targetViewBuffer
-                      permittedArrowDirections:UIPopoverArrowDirectionUp
+                      permittedArrowDirections:UIPopoverArrowDirectionAny
                                       animated:NO];
 }
 
