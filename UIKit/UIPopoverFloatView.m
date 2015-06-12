@@ -43,7 +43,17 @@
 
 - (void)reciveMaskedTouch:(UITouch *)touch
 {
-    [self setVisible:NO animated:YES];
+    if ([self _shouldDismissPopover]) {
+        [self setVisible:NO animated:YES];
+    }
+}
+
+- (BOOL)_shouldDismissPopover
+{
+    if (_parent.delegate) {
+        return [_parent.delegate popoverControllerShouldDismissPopover:_parent];
+    }
+    return YES;
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "TNPopoverPropertiesTestViewController.h"
+#import "TNPopoverListenersViewController.h"
 #import "TNChangedColorButton.h"
 #import "TNBlockButton.h"
 
@@ -15,7 +16,6 @@
     UIView *_controlPanel;
     UIPopoverController *_popoverController;
 }
-
 
 + (NSString *)testName
 {
@@ -39,9 +39,10 @@
 
 - (UIPopoverController *)_newPopoverController
 {
-    UIViewController *initViewController = [[UIViewController alloc] init];
+    TNPopoverListenersViewController *initViewController = [[TNPopoverListenersViewController alloc] init];
     initViewController.view = _controlPanel;
     UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:initViewController];
+    popoverController.delegate = initViewController;
     popoverController.popoverContentSize = CGSizeMake(320, 300);
     popoverController.popoverLayoutMargins = UIEdgeInsetsMake(100, 200, 30, 30);
     return popoverController;
@@ -135,5 +136,7 @@
     viewController.view.backgroundColor = viewControllerColor;
     return viewController;
 }
+
+#pragma mark - callback
 
 @end

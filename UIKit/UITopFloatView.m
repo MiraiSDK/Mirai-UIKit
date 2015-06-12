@@ -45,14 +45,21 @@ typedef struct {
 
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated
 {
+    if (_visible == visible) {
+        return;
+    }
     if (visible) {
+        [_delegate floatViewWillAppear:animated];
         _currentKeyWindow = [[UIApplication sharedApplication] keyWindow];
         if (![_currentKeyWindow _hasAddedTopFloatView:self]) {
             [_currentKeyWindow _addTopFloatView:self];
             [self _chooseAndSetSuitableLocationAndDirectionWithFloatCloseToTarget:_floatCloseToTarget];
         }
+        [_delegate floatViewDidDisappear:animated];
     } else {
+        [_delegate floatViewWillDisappear:animated];
         [self removeFromSuperview];
+        [_delegate floatViewDidDisappear:animated];
     }
     _visible = visible;
 }

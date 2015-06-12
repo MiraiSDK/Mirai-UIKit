@@ -7,6 +7,7 @@
 //
 
 #import "UIPopoverController.h"
+#import "UITopFloatViewDelegate.h"
 #import "UITopFloatView.h"
 #import "UIPositionOnRect.h"
 #import "UIPopoverFloatView.h"
@@ -16,10 +17,13 @@
 #define kMinimumPopoverWidth 320
 #define kMaximumPopoverWidth 600
 
-@implementation UIPopoverController
+@interface UIPopoverController () <UITouchMask>
 {
     UIPopoverFloatView *_floatView;
 }
+@end
+
+@implementation UIPopoverController
 
 - (id)initWithContentViewController:(UIViewController *)viewController
 {
@@ -27,6 +31,7 @@
     if (self) {
         _contentViewController = viewController;
         _floatView = [[UIPopoverFloatView alloc] initWithParent:self withContainer:viewController.view];
+        _floatView.delegate = self;
         [self _settingDefaultValues];
     }
     return self;
@@ -70,7 +75,6 @@
 {
     if (_contentViewController != viewController) {
         _contentViewController = viewController;
-        NSLog(@"-> change content to %@", viewController);
         [_floatView setContainer:viewController.view animated:animated];
         [self setPopoverContentSize:viewController.view.frame.size];
     }
@@ -88,6 +92,7 @@
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view
       permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
+    [_delegate popoverController:self willRepositionPopoverToRect:&rect inView:&view];
     _floatView.presentArrowDirections = arrowDirections;
     _floatView.floatCloseToTarget = [view convertRect:rect toView:[[UIApplication sharedApplication] keyWindow]];
     [_floatView setVisible:YES animated:animated];
@@ -101,6 +106,27 @@
 - (void)dismissPopoverAnimated:(BOOL)animated
 {
     [_floatView setVisible:NO animated:animated];
+}
+
+- (void)floatViewWillAppear:(BOOL)animated
+{
+    [_contentViewController viewWillAppear:animated];
+}
+
+- (void)floatViewDidAppear:(BOOL)animated
+{
+    [_contentViewController viewDidAppear:animated];
+}
+
+- (void)floatViewWillDisappear:(BOOL)animated
+{
+    [_contentViewController viewWillDisappear:animated];
+}
+
+- (void)floatViewDidDisappear:(BOOL)animated
+{
+    [_contentViewController viewDidDisappear:animated];
+    [_delegate popoverControllerDidDismissPopover:self];
 }
 
 @end
