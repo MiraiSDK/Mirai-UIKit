@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UITopFloatView.h"
-#import "UIWindow+UIPrivate.h"
+#import "UITopFloatViewContainerWindow.h"
 
 #define kMinimumOverlapSize 35
 #define kAnimationDuration 0.5
@@ -16,12 +16,6 @@
 typedef struct {
     CGFloat windowSize, limit0, limit1, size, suitableCenterLine;
 } SuitableRange;
-
-@interface UITopFloatView ()
-{
-    __weak UIWindow *_currentKeyWindow;
-}
-@end
 
 @implementation UITopFloatView
 
@@ -50,9 +44,11 @@ typedef struct {
     }
     if (visible) {
         [_delegate floatViewWillAppear:animated];
-        _currentKeyWindow = [[UIApplication sharedApplication] keyWindow];
-        if (![_currentKeyWindow _hasAddedTopFloatView:self]) {
-            [_currentKeyWindow _addTopFloatView:self];
+        
+        UITopFloatViewContainerWindow *container = [UITopFloatViewContainerWindow shareTopFloatViewContainerWindow];
+        
+        if (![container.subviews containsObject:self]) {
+            [container addSubview:self];
             [self _chooseAndSetSuitableLocationAndDirectionWithFloatCloseToTarget:_floatCloseToTarget];
         }
         [_delegate floatViewDidDisappear:animated];
@@ -68,7 +64,7 @@ typedef struct {
 {
     if (!CGRectEqualToRect(_floatCloseToTarget, floatCloseToTarget)) {
         _floatCloseToTarget = floatCloseToTarget;
-        if (_currentKeyWindow) {
+        if (_visible) {
             [self _chooseAndSetSuitableLocationAndDirectionWithFloatCloseToTarget:floatCloseToTarget];
         }
     }
@@ -82,7 +78,7 @@ typedef struct {
     BOOL foundSuitable = NO;
     UIPositionOnRectDirection lastDirection = UIPositionOnRectDirectionUp;
     
-    floatCloseToTarget = CGRectIntersection(_currentKeyWindow.bounds, floatCloseToTarget);
+    floatCloseToTarget = CGRectIntersection([self _windowBounds], floatCloseToTarget);
     
     for (NSNumber *directionNumber in [self testPositionOnBorderDirectionList]) {
         UIPositionOnRectDirection direction = directionNumber.unsignedIntegerValue;
@@ -179,12 +175,12 @@ typedef struct {
                  withFloatCloseToTargetRect:(CGRect)floatCloseToTarget withArrowPosition:(CGPoint)arrowPosition
 {
     SuitableRange suitableRange = {0, 0, 0, 0, 0};
-    CGRect visibleTargetRect = CGRectIntersection(_currentKeyWindow.bounds, floatCloseToTarget);
+    CGRect visibleTargetRect = CGRectIntersection([self _windowBounds], floatCloseToTarget);
     
     switch (direction) {
         case UIPositionOnRectDirectionUp:
         case UIPositionOnRectDirectionDown:
-            suitableRange.windowSize = _currentKeyWindow.bounds.size.width;
+            suitableRange.windowSize = [self _windowBounds].size.width;
             suitableRange.limit0 = visibleTargetRect.origin.x;
             suitableRange.limit1 = suitableRange.limit0 + visibleTargetRect.size.width;
             suitableRange.size = self.bubbleSize.width;
@@ -193,7 +189,7 @@ typedef struct {
             
         case UIPositionOnRectDirectionLeft:
         case UIPositionOnRectDirectionRight:
-            suitableRange.windowSize = _currentKeyWindow.bounds.size.height;
+            suitableRange.windowSize = [self _windowBounds].size.height;
             suitableRange.limit0 = visibleTargetRect.origin.y;
             suitableRange.limit1 = suitableRange.limit0 + visibleTargetRect.size.height;
             suitableRange.size = self.bubbleSize.height;
@@ -218,10 +214,10 @@ typedef struct {
 - (CGRect)_topFloatViewContainerRectWithDirection:(UIPositionOnRectDirection)direction
                        withFloatCloseToTargetRect:(CGRect)floatCloseToTarget
 {
-    CGPoint leftTopPoint = _currentKeyWindow.bounds.origin;
+    CGPoint leftTopPoint = [self _windowBounds].origin;
     CGPoint rightBottomPoint = CGPointMake(
-                                           leftTopPoint.x + _currentKeyWindow.bounds.size.width,
-                                           leftTopPoint.y + _currentKeyWindow.bounds.size.height);
+                                           leftTopPoint.x + [self _windowBounds].size.width,
+                                           leftTopPoint.y + [self _windowBounds].size.height);
     
     switch (direction) {
         case UIPositionOnRectDirectionUp:
@@ -345,13 +341,18 @@ typedef struct {
 
 - (BOOL)_suitableWithTestBubbleRect:(CGRect)testBubbleRect withFloatCloseToTarget:(CGRect)floatCloseToTarget
 {
-    return  CGRectContainsRect(_currentKeyWindow.bounds, testBubbleRect) &&
+    return  CGRectContainsRect([self _windowBounds], testBubbleRect) &&
             !CGRectIntersectsRect(floatCloseToTarget, testBubbleRect);
 }
 
 - (CGPoint)_centerPositionOnRect:(CGRect)rect
 {
     return CGPointMake(rect.origin.x + rect.size.width/2, rect.origin.x + rect.size.height/2);
+}
+
+- (CGRect)_windowBounds
+{
+    return [UIApplication sharedApplication].keyWindow.bounds;
 }
 
 @end

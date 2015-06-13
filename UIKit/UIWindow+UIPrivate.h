@@ -28,8 +28,6 @@
  */
 
 #import "UIWindow.h"
-#import "UIMenuBubbleView.h"
-#import "UITopFloatView.h"
 
 @interface UIWindow (UIPrivate)
 - (UIResponder *)_firstResponder;
@@ -37,7 +35,5 @@
 - (void)_makeHidden;
 - (void)_makeVisible;
 - (void)_setLandscaped:(BOOL)landscaped;
-- (BOOL)_hasAddedTopFloatView:(UITopFloatView *)topFloatView;
-- (void)_addTopFloatView:(UITopFloatView *)topFloatView;
 - (UIInterfaceOrientation)_currentOrientation;
 @end

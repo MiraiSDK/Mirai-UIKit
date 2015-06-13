@@ -312,6 +312,9 @@
 		D2E097FF1B189E32002DB2A4 /* UIPositionOnRect.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */; };
 		D2E098001B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
 		D2E098011B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
+		D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */; };
+		D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
+		D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -640,6 +643,8 @@
 		D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMenuBubbleView.m; sourceTree = "<group>"; };
 		D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPositionOnRect.h; sourceTree = "<group>"; };
 		D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPositionOnRect.m; sourceTree = "<group>"; };
+		D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainerWindow.h; sourceTree = "<group>"; };
+		D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainerWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1187,6 +1192,8 @@
 				D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */,
 				D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */,
 				D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */,
+				D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */,
+				D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */,
 			);
 			name = UITopView;
 			sourceTree = "<group>";
@@ -1256,6 +1263,7 @@
 				43B447FD1AB6FADF00DC1968 /* unzip.h in Headers */,
 				D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */,
 				43846348188C5977006DA1AA /* UIFontDescriptor.h in Headers */,
+				D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */,
 				434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
 				43846340188C540F006DA1AA /* NSParagraphStyle.h in Headers */,
@@ -1598,6 +1606,7 @@
 				434CFD521A0CB85800B6AC9E /* UIStoryboard.m in Sources */,
 				434CFD561A0CB8B300B6AC9E /* UIStoryboardSegue.m in Sources */,
 				434CFCF21A0C9E7E00B6AC9E /* UIImagePickerController.m in Sources */,
+				D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1615,6 +1624,7 @@
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
 				D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
+				D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

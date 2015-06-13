@@ -18,7 +18,7 @@
 #import "UIScreenPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UITopFloatViewContainer.h"
+#import "UITopFloatView.h"
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
@@ -41,8 +41,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 @implementation UIWindow
 {
-    UITopFloatViewContainer *_topFloatViewContainer;
-    
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
     NSMutableSet *_effectRecognizers;
@@ -58,7 +56,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         [self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
         self.screen = [UIScreen mainScreen];
         self.opaque = NO;
-        _topFloatViewContainer = [self _newTopFloatViewContainer];
         _touches = [NSMutableSet set];
         _excludedRecognizers = [NSMutableSet set];
         _effectRecognizers = [NSMutableSet set];
@@ -102,18 +99,12 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         _rootViewController = rootViewController;
         _rootViewController.view.frame = self.bounds;    // unsure about this
         _rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        //[self addSubview:_rootViewController.view];
-        [self _addBelowTopFloatView:_rootViewController.view];
+        [self addSubview:_rootViewController.view];
         
         UIViewController *vc = rootViewController;
         vc.view.transform = _landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
         vc.view.frame = self.window.bounds;
     }
-}
-
-- (void)_addBelowTopFloatView:(UIView *)view
-{
-    [self insertSubview:view belowSubview:_topFloatViewContainer];
 }
 
 - (void)setScreen:(UIScreen *)theScreen
@@ -475,16 +466,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
                 }
             }
         }
-        if ([self _anyTopFloatViewHere]) {
-            for (UITouch *touch in touches) {
-                if ([self _everyTopFloatViewWillMaskTouchWithView:touch.view]) {\
-                    [eaten addObject:touch];
-                    if (touch.phase == UITouchPhaseBegan) {
-                        [self _letEveryTopFloatViewReciveMaskTouch:touch];
-                    }
-                }
-            }
-        }
         
         [touches minusSet:eaten];
         
@@ -544,38 +525,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     }
 }
 
-- (UITopFloatViewContainer *)_newTopFloatViewContainer
-{
-    UITopFloatViewContainer *topFloatViewContainer = [[UITopFloatViewContainer alloc] initWithSuperWindow:self];
-    [self addSubview:topFloatViewContainer];
-    return topFloatViewContainer;
-}
-
-- (BOOL)_hasAddedTopFloatView:(UITopFloatView *)topFloatView
-{
-    return topFloatView.superview == _topFloatViewContainer;
-}
-
-- (void)_addTopFloatView:(UITopFloatView *)topFloatView
-{
-    [_topFloatViewContainer addSubview:topFloatView];
-}
-
-- (BOOL)_anyTopFloatViewHere
-{
-    return _topFloatViewContainer.subviews.count > 0;
-}
-
-- (BOOL)_everyTopFloatViewWillMaskTouchWithView:(UIView *)checkedView
-{
-    for (UITopFloatView *topFloatView in _topFloatViewContainer.subviews) {
-        if (![self _topFloatView:topFloatView willMaskTouchWithView:checkedView]) {
-            return NO;
-        }
-    }
-    return YES;
-}
-
 - (BOOL)_topFloatView:(UITopFloatView *)topFloatView willMaskTouchWithView:(UIView *)checkedView
 {
     while (checkedView) {
@@ -585,13 +534,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         checkedView = checkedView.superview;
     }
     return YES;
-}
-
-- (void)_letEveryTopFloatViewReciveMaskTouch:(UITouch *)touch
-{
-    for (UITopFloatView *topFloatView in _topFloatViewContainer.subviews) {
-        [topFloatView reciveMaskedTouch:touch];
-    }
 }
 
 @end
