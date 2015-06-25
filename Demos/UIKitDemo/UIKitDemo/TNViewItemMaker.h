@@ -15,6 +15,8 @@
 @property (nonatomic) CGFloat titleWidthScale;
 @property (nonatomic) CGFloat topLocation;
 
+@property (nonatomic, readonly) NSArray *madeContentViews;
+
 - (instancetype)initWithView:(UIView *)view;
 - (void)makeItem:(NSString *)itemTitle block:(UIView *(^)(void))makerBlock;
 - (void)makeItem:(NSString *)itemTitle height:(CGFloat)itemHeight block:(UIView *(^)(void))makerBlock;

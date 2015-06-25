@@ -10,6 +10,7 @@
 
 @implementation TNViewItemMaker
 {
+    NSMutableArray *_madeContentViews;
     UIView *_containerView;
     UIView *_lastAddedItem;
 }
@@ -17,6 +18,7 @@
 - (instancetype)initWithView:(UIView *)view
 {
     if (self = [super init]) {
+        _madeContentViews = [NSMutableArray new];
         _containerView = view;
         _itemHeight = 40.;
         _titleWidthScale = 0.312;
@@ -50,6 +52,12 @@
     
     _lastAddedItem = item;
     [_containerView addSubview:item];
+    [_madeContentViews addObject:contentView];
+}
+
+- (NSArray *)madeContentViews
+{
+    return _madeContentViews;
 }
 
 - (CGFloat)_nextAddedViewYLocation
