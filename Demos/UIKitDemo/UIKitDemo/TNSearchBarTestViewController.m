@@ -7,9 +7,11 @@
 //
 
 #import "TNSearchBarTestViewController.h"
+#import "TNSearchBarDelegateTest.h"
 #import "TNViewItemMaker.h"
 #import "TNChangedColorButton.h"
 #import "TNTargetActionToBlock.h"
+#import "TNTitleChangedButton.h"
 
 @implementation TNSearchBarTestViewController
 {
@@ -24,8 +26,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (!_actionBlockContainer) {
+        _actionBlockContainer = [NSMutableArray new];
+    }
     [self _makeSearchBar];
     [self setViewControllers:@[[self _newButtonTestViewControoler],
+                               [self _newScopeTestViewController],
                                [self _newDisplayTestViewController],
                                ]];
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -35,6 +42,10 @@
 {
     _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 75, self.view.bounds.size.width, 50)];
     [self.view addSubview:_searchBar];
+    
+    TNSearchBarDelegateTest *searchBarDelegate = [[TNSearchBarDelegateTest alloc]init];
+    _searchBar.delegate = searchBarDelegate;
+    [_actionBlockContainer addObject:searchBarDelegate];
 }
 
 - (UIViewController *)_newButtonTestViewControoler
@@ -52,9 +63,6 @@
 
 - (void)addProperty:(NSString *)property forMaker:(TNViewItemMaker *)maker
 {
-    if (!_actionBlockContainer) {
-        _actionBlockContainer = [NSMutableArray new];
-    }
     __weak UISearchBar *weakSearchBar = _searchBar;
     
     TNTargetActionToBlock *actionBlock = [[TNTargetActionToBlock alloc] initWithBlock:^(UISwitch *switchItem) {
@@ -69,6 +77,61 @@
         [switchItem addTarget:actionBlock action:TNAction forControlEvents:UIControlEventValueChanged];
         return switchItem;
     }];
+}
+
+- (UIViewController *)_newScopeTestViewController
+{
+    UIViewController *scopeTestViewController = [self _newViewControllerWithTitle:@"scope test"];
+    TNViewItemMaker *maker = [[TNViewItemMaker alloc] initWithView:scopeTestViewController.view];
+    maker.topLocation = CGRectGetMaxY(_searchBar.frame) + 40;
+    
+    NSArray *scopeNameList = @[@"letter", @"number", @"name"];
+    NSArray *scopeButtonTitlesList = @[@[@"A", @"B", @"C", @"D"],
+                                       @[@"1", @"2", @"3", @"4"],
+                                       @[@"Tom", @"Jerry"],
+                                       ];
+    
+    [maker makeItem:@"scopeButtonTitles" block:^UIView *{
+        __weak UISearchBar *weakSearchBar = _searchBar;
+        TNTitleChangedButton *button = [[TNTitleChangedButton alloc]initWithTitles:scopeNameList withTappedBlock:^(NSString *title, NSUInteger index) {
+            weakSearchBar.scopeButtonTitles = [scopeButtonTitlesList objectAtIndex:index];
+        }];
+        return button;
+    }];
+    [maker makeItem:@"selectedScopeButtonIndex" block:^UIView *{
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+        
+        __weak UIButton *weakButton = button;
+        __weak UISearchBar *weakSearchBar = _searchBar;
+        
+        TNTargetActionToBlock *target = [[TNTargetActionToBlock alloc] initWithBlock:^(id sender) {
+            NSString *title = [[NSString alloc] initWithFormat:@"refresh:%li",
+                               weakSearchBar.selectedScopeButtonIndex];
+            [weakButton setTitle:title forState:UIControlStateNormal];
+        }];
+        [_actionBlockContainer addObject:target];
+        
+        [button setTitle:@"show" forState:UIControlStateNormal];
+        [button addTarget:target action:TNAction forControlEvents:UIControlEventTouchUpInside];
+        
+        return button;
+    }];
+    [maker makeItem:@"showsScopeBar" block:^UIView *{
+        UISwitch *switchItem = [[UISwitch alloc] initWithFrame:CGRectZero];
+        switchItem.on = _searchBar.showsScopeBar;
+        
+        __weak UISwitch *weakSwitch = switchItem;
+        __weak UISearchBar *weakSearchBar = _searchBar;
+        
+        TNTargetActionToBlock *target = [[TNTargetActionToBlock alloc] initWithBlock:^(id sender) {
+            weakSearchBar.showsScopeBar = weakSwitch.on;
+        }];
+        [_actionBlockContainer addObject:target];
+        
+        [switchItem addTarget:target action:TNAction forControlEvents:UIControlEventValueChanged];
+        return switchItem;
+    }];
+    return scopeTestViewController;
 }
 
 - (UIViewController *)_newDisplayTestViewController
