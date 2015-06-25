@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, UISearchBarStyle) {
 
 @property(nonatomic,assign,getter=isTranslucent) BOOL translucent;
 
-@property(nonatomic,copy) NSArray   *scopeButtonTitle;
+@property(nonatomic,copy) NSArray   *scopeButtonTitles;
 @property(nonatomic)      NSInteger  selectedScopeButtonIndex;
 @property(nonatomic)      BOOL       showsScopeBar;
 
