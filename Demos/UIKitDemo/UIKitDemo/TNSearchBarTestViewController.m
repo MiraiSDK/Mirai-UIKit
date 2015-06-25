@@ -9,10 +9,12 @@
 #import "TNSearchBarTestViewController.h"
 #import "TNViewItemMaker.h"
 #import "TNChangedColorButton.h"
+#import "TNTargetActionToBlock.h"
 
 @implementation TNSearchBarTestViewController
 {
     UISearchBar *_searchBar;
+    NSMutableArray *_actionBlockContainer;
 }
 
 + (NSString *)testName
@@ -23,7 +25,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self _makeSearchBar];
-    [self setViewControllers:@[[self _newDisplayTestViewController]]];
+    [self setViewControllers:@[[self _newButtonTestViewControoler],
+                               [self _newDisplayTestViewController],
+                               ]];
     [self.view setBackgroundColor:[UIColor whiteColor]];
 }
 
@@ -31,6 +35,40 @@
 {
     _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 75, self.view.bounds.size.width, 50)];
     [self.view addSubview:_searchBar];
+}
+
+- (UIViewController *)_newButtonTestViewControoler
+{
+    UIViewController *buttonTestViewController = [self _newViewControllerWithTitle:@"button test"];
+    TNViewItemMaker *maker = [self _newViewItemMakerWithViewController:buttonTestViewController];
+    
+    [self addProperty:@"showsBookmarkButton" forMaker:maker];
+    [self addProperty:@"showsCancelButton" forMaker:maker];
+    [self addProperty:@"showsSearchResultsButton" forMaker:maker];
+    [self addProperty:@"searchResultsButtonSelected" forMaker:maker];
+    
+    return buttonTestViewController;
+}
+
+- (void)addProperty:(NSString *)property forMaker:(TNViewItemMaker *)maker
+{
+    if (!_actionBlockContainer) {
+        _actionBlockContainer = [NSMutableArray new];
+    }
+    __weak UISearchBar *weakSearchBar = _searchBar;
+    
+    TNTargetActionToBlock *actionBlock = [[TNTargetActionToBlock alloc] initWithBlock:^(UISwitch *switchItem) {
+        [weakSearchBar setValue:@(switchItem.on) forKey:property];
+    }];
+    [_actionBlockContainer addObject:actionBlock];
+    
+    [maker makeItem:property block:^UIView *{
+        UISwitch *switchItem = [[UISwitch alloc] initWithFrame:CGRectZero];
+        NSNumber *onNumber = [_searchBar valueForKey:property];
+        switchItem.on = [onNumber boolValue];
+        [switchItem addTarget:actionBlock action:TNAction forControlEvents:UIControlEventValueChanged];
+        return switchItem;
+    }];
 }
 
 - (UIViewController *)_newDisplayTestViewController
@@ -70,6 +108,7 @@
     }];
     [maker makeItem:@"translucent" block:^UIView *{
         UISwitch *switchItem = [[UISwitch alloc] initWithFrame:CGRectZero];
+        switchItem.on = _searchBar.translucent;
         [switchItem addTarget:self action:@selector(_onDisplayTranslucentSwitchChanged:)
              forControlEvents:UIControlEventValueChanged];
         return switchItem;
