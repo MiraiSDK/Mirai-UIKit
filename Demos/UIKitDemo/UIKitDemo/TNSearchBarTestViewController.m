@@ -40,7 +40,7 @@
 
 - (void)_makeSearchBar
 {
-    _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 75, self.view.bounds.size.width, 50)];
+    _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 125, self.view.bounds.size.width, 75)];
     [self.view addSubview:_searchBar];
     
     TNSearchBarDelegateTest *searchBarDelegate = [[TNSearchBarDelegateTest alloc]init];
