@@ -13,6 +13,7 @@
 #define kCompoentInterval 10
 #define kCancelButtonWidth 100
 #define kTinyIconButtonSize 35
+#define kScopeBarHeight 40
 
 @implementation UISearchBar
 {
@@ -22,6 +23,7 @@
     UIControl *_searchInputBackground;
     UIButton *_rightOperateButton;
     UIButton *_cancelButton;
+    UISegmentedControl *_scopeBar;
 }
 
 - (instancetype)init
@@ -62,6 +64,24 @@
     [self addSubview:_searchInputBackground];
 }
 
+- (UISegmentedControl *)_newScopeBar
+{
+    _selectedScopeButtonIndex = MIN(_selectedScopeButtonIndex, _scopeButtonTitles.count - 1);
+    UISegmentedControl *scopeBar = [[UISegmentedControl alloc] initWithItems:_scopeButtonTitles];
+    scopeBar.selectedSegmentIndex = _selectedScopeButtonIndex;
+    [scopeBar addTarget:self action:@selector(_onSegmentedSelectedIndexChanged:)
+       forControlEvents:UIControlEventValueChanged];
+    return scopeBar;
+}
+
+- (void)_onSegmentedSelectedIndexChanged:(UISegmentedControl *)scopeBar
+{
+    if (_selectedScopeButtonIndex != scopeBar.selectedSegmentIndex) {
+        _selectedScopeButtonIndex = scopeBar.selectedSegmentIndex;
+        //TODO call some delegate method.
+    }
+}
+
 - (void)_refreshAllSubcomponentsOnStageState
 {
     [self _setOnStageState:_showsSearchTextField forSubcomponent:_searchTextField
@@ -69,6 +89,7 @@
     [self _setOnStageState:[self _willShowsRightOperateButton]
            forSubcomponent:_rightOperateButton container:_searchInputBackground];
     [self _setOnStageState:_showsCancelButton forSubcomponent:_cancelButton container:self];
+    [self _synchronizeScopeOnStageState];
 }
 
 - (BOOL)_willShowsRightOperateButton
@@ -89,19 +110,50 @@
     }
 }
 
-- (void)_refreshAllComponentsLayout
+- (void)_synchronizeScopeOnStageState
 {
-    CGFloat searchRightXLocation = [self _refreshCancelButtonLayoutThenReturnSearchRightXLocation];
-    [self _refreshSearchInputBackgroundLayoutWithSpaceWidth:(searchRightXLocation - 0.0)];
-    [self _refreshRightOperateButtonLayout];
-    [self _refreshSearchTextFieldLayout];
+    if ([self _willShowScopBar] && !_scopeBar) {
+        _scopeBar = [self _newScopeBar];
+        [self addSubview:_scopeBar];
+        
+    } else if (![self _willShowScopBar] && _scopeBar) {
+        [_scopeBar removeFromSuperview];
+        _scopeBar = nil;
+    }
 }
 
-- (CGFloat)_refreshCancelButtonLayoutThenReturnSearchRightXLocation
+- (void)_refreshAllComponentsLayout
+{
+    CGFloat searchInputBackgroundTopLocation = [self _countSearchInputBackgroundTopLocationAndResizeSelf];
+    CGFloat searchRightXLocation = [self _refreshCancelButtonLayoutThenReturnSearchRightXLocationWithTopLocation:searchInputBackgroundTopLocation];
+    [self _refreshSearchInputBackgroundLayoutWithSpaceWidth:(searchRightXLocation - 0.0)
+                                            withTopLocation:searchInputBackgroundTopLocation];
+    [self _refreshRightOperateButtonLayout];
+    [self _refreshSearchTextFieldLayout];
+    [self _refreshScopeBarLayout];
+}
+
+- (CGFloat)_countSearchInputBackgroundTopLocationAndResizeSelf
+{
+    CGFloat contentHeight = kSearchInputBackgroundHeight + 2*kCompoentInterval;
+    if (_scopeBar) {
+        contentHeight += kScopeBarHeight + kCompoentInterval;
+    }
+    CGFloat selfMoreThanHeightOfContent = self.frame.size.height - contentHeight;
+    if (selfMoreThanHeightOfContent < 0) {
+        CGRect resizeFrame = self.frame;
+        resizeFrame.size.height += ABS(selfMoreThanHeightOfContent);
+        self.frame = resizeFrame;
+        selfMoreThanHeightOfContent = 0;
+    }
+    return selfMoreThanHeightOfContent/2 + kCompoentInterval;
+}
+
+- (CGFloat)_refreshCancelButtonLayoutThenReturnSearchRightXLocationWithTopLocation:(CGFloat)topLocation
 {
     if ([self _isOnStage:_cancelButton]) {
         CGFloat cancelButtonStartXLocation = self.bounds.size.width - kCancelButtonWidth - kCompoentInterval;
-        _cancelButton.frame = CGRectMake(cancelButtonStartXLocation, [self _searchInputBackgroundTopYLocation],
+        _cancelButton.frame = CGRectMake(cancelButtonStartXLocation, topLocation,
                                          kCancelButtonWidth, kSearchInputBackgroundHeight);
         return cancelButtonStartXLocation;
     } else {
@@ -110,8 +162,9 @@
 }
 
 - (void)_refreshSearchInputBackgroundLayoutWithSpaceWidth:(CGFloat)spaceWidth
+                                          withTopLocation:(CGFloat)topLocation
 {
-    _searchInputBackground.frame = CGRectMake(kCompoentInterval, [self _searchInputBackgroundTopYLocation],
+    _searchInputBackground.frame = CGRectMake(kCompoentInterval, topLocation,
                                               spaceWidth - 2*kCompoentInterval, kSearchInputBackgroundHeight);
 }
 
@@ -141,9 +194,14 @@
                                         _searchInputBackground.bounds.size.height);
 }
 
-- (CGFloat)_searchInputBackgroundTopYLocation
+- (void)_refreshScopeBarLayout
 {
-    return (self.bounds.size.height - kSearchInputBackgroundHeight)/2;
+    if (!_scopeBar) {
+        return;
+    }
+    CGFloat topYLocation = CGRectGetMaxY(_searchInputBackground.frame);
+    _scopeBar.frame = CGRectMake(kCompoentInterval, topYLocation + kCompoentInterval,
+                                 self.frame.size.width - 2*kCompoentInterval, kScopeBarHeight);
 }
 
 - (CGFloat)_rightOperateButtonCloseToBroderInterval
@@ -221,11 +279,41 @@
     }
 }
 
+- (void)setScopeButtonTitles:(NSArray *)scopeButtonTitles
+{
+    _scopeButtonTitles = scopeButtonTitles;
+    [self _clearScopeBarIfExist];
+    [self _refreshAllSubcomponentsOnStageState];
+    [self _refreshAllComponentsLayout];
+}
+
+- (void)setShowsScopeBar:(BOOL)showsScopeBar
+{
+    if (_showsScopeBar != showsScopeBar) {
+        _showsScopeBar = showsScopeBar;
+        [self _refreshAllSubcomponentsOnStageState];
+        [self _refreshAllComponentsLayout];
+    }
+}
+
+- (void)_clearScopeBarIfExist
+{
+    if(_scopeBar) {
+        [_scopeBar removeFromSuperview];
+        _scopeBar = nil;
+    }
+}
+
 #pragma mark - util methodes
+
+- (BOOL)_willShowScopBar
+{
+    return _showsScopeBar && _scopeButtonTitles;
+}
 
 - (BOOL)_isOnStage:(UIView *)subview
 {
-    return subview.superview != nil;
+    return subview != nil && subview.superview != nil;
 }
 
 @end
