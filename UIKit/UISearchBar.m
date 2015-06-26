@@ -42,6 +42,8 @@
     return self;
 }
 
+#pragma mark - make and refresh state.
+
 - (void)_setDefaultValuesForAllProperties
 {
     _barStyle = UIBarStyleDefault;
@@ -151,13 +153,75 @@
 
 - (void)_refreshRightOperateIcon
 {
-    
+    if ([self _isOnStage:_searchTextField]) {
+        [_rightOperateButton setTitle:@"X" forState:UIControlStateNormal];
+        
+    } else {
+        if (_showsSearchResultsButton && _searchResultsButtonSelected) {
+            [_rightOperateButton setTitle:@"(√)" forState:UIControlStateNormal];
+            
+        } else if (_showsSearchResultsButton) {
+            [_rightOperateButton setTitle:@"√" forState:UIControlStateNormal];
+            
+        } else if (_showsBookmarkButton) {
+            [_rightOperateButton setTitle:@"书" forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (void)_refreshAllComponentsAppearance
 {
-    
+    self.backgroundColor = [UIColor grayColor];
+    _searchInputBackground.backgroundColor = [UIColor whiteColor];
 }
+
+#pragma mark - properties setter and getter
+
+- (void)setShowsBookmarkButton:(BOOL)showsBookmarkButton
+{
+    if (_showsBookmarkButton != showsBookmarkButton) {
+        _showsBookmarkButton = showsBookmarkButton;
+        [self _refreshAllSubcomponentsOnStageState];
+        [self _refreshAllComponentsLayout];
+        [self _refreshRightOperateIcon];
+    }
+}
+
+- (void)setShowsCancelButton:(BOOL)showsCancelButton
+{
+    [self setShowsCancelButton:showsCancelButton animated:NO];
+}
+
+- (void)setShowsCancelButton:(BOOL)showsCancelButton animated:(BOOL)animated
+{
+    if (_showsCancelButton != showsCancelButton) {
+        _showsCancelButton = showsCancelButton;
+        [self _refreshAllSubcomponentsOnStageState];
+        [self _refreshAllComponentsLayout];
+    }
+}
+
+- (void)setShowsSearchResultsButton:(BOOL)showsSearchResultsButton
+{
+    if (_showsSearchResultsButton != showsSearchResultsButton) {
+        _showsSearchResultsButton = showsSearchResultsButton;
+        [self _refreshAllSubcomponentsOnStageState];
+        [self _refreshAllComponentsLayout];
+        [self _refreshRightOperateIcon];
+    }
+}
+
+- (void)setSearchResultsButtonSelected:(BOOL)searchResultsButtonSelected
+{
+    if (_searchResultsButtonSelected != searchResultsButtonSelected) {
+        _searchResultsButtonSelected = searchResultsButtonSelected;
+        [self _refreshAllSubcomponentsOnStageState];
+        [self _refreshAllComponentsLayout];
+        [self _refreshRightOperateIcon];
+    }
+}
+
+#pragma mark - util methodes
 
 - (BOOL)_isOnStage:(UIView *)subview
 {
