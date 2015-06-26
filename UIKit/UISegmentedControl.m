@@ -35,7 +35,7 @@ typedef enum{
     self = [super initWithFrame:CGRectMake(0, 0, 200, 44)];
     if (self) {
         _tintColor = DefaultTintColor;
-        [self setDefaultValueAboutSelect];
+        [self _setDefaultValueAboutSelect];
         [self _makeSegmentArray:items];
         [self _refreshSegmentFrame];
     }
@@ -167,7 +167,7 @@ typedef enum{
 - (void)_setAllSegmentedButtonsTintColor:(UIColor *)color
 {
     for (NSUInteger i=0; i<self.segmentArray.count; ++i) {
-        BOOL isSelected = !self.momentary &&  (self.selectedSegmentIndex == i);
+        BOOL isSelected = !self.momentary &&  (_selectedSegmentIndex == i);
         [self _setSegmentAt:i isSelected:isSelected];
     }
 }
@@ -200,10 +200,15 @@ typedef enum{
 
 #pragma mark - select segement.
 
-- (void)setDefaultValueAboutSelect
+- (void)setSelectedSegmentIndex:(NSInteger)selectedSegmentIndex
 {
-    self.momentary = NO;
-    self.selectedSegmentIndex = UISegmentedControlNoSegment;
+    [self _setSelectedSegmentIndexAndTriggerEvent:selectedSegmentIndex];
+}
+
+- (void)_setDefaultValueAboutSelect
+{
+    _momentary = NO;
+    _selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
 - (void)_onPressSegment:(id)sender
@@ -245,8 +250,8 @@ typedef enum{
     if (!self.momentary) {
         [self _setSegmentAt:newSelectedIndex isSelected:YES];
     }
-    self.selectedSegmentIndex = newSelectedIndex;
-    self.hasChangedSelectedSegmentIndexDuringTouch = YES;
+    _selectedSegmentIndex = newSelectedIndex;
+    _hasChangedSelectedSegmentIndexDuringTouch = YES;
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
