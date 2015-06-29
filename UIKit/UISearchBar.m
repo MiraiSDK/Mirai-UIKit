@@ -17,8 +17,6 @@
 
 @implementation UISearchBar
 {
-    BOOL _showsSearchTextField;
-    
     UITextField *_searchTextField;
     UIControl *_searchInputBackground;
     UIButton *_rightOperateButton;
@@ -61,7 +59,11 @@
     _cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
     [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [_searchTextField addTarget:self action:@selector(_onSearchInputTextChanged:)
+               forControlEvents:UIControlEventEditingChanged];
+    
     [self addSubview:_searchInputBackground];
+    [_searchInputBackground addSubview:_searchTextField];
 }
 
 - (UISegmentedControl *)_newScopeBar
@@ -84,8 +86,6 @@
 
 - (void)_refreshAllSubcomponentsOnStageState
 {
-    [self _setOnStageState:_showsSearchTextField forSubcomponent:_searchTextField
-                 container:_searchInputBackground];
     [self _setOnStageState:[self _willShowsRightOperateButton]
            forSubcomponent:_rightOperateButton container:_searchInputBackground];
     [self _setOnStageState:_showsCancelButton forSubcomponent:_cancelButton container:self];
@@ -94,7 +94,7 @@
 
 - (BOOL)_willShowsRightOperateButton
 {
-    if (_showsSearchTextField) {
+    if (![self _isSearchInputEmpty]) {
         return YES;
     } else {
         return _showsBookmarkButton || _showsSearchResultsButton || _searchResultsButtonSelected;
@@ -181,9 +181,6 @@
 
 - (void)_refreshSearchTextFieldLayout
 {
-    if (![self _isOnStage:_searchTextField]) {
-        return;
-    }
     CGFloat sapceForRightOperate = 0.0;
     if (![self _isOnStage:_rightOperateButton]) {
         CGFloat closeToBorderInterval = [self _rightOperateButtonCloseToBroderInterval];
@@ -231,6 +228,14 @@
 {
     self.backgroundColor = [UIColor grayColor];
     _searchInputBackground.backgroundColor = [UIColor whiteColor];
+}
+
+#pragma mark - search input
+
+- (void)_onSearchInputTextChanged:(id)sender
+{
+    NSString *text = _searchTextField.text;
+    NSLog(@"%s %@", __FUNCTION__, text);
 }
 
 #pragma mark - properties setter and getter
@@ -309,6 +314,11 @@
 - (BOOL)_willShowScopBar
 {
     return _showsScopeBar && _scopeButtonTitles;
+}
+
+- (BOOL)_isSearchInputEmpty
+{
+    return [_searchTextField.text isEqualToString:@""];
 }
 
 - (BOOL)_isOnStage:(UIView *)subview
