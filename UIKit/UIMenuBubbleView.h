@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UITopFloatView.h"
 
-@interface UIMenuBubbleView : UIView
+@interface UIMenuBubbleView : UITopFloatView
 
 @property (nonatomic) CGRect keyWindowTargetRect;
 @property (nonatomic, readonly) CGRect menuFrame;

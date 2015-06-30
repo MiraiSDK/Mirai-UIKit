@@ -83,11 +83,11 @@
         _menuVisible = menuVisible;
         if (menuVisible) {
             [center postNotificationName:UIMenuControllerWillShowMenuNotification object:nil];
-            [self _showMenuBubbleViewOnKeyWindow];
+            [_menuBubbleView setVisible:menuVisible animated:animated];
             [center postNotificationName:UIMenuControllerDidShowMenuNotification object:nil];
         } else {
             [center postNotificationName:UIMenuControllerWillHideMenuNotification object:nil];
-            [_menuBubbleView removeFromSuperview];
+            [_menuBubbleView setVisible:menuVisible animated:animated];
             [center postNotificationName:UIMenuControllerDidHideMenuNotification object:nil];
         }
     }
@@ -97,12 +97,6 @@
 {
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     _menuBubbleView.keyWindowTargetRect = [targetView convertRect:targetRect toView:keyWindow];
-}
-
-- (void)_showMenuBubbleViewOnKeyWindow
-{
-    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-    [keyWindow _addMenuBubbleView:_menuBubbleView];
 }
 
 @end

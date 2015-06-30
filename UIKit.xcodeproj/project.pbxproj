@@ -285,6 +285,20 @@
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
+		D28E58781B1850E100BAB5D1 /* UITouchMask.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E58761B1850E100BAB5D1 /* UITouchMask.h */; };
+		D28E587D1B1851F800BAB5D1 /* UITopFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */; };
+		D28E587E1B1851F800BAB5D1 /* UITopFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */; };
+		D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */; };
+		D28E58821B18620200BAB5D1 /* UITopFloatViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E58801B18620200BAB5D1 /* UITopFloatViewContainer.h */; };
+		D28E58831B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */; };
+		D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */; };
+		D29371B41B2ABFFA00A66047 /* UITopFloatViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29371B31B2ABFFA00A66047 /* UITopFloatViewDelegate.h */; };
+		D2939BB71B231273003E1FCB /* UIPopoverFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D2939BB51B231273003E1FCB /* UIPopoverFloatView.h */; };
+		D2939BB81B231273003E1FCB /* UIPopoverFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */; };
+		D2939BB91B231273003E1FCB /* UIPopoverFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */; };
+		D29A5EB11B1AA87F004EA433 /* UIBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */; };
+		D29A5EB21B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
+		D29A5EB31B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
 		D2BA4C851AEF3109003D4A35 /* TNImageBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = D2BA4C831AEF3109003D4A35 /* TNImageBuffer.h */; };
 		D2BA4C861AEF3109003D4A35 /* TNImageBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */; };
 		D2BA4C871AEF3109003D4A35 /* TNImageBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */; };
@@ -295,6 +309,12 @@
 		D2D489491B0B1E1E00D0558F /* UIMenuBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */; };
 		D2D4894A1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */; };
 		D2D4894B1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */; };
+		D2E097FF1B189E32002DB2A4 /* UIPositionOnRect.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */; };
+		D2E098001B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
+		D2E098011B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
+		D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */; };
+		D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
+		D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -604,6 +624,16 @@
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
+		D28E58761B1850E100BAB5D1 /* UITouchMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchMask.h; sourceTree = "<group>"; };
+		D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatView.h; sourceTree = "<group>"; };
+		D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatView.m; sourceTree = "<group>"; };
+		D28E58801B18620200BAB5D1 /* UITopFloatViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainer.h; sourceTree = "<group>"; };
+		D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainer.m; sourceTree = "<group>"; };
+		D29371B31B2ABFFA00A66047 /* UITopFloatViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewDelegate.h; sourceTree = "<group>"; };
+		D2939BB51B231273003E1FCB /* UIPopoverFloatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverFloatView.h; sourceTree = "<group>"; };
+		D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverFloatView.m; sourceTree = "<group>"; };
+		D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleView.h; sourceTree = "<group>"; };
+		D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleView.m; sourceTree = "<group>"; };
 		D2BA4C831AEF3109003D4A35 /* TNImageBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNImageBuffer.h; sourceTree = "<group>"; };
 		D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNImageBuffer.m; sourceTree = "<group>"; };
 		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
@@ -611,6 +641,10 @@
 		D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+UIPrivate.h"; sourceTree = "<group>"; };
 		D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMenuBubbleView.h; sourceTree = "<group>"; };
 		D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMenuBubbleView.m; sourceTree = "<group>"; };
+		D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPositionOnRect.h; sourceTree = "<group>"; };
+		D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPositionOnRect.m; sourceTree = "<group>"; };
+		D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainerWindow.h; sourceTree = "<group>"; };
+		D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainerWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -900,6 +934,7 @@
 		4384632C188B3F7A006DA1AA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D28E58751B18509500BAB5D1 /* UITopView */,
 				D24BB0451AD7BCB2006BD749 /* UITabBarController */,
 				43ECCF0C1851CA9A0076535C /* UIView.h */,
 				43ECCF0D1851CA9A0076535C /* UIView.m */,
@@ -1007,6 +1042,8 @@
 				434CFD5B1A0CB96400B6AC9E /* Interface Builder */,
 				D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */,
 				D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */,
+				D2939BB51B231273003E1FCB /* UIPopoverFloatView.h */,
+				D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1142,6 +1179,25 @@
 			name = UITabBarController;
 			sourceTree = "<group>";
 		};
+		D28E58751B18509500BAB5D1 /* UITopView */ = {
+			isa = PBXGroup;
+			children = (
+				D28E58761B1850E100BAB5D1 /* UITouchMask.h */,
+				D29371B31B2ABFFA00A66047 /* UITopFloatViewDelegate.h */,
+				D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */,
+				D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */,
+				D28E58801B18620200BAB5D1 /* UITopFloatViewContainer.h */,
+				D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */,
+				D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */,
+				D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */,
+				D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */,
+				D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */,
+				D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */,
+				D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */,
+			);
+			name = UITopView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1169,10 +1225,12 @@
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,
 				4384631C188B3D52006DA1AA /* UIControlAction.h in Headers */,
 				432FF08B18544D7A005486C5 /* UIStringDrawing.h in Headers */,
+				D28E58821B18620200BAB5D1 /* UITopFloatViewContainer.h in Headers */,
 				43B447FB1AB6FADF00DC1968 /* ioapi.h in Headers */,
 				43718EC518518FB400850F08 /* UIKitDefines.h in Headers */,
 				43B819D618E27D710020624F /* UIScrollView+UIPrivate.h in Headers */,
 				43846302188B1ED9006DA1AA /* UIColor.h in Headers */,
+				D2E097FF1B189E32002DB2A4 /* UIPositionOnRect.h in Headers */,
 				434CFD411A0CB64000B6AC9E /* UIPopoverBackgroundView.h in Headers */,
 				43CBC1AF1A7AA7850060B2AE /* AndroidMain.h in Headers */,
 				43846326188B3D7C006DA1AA /* UIAction.h in Headers */,
@@ -1193,6 +1251,7 @@
 				436D4AE919F532D700F6F8F9 /* UITextInput.h in Headers */,
 				4315799A18B0E3CF00AE4256 /* UIApplication+UIPrivate.h in Headers */,
 				431412D318C0A5A4001AF732 /* UIViewLayoutManager.h in Headers */,
+				D28E58781B1850E100BAB5D1 /* UITouchMask.h in Headers */,
 				43EBAA6C18AA588F005DDD8D /* UIScroller.h in Headers */,
 				432FF093185452EC005486C5 /* NSStringDrawing.h in Headers */,
 				431412D918C0B814001AF732 /* UIViewAnimationGroup.h in Headers */,
@@ -1204,6 +1263,7 @@
 				43B447FD1AB6FADF00DC1968 /* unzip.h in Headers */,
 				D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */,
 				43846348188C5977006DA1AA /* UIFontDescriptor.h in Headers */,
+				D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */,
 				434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
 				43846340188C540F006DA1AA /* NSParagraphStyle.h in Headers */,
@@ -1240,6 +1300,7 @@
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
 				D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */,
 				434CFCEB1A0C9DA100B6AC9E /* UIScreenMode.h in Headers */,
+				D28E587D1B1851F800BAB5D1 /* UITopFloatView.h in Headers */,
 				436D4AFC19F548FA00F6F8F9 /* UIPickerView.h in Headers */,
 				439A73CF18E84C6300B1BE40 /* UITableViewSection.h in Headers */,
 				43EBAA8618AB7115005DDD8D /* UIBarCommon.h in Headers */,
@@ -1252,6 +1313,7 @@
 				4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */,
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
 				43C200CF18EBE0AA00490D59 /* UIActivityIndicatorView.h in Headers */,
+				D29371B41B2ABFFA00A66047 /* UITopFloatViewDelegate.h in Headers */,
 				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
 				43EBAA9018AB85FB005DDD8D /* UIBarButtonItem.h in Headers */,
 				439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */,
@@ -1280,6 +1342,7 @@
 				43718EA418517FBA00850F08 /* UIApplication.h in Headers */,
 				439A73C618E84C5A00B1BE40 /* UITableViewCell+UIPrivate.h in Headers */,
 				43C0114818D6EF9E00168E9D /* UINavigationBar+UIPrivate.h in Headers */,
+				D2939BB71B231273003E1FCB /* UIPopoverFloatView.h in Headers */,
 				434CFD4D1A0CB7A000B6AC9E /* UINibLoading.h in Headers */,
 				D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */,
 				434CFD2D1A0CB20E00B6AC9E /* UIScreenEdgePanGestureRecognizer.h in Headers */,
@@ -1290,6 +1353,7 @@
 				43E3429418F6947E00463092 /* NSAttributedString.h in Headers */,
 				43CA2A351956CD5A00B92F2C /* TNAConfiguration.h in Headers */,
 				432F737A1A08AC9C009CEC64 /* UIMenuController.h in Headers */,
+				D29A5EB11B1AA87F004EA433 /* UIBubbleView.h in Headers */,
 				436D4B1219F553D300F6F8F9 /* UITabBarController.h in Headers */,
 				434CFD1D1A0CAC2300B6AC9E /* NSTextContainer.h in Headers */,
 				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
@@ -1430,6 +1494,7 @@
 				436D4AFD19F548FA00F6F8F9 /* UIPickerView.m in Sources */,
 				43E2AC9E18ACD9370029EE86 /* UIToolbar.m in Sources */,
 				43C200D018EBE0AA00490D59 /* UIActivityIndicatorView.m in Sources */,
+				D2E098001B189E32002DB2A4 /* UIPositionOnRect.m in Sources */,
 				43846341188C540F006DA1AA /* NSParagraphStyle.m in Sources */,
 				43846349188C5977006DA1AA /* UIFontDescriptor.m in Sources */,
 				434CFD221A0CACD900B6AC9E /* NSLayoutManager.m in Sources */,
@@ -1453,6 +1518,7 @@
 				43B819EE18E2AA870020624F /* UIPanGestureRecognizer.m in Sources */,
 				43C200DB18EBE57400490D59 /* UIActionSheet.m in Sources */,
 				436D4AEA19F532D700F6F8F9 /* UITextInput.m in Sources */,
+				D28E587E1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				43846345188C58F9006DA1AA /* UIFont.m in Sources */,
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
@@ -1467,6 +1533,7 @@
 				436D4AF919F5471E00F6F8F9 /* UISegmentedControl.m in Sources */,
 				434CFCF61A0CA05300B6AC9E /* UIInputView.m in Sources */,
 				434CFD261A0CAFCD00B6AC9E /* NSTextStorage.m in Sources */,
+				D28E58831B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
 				43B819EC18E2AA870020624F /* UILongPressGestureRecognizer.m in Sources */,
 				434CFD0A1A0CA87400B6AC9E /* UITextChecker.m in Sources */,
@@ -1488,6 +1555,7 @@
 				436D4B0F19F5507C00F6F8F9 /* UISearchBar.m in Sources */,
 				439A73C018E84C4E00B1BE40 /* UITableView.m in Sources */,
 				431412D418C0A5A4001AF732 /* UIViewLayoutManager.m in Sources */,
+				D29A5EB21B1AA87F004EA433 /* UIBubbleView.m in Sources */,
 				434CFD631A0CBAB400B6AC9E /* UIVideoEditorController.m in Sources */,
 				436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */,
 				434CFD5F1A0CB9A800B6AC9E /* UIStateRestoration.m in Sources */,
@@ -1529,6 +1597,7 @@
 				D2BA4C861AEF3109003D4A35 /* TNImageBuffer.m in Sources */,
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
+				D2939BB81B231273003E1FCB /* UIPopoverFloatView.m in Sources */,
 				434CFD321A0CB24200B6AC9E /* UIRefreshControl.m in Sources */,
 				43CBC1B01A7AA7850060B2AE /* AndroidMain.m in Sources */,
 				43846310188B2BCD006DA1AA /* UIImage.m in Sources */,
@@ -1537,6 +1606,7 @@
 				434CFD521A0CB85800B6AC9E /* UIStoryboard.m in Sources */,
 				434CFD561A0CB8B300B6AC9E /* UIStoryboardSegue.m in Sources */,
 				434CFCF21A0C9E7E00B6AC9E /* UIImagePickerController.m in Sources */,
+				D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1547,8 +1617,14 @@
 				D2D4894B1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */,
 				D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				D2BA4C871AEF3109003D4A35 /* TNImageBuffer.m in Sources */,
+				D29A5EB31B1AA87F004EA433 /* UIBubbleView.m in Sources */,
+				D2E098011B189E32002DB2A4 /* UIPositionOnRect.m in Sources */,
+				D2939BB91B231273003E1FCB /* UIPopoverFloatView.m in Sources */,
 				D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
+				D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
+				D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
+				D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

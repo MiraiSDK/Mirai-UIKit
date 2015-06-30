@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 #import "UIScreen.h"
 #import "UIScreenPrivate.h"
 #import <QuartzCore/QuartzCore.h>
@@ -18,7 +18,7 @@
 #import "UIScreenPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UIMenuBubbleView.h"
+#import "UITopFloatView.h"
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
@@ -41,8 +41,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 @implementation UIWindow
 {
-    __weak UIMenuBubbleView *_menuBubbleView;
-    
     NSMutableSet *_touches;
     NSMutableSet *_excludedRecognizers;
     NSMutableSet *_effectRecognizers;
@@ -101,36 +99,12 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         _rootViewController = rootViewController;
         _rootViewController.view.frame = self.bounds;    // unsure about this
         _rootViewController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        //[self addSubview:_rootViewController.view];
-        [self _addBelowMenuBubbleView:_rootViewController.view];
+        [self addSubview:_rootViewController.view];
         
         UIViewController *vc = rootViewController;
         vc.view.transform = _landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
         vc.view.frame = self.window.bounds;
     }
-}
-
-- (void)willRemoveSubview:(UIView *)subview
-{
-    [super willRemoveSubview:subview];
-    if (subview != nil && subview == _menuBubbleView) {
-        _menuBubbleView = nil;
-    }
-}
-
-- (void)_addBelowMenuBubbleView:(UIView *)view
-{
-    if (_menuBubbleView != nil) {
-        [self insertSubview:view belowSubview:_menuBubbleView];
-    } else {
-        [super addSubview:view];
-    }
-}
-
-- (void)_addMenuBubbleView:(UIMenuBubbleView *)subview
-{
-    _menuBubbleView = subview;
-    [self insertSubview:subview atIndex:self.subviews.count];
 }
 
 - (void)setScreen:(UIScreen *)theScreen
@@ -482,7 +456,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         [self _sendGesturesForEvent:event];
         
         NSMutableSet *touches = [[event touchesForWindow:self] mutableCopy];
-        [self _notifyMenuBubbleTappedEventWithTouchesSet:touches];
         
         NSMutableSet *eaten = [NSMutableSet set];
         for (UITouch *touch in touches) {
@@ -552,31 +525,15 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     }
 }
 
-- (void)_notifyMenuBubbleTappedEventWithTouchesSet:(NSMutableSet *)touches
+- (BOOL)_topFloatView:(UITopFloatView *)topFloatView willMaskTouchWithView:(UIView *)checkedView
 {
-    if (!_menuBubbleView) {
-        return;
-    }
-    for (UITouch *touch in touches) {
-        if (touch.phase == UITouchPhaseBegan) {
-            [_menuBubbleView _onTappedSpaceOnCurrentWindowWithEvent:touch];
-            break;
+    while (checkedView) {
+        if ([topFloatView allowedReceiveViewAndItsSubviews:checkedView]) {
+            return NO;
         }
+        checkedView = checkedView.superview;
     }
-    [self _clearTouchWhichHasNilView:touches];
-}
-
-- (void)_clearTouchWhichHasNilView:(NSMutableSet *)touches
-{
-    NSMutableArray *toRemovedTouchesList = [[NSMutableArray alloc] init];
-    for (UITouch *touch in touches) {
-        if (!touch.view) {
-            [toRemovedTouchesList addObject:touch];
-        }
-    }
-    for (UITouch *touch in toRemovedTouchesList) {
-        [touches removeObject:touch];
-    }
+    return YES;
 }
 
 @end

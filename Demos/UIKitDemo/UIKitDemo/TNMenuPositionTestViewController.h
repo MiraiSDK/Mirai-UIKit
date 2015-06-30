@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 Shanghai TinyNetwork Inc. All rights reserved.
 //
 
-#import "TNTestViewController.h"
+#import "TNTopFloatTestViewController.h"
 
-@interface TNMenuPositionTestViewController : TNTestViewController
+@interface TNMenuPositionTestViewController : TNTopFloatTestViewController
 
 @end

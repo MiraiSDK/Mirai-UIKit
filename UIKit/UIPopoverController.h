@@ -23,7 +23,7 @@ typedef NS_OPTIONS(NSUInteger, UIPopoverArrowDirection) {
     UIPopoverArrowDirectionLeft = 1UL << 2,
     UIPopoverArrowDirectionRight = 1UL << 3,
     UIPopoverArrowDirectionAny = UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown | UIPopoverArrowDirectionLeft | UIPopoverArrowDirectionRight,
-    UIPopoverArrowDirectionUnknown = NSUIntegerMax
+    UIPopoverArrowDirectionUnknown = NSUIntegerMax,
 };
 
 @interface UIPopoverController : NSObject <UIAppearanceContainer>
