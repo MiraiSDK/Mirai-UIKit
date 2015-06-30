@@ -282,6 +282,10 @@
 		43ECCF131851CAA80076535C /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF111851CAA80076535C /* UIWindow.m */; };
 		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
 		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
+		D23348C61B424B4A00A687B7 /* JavaBrigeProxy.java in Sources */ = {isa = PBXBuildFile; fileRef = D23348C41B424B4A00A687B7 /* JavaBrigeProxy.java */; };
+		D23348C71B424B4A00A687B7 /* JavaBrigeProxy.java in Sources */ = {isa = PBXBuildFile; fileRef = D23348C41B424B4A00A687B7 /* JavaBrigeProxy.java */; };
+		D23348C81B424B4A00A687B7 /* JavaBrigeProxyFactory.java in Sources */ = {isa = PBXBuildFile; fileRef = D23348C51B424B4A00A687B7 /* JavaBrigeProxyFactory.java */; };
+		D23348C91B424B4A00A687B7 /* JavaBrigeProxyFactory.java in Sources */ = {isa = PBXBuildFile; fileRef = D23348C51B424B4A00A687B7 /* JavaBrigeProxyFactory.java */; };
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
@@ -622,6 +626,8 @@
 		43ECCF111851CAA80076535C /* UIWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIWindow.m; sourceTree = "<group>"; };
 		43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidEventsServer.h; sourceTree = "<group>"; };
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
+		D23348C41B424B4A00A687B7 /* JavaBrigeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBrigeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBrigeTools/JavaBrigeProxy.java; sourceTree = SOURCE_ROOT; };
+		D23348C51B424B4A00A687B7 /* JavaBrigeProxyFactory.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBrigeProxyFactory.java; path = CocoaActivity/src/org/tiny4/JavaBrigeTools/JavaBrigeProxyFactory.java; sourceTree = SOURCE_ROOT; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
 		D28E58761B1850E100BAB5D1 /* UITouchMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchMask.h; sourceTree = "<group>"; };
@@ -676,6 +682,8 @@
 		433C4A251AD0FC20005D06BB /* CocoaActivity */ = {
 			isa = PBXGroup;
 			children = (
+				D23348C41B424B4A00A687B7 /* JavaBrigeProxy.java */,
+				D23348C51B424B4A00A687B7 /* JavaBrigeProxyFactory.java */,
 				433C4A261AD0FC20005D06BB /* CocoaActivity.java */,
 				433C4A271AD0FC20005D06BB /* GLViewRender.java */,
 				433C4A281AD0FC20005D06BB /* GLWebView.java */,
@@ -1558,6 +1566,7 @@
 				D29A5EB21B1AA87F004EA433 /* UIBubbleView.m in Sources */,
 				434CFD631A0CBAB400B6AC9E /* UIVideoEditorController.m in Sources */,
 				436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */,
+				D23348C81B424B4A00A687B7 /* JavaBrigeProxyFactory.java in Sources */,
 				434CFD5F1A0CB9A800B6AC9E /* UIStateRestoration.m in Sources */,
 				D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
@@ -1589,6 +1598,7 @@
 				43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */,
 				436D4B0B19F54FCB00F6F8F9 /* UISearchController.m in Sources */,
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,
+				D23348C61B424B4A00A687B7 /* JavaBrigeProxy.java in Sources */,
 				4384630C188B2751006DA1AA /* UIGeometry.m in Sources */,
 				434CFD5A1A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.m in Sources */,
 				4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */,
@@ -1621,6 +1631,8 @@
 				D2E098011B189E32002DB2A4 /* UIPositionOnRect.m in Sources */,
 				D2939BB91B231273003E1FCB /* UIPopoverFloatView.m in Sources */,
 				D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
+				D23348C71B424B4A00A687B7 /* JavaBrigeProxy.java in Sources */,
+				D23348C91B424B4A00A687B7 /* JavaBrigeProxyFactory.java in Sources */,
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
 				D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
