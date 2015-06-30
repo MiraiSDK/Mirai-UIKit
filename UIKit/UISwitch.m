@@ -11,6 +11,9 @@
 #import "NSStringDrawing.h"
 #import "UILabel.h"
 
+#define SwitchWidth 51
+#define SwitchHeight 31
+
 #define LineWith 2.0
 #define ButtonMoveTime 0.25
 #define LineColor CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1)
@@ -27,13 +30,19 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 51, 31)];
+    self = [super initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, SwitchWidth, SwitchHeight)];
     if (self) {
         [self _registerTouchUpEvent];
         [self _makeSubviews];
         [self _setViewStateWithOn:NO];
     }
     return self;
+}
+
+- (void)setFrame:(CGRect)frame
+{
+    frame = CGRectMake(frame.origin.x, frame.origin.y, SwitchWidth, SwitchHeight);
+    [super setFrame:frame];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
