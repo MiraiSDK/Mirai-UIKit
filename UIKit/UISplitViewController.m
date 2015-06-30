@@ -26,6 +26,12 @@ typedef enum {
 @end
 
 @implementation UISplitViewController
+{
+    BOOL _forcedSynchronizeSubViewControllerppearance;
+    BOOL _primaryViewControllerOnStage;
+    BOOL _primaryShrink;
+    BOOL _secondaryShrink;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,6 +43,7 @@ typedef enum {
 
 - (void)_settingDefaultValues
 {
+    _forcedSynchronizeSubViewControllerppearance = YES;
     _viewControllers = @[];
     _preferredPrimaryColumnWidthFraction = 0.4;
     _maximumPrimaryColumnWidth = 400.0;
@@ -55,6 +62,7 @@ typedef enum {
     [self _refreshPrimaryColumnWidth];
     [self _synchronizeSubViewControllerAppearnce];
     [self _makeSplitAppearanceChangeGesture];
+    _forcedSynchronizeSubViewControllerppearance = NO;
 }
 
 # pragma mark - setting about primary size.
@@ -116,7 +124,9 @@ typedef enum {
     // this method must be called before loadView:
     // so, when call this method, self.view may be probable not ready to invoke.
     if (self.isViewLoaded) {
+        _forcedSynchronizeSubViewControllerppearance = YES;
         [self _synchronizeSubViewControllerAppearnce];
+        _forcedSynchronizeSubViewControllerppearance = NO;
     }
 }
 
@@ -131,10 +141,35 @@ typedef enum {
 
 - (void)_synchronizeSubViewControllerAppearnce
 {
-    [self _letViewController:_primaryViewController onStage:!self.collapsed
-                   withFrame:[self _getPrimaryViewControllerFrameWithSplitAppearnce:_splitAppearance]];
-    [self _letViewController:_secondaryViewController onStage:YES
-                   withFrame:[self _getSecondaryViewControllerFrameWithSplitAppearnce:_splitAppearance]];
+    [self _synchronizeSubViewControllerAppearnceWithAnimated:NO];
+}
+
+- (void)_synchronizeSubViewControllerAppearnceWithAnimated:(BOOL)animated
+{
+    BOOL primaryViewControllerOnStage = !self.collapsed;
+    BOOL primaryShrink = [self _isPrimaryShrinkWithSplitAppearance:_splitAppearance];
+    
+    if (_forcedSynchronizeSubViewControllerppearance ||
+        primaryViewControllerOnStage != _primaryViewControllerOnStage ||
+        primaryShrink != _primaryShrink) {
+        
+        _primaryViewControllerOnStage = primaryViewControllerOnStage;
+        _primaryShrink = primaryShrink;
+        [self _moveViewController:_primaryViewController onStage:primaryViewControllerOnStage
+                       startFrame:[self _primaryFrameWithShrink:!primaryShrink]
+                         endFrame:[self _primaryFrameWithShrink:primaryShrink] animated:animated];
+    }
+    
+    BOOL secondaryViewControllerOnStage = YES;
+    BOOL secondaryShrink = [self _isSecondaryShrinkWithSplitAppearance:_splitAppearance];
+    
+    if (_forcedSynchronizeSubViewControllerppearance || secondaryShrink != _secondaryShrink) {
+    
+        _secondaryShrink = secondaryShrink;
+        [self _moveViewController:_secondaryViewController onStage:secondaryViewControllerOnStage
+                       startFrame:[self _secondaryFrameWithShrink:!secondaryShrink]
+                         endFrame:[self _secondaryFrameWithShrink:secondaryShrink] animated:animated];
+    }
 }
 
 - (void)_clearOldViewController:(UIViewController *)oldViewController
@@ -144,27 +179,45 @@ typedef enum {
     }
 }
 
-- (CGRect)_getPrimaryViewControllerFrameWithSplitAppearnce:(UISplitViewControllerSplitAppearnce)splitAppearance
+- (BOOL)_isPrimaryShrinkWithSplitAppearance:(UISplitViewControllerSplitAppearnce)splitAppearance
 {
     switch (splitAppearance) {
         case UISplitViewControllerSplitAppearncePrimaryHidden:
-            return [self _getAreaWithRangeFrom:-self.primaryColumnWidth to:0];
+            return YES;
             
         case UISplitViewControllerSplitAppearncePrimaryOverlay:
         case UISplitViewControllerSplitAppearnceBoth:
-            return [self _getAreaWithRangeFrom:0 to:self.primaryColumnWidth];
+            return NO;
     }
 }
 
-- (CGRect)_getSecondaryViewControllerFrameWithSplitAppearnce:(UISplitViewControllerSplitAppearnce)splitAppearance
+- (BOOL)_isSecondaryShrinkWithSplitAppearance:(UISplitViewControllerSplitAppearnce)splitAppearance
 {
     switch (splitAppearance) {
+        case UISplitViewControllerSplitAppearnceBoth:
+            return YES;
+            
         case UISplitViewControllerSplitAppearncePrimaryHidden:
         case UISplitViewControllerSplitAppearncePrimaryOverlay:
-            return [self _getAreaWithRangeFrom:0 to:self.view.bounds.size.width];
-            
-        case UISplitViewControllerSplitAppearnceBoth:
-            return [self _getAreaWithRangeFrom:self.primaryColumnWidth to:self.view.bounds.size.width];
+            return NO;
+    }
+}
+
+- (CGRect)_primaryFrameWithShrink:(BOOL)shrink
+{
+    if (shrink) {
+        return [self _getAreaWithRangeFrom:-self.primaryColumnWidth to:0];
+    } else {
+        return [self _getAreaWithRangeFrom:0 to:self.primaryColumnWidth];
+    }
+}
+
+- (CGRect)_secondaryFrameWithShrink:(BOOL)shrink
+{
+    if (shrink) {
+        return [self _getAreaWithRangeFrom:self.primaryColumnWidth to:self.view.bounds.size.width];
+    } else {
+        return [self _getAreaWithRangeFrom:0 to:self.view.bounds.size.width];
     }
 }
 
@@ -180,12 +233,27 @@ typedef enum {
     }
 }
 
-- (void)_letViewController:(UIViewController *)viewController onStage:(BOOL)onStage withFrame:(CGRect)frame{
-    if (viewController) {
-        if (onStage) {
-            viewController.view.frame = frame;
-        }
-        [self _synchronizeView:viewController.view onStage:onStage];
+- (void)_moveViewController:(UIViewController *)viewController onStage:(BOOL)onStage
+                 startFrame:(CGRect)startFrame endFrame:(CGRect)endFrame
+                   animated:(BOOL)animated
+{
+    if (!viewController) {
+        return;
+    }
+    UIView *view = viewController.view;
+    if (animated) {
+        view.frame = startFrame;
+        [self _letView:view onStage:YES];
+        [UIView animateWithDuration:kChangeSplitAppearanceNeedTime animations:^{
+            view.frame = endFrame;
+        } completion:^(BOOL finished) {
+            if (finished) {
+                [self _letView:view onStage:onStage];
+            }
+        }];
+    } else {
+        view.frame = endFrame;
+        [self _letView:view onStage:onStage];
     }
 }
 
@@ -202,7 +270,7 @@ typedef enum {
     return CGRectMake(startXLocation, 0, endXLocation - startXLocation, self.view.bounds.size.height);
 }
 
-- (void)_synchronizeView:(UIView *)view onStage:(BOOL)onStage
+- (void)_letView:(UIView *)view onStage:(BOOL)onStage
 {
     if (onStage && view.superview != self.view) {
         if (view == _primaryViewController.view) {
@@ -313,7 +381,6 @@ typedef enum {
 
 - (void)_recoverPrimaryViewController
 {
-    NSLog(@"displayMode : %li when call %s", _preferredDisplayMode, __FUNCTION__);
     switch (_preferredDisplayMode) {
         case UISplitViewControllerDisplayModeAllVisible:
             self.displayMode = _preferredDisplayMode;
@@ -349,14 +416,7 @@ typedef enum {
                                                                                         to:splitAppearance];
     _splitAppearance = splitAppearance;
     [self _refreshPrimaryColumnWidth];
-    
-    if (willNeedPlayAnimation && animated) {
-        [UIView animateWithDuration:kChangeSplitAppearanceNeedTime animations:^{
-            [self _synchronizeSubViewControllerAppearnce];
-        }];
-    } else {
-        [self _synchronizeSubViewControllerAppearnce];
-    }
+    [self _synchronizeSubViewControllerAppearnceWithAnimated:(willNeedPlayAnimation && animated)];
 }
 
 - (BOOL)_willNeedPlayAnimationWhenChangeSplitAppearanceFrom:(UISplitViewControllerSplitAppearnce)oldSplitAppearance
