@@ -1,12 +1,12 @@
 //
-//  TNJavaBrigeCallbackContext.m
+//  TNJavaBridgeCallbackContext.m
 //  UIKit
 //
 //  Created by TaoZeyu on 15/7/1.
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "TNJavaBrigeCallbackContext+UIPrivate.h"
+#import "TNJavaBridgeCallbackContext+UIPrivate.h"
 
 typedef struct JavaTypeStruct {
     jclass typeClass;
@@ -28,7 +28,7 @@ JavaTypeStruct JavaTypeStructMake(const char *typeClassName,
     return jts;
 }
 
-@implementation TNJavaBrigeCallbackContext
+@implementation TNJavaBridgeCallbackContext
 {
     jarray _jArgs;
     BOOL _invaild;

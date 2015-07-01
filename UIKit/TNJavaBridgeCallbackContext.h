@@ -1,5 +1,5 @@
 //
-//  TNJavaBrigeCallbackContext.h
+//  TNJavaBridgeCallbackContext.h
 //  UIKit
 //
 //  Created by TaoZeyu on 15/7/1.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TNJavaBrigeCallbackContext : NSObject
+@interface TNJavaBridgeCallbackContext : NSObject
 
 - (int)integerParameterAt:(NSUInteger)index;
 - (float)floatParameterAt:(NSUInteger)index;

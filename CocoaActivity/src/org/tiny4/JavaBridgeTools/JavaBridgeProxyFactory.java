@@ -1,4 +1,4 @@
-package org.tiny4.JavaBrigeTools;
+package org.tiny4.JavaBridgeTools;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.tiny4.JavaBrigeTools.JavaBrigeProxy.DuplicatedMethodSignatureException;
+import org.tiny4.JavaBridgeTools.JavaBridgeProxy.DuplicatedMethodSignatureException;
 
-public class JavaBrigeProxyFactory {
+public class JavaBridgeProxyFactory {
 
-	private static final ClassLoader _classLoader = JavaBrigeProxy.class.getClassLoader();
+	private static final ClassLoader _classLoader = JavaBridgeProxy.class.getClassLoader();
 	
 	@SuppressWarnings("serial")
 	private static final Map<String, Class<?>> _primitiveTypeClasses = new HashMap<String, Class<?>>() {{
@@ -28,7 +28,7 @@ public class JavaBrigeProxyFactory {
 		put("boolean", boolean.class);
 	}};
 	
-	private static int _resultCode = JavaBrigeProxy.Success;
+	private static int _resultCode = JavaBridgeProxy.Success;
 	
 	private final Map<Method, Integer> _method2IntegerMap;
 	private final Constructor<?> _proxiedInstanceConstructor;
@@ -37,43 +37,43 @@ public class JavaBrigeProxyFactory {
 		return _resultCode;
 	}
 	
-	public static JavaBrigeProxyFactory createFactory(String[] proxiedClassNames, String[] methodSignatures) {
-		JavaBrigeProxyFactory factory = null;
+	public static JavaBridgeProxyFactory createFactory(String[] proxiedClassNames, String[] methodSignatures) {
+		JavaBridgeProxyFactory factory = null;
 		try {
-			factory = new JavaBrigeProxyFactory(proxiedClassNames, methodSignatures);
+			factory = new JavaBridgeProxyFactory(proxiedClassNames, methodSignatures);
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			_resultCode = JavaBrigeProxy.ClassNotFoundCode;
+			_resultCode = JavaBridgeProxy.ClassNotFoundCode;
 			return null;
 			
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
-			_resultCode = JavaBrigeProxy.NoSuchMethodCode;
+			_resultCode = JavaBridgeProxy.NoSuchMethodCode;
 			return null;
 			
 		} catch (SecurityException e) {
 			e.printStackTrace();
-			_resultCode = JavaBrigeProxy.SecurityCode;
+			_resultCode = JavaBridgeProxy.SecurityCode;
 			return null;
 			
 		} catch (DuplicatedMethodSignatureException e) {
 			e.printStackTrace();
-			_resultCode = JavaBrigeProxy.DuplicatedMethodSignatureCode;
+			_resultCode = JavaBridgeProxy.DuplicatedMethodSignatureCode;
 			return null;
 		}
-		_resultCode = JavaBrigeProxy.Success;
+		_resultCode = JavaBridgeProxy.Success;
 		return factory;
 	}
 	
-	public JavaBrigeProxy createJavaBrigeProxy(int id) {
-		JavaBrigeProxy proxy = new JavaBrigeProxy(this, id);
+	public JavaBridgeProxy createJavaBridgeProxy(int id) {
+		JavaBridgeProxy proxy = new JavaBridgeProxy(this, id);
 		try {
 			proxy.setProxiedInstance(getProxiedInstance(proxy));
 			
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-			_resultCode = JavaBrigeProxy.IllegalAccessCode;
+			_resultCode = JavaBridgeProxy.IllegalAccessCode;
 			return null;
 		}
 		return proxy;
@@ -87,7 +87,7 @@ public class JavaBrigeProxyFactory {
 		return id;
 	}
 	
-	private JavaBrigeProxyFactory(String[] proxiedClassNames, String[] methodSignatures) 
+	private JavaBridgeProxyFactory(String[] proxiedClassNames, String[] methodSignatures) 
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, DuplicatedMethodSignatureException  {
 		
 		Class<?>[] proxiedinterfaces = findClassesByNames(proxiedClassNames);
@@ -98,7 +98,7 @@ public class JavaBrigeProxyFactory {
 		_proxiedInstanceConstructor = proxyClass.getConstructor(InvocationHandler.class);
 	}
 	
-	private Object getProxiedInstance(JavaBrigeProxy proxy) throws IllegalAccessException {
+	private Object getProxiedInstance(JavaBridgeProxy proxy) throws IllegalAccessException {
 		try {
 			return _proxiedInstanceConstructor.newInstance(proxy);
 			
@@ -148,7 +148,7 @@ public class JavaBrigeProxyFactory {
 			try {
 				Method method = proxiedInterface.getMethod(methodName, paramTypes);
 				if (foundMethod != null) {
-					throw new JavaBrigeProxy.DuplicatedMethodSignatureException();
+					throw new JavaBridgeProxy.DuplicatedMethodSignatureException();
 				}
 				foundMethod = method;
 			} catch (NoSuchMethodException e) {

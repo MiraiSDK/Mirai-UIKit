@@ -1,11 +1,11 @@
-package org.tiny4.JavaBrigeTools;
+package org.tiny4.JavaBridgeTools;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JavaBrigeProxy implements InvocationHandler {
+public class JavaBridgeProxy implements InvocationHandler {
 
 	public static final int Success = 0;
 	public static final int ClassNotFoundCode = 1;
@@ -26,7 +26,7 @@ public class JavaBrigeProxy implements InvocationHandler {
 		put(boolean.class, Boolean.valueOf(false));
 	}};
 	
-	private final JavaBrigeProxyFactory _maker;
+	private final JavaBridgeProxyFactory _maker;
 	private final int _id;
 	
 	private Object _proxiedInstance;
@@ -36,10 +36,11 @@ public class JavaBrigeProxy implements InvocationHandler {
 	}
 	
 	void setProxiedInstance(Object proxiedInstance) {
+		String.valueOf("");
 		_proxiedInstance = proxiedInstance;
 	}
 	
-	JavaBrigeProxy(JavaBrigeProxyFactory maker, int id) {
+	JavaBridgeProxy(JavaBridgeProxyFactory maker, int id) {
 		_maker = maker;
 		_id = id;
 	}

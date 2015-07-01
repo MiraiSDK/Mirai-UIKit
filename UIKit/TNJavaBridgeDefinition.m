@@ -1,25 +1,25 @@
 //
-//  TNJavaBrigeDefinition.m
+//  TNJavaBridgeDefinition.m
 //  UIKit
 //
 //  Created by TaoZeyu on 15/6/30.
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "TNJavaBrigeDefinition.h"
+#import "TNJavaBridgeDefinition.h"
 #import <TNJavaHelper/TNJavaHelper.h>
 
-@interface TNJavaBrigeDefinition ()
+@interface TNJavaBridgeDefinition ()
 
 @property (nonatomic) NSUInteger classesCount;
 @property (nonatomic) NSUInteger methodsCount;
 
 @end
 
-@implementation TNJavaBrigeDefinition
+@implementation TNJavaBridgeDefinition
 {
     jclass _jFactoryClass;
-    jmethodID _jCreateJavaBrigeProxyMethod;
+    jmethodID _jCreateJavaBridgeProxyMethod;
     jobject _jProxyFactory;
 }
 
@@ -48,8 +48,8 @@
             return nil;
         }
         
-        _jCreateJavaBrigeProxyMethod = [self _findCreateJavaBrigeProxyMethodWithFactoryClass:_jFactoryClass];
-        if (_jCreateJavaBrigeProxyMethod == NULL) {
+        _jCreateJavaBridgeProxyMethod = [self _findCreateJavaBridgeProxyMethodWithFactoryClass:_jFactoryClass];
+        if (_jCreateJavaBridgeProxyMethod == NULL) {
             return nil;
         }
         
@@ -66,14 +66,14 @@
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     (*env)->DeleteGlobalRef(env, _jFactoryClass);
-    (*env)->DeleteGlobalRef(env, _jCreateJavaBrigeProxyMethod);
+    (*env)->DeleteGlobalRef(env, _jCreateJavaBridgeProxyMethod);
     (*env)->DeleteGlobalRef(env, _jProxyFactory);
 }
 
 - (jobject)newJProxyWithId:(jint)proxyId
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
-    jobject jPorxy = (*env)->CallObjectMethod(env, _jProxyFactory, _jCreateJavaBrigeProxyMethod, proxyId);
+    jobject jPorxy = (*env)->CallObjectMethod(env, _jProxyFactory, _jCreateJavaBridgeProxyMethod, proxyId);
     (*env)->NewGlobalRef(env, jPorxy);
     (*env)->DeleteLocalRef(env, jPorxy);
     return jPorxy;
@@ -82,10 +82,10 @@
 - (jclass)_findFactoryClass
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
-    jclass jFactoryClass = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.JavaBrigeTools.JavaBrigeProxyFactory"];
+    jclass jFactoryClass = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.JavaBridgeTools.JavaBridgeProxyFactory"];
     
     if (!jFactoryClass) {
-        NSLog(@"class not found: %@",@"org.tiny4.JavaBrigeTools.JavaBrigeProxyFactory");
+        NSLog(@"class not found: %@",@"org.tiny4.JavaBridgeTools.JavaBridgeProxyFactory");
         return NULL;
     }
     (*env)->NewGlobalRef(env, jFactoryClass);
@@ -93,19 +93,19 @@
     return jFactoryClass;
 }
 
-- (jmethodID)_findCreateJavaBrigeProxyMethodWithFactoryClass:(jclass)factoryClass
+- (jmethodID)_findCreateJavaBridgeProxyMethodWithFactoryClass:(jclass)factoryClass
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
-    jmethodID jCreateJavaBrigeProxyMethod = (*env)->GetMethodID(env, factoryClass,
-                                        "createFactory", "(I)Lorg/tiny4/JavaBrigeTools/JavaBrigeProxy;");
+    jmethodID jCreateJavaBridgeProxyMethod = (*env)->GetMethodID(env, factoryClass,
+                                        "createFactory", "(I)Lorg/tiny4/JavaBridgeTools/JavaBridgeProxy;");
     
-    if (jCreateJavaBrigeProxyMethod == NULL) {
+    if (jCreateJavaBridgeProxyMethod == NULL) {
         NSLog(@"method id not found:%@",@"createFactory");
         return NULL;
     }
-    (*env)->NewGlobalRef(env, jCreateJavaBrigeProxyMethod);
-    (*env)->DeleteLocalRef(env, jCreateJavaBrigeProxyMethod);
-    return jCreateJavaBrigeProxyMethod;
+    (*env)->NewGlobalRef(env, jCreateJavaBridgeProxyMethod);
+    (*env)->DeleteLocalRef(env, jCreateJavaBridgeProxyMethod);
+    return jCreateJavaBridgeProxyMethod;
 }
 
 - (jobject)_newProxyFactoryWithProxiedClassNames:(NSArray *)proxiedClassNames
@@ -113,7 +113,7 @@
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jmethodID mid = (*env)->GetMethodID(env, _jFactoryClass,
-    "createFactory", "([Ljava/lang/String;[Ljava/lang/String;)Lorg/tiny4/JavaBrigeTools/JavaBrigeProxyFactory;");
+    "createFactory", "([Ljava/lang/String;[Ljava/lang/String;)Lorg/tiny4/JavaBridgeTools/JavaBridgeProxyFactory;");
     
     if (mid == NULL) {
         NSLog(@"method id not found:%@",@"createFactory");
@@ -179,7 +179,7 @@
         default:
         break;
     }
-    NSLog(@"JavaBrige called result code : %@", resultMessage);
+    NSLog(@"JavaBridge called result code : %@", resultMessage);
 }
 
 - (jobjectArray)_newJStringArrayFrom:(NSArray *)objcArray env:(JNIEnv *)env

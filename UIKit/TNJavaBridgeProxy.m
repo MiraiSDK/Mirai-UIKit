@@ -1,16 +1,16 @@
 //
-//  TNJavaBrigeProxy.m
+//  TNJavaBridgeProxy.m
 //  UIKit
 //
 //  Created by TaoZeyu on 15/6/30.
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "TNJavaBrigeProxy.h"
-#import "TNJavaBrigeCallbackContext+UIPrivate.h"
+#import "TNJavaBridgeProxy.h"
+#import "TNJavaBridgeCallbackContext+UIPrivate.h"
 #import <TNJavaHelper/TNJavaHelper.h>
 
-@implementation TNJavaBrigeProxy
+@implementation TNJavaBridgeProxy
 {
     jint _proxyId;
     jobject _jProxy;
@@ -28,8 +28,8 @@ static jint _nextProxyId;
     _nextProxyId = 0;
 }
 
-- (instancetype)initWithDefinition:(TNJavaBrigeDefinition *)definition
-                      withCallback:(void (^)(TNJavaBrigeCallbackContext *))callback
+- (instancetype)initWithDefinition:(TNJavaBridgeDefinition *)definition
+                      withCallback:(void (^)(TNJavaBridgeCallbackContext *))callback
 {
     if (self = [self initWithDefinition:definition]) {
         [self callback:callback];
@@ -37,12 +37,12 @@ static jint _nextProxyId;
     return self;
 }
 
-- (instancetype)initWithDefinition:(TNJavaBrigeDefinition *)definition
+- (instancetype)initWithDefinition:(TNJavaBridgeDefinition *)definition
 {
     if (self = [super init]) {
         @synchronized(_objLock) {
-            _proxyId = [TNJavaBrigeProxy _newProxyId];
-            [TNJavaBrigeProxy _registerProxy:self asId:_proxyId];
+            _proxyId = [TNJavaBridgeProxy _newProxyId];
+            [TNJavaBridgeProxy _registerProxy:self asId:_proxyId];
             _jProxy = [definition newJProxyWithId:_proxyId];
         }
         _callbackList = [self _newAllNilArrayWithCount:definition.methodsCount];
@@ -56,30 +56,30 @@ static jint _nextProxyId;
     (*env)->DeleteGlobalRef(env, _jProxy);
     
     @synchronized(_objLock) {
-        [TNJavaBrigeProxy _unregisterProxy:self];
+        [TNJavaBridgeProxy _unregisterProxy:self];
     }
 }
 
-jobject Java_org_tiny4_JavaBrigeTools_JavaBrigeProxy_navtiveCallback(JNIEnv *env, jobject obj,
+jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *env, jobject obj,
                                                                   jint instanceId, jint methodId, jarray args) {
     
-    TNJavaBrigeProxy *proxy;
+    TNJavaBridgeProxy *proxy;
     @synchronized(_objLock) {
-        proxy = [TNJavaBrigeProxy _findProxyWithId:instanceId];
+        proxy = [TNJavaBridgeProxy _findProxyWithId:instanceId];
     }
     
     if (!proxy) {
-        NSLog(@"warning: navetiveCallback not found TNJavaBrigeProxy instance whoses id equals %i. you should unregsiter Java listener before release Objective-C TNJavaBrigeProxy instance, otherwise, Java listener would not find any callback block on Objective-C and may make some very serious error.", instanceId);
+        NSLog(@"warning: navetiveCallback not found TNJavaBridgeProxy instance whoses id equals %i. you should unregsiter Java listener before release Objective-C TNJavaBridgeProxy instance, otherwise, Java listener would not find any callback block on Objective-C and may make some very serious error.", instanceId);
         return NULL;
     }
-    void (^callback)(TNJavaBrigeCallbackContext *);
+    void (^callback)(TNJavaBridgeCallbackContext *);
     
     callback = [proxy->_callbackList objectAtIndex:((NSUInteger)methodId)];
     if ([[NSNull null] isEqual:callback]) {
         return NULL;
     }
     
-    TNJavaBrigeCallbackContext *context = [[TNJavaBrigeCallbackContext alloc] initWithArgs:args];
+    TNJavaBridgeCallbackContext *context = [[TNJavaBridgeCallbackContext alloc] initWithArgs:args];
     callback(context);
     [context setInvalid];
     
@@ -96,7 +96,7 @@ jobject Java_org_tiny4_JavaBrigeTools_JavaBrigeProxy_navtiveCallback(JNIEnv *env
     [self methodIndex:0 target:target action:action];
 }
 
-- (void)callback:(void (^)(TNJavaBrigeCallbackContext *))callback
+- (void)callback:(void (^)(TNJavaBridgeCallbackContext *))callback
 {
     [self methodIndex:0 callback:callback];
 }
@@ -105,9 +105,9 @@ jobject Java_org_tiny4_JavaBrigeTools_JavaBrigeProxy_navtiveCallback(JNIEnv *env
 {
     __unsafe_unretained id unsafeTarget = target;
     
-    [self methodIndex:methodIndex callback:^(TNJavaBrigeCallbackContext *context) {
+    [self methodIndex:methodIndex callback:^(TNJavaBridgeCallbackContext *context) {
         if (![unsafeTarget respondsToSelector:action]) {
-            NSLog(@"warning: target %@ can't responds to %@ on JavaBrigeProxy.",
+            NSLog(@"warning: target %@ can't responds to %@ on JavaBridgeProxy.",
                   target, NSStringFromSelector(action));
             return;
         }
@@ -115,7 +115,7 @@ jobject Java_org_tiny4_JavaBrigeTools_JavaBrigeProxy_navtiveCallback(JNIEnv *env
     }];
 }
 
-- (void)methodIndex:(NSUInteger)methodIndex callback:(void (^)(TNJavaBrigeCallbackContext *))callback
+- (void)methodIndex:(NSUInteger)methodIndex callback:(void (^)(TNJavaBridgeCallbackContext *))callback
 {
     @synchronized(self) {
         [_callbackList replaceObjectAtIndex:methodIndex withObject:callback];
@@ -150,17 +150,17 @@ jobject Java_org_tiny4_JavaBrigeTools_JavaBrigeProxy_navtiveCallback(JNIEnv *env
     return resultId;
 }
 
-+ (TNJavaBrigeProxy *)_findProxyWithId:(jint)proxyId
++ (TNJavaBridgeProxy *)_findProxyWithId:(jint)proxyId
 {
     return [_id2ProxyMap valueForKey:[[NSString alloc] initWithFormat:@"%i", proxyId]];
 }
 
-+ (void)_registerProxy:(TNJavaBrigeProxy *)proxy asId:(jint)proxyId
++ (void)_registerProxy:(TNJavaBridgeProxy *)proxy asId:(jint)proxyId
 {
     [_id2ProxyMap setValue:proxy forKey:[[NSString alloc] initWithFormat:@"%i", proxyId]];
 }
 
-+ (void)_unregisterProxy:(TNJavaBrigeProxy *)proxy
++ (void)_unregisterProxy:(TNJavaBridgeProxy *)proxy
 {
     [_id2ProxyMap removeObjectForKey:[[NSString alloc] initWithFormat:@"%i", proxy->_proxyId]];
 }

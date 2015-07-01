@@ -1,5 +1,5 @@
 //
-//  TNJavaBrigeDefinition.h
+//  TNJavaBridgeDefinition.h
 //  UIKit
 //
 //  Created by TaoZeyu on 15/6/30.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #include <jni.h>
 
-@interface TNJavaBrigeDefinition : NSObject
+@interface TNJavaBridgeDefinition : NSObject
 
 @property (nonatomic, readonly) NSUInteger classesCount;
 @property (nonatomic, readonly) NSUInteger methodsCount;
