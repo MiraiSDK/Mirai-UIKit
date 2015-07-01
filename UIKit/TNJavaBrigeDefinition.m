@@ -9,6 +9,13 @@
 #import "TNJavaBrigeDefinition.h"
 #import <TNJavaHelper/TNJavaHelper.h>
 
+@interface TNJavaBrigeDefinition ()
+
+@property (nonatomic) NSUInteger classesCount;
+@property (nonatomic) NSUInteger methodsCount;
+
+@end
+
 @implementation TNJavaBrigeDefinition
 {
     jclass _jFactoryClass;
@@ -22,10 +29,19 @@
     return [self initWithProxiedClassNames:@[proxiedClassName] withMethodSignatures:methodSignatures];
 }
 
+- (instancetype)initWithProxiedClassName:(NSString *)proxiedClassName
+                     withMethodSignature:(NSString *)methodSignature
+{
+    return [self initWithProxiedClassNames:@[proxiedClassName] withMethodSignatures:@[methodSignature]];
+}
+
 - (instancetype)initWithProxiedClassNames:(NSArray *)proxiedClassNames
                      withMethodSignatures:(NSArray *)methodSignatures
 {
     if (self = [super init]) {
+        
+        _classesCount = proxiedClassNames.count;
+        _methodsCount = methodSignatures.count;
         
         _jFactoryClass = [self _findFactoryClass];
         if (_jFactoryClass == NULL) {
@@ -54,14 +70,13 @@
     (*env)->DeleteGlobalRef(env, _jProxyFactory);
 }
 
-- (TNJavaBrigeProxy *)newProxy
+- (jobject)newJProxyWithId:(jint)proxyId
 {
-    jint proxyId = [TNJavaBrigeProxy newId];
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject jPorxy = (*env)->CallObjectMethod(env, _jProxyFactory, _jCreateJavaBrigeProxyMethod, proxyId);
     (*env)->NewGlobalRef(env, jPorxy);
     (*env)->DeleteLocalRef(env, jPorxy);
-    return [[TNJavaBrigeProxy alloc] initWith:jPorxy];
+    return jPorxy;
 }
 
 - (jclass)_findFactoryClass
@@ -82,7 +97,7 @@
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jmethodID jCreateJavaBrigeProxyMethod = (*env)->GetMethodID(env, factoryClass,
-                                        "createFactory", "(I)Lorg/tiny4/JavaBrigeTools/JavaBrigeProxy");
+                                        "createFactory", "(I)Lorg/tiny4/JavaBrigeTools/JavaBrigeProxy;");
     
     if (jCreateJavaBrigeProxyMethod == NULL) {
         NSLog(@"method id not found:%@",@"createFactory");
@@ -98,7 +113,7 @@
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jmethodID mid = (*env)->GetMethodID(env, _jFactoryClass,
-    "createFactory", "([Ljava/lang/String;[Ljava/lang/String;)Lorg/tiny4/JavaBrigeTools/JavaBrigeProxyFactory");
+    "createFactory", "([Ljava/lang/String;[Ljava/lang/String;)Lorg/tiny4/JavaBrigeTools/JavaBrigeProxyFactory;");
     
     if (mid == NULL) {
         NSLog(@"method id not found:%@",@"createFactory");

@@ -309,6 +309,9 @@
 		D28F68401B427E2A00AFBF84 /* TNJavaBrigeProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = D28F683E1B427E2A00AFBF84 /* TNJavaBrigeProxy.h */; };
 		D28F68411B427E2A00AFBF84 /* TNJavaBrigeProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D28F683F1B427E2A00AFBF84 /* TNJavaBrigeProxy.m */; };
 		D28F68421B427E2A00AFBF84 /* TNJavaBrigeProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D28F683F1B427E2A00AFBF84 /* TNJavaBrigeProxy.m */; };
+		D2B8DAB71B438D5B00314D24 /* TNJavaBrigeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBrigeCallbackContext.h */; };
+		D2B8DAB81B438D5B00314D24 /* TNJavaBrigeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBrigeCallbackContext.m */; };
+		D2B8DAB91B438D5B00314D24 /* TNJavaBrigeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBrigeCallbackContext.m */; };
 		D2BA4C851AEF3109003D4A35 /* TNImageBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = D2BA4C831AEF3109003D4A35 /* TNImageBuffer.h */; };
 		D2BA4C861AEF3109003D4A35 /* TNImageBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */; };
 		D2BA4C871AEF3109003D4A35 /* TNImageBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */; };
@@ -650,6 +653,9 @@
 		D28F683A1B426D8F00AFBF84 /* TNJavaBrigeDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBrigeDefinition.m; sourceTree = "<group>"; };
 		D28F683E1B427E2A00AFBF84 /* TNJavaBrigeProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBrigeProxy.h; sourceTree = "<group>"; };
 		D28F683F1B427E2A00AFBF84 /* TNJavaBrigeProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBrigeProxy.m; sourceTree = "<group>"; };
+		D2B8DAB51B438D5B00314D24 /* TNJavaBrigeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBrigeCallbackContext.h; sourceTree = "<group>"; };
+		D2B8DAB61B438D5B00314D24 /* TNJavaBrigeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBrigeCallbackContext.m; sourceTree = "<group>"; };
+		D2B8DABB1B439C2500314D24 /* TNJavaBrigeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBrigeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
 		D2BA4C831AEF3109003D4A35 /* TNImageBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNImageBuffer.h; sourceTree = "<group>"; };
 		D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNImageBuffer.m; sourceTree = "<group>"; };
 		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
@@ -1187,6 +1193,9 @@
 				D28F683A1B426D8F00AFBF84 /* TNJavaBrigeDefinition.m */,
 				D28F683E1B427E2A00AFBF84 /* TNJavaBrigeProxy.h */,
 				D28F683F1B427E2A00AFBF84 /* TNJavaBrigeProxy.m */,
+				D2B8DABB1B439C2500314D24 /* TNJavaBrigeCallbackContext+UIPrivate.h */,
+				D2B8DAB51B438D5B00314D24 /* TNJavaBrigeCallbackContext.h */,
+				D2B8DAB61B438D5B00314D24 /* TNJavaBrigeCallbackContext.m */,
 			);
 			name = JavaBrigeTools;
 			sourceTree = "<group>";
@@ -1390,6 +1399,7 @@
 				434CFD1D1A0CAC2300B6AC9E /* NSTextContainer.h in Headers */,
 				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
 				43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */,
+				D2B8DAB71B438D5B00314D24 /* TNJavaBrigeCallbackContext.h in Headers */,
 				432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */,
 				436D4AD919F52FB300F6F8F9 /* UISlider.h in Headers */,
 			);
@@ -1599,6 +1609,7 @@
 				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
 				434CFD361A0CB29A00B6AC9E /* UIReferenceLibraryViewController.m in Sources */,
 				434CFD2A1A0CB18D00B6AC9E /* UISearchDisplayController.m in Sources */,
+				D2B8DAB81B438D5B00314D24 /* TNJavaBrigeCallbackContext.m in Sources */,
 				434CFD1A1A0CAAF200B6AC9E /* NSTextAttachment.m in Sources */,
 				432F73801A08AE99009CEC64 /* UISplitViewController.m in Sources */,
 				43B447FA1AB6FADF00DC1968 /* ioapi.c in Sources */,
@@ -1652,6 +1663,7 @@
 			files = (
 				D28F683D1B426D8F00AFBF84 /* TNJavaBrigeDefinition.m in Sources */,
 				D28F68421B427E2A00AFBF84 /* TNJavaBrigeProxy.m in Sources */,
+				D2B8DAB91B438D5B00314D24 /* TNJavaBrigeCallbackContext.m in Sources */,
 				D2D4894B1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */,
 				D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				D2BA4C871AEF3109003D4A35 /* TNImageBuffer.m in Sources */,

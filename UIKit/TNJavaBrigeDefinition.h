@@ -7,17 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TNJavaBrigeProxy.h"
 #include <jni.h>
 
 @interface TNJavaBrigeDefinition : NSObject
 
+@property (nonatomic, readonly) NSUInteger classesCount;
+@property (nonatomic, readonly) NSUInteger methodsCount;
+
 - (instancetype)initWithProxiedClassName:(NSString *)proxiedClassName
-                     withMethodSignatures:(NSArray *)methodSignatures;
+                    withMethodSignatures:(NSArray *)methodSignatures;
+
+- (instancetype)initWithProxiedClassName:(NSString *)proxiedClassName
+                    withMethodSignature:(NSString *)methodSignature;
 
 - (instancetype)initWithProxiedClassNames:(NSArray *)proxiedClassNames
                      withMethodSignatures:(NSArray *)methodSignatures;
 
-- (TNJavaBrigeProxy *)newProxy;
+- (jobject)newJProxyWithId:(jint)proxyId;
 
 @end
