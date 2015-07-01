@@ -44,7 +44,7 @@ public class JavaBrigeProxy implements InvocationHandler {
 		_id = id;
 	}
 	
-    private Object navtive navtiveCallback(int instanceId, int methodId, Object[] args);
+    private native Object navtiveCallback(int instanceId, int methodId, Object[] args);
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)

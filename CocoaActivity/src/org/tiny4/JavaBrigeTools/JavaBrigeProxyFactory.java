@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +14,6 @@ import org.tiny4.JavaBrigeTools.JavaBrigeProxy.DuplicatedMethodSignatureExceptio
 public class JavaBrigeProxyFactory {
 
 	private static final ClassLoader _classLoader = JavaBrigeProxy.class.getClassLoader();
-	private static final Map<StringArrayKey, JavaBrigeProxyFactory> _factoryCacheMap = 
-			new ConcurrentHashMap<JavaBrigeProxyFactory.StringArrayKey, JavaBrigeProxyFactory>();
 	
 	@SuppressWarnings("serial")
 	private static final Map<String, Class<?>> _primitiveTypeClasses = new HashMap<String, Class<?>>() {{
@@ -41,33 +38,29 @@ public class JavaBrigeProxyFactory {
 	}
 	
 	public static JavaBrigeProxyFactory createFactory(String[] proxiedClassNames, String[] methodSignatures) {
-		StringArrayKey key = new StringArrayKey(proxiedClassNames);
-		JavaBrigeProxyFactory factory = _factoryCacheMap.get(key);
-		if (factory == null) {
-			try {
-				factory = new JavaBrigeProxyFactory(proxiedClassNames, methodSignatures);
-				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				_resultCode = JavaBrigeProxy.ClassNotFoundCode;
-				return null;
-				
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-				_resultCode = JavaBrigeProxy.NoSuchMethodCode;
-				return null;
-				
-			} catch (SecurityException e) {
-				e.printStackTrace();
-				_resultCode = JavaBrigeProxy.SecurityCode;
-				return null;
-				
-			} catch (DuplicatedMethodSignatureException e) {
-				e.printStackTrace();
-				_resultCode = JavaBrigeProxy.DuplicatedMethodSignatureCode;
-				return null;
-			}
-			_factoryCacheMap.putIfAbsent(key, factory);
+		JavaBrigeProxyFactory factory = null;
+		try {
+			factory = new JavaBrigeProxyFactory(proxiedClassNames, methodSignatures);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			_resultCode = JavaBrigeProxy.ClassNotFoundCode;
+			return null;
+			
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			_resultCode = JavaBrigeProxy.NoSuchMethodCode;
+			return null;
+			
+		} catch (SecurityException e) {
+			e.printStackTrace();
+			_resultCode = JavaBrigeProxy.SecurityCode;
+			return null;
+			
+		} catch (DuplicatedMethodSignatureException e) {
+			e.printStackTrace();
+			_resultCode = JavaBrigeProxy.DuplicatedMethodSignatureCode;
+			return null;
 		}
 		_resultCode = JavaBrigeProxy.Success;
 		return factory;
@@ -197,40 +190,5 @@ public class JavaBrigeProxyFactory {
 			type = Class.forName(typeName, initialize, _classLoader);
 		}
 		return type;
-	}
-	
-	private static class StringArrayKey {
-		
-		private final String[] _strings;
-		
-		private StringArrayKey(String[] strings) {
-			_strings = strings;
-		}
-		
-		@Override
-		public int hashCode() {
-			int hashCode = 0;
-			for (int i=0; i<_strings.length; ++i) {
-				hashCode += _strings[i].hashCode();
-			}
-			return hashCode;
-		}
-		
-		@Override
-		public boolean equals(Object o) {
-			if (!(o instanceof StringArrayKey)) {
-				return false;
-			}
-			StringArrayKey otherArray = (StringArrayKey)o;
-			if (otherArray._strings.length != this._strings.length) {
-				return false;
-			}
-			for (int i=0; i<_strings.length; ++i) {
-				if(!_strings[i].equals(otherArray._strings[i])) {
-					return false;
-				}
-			}
-			return true;
-		}
 	}
 }
