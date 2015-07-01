@@ -12,7 +12,7 @@
 
 @interface TNJavaBridgeCallbackContext (UIPrivate)
 
-@property (nonatomic, readonly) jobject returnObject;
+@property (nonatomic, readonly) jobject jReturnObject;
 
 - (instancetype)initWithArgs:(jarray)args;
 - (void)setInvalid;

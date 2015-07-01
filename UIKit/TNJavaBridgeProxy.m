@@ -83,7 +83,7 @@ jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *e
     callback(context);
     [context setInvalid];
     
-    return context.returnObject;
+    return context.jReturnObject;
 }
 
 - (jobject)jProxy

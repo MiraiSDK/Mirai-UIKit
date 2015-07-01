@@ -10,6 +10,11 @@
 
 @interface TNJavaBridgeCallbackContext : NSObject
 
+- (BOOL)isIntegerParameterAt:(NSUInteger)index;
+- (BOOL)isFloatParameterAt:(NSUInteger)index;
+- (BOOL)isDoubleParameterAt:(NSUInteger)index;
+- (BOOL)isStringParameterAt:(NSUInteger)index;
+
 - (int)integerParameterAt:(NSUInteger)index;
 - (float)floatParameterAt:(NSUInteger)index;
 - (double)doubleParameterAt:(NSUInteger)index;

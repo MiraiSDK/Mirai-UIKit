@@ -31,6 +31,8 @@ JavaTypeStruct JavaTypeStructMake(const char *typeClassName,
 @implementation TNJavaBridgeCallbackContext
 {
     jarray _jArgs;
+    jobject _jReturnObject;
+    
     BOOL _invaild;
 }
 static JavaTypeStruct _integerTypeStruct;
@@ -74,12 +76,155 @@ static JavaTypeStruct _stringTypeStruct;
 - (void)dealloc
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    
+    if (_jReturnObject != NULL) {
+        (*env)->DeleteGlobalRef(env, _jReturnObject);
+    }
     (*env)->DeleteGlobalRef(env, _jArgs);
 }
 
 - (void)setInvalid
 {
     _invaild = YES;
+}
+
+- (jobject)jReturnObject
+{
+    return _jReturnObject;
+}
+
+- (void)setJReturnObject:(jobject)jReturnObject
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    
+    if (jReturnObject != NULL) {
+        (*env)->NewGlobalRef(env, jReturnObject);
+    }
+    if (_jReturnObject != NULL) {
+        (*env)->DeleteGlobalRef(env, _jReturnObject);
+    }
+    _jReturnObject = jReturnObject;
+}
+
+- (BOOL)isIntegerParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    return (*env)->IsInstanceOf(env, value, _integerTypeStruct.typeClass);
+}
+
+- (BOOL)isFloatParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    return (*env)->IsInstanceOf(env, value, _floatTypeStruct.typeClass);
+}
+
+- (BOOL)isDoubleParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    return (*env)->IsInstanceOf(env, value, _doubleTypeStruct.typeClass);
+}
+
+- (BOOL)isStringParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    return (*env)->IsInstanceOf(env, value, _stringTypeStruct.typeClass);
+}
+
+- (int)integerParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    if (!(*env)->IsInstanceOf(env, value, _integerTypeStruct.typeClass)) {
+        return 0;
+    }
+    return (*env)->CallIntMethod(env, value, _integerTypeStruct.valueMethod);
+}
+
+- (float)floatParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    if (!(*env)->IsInstanceOf(env, value, _floatTypeStruct.typeClass)) {
+        return 0.0;
+    }
+    return (*env)->CallFloatMethod(env, value, _floatTypeStruct.valueMethod);
+}
+
+- (double)doubleParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    if (!(*env)->IsInstanceOf(env, value, _doubleTypeStruct.typeClass)) {
+        return 0.0;
+    }
+    return (*env)->CallDoubleMethod(env, value, _doubleTypeStruct.valueMethod);
+}
+
+- (NSString *)stringParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    if (!(*env)->IsInstanceOf(env, value, _stringTypeStruct.typeClass)) {
+        return nil;
+    }
+    const char *str = (*env)->GetStringUTFChars(env, value, 0);
+    return [[NSString alloc] initWithCString:str];
+}
+
+- (void)setIntegerResult:(int)result
+{
+    if (_invaild) {
+        [self _printInvailedMessage];
+        return;
+    }
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->CallStaticObjectMethod(env, _integerTypeStruct.typeClass,
+                                                   _integerTypeStruct.valueOfMethod, result);
+    [self setJReturnObject:value];
+}
+
+- (void)setFloatResult:(float)result
+{
+    if (_invaild) {
+        [self _printInvailedMessage];
+        return;
+    }
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->CallStaticObjectMethod(env, _floatTypeStruct.typeClass,
+                                                   _floatTypeStruct.valueOfMethod, result);
+    [self setJReturnObject:value];
+}
+
+- (void)setDoubleResult:(double)result
+{
+    if (_invaild) {
+        [self _printInvailedMessage];
+        return;
+    }
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->CallStaticObjectMethod(env, _doubleTypeStruct.typeClass,
+                                                   _doubleTypeStruct.valueOfMethod, result);
+    [self setJReturnObject:value];
+}
+
+- (void)setStringResult:(NSString *)result
+{
+    if (_invaild) {
+        [self _printInvailedMessage];
+        return;
+    }
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->NewStringUTF(env, result.cString);
+    [self setJReturnObject:value];
+}
+
+- (void)_printInvailedMessage
+{
+    NSLog(@"warning: TNJavaBridgeCallbackContext has invalid. the result value you puted will be not return to Java.");
 }
 
 @end
