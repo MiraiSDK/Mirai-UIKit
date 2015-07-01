@@ -14,15 +14,25 @@
 {
     jint _proxyId;
     jobject _jProxy;
+    jobject _jProxiedInstance;
     
     NSMutableArray *_callbackList;
 }
+static jmethodID _getProxiedInstanceMethod;
+
 static NSObject *_objLock;
 static NSMutableDictionary *_id2ProxyMap;
 static jint _nextProxyId;
 
 + (void)initialize
 {
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    
+    jclass class = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.JavaBridgeTools.JavaBridgeProxy"];
+    jmethodID methodId = (*env)->GetMethodID(env, class, "getProxiedInstance", "()Ljava/lang/Object;");
+    
+    _getProxiedInstanceMethod = (*env)->NewGlobalRef(env, methodId);
+    
     _objLock = [[NSObject alloc] init];
     _id2ProxyMap = [[NSMutableDictionary alloc] init];
     _nextProxyId = 0;
@@ -44,6 +54,7 @@ static jint _nextProxyId;
             _proxyId = [TNJavaBridgeProxy _newProxyId];
             [TNJavaBridgeProxy _registerProxy:self asId:_proxyId];
             _jProxy = [definition newJProxyWithId:_proxyId];
+            _jProxiedInstance = [self _proxiedInstanceFromProxy:_jProxy];
         }
         _callbackList = [self _newAllNilArrayWithCount:definition.methodsCount];
     }
@@ -53,7 +64,9 @@ static jint _nextProxyId;
 - (void)dealloc
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    
     (*env)->DeleteGlobalRef(env, _jProxy);
+    (*env)->DeleteGlobalRef(env, _jProxiedInstance);
     
     @synchronized(_objLock) {
         [TNJavaBridgeProxy _unregisterProxy:self];
@@ -86,9 +99,9 @@ jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *e
     return context.jReturnObject;
 }
 
-- (jobject)jProxy
+- (jobject)jProxiedInstance
 {
-    return _jProxy;
+    return _jProxiedInstance;
 }
 
 - (void)target:(id)target action:(SEL)action
@@ -148,6 +161,12 @@ jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *e
     jint resultId = _nextProxyId;
     _nextProxyId++;
     return resultId;
+}
+
+- (jobject)_proxiedInstanceFromProxy:(jobject)jProxy
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    return (*env)->CallObjectMethod(env, jProxy, _getProxiedInstanceMethod);
 }
 
 + (TNJavaBridgeProxy *)_findProxyWithId:(jint)proxyId
