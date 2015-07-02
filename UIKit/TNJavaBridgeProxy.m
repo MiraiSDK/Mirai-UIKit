@@ -31,7 +31,7 @@ static jint _nextProxyId;
     jclass class = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.JavaBridgeTools.JavaBridgeProxy"];
     jmethodID methodId = (*env)->GetMethodID(env, class, "getProxiedInstance", "()Ljava/lang/Object;");
     
-    _getProxiedInstanceMethod = (*env)->NewGlobalRef(env, methodId);
+    _getProxiedInstanceMethod = methodId;
     
     _objLock = [[NSObject alloc] init];
     _id2ProxyMap = [[NSMutableDictionary alloc] init];
@@ -91,7 +91,6 @@ jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *e
     if ([[NSNull null] isEqual:callback]) {
         return NULL;
     }
-    
     TNJavaBridgeCallbackContext *context = [[TNJavaBridgeCallbackContext alloc] initWithArgs:args];
     callback(context);
     [context setInvalid];

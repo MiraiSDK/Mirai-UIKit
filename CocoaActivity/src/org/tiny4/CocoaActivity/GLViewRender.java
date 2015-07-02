@@ -189,6 +189,10 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
         }
     }
 
+    protected void runOnUiThreadAsync(Runnable aRunnable) {
+        mActivity.runOnUiThread(aRunnable);
+    }
+    
     public int updateTextureIfNeeds(float [] matrix) {
 //        Log.i(TAG,"updateTextureIfNeeds textid:"+_glTexId);
 

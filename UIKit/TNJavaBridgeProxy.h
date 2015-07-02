@@ -13,7 +13,7 @@
 
 @interface TNJavaBridgeProxy : NSObject
 
-@property (nonatomic, readonly) jobject jProxyInstance;
+@property (nonatomic, readonly) jobject jProxiedInstance;
 
 - (instancetype)initWithDefinition:(TNJavaBridgeDefinition *)definition;
 - (instancetype)initWithDefinition:(TNJavaBridgeDefinition *)definition

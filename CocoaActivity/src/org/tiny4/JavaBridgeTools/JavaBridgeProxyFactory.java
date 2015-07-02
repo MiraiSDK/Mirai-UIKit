@@ -9,11 +9,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.util.Log;
+
 import org.tiny4.JavaBridgeTools.JavaBridgeProxy.DuplicatedMethodSignatureException;
 
 public class JavaBridgeProxyFactory {
-
-	private static final ClassLoader _classLoader = JavaBridgeProxy.class.getClassLoader();
+    
+    private static String TAG = "JavaBridgeProxy";
+    private static final ClassLoader _classLoader = JavaBridgeProxy.class.getClassLoader();
 	
 	@SuppressWarnings("serial")
 	private static final Map<String, Class<?>> _primitiveTypeClasses = new HashMap<String, Class<?>>() {{
@@ -43,29 +46,29 @@ public class JavaBridgeProxyFactory {
 			factory = new JavaBridgeProxyFactory(proxiedClassNames, methodSignatures);
 			
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+            Log.i(TAG, e.toString());
 			_resultCode = JavaBridgeProxy.ClassNotFoundCode;
 			return null;
 			
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			Log.i(TAG, e.toString());
 			_resultCode = JavaBridgeProxy.NoSuchMethodCode;
 			return null;
 			
 		} catch (SecurityException e) {
-			e.printStackTrace();
+			Log.i(TAG, e.toString());
 			_resultCode = JavaBridgeProxy.SecurityCode;
 			return null;
 			
 		} catch (DuplicatedMethodSignatureException e) {
-			e.printStackTrace();
+			Log.i(TAG, e.toString());
 			_resultCode = JavaBridgeProxy.DuplicatedMethodSignatureCode;
 			return null;
 		}
 		_resultCode = JavaBridgeProxy.Success;
 		return factory;
 	}
-	
+
 	public JavaBridgeProxy createJavaBridgeProxy(int id) {
 		JavaBridgeProxy proxy = new JavaBridgeProxy(this, id);
 		try {

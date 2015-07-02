@@ -22,7 +22,7 @@ JavaTypeStruct JavaTypeStructMake(const char *typeClassName,
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     
     jts.typeClass = (*env)->FindClass(env, typeClassName);
-    jts.valueOfMethod = (*env)->GetMethodID(env, jts.typeClass, valueOfMethodName, valueOfMethodParamsName);
+    jts.valueOfMethod = (*env)->GetStaticMethodID(env, jts.typeClass, valueOfMethodName, valueOfMethodParamsName);
     jts.valueMethod = (*env)->GetMethodID(env, jts.typeClass, valueMethodName, valueMethodParamsName);
     
     return jts;
@@ -83,6 +83,13 @@ static JavaTypeStruct _stringTypeStruct;
     (*env)->DeleteGlobalRef(env, _jArgs);
 }
 
+- (NSUInteger)parameterCount
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jint jarrayLength = (*env)->GetArrayLength(env, _jArgs);
+    return (NSUInteger)jarrayLength;
+}
+
 - (void)setInvalid
 {
     _invaild = YES;
@@ -138,7 +145,7 @@ static JavaTypeStruct _stringTypeStruct;
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
-    if (!(*env)->IsInstanceOf(env, value, _integerTypeStruct.typeClass)) {
+    if (value == NULL) {
         return 0;
     }
     return (*env)->CallIntMethod(env, value, _integerTypeStruct.valueMethod);
@@ -148,7 +155,7 @@ static JavaTypeStruct _stringTypeStruct;
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
-    if (!(*env)->IsInstanceOf(env, value, _floatTypeStruct.typeClass)) {
+    if (value == NULL) {
         return 0.0;
     }
     return (*env)->CallFloatMethod(env, value, _floatTypeStruct.valueMethod);
@@ -158,7 +165,7 @@ static JavaTypeStruct _stringTypeStruct;
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
-    if (!(*env)->IsInstanceOf(env, value, _doubleTypeStruct.typeClass)) {
+    if (value == NULL) {
         return 0.0;
     }
     return (*env)->CallDoubleMethod(env, value, _doubleTypeStruct.valueMethod);
@@ -168,7 +175,7 @@ static JavaTypeStruct _stringTypeStruct;
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
-    if (!(*env)->IsInstanceOf(env, value, _stringTypeStruct.typeClass)) {
+    if (value == NULL) {
         return nil;
     }
     const char *str = (*env)->GetStringUTFChars(env, value, 0);

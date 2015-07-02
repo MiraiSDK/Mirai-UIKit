@@ -5,8 +5,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JavaBridgeProxy implements InvocationHandler {
+import android.util.Log;
 
+public class JavaBridgeProxy implements InvocationHandler {
+    
+    private static String TAG = "JavaBridgeProxy";
+    
 	public static final int Success = 0;
 	public static final int ClassNotFoundCode = 1;
 	public static final int NoSuchMethodCode = 2;
@@ -59,6 +63,7 @@ public class JavaBridgeProxy implements InvocationHandler {
 		
 		int methodId = _maker.getIdByMethod(method);
 		if (methodId != -1) {
+            Log.i(TAG, "call native method: "+ method.getName());
 			return navtiveCallback(_id, methodId, args);
 		} else {
 			if (method.getDeclaringClass().equals(Object.class)) {

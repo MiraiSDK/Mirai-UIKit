@@ -52,9 +52,9 @@
         if (_jCreateJavaBridgeProxyMethod == NULL) {
             return nil;
         }
-        
         _jProxyFactory = [self _newProxyFactoryWithProxiedClassNames:proxiedClassNames
-                                                withMethodSignatures:methodSignatures];
+                                                withMethodSignatures:methodSignatures
+                                                    withFactoryClass:_jFactoryClass];
         if (_jProxyFactory == NULL) {
             return nil;
         }
@@ -75,7 +75,6 @@
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject jPorxy = (*env)->CallObjectMethod(env, _jProxyFactory, _jCreateJavaBridgeProxyMethod, proxyId);
     (*env)->NewGlobalRef(env, jPorxy);
-    (*env)->DeleteLocalRef(env, jPorxy);
     return jPorxy;
 }
 
@@ -84,12 +83,11 @@
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jclass jFactoryClass = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.JavaBridgeTools.JavaBridgeProxyFactory"];
     
-    if (!jFactoryClass) {
+    if (jFactoryClass == NULL) {
         NSLog(@"class not found: %@",@"org.tiny4.JavaBridgeTools.JavaBridgeProxyFactory");
         return NULL;
     }
     (*env)->NewGlobalRef(env, jFactoryClass);
-    (*env)->DeleteLocalRef(env, jFactoryClass);
     return jFactoryClass;
 }
 
@@ -97,22 +95,20 @@
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jmethodID jCreateJavaBridgeProxyMethod = (*env)->GetMethodID(env, factoryClass,
-                                        "createFactory", "(I)Lorg/tiny4/JavaBridgeTools/JavaBridgeProxy;");
-    
+                                        "createJavaBridgeProxy", "(I)Lorg/tiny4/JavaBridgeTools/JavaBridgeProxy;");
     if (jCreateJavaBridgeProxyMethod == NULL) {
-        NSLog(@"method id not found:%@",@"createFactory");
+        NSLog(@"method id not found:%@",@"createJavaBridgeProxy");
         return NULL;
     }
-    (*env)->NewGlobalRef(env, jCreateJavaBridgeProxyMethod);
-    (*env)->DeleteLocalRef(env, jCreateJavaBridgeProxyMethod);
     return jCreateJavaBridgeProxyMethod;
 }
 
 - (jobject)_newProxyFactoryWithProxiedClassNames:(NSArray *)proxiedClassNames
                             withMethodSignatures:(NSArray *)methodSignatures
+                                withFactoryClass:(jclass)jFactoryClass
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
-    jmethodID mid = (*env)->GetMethodID(env, _jFactoryClass,
+    jmethodID mid = (*env)->GetStaticMethodID(env, jFactoryClass,
     "createFactory", "([Ljava/lang/String;[Ljava/lang/String;)Lorg/tiny4/JavaBridgeTools/JavaBridgeProxyFactory;");
     
     if (mid == NULL) {
@@ -125,15 +121,11 @@
     jobject jProxyFactory = (*env)->CallStaticObjectMethod(env, _jFactoryClass, mid,
                                                            jProxiedClassNames, jMethodSignatures);
     
-    (*env)->DeleteLocalRef(env, jProxiedClassNames);
-    (*env)->DeleteLocalRef(env, jMethodSignatures);
-    
     if (jProxyFactory == NULL) {
         [self _showProxyFactoryResultCodeWithEnv:env];
         return NULL;
     }
     (*env)->NewGlobalRef(env, jProxyFactory);
-    (*env)->DeleteLocalRef(env, jProxyFactory);
     return jProxyFactory;
 }
 
@@ -145,9 +137,6 @@
         return;
     }
     jint resultCode = (*env)->CallStaticIntMethod(env, _jFactoryClass, mid);
-    
-    (*env)->DeleteLocalRef(env, _jFactoryClass);
-    (*env)->DeleteLocalRef(env, mid);
     
     NSString *resultMessage = @"Uknow";
     
@@ -194,9 +183,6 @@
         (*env)->SetObjectArrayElement(env, jStringArray, (jint)i, elementString);
         (*env)->DeleteLocalRef(env, elementString);
     }
-    (*env)->DeleteLocalRef(env, stringClass);
-    (*env)->DeleteLocalRef(env, emptyHoldString);
-    
     return jStringArray;
 }
 

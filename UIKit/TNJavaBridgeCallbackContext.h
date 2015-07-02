@@ -10,6 +10,8 @@
 
 @interface TNJavaBridgeCallbackContext : NSObject
 
+@property (nonatomic, readonly) NSUInteger parameterCount;
+
 - (BOOL)isIntegerParameterAt:(NSUInteger)index;
 - (BOOL)isFloatParameterAt:(NSUInteger)index;
 - (BOOL)isDoubleParameterAt:(NSUInteger)index;
