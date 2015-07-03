@@ -7,15 +7,24 @@
 //
 
 #import "UISearchBar.h"
+#import <UIKit/UIKit.h>
+
 #import "UITextField+UIPrivate.h"
 #import "TNJavaBridgeProxy.h"
-#import <UIKit/UIKit.h>
+#import "UISearchBarDefaultDelegate.h"
 
 #define kSearchInputBackgroundHeight 40
 #define kCompoentInterval 10
 #define kCancelButtonWidth 100
 #define kTinyIconButtonSize 35
 #define kScopeBarHeight 40
+
+typedef enum {
+    UISearchBarRightOperateButtonStateClear,
+    UISearchBarRightOperateButtonStateBookMark,
+    UISearchBarRightOperateButtonStateSearchResult,
+    UISearchBarRightOperateButtonStateSearchResultSelected,
+} UISearchBarRightOperateButtonState;
 
 @implementation UISearchBar
 {
@@ -41,6 +50,7 @@
     if (self = [super initWithFrame:frame]) {
         [self _setDefaultValuesForAllProperties];
         [self _makeAllSubcomponets];
+        [self _registerButtonTappedEventsForAll];
         [self _refreshAllSubcomponentsOnStageState];
         [self _refreshAllComponentsLayout];
         [self _refreshRightOperateIcon];
@@ -86,7 +96,8 @@
 {
     if (_selectedScopeButtonIndex != scopeBar.selectedSegmentIndex) {
         _selectedScopeButtonIndex = scopeBar.selectedSegmentIndex;
-        //TODO call some delegate method.
+        
+        [[self _delegateNotNil] searchBar:self selectedScopeButtonIndexDidChange:_selectedScopeButtonIndex];
     }
 }
 
@@ -214,20 +225,28 @@
 
 - (void)_refreshRightOperateIcon
 {
-    if ([self _isOnStage:_searchTextField]) {
-        [_rightOperateButton setTitle:@"X" forState:UIControlStateNormal];
+    NSString *title = nil;
+    switch ([self _rightOperateButtonState]) {
+        case UISearchBarRightOperateButtonStateClear:
+            title = @"X";
+            break;
         
-    } else {
-        if (_showsSearchResultsButton && _searchResultsButtonSelected) {
-            [_rightOperateButton setTitle:@"(√)" forState:UIControlStateNormal];
-            
-        } else if (_showsSearchResultsButton) {
-            [_rightOperateButton setTitle:@"√" forState:UIControlStateNormal];
-            
-        } else if (_showsBookmarkButton) {
-            [_rightOperateButton setTitle:@"书" forState:UIControlStateNormal];
-        }
+        case UISearchBarRightOperateButtonStateSearchResultSelected:
+            title = @"(√)";
+            break;
+        
+        case UISearchBarRightOperateButtonStateSearchResult:
+            title = @"√";
+            break;
+        
+        case UISearchBarRightOperateButtonStateBookMark:
+            title = @"书";
+            break;
+        
+        default:
+            break;
     }
+    [_rightOperateButton setTitle:title forState:UIControlStateNormal];
 }
 
 - (void)_refreshAllComponentsAppearance
@@ -338,24 +357,90 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 
 - (void)_afterTextChanged:(TNJavaBridgeCallbackContext *)context
 {
-    NSLog(@"%s", __FUNCTION__);
+    NSString *text = @"unknow"; //_searchTextField.text;
+    [[self _delegateNotNil] searchBar:self textDidChange:text];
 }
 
 - (void)_beforeTextChanged:(TNJavaBridgeCallbackContext *)context
 {
-    NSLog(@"%s %i %i %i", __FUNCTION__, [context integerParameterAt:1],
-          [context integerParameterAt:2],
-          [context integerParameterAt:3]);
+    NSLog(@"%s", __FUNCTION__);
 }
 
 - (void)_onTextChanged:(TNJavaBridgeCallbackContext *)context
 {
-    NSLog(@"%s %i %i %i", __FUNCTION__, [context integerParameterAt:1],
-          [context integerParameterAt:2],
-          [context integerParameterAt:3]);
+    NSLog(@"%s", __FUNCTION__);
+}
+
+#pragma mark - button callback
+
+- (UISearchBarRightOperateButtonState)_rightOperateButtonState
+{
+    if (![self _isSearchInputEmpty]) {
+        return UISearchBarRightOperateButtonStateClear;
+        
+    } else {
+        if (_showsSearchResultsButton && _searchResultsButtonSelected) {
+            return UISearchBarRightOperateButtonStateSearchResultSelected;
+            
+        } else if (_showsSearchResultsButton) {
+            return UISearchBarRightOperateButtonStateSearchResult;
+            
+        } else if (_showsBookmarkButton) {
+            return UISearchBarRightOperateButtonStateBookMark;
+        }
+    }
+    return 0;
+}
+
+- (void)_registerButtonTappedEventsForAll
+{
+    [_cancelButton addTarget:self action:@selector(_onTappedCancelButton:)
+            forControlEvents:UIControlEventTouchUpInside];
+    [_rightOperateButton addTarget:self action:@selector(_onTappedRightOperateButton:)
+                  forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)_onTappedCancelButton:(id)sender
+{
+    [[self _delegateNotNil] searchBarCancelButtonClicked:self];
+}
+
+- (void)_onTappedRightOperateButton:(id)sender
+{
+    switch ([self _rightOperateButtonState]) {
+        case UISearchBarRightOperateButtonStateClear:
+            break;
+        
+        case UISearchBarRightOperateButtonStateSearchResultSelected:
+            [[self _delegateNotNil] searchBarResultsListButtonClicked:self];
+            break;
+        
+        case UISearchBarRightOperateButtonStateSearchResult:
+            [[self _delegateNotNil] searchBarResultsListButtonClicked:self];
+            break;
+        
+        case UISearchBarRightOperateButtonStateBookMark:
+            [[self _delegateNotNil] searchBarBookmarkButtonClicked:self];
+            break;
+        
+        default:
+            break;
+    }
 }
 
 #pragma mark - util methodes
+
+- (id<UISearchBarDelegate>)_delegateNotNil
+{
+    if (_delegate) {
+        return _delegate;
+    }
+    static UISearchBarDefaultDelegate *defaultDelegate;
+    if (!defaultDelegate) {
+        defaultDelegate = [[UISearchBarDefaultDelegate alloc] init];
+    }
+    return defaultDelegate;
+}
 
 - (BOOL)_willShowScopBar
 {

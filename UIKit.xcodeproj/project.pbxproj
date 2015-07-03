@@ -309,6 +309,9 @@
 		D29A5EB31B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
 		D29E653B1B46266B00A72434 /* UITextField+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */; };
 		D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */; };
+		D2B48A801B46813600F64529 /* UISearchBarDefaultDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B48A7E1B46813600F64529 /* UISearchBarDefaultDelegate.h */; };
+		D2B48A811B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */; };
+		D2B48A821B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */; };
 		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
 		D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
 		D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
@@ -656,6 +659,8 @@
 		D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+UIPrivate.h"; sourceTree = "<group>"; };
 		D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxyDefinition+UIPrivate.h"; sourceTree = "<group>"; };
 		D29E653E1B46293000A72434 /* TNJavaBridgeProxy+UIJniObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxy+UIJniObj.h"; sourceTree = "<group>"; };
+		D2B48A7E1B46813600F64529 /* UISearchBarDefaultDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchBarDefaultDelegate.h; sourceTree = "<group>"; };
+		D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchBarDefaultDelegate.m; sourceTree = "<group>"; };
 		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
 		D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeCallbackContext.m; sourceTree = "<group>"; };
 		D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
@@ -1013,6 +1018,8 @@
 				436D4B0919F54FCB00F6F8F9 /* UISearchController.m */,
 				436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */,
 				436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */,
+				D2B48A7E1B46813600F64529 /* UISearchBarDefaultDelegate.h */,
+				D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */,
 				432F73781A08AC9C009CEC64 /* UIMenuController.h */,
 				432F73791A08AC9C009CEC64 /* UIMenuController.m */,
 				432F737D1A08AE99009CEC64 /* UISplitViewController.h */,
@@ -1270,6 +1277,7 @@
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,
 				4384631C188B3D52006DA1AA /* UIControlAction.h in Headers */,
 				432FF08B18544D7A005486C5 /* UIStringDrawing.h in Headers */,
+				D2B48A801B46813600F64529 /* UISearchBarDefaultDelegate.h in Headers */,
 				D28E58821B18620200BAB5D1 /* UITopFloatViewContainer.h in Headers */,
 				43B447FB1AB6FADF00DC1968 /* ioapi.h in Headers */,
 				43718EC518518FB400850F08 /* UIKitDefines.h in Headers */,
@@ -1617,6 +1625,7 @@
 				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
 				434CFD361A0CB29A00B6AC9E /* UIReferenceLibraryViewController.m in Sources */,
 				434CFD2A1A0CB18D00B6AC9E /* UISearchDisplayController.m in Sources */,
+				D2B48A811B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */,
 				D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */,
 				434CFD1A1A0CAAF200B6AC9E /* NSTextAttachment.m in Sources */,
 				432F73801A08AE99009CEC64 /* UISplitViewController.m in Sources */,
@@ -1680,6 +1689,7 @@
 				D2939BB91B231273003E1FCB /* UIPopoverFloatView.m in Sources */,
 				D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
+				D2B48A821B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */,
 				D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
 				D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
