@@ -15,16 +15,19 @@
 - (BOOL)isIntegerParameterAt:(NSUInteger)index;
 - (BOOL)isFloatParameterAt:(NSUInteger)index;
 - (BOOL)isDoubleParameterAt:(NSUInteger)index;
+- (BOOL)isBoolParameterAt:(NSUInteger)index;
 - (BOOL)isStringParameterAt:(NSUInteger)index;
 
 - (int)integerParameterAt:(NSUInteger)index;
 - (float)floatParameterAt:(NSUInteger)index;
 - (double)doubleParameterAt:(NSUInteger)index;
+- (BOOL)boolParameterAt:(NSUInteger)index;
 - (NSString *)stringParameterAt:(NSUInteger)index;
 
 - (void)setIntegerResult:(int)result;
 - (void)setFloatResult:(float)result;
 - (void)setDoubleResult:(double)result;
+- (void)setBoolResult:(BOOL)result;
 - (void)setStringResult:(NSString *)result;
 
 @end

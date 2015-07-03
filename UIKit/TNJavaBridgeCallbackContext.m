@@ -38,6 +38,7 @@ JavaTypeStruct JavaTypeStructMake(const char *typeClassName,
 static JavaTypeStruct _integerTypeStruct;
 static JavaTypeStruct _floatTypeStruct;
 static JavaTypeStruct _doubleTypeStruct;
+static JavaTypeStruct _boolTypeStruct;
 static JavaTypeStruct _stringTypeStruct;
 
 + (void)initialize
@@ -56,6 +57,11 @@ static JavaTypeStruct _stringTypeStruct;
         "java/lang/Double",
         "valueOf", "(D)Ljava/lang/Double;",
         "doubleValue", "()D"
+                                           );
+    _boolTypeStruct = JavaTypeStructMake(
+        "java/lang/Boolean",
+        "valueOf", "(Z)Ljava/lang/Boolean;",
+        "booleanValue", "()Z"
     );
     _stringTypeStruct = JavaTypeStructMake(
         "java/lang/String",
@@ -134,6 +140,13 @@ static JavaTypeStruct _stringTypeStruct;
     return (*env)->IsInstanceOf(env, value, _doubleTypeStruct.typeClass);
 }
 
+- (BOOL)isBoolParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    return (*env)->IsInstanceOf(env, value, _boolTypeStruct.typeClass);
+}
+
 - (BOOL)isStringParameterAt:(NSUInteger)index
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
@@ -169,6 +182,16 @@ static JavaTypeStruct _stringTypeStruct;
         return 0.0;
     }
     return (*env)->CallDoubleMethod(env, value, _doubleTypeStruct.valueMethod);
+}
+
+- (BOOL)boolParameterAt:(NSUInteger)index
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->GetObjectArrayElement(env, _jArgs, (jsize)index);
+    if (value == NULL) {
+        return 0.0;
+    }
+    return (*env)->CallDoubleMethod(env, value, _boolTypeStruct.valueMethod);
 }
 
 - (NSString *)stringParameterAt:(NSUInteger)index
@@ -215,6 +238,18 @@ static JavaTypeStruct _stringTypeStruct;
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     jobject value = (*env)->CallStaticObjectMethod(env, _doubleTypeStruct.typeClass,
                                                    _doubleTypeStruct.valueOfMethod, result);
+    [self setJReturnObject:value];
+}
+
+- (void)setBoolResult:(BOOL)result
+{
+    if (_invaild) {
+        [self _printInvailedMessage];
+        return;
+    }
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jobject value = (*env)->CallStaticObjectMethod(env, _boolTypeStruct.typeClass,
+                                                   _boolTypeStruct.valueOfMethod, result);
     [self setJReturnObject:value];
 }
 
