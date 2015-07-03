@@ -7,6 +7,8 @@
 //
 
 #import "UISearchBar.h"
+#import "UITextField+UIPrivate.h"
+#import "TNJavaBridgeProxy.h"
 #import <UIKit/UIKit.h>
 
 #define kSearchInputBackgroundHeight 40
@@ -22,6 +24,11 @@
     UIButton *_rightOperateButton;
     UIButton *_cancelButton;
     UISegmentedControl *_scopeBar;
+}
+
++ (void)initialize
+{
+    [UISearchBar _defineTextWatcher];
 }
 
 - (instancetype)init
@@ -59,8 +66,7 @@
     _cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
     [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [_searchTextField addTarget:self action:@selector(_onSearchInputTextChanged:)
-               forControlEvents:UIControlEventEditingChanged];
+    [self _registerAllListenersToTextField:_searchTextField];
     
     [self addSubview:_searchInputBackground];
     [_searchInputBackground addSubview:_searchTextField];
@@ -230,14 +236,6 @@
     _searchInputBackground.backgroundColor = [UIColor whiteColor];
 }
 
-#pragma mark - search input
-
-- (void)_onSearchInputTextChanged:(id)sender
-{
-    NSString *text = _searchTextField.text;
-    NSLog(@"%s %@", __FUNCTION__, text);
-}
-
 #pragma mark - properties setter and getter
 
 - (void)setShowsBookmarkButton:(BOOL)showsBookmarkButton
@@ -307,6 +305,54 @@
         [_scopeBar removeFromSuperview];
         _scopeBar = nil;
     }
+}
+
+#pragma mark - Android EditText listener callback.
+
+- (void)_registerAllListenersToTextField:(UITextField *)textFiled
+{
+    TNJavaBridgeProxy *textWatcherListener = [[TNJavaBridgeProxy alloc] initWithDefinition:_textWatcherListenerDefinition];
+    [self _bindActionForTextWatcherLisenter:textWatcherListener];
+    [textFiled setTextWatcherListener:textWatcherListener];
+}
+
+static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
+
++ (void)_defineTextWatcher
+{
+    NSString *textWatcherClass = @"android.text.TextWatcher";
+    NSArray *textWatcherSignatures = @[@"afterTextChanged(android.text.Editable)",
+                                       @"beforeTextChanged(java.lang.CharSequence,int,int,int)",
+                                       @"onTextChanged(java.lang.CharSequence,int,int,int)"];
+    
+    _textWatcherListenerDefinition = [[TNJavaBridgeDefinition alloc] initWithProxiedClassName:textWatcherClass
+                                                                         withMethodSignatures:textWatcherSignatures];
+}
+
+- (void)_bindActionForTextWatcherLisenter:(TNJavaBridgeProxy *)textWatcherListener
+{
+    [textWatcherListener methodIndex:0 target:self action:@selector(_afterTextChanged:)];
+    [textWatcherListener methodIndex:1 target:self action:@selector(_beforeTextChanged:)];
+    [textWatcherListener methodIndex:2 target:self action:@selector(_onTextChanged:)];
+}
+
+- (void)_afterTextChanged:(TNJavaBridgeCallbackContext *)context
+{
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)_beforeTextChanged:(TNJavaBridgeCallbackContext *)context
+{
+    NSLog(@"%s %i %i %i", __FUNCTION__, [context integerParameterAt:1],
+          [context integerParameterAt:2],
+          [context integerParameterAt:3]);
+}
+
+- (void)_onTextChanged:(TNJavaBridgeCallbackContext *)context
+{
+    NSLog(@"%s %i %i %i", __FUNCTION__, [context integerParameterAt:1],
+          [context integerParameterAt:2],
+          [context integerParameterAt:3]);
 }
 
 #pragma mark - util methodes

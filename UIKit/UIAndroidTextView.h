@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TNJavaBridgeProxy.h"
 
 @interface UIAndroidTextView : UIView <UITextInputTraits>
 @property (nonatomic, assign) UITextAlignment textAlignment; // stub, not yet implemented!
@@ -24,7 +24,7 @@
 - (BOOL)becomeFirstResponder;
 - (BOOL)resignFirstResponder;
 
-
-
+- (void)setTextWatcherListener:(TNJavaBridgeProxy *)textWatcherListener;
+- (void)setOnFocusChangeListener:(TNJavaBridgeProxy *)focusChangeListener;
 
 @end

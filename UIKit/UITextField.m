@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UITextField.h"
+#import "UITextField+UIPrivate.h"
 
 #import "UIAndroidTextView.h"
 @interface UITextField ()
@@ -64,6 +64,16 @@
 - (NSString *)placeholder
 {
     return _backend.placeholder;
+}
+
+- (void)setTextWatcherListener:(TNJavaBridgeProxy *)textWatcherListener
+{
+    [_backend setTextWatcherListener:textWatcherListener];
+}
+
+- (void)setOnFocusChangeListener:(TNJavaBridgeProxy *)focusChangeLisenter
+{
+    [_backend setOnFocusChangeListener:focusChangeLisenter];
 }
 
 - (CGRect)borderRectForBounds:(CGRect)bounds

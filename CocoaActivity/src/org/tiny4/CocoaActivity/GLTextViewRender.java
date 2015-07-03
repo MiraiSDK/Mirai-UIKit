@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
 import android.text.TextWatcher;
+import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 
 import android.util.Log;
@@ -120,11 +121,20 @@ public class GLTextViewRender extends GLViewRender {
     }
     
     public void addTextChangedListener (final TextWatcher watcher) {
-        Log.i("JavaBridgeProxy", "call add text changed listener "+ watcher);
         Runnable aRunnable = new Runnable() {
             @Override
             public void run() {
                 _view.addTextChangedListener(watcher);
+            }
+        };
+        runOnUiThreadAsync(aRunnable);
+    }
+    
+    public void setOnFocusChangeListener (final OnFocusChangeListener focusChange) {
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                _view.setOnFocusChangeListener(focusChange);
             }
         };
         runOnUiThreadAsync(aRunnable);
