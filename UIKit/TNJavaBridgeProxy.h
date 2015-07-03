@@ -9,11 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "TNJavaBridgeDefinition.h"
 #import "TNJavaBridgeCallbackContext.h"
-#include <jni.h>
 
 @interface TNJavaBridgeProxy : NSObject
-
-@property (nonatomic, readonly) jobject jProxiedInstance;
 
 - (instancetype)initWithDefinition:(TNJavaBridgeDefinition *)definition;
 - (instancetype)initWithDefinition:(TNJavaBridgeDefinition *)definition

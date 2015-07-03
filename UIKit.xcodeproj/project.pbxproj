@@ -307,6 +307,8 @@
 		D29A5EB11B1AA87F004EA433 /* UIBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */; };
 		D29A5EB21B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
 		D29A5EB31B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
+		D29E653B1B46266B00A72434 /* UITextField+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */; };
+		D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */; };
 		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
 		D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
 		D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
@@ -651,6 +653,9 @@
 		D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverFloatView.m; sourceTree = "<group>"; };
 		D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleView.h; sourceTree = "<group>"; };
 		D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleView.m; sourceTree = "<group>"; };
+		D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+UIPrivate.h"; sourceTree = "<group>"; };
+		D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxyDefinition+UIPrivate.h"; sourceTree = "<group>"; };
+		D29E653E1B46293000A72434 /* TNJavaBridgeProxy+UIJniObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxy+UIJniObj.h"; sourceTree = "<group>"; };
 		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
 		D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeCallbackContext.m; sourceTree = "<group>"; };
 		D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
@@ -994,6 +999,7 @@
 				436D4ADF19F5314700F6F8F9 /* UIAlertView.h */,
 				436D4AE019F5314700F6F8F9 /* UIAlertView.m */,
 				436D4AE319F531D300F6F8F9 /* UITextField.h */,
+				D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */,
 				436D4AE419F531D300F6F8F9 /* UITextField.m */,
 				436D4AE719F532D700F6F8F9 /* UITextInput.h */,
 				436D4AE819F532D700F6F8F9 /* UITextInput.m */,
@@ -1187,9 +1193,11 @@
 			children = (
 				D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */,
 				D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */,
+				D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */,
 				D28F68391B426D8F00AFBF84 /* TNJavaBridgeDefinition.h */,
 				D28F683A1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m */,
 				D28F683E1B427E2A00AFBF84 /* TNJavaBridgeProxy.h */,
+				D29E653E1B46293000A72434 /* TNJavaBridgeProxy+UIJniObj.h */,
 				D28F683F1B427E2A00AFBF84 /* TNJavaBridgeProxy.m */,
 				D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */,
 				D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */,
@@ -1347,6 +1355,7 @@
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
 				434CFCF51A0CA05300B6AC9E /* UIInputView.h in Headers */,
 				434CFCFD1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.h in Headers */,
+				D29E653B1B46266B00A72434 /* UITextField+UIPrivate.h in Headers */,
 				43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */,
 				4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */,
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
@@ -1366,6 +1375,7 @@
 				D2D489491B0B1E1E00D0558F /* UIMenuBubbleView.h in Headers */,
 				434CFCEE1A0C9DFD00B6AC9E /* UIAlert.h in Headers */,
 				43C200C418EBBCD400490D59 /* UIPageControl.h in Headers */,
+				D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
 				436D4B0A19F54FCB00F6F8F9 /* UISearchController.h in Headers */,

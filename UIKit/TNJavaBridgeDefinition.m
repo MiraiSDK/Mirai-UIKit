@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "TNJavaBridgeDefinition.h"
+#import "TNJavaBridgeProxyDefinition+UIPrivate.h"
 #import <TNJavaHelper/TNJavaHelper.h>
 
 @interface TNJavaBridgeDefinition ()
@@ -131,7 +131,7 @@
 
 - (void)_showProxyFactoryResultCodeWithEnv:(JNIEnv *)env
 {
-    jmethodID mid = (*env)->GetMethodID(env, _jFactoryClass, "getResultCode","()I");
+    jmethodID mid = (*env)->GetStaticMethodID(env, _jFactoryClass, "getResultCode","()I");
     if (mid == NULL) {
         NSLog(@"method id not found:%@",@"getResultCode");
         return;

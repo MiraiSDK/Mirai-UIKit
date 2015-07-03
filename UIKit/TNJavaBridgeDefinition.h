@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <jni.h>
 
 @interface TNJavaBridgeDefinition : NSObject
 
@@ -22,7 +21,5 @@
 
 - (instancetype)initWithProxiedClassNames:(NSArray *)proxiedClassNames
                      withMethodSignatures:(NSArray *)methodSignatures;
-
-- (jobject)newJProxyWithId:(jint)proxyId;
 
 @end

@@ -6,7 +6,8 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "TNJavaBridgeProxy.h"
+#import "TNJavaBridgeProxyDefinition+UIPrivate.h"
+#import "TNJavaBridgeProxy+UIJniObj.h"
 #import "TNJavaBridgeCallbackContext+UIPrivate.h"
 #import <TNJavaHelper/TNJavaHelper.h>
 
@@ -123,7 +124,7 @@ jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *e
                   target, NSStringFromSelector(action));
             return;
         }
-        [unsafeTarget performSelector:action withObject:self];
+        [unsafeTarget performSelector:action withObject:context];
     }];
 }
 
