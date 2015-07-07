@@ -8,6 +8,7 @@
 
 #import "TNSearchControllerTestMenu.h"
 #import "TNSearchBarTestViewController.h"
+#import "TNSearchControllerTestViewController.h"
 
 @implementation TNSearchControllerTestMenu
 
@@ -23,7 +24,8 @@
 
 + (NSArray *)subTests
 {
-    return @[TNSearchBarTestViewController.class,];
+    return @[TNSearchBarTestViewController.class,
+             TNSearchControllerTestViewController.class,];
 }
 
 @end
