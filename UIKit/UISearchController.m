@@ -9,8 +9,13 @@
 #import "UISearchController.h"
 
 @interface _UISearchResultsViewContainer : UIView
+
 @property (nonatomic) BOOL dimsBackgroundDuringPresentation;
+@property (nonatomic) BOOL showResultsView;
+
 - (instancetype)initWithSearchController:(UISearchController *)searchController;
+- (void)setResultsView:(UIView *)resultsView;
+
 @end
 
 static void SetViewAutoresizeToMatchSuperview(UIView *view) {
@@ -29,13 +34,10 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
 - (instancetype)initWithSearchResultsController:(UIViewController *)searchResultsController
 {
     if (self = [super init]) {
-        [self _settingDefaultValues];
-        
+        _active = NO;
+        _dimsBackgroundDuringPresentation = YES;
+        _hidesNavigationBarDuringPresentation = YES;
         _searchResultsController = searchResultsController;
-        _searchResultsViewContainer = [[_UISearchResultsViewContainer alloc] initWithSearchController:self];
-        _searchResultsContainerWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        
-        [_searchResultsContainerWindow setRootViewController:self];
     }
     return self;
 }
@@ -44,17 +46,26 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
 {
     [super loadView];
     UIView *view = self.view;
-    
-    [view addSubview:_searchResultsViewContainer];
-    view.backgroundColor = [UIColor redColor]; // delte it after test.
     SetViewAutoresizeToMatchSuperview(view);
+    
+    _searchResultsViewContainer = [[_UISearchResultsViewContainer alloc] initWithSearchController:self];
+    [view addSubview:_searchResultsViewContainer];
+    if (_searchResultsController) {
+        [_searchResultsViewContainer setResultsView:_searchResultsController.view];
+    }
+    
+    _searchResultsContainerWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [_searchResultsContainerWindow setRootViewController:self];
 }
 
-- (void)_settingDefaultValues
+- (void)setSearchResultsController:(UIViewController *)searchResultsController
 {
-    _active = NO;
-    _dimsBackgroundDuringPresentation = YES;
-    _hidesNavigationBarDuringPresentation = YES;
+    if (_searchResultsController == searchResultsController) {
+        return;
+    }
+    _searchResultsController = searchResultsController;
+    UIView *resultsView = searchResultsController ? searchResultsController.view : nil;
+    [_searchResultsViewContainer setResultsView:resultsView];
 }
 
 - (void)setDimsBackgroundDuringPresentation:(BOOL)dimsBackgroundDuringPresentation
@@ -70,8 +81,6 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
     }
     _active = active;
     _searchResultsContainerWindow.hidden = !active;
-    
-    NSLog(@"-> %@", NSStringFromCGRect(_searchResultsViewContainer.frame));
 }
 
 @end
@@ -79,6 +88,7 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
 @implementation _UISearchResultsViewContainer
 {
     UISearchController *_searchController;
+    UIView *_resultsView;
 }
 
 - (instancetype)initWithSearchController:(UISearchController *)searchController
@@ -104,6 +114,25 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
     } else {
         [self setBackgroundColor:[UIColor clearColor]];
     }
+}
+
+- (void)setShowResultsView:(BOOL)showResultsView
+{
+    _showResultsView = showResultsView;
+    _resultsView.hidden = !showResultsView;
+}
+
+- (void)setResultsView:(UIView *)resultsView
+{
+    if (_resultsView) {
+        [_resultsView removeFromSuperview];
+    }
+    _resultsView = resultsView;
+    resultsView.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    resultsView.hidden = !_showResultsView;
+    
+    SetViewAutoresizeToMatchSuperview(resultsView);
+    [self addSubview:_resultsView];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
