@@ -59,6 +59,12 @@ typedef enum {
     return self;
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self _refreshAllComponentsLayout];
+}
+
 #pragma mark - make and refresh state.
 
 - (void)_setDefaultValuesForAllProperties
