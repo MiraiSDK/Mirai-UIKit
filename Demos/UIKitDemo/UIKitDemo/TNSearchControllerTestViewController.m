@@ -10,6 +10,9 @@
 #import "TNUtils.h"
 
 @interface TNSearchControllerTestViewController ()<UISearchControllerDelegate, UISearchResultsUpdating>
+@end
+
+@interface _TNResultsViewController : UIViewController
 
 @end
 
@@ -37,7 +40,7 @@
     
     [self _makePropertiesChangeSwitch];
     
-    _searchController.searchBar.frame = CGRectMake(0, 0, 320, 44);
+    _searchController.searchBar.frame = CGRectMake(0, 0, 320, 70);
     self.tableView.tableHeaderView = _searchController.searchBar;
 }
 
@@ -50,6 +53,7 @@
 - (UISearchController *)_newSearchController
 {
     UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:_resultViewController];
+    NSLog(@"after search controller init.");
     
     searchController.delegate = self;
     searchController.searchResultsUpdater = self;
@@ -60,9 +64,7 @@
 
 - (UIViewController *)_newResultViewController
 {
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.view.backgroundColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:0.3];
-    return vc;
+    return [[_TNResultsViewController alloc] init];
 }
 
 - (void)_makePropertiesChangeSwitch
@@ -118,11 +120,13 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
     NSLog(@"%s", __FUNCTION__);
+    NSLog(@"-> %i", _resultViewController.view.hidden);
 }
 
 - (void)willPresentSearchController:(UISearchController *)searchController
 {
     NSLog(@"%s", __FUNCTION__);
+    NSLog(@"-> %i", _resultViewController.view.hidden);
 }
 
 - (void)didPresentSearchController:(UISearchController *)searchController
@@ -143,6 +147,37 @@
 - (void)presentSearchController:(UISearchController *)searchController
 {
     NSLog(@"%s", __FUNCTION__);
+}
+
+@end
+
+@implementation _TNResultsViewController
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"_TNResultsViewController %s %i", __FUNCTION__, animated);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"_TNResultsViewController %s %i", __FUNCTION__, animated);
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    NSLog(@"_TNResultsViewController %s %i", __FUNCTION__, animated);
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"_TNResultsViewController %s %i", __FUNCTION__, animated);
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:0.3];
+    NSLog(@"_TNResultsViewController %s", __FUNCTION__);
 }
 
 @end
