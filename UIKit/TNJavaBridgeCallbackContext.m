@@ -202,7 +202,9 @@ static JavaTypeStruct _stringTypeStruct;
         return nil;
     }
     const char *str = (*env)->GetStringUTFChars(env, value, 0);
-    return [[NSString alloc] initWithCString:str];
+    NSString *resultString = [[NSString alloc] initWithCString:str];
+    (*env)->ReleaseStringUTFChars(env, value, str);
+    return resultString;
 }
 
 - (void)setIntegerResult:(int)result
