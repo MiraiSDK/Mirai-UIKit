@@ -26,6 +26,9 @@ typedef enum {
     UISearchBarRightOperateButtonStateSearchResultSelected,
 } UISearchBarRightOperateButtonState;
 
+@interface UISearchBar () <UITextFieldDelegate>
+@end
+
 @implementation UISearchBar
 {
     UITextField *_searchTextField;
@@ -80,6 +83,8 @@ typedef enum {
     _searchInputBackground = [[UIControl alloc] initWithFrame:CGRectZero];
     _rightOperateButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    
+    _searchTextField.delegate = self;
     
     [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self _registerAllListenersToTextField:_searchTextField];
@@ -332,6 +337,16 @@ typedef enum {
     }
 }
 
+- (NSString *)text
+{
+    return _searchTextField.text;
+}
+
+- (void)setText:(NSString *)text
+{
+    _searchTextField.text = text;
+}
+
 #pragma mark - Android EditText listener callback.
 
 - (void)_registerAllListenersToTextField:(UITextField *)textFiled
@@ -363,8 +378,11 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 
 - (void)_afterTextChanged:(TNJavaBridgeCallbackContext *)context
 {
-    NSString *text = @"unknow"; //_searchTextField.text;
-    [[self _delegateNotNil] searchBar:self textDidChange:text];
+    [self _refreshAllSubcomponentsOnStageState];
+    [self _refreshRightOperateIcon];
+    [self _refreshAllComponentsLayout];
+    
+    [[self _delegateNotNil] searchBar:self textDidChange:_searchTextField.text];
 }
 
 - (void)_beforeTextChanged:(TNJavaBridgeCallbackContext *)context
@@ -375,6 +393,19 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 - (void)_onTextChanged:(TNJavaBridgeCallbackContext *)context
 {
     NSLog(@"%s", __FUNCTION__);
+}
+
+#pragma about text field.
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [[self _delegateNotNil] searchBarTextDidBeginEditing:self];
+}
+
+- (void)resignFirstResponder
+{
+    [super resignFirstResponder];
+    [_searchTextField resignFirstResponder];
 }
 
 #pragma mark - button callback
@@ -415,6 +446,10 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 {
     switch ([self _rightOperateButtonState]) {
         case UISearchBarRightOperateButtonStateClear:
+            _searchTextField.text = @"";
+            [self _refreshAllSubcomponentsOnStageState];
+            [self _refreshAllComponentsLayout];
+            [self _refreshRightOperateIcon];
             break;
         
         case UISearchBarRightOperateButtonStateSearchResultSelected:

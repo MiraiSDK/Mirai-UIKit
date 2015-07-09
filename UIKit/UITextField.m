@@ -261,6 +261,7 @@
     NSLog(@"%s",__PRETTY_FUNCTION__);
     if (![self isFirstResponder]) {
         [self becomeFirstResponder];
+        [_delegate textFieldDidBeginEditing:self];
     }
     [_backend touchesBegan:touches withEvent:event];
 }

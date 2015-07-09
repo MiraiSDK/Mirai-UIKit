@@ -11,6 +11,9 @@
 
 #define kSearchBarHeightWhenActive 70
 
+@interface UISearchController () <UISearchBarDelegate>
+@end
+
 @interface _UISearchResultsViewContainer : UIView
 
 @property (nonatomic) BOOL dimsBackgroundDuringPresentation;
@@ -58,9 +61,12 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
         // user may get searchBar before call [self view].
         // so, I have to create it on init method instead of loadView method.
         _searchBar = [[UISearchBar alloc] init];
+        _searchBar.delegate = self;
     }
     return self;
 }
+
+#pragma mark - make components.
 
 - (void)loadView
 {
@@ -95,6 +101,8 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
     [searchResultsContainerWindow setRootViewController:self];
     return searchResultsContainerWindow;
 }
+
+#pragma mark - properties setter and getter
 
 - (void)setSearchResultsController:(UIViewController *)searchResultsController
 {
@@ -137,7 +145,9 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
 
 - (void)_doInactive
 {
+    [_searchBar setText:@""];
     [_searchBar setShowsCancelButton:NO];
+    [_searchBar resignFirstResponder];
     [_searchBarContainer restoreSearchBarBack];
     [self recoverHidedNavigationBarIfNeed];
 }
@@ -188,6 +198,26 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
     UINavigationController *navigationController = _searchBarContainer.originalNavigationController;
     [navigationController setNavigationBarHidden:NO animated:YES];
 }
+
+#pragma mark - callback methods.
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    BOOL showResultsView = ![searchText isEqualToString:@""];
+    [_searchResultsViewContainer setShowResultsView:showResultsView];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    self.active = NO;
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    self.active = YES;
+}
+
+#pragma mark - tool methods.
 
 - (UINavigationController *)_findNavigationControllerOfView:(UIView *)view
 {
@@ -240,6 +270,9 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
 
 - (void)setShowResultsView:(BOOL)showResultsView
 {
+    if (_showResultsView == showResultsView) {
+        return;
+    }
     _showResultsView = showResultsView;
     _resultsView.hidden = !showResultsView;
 }
@@ -277,7 +310,9 @@ static void SetViewAutoresizeToMatchSuperview(UIView *view) {
 
 - (void)_onTappedSelf:(id)sender
 {
-    [_searchController setActive:NO];
+    if ([_searchController.searchBar.text isEqualToString:@""]) {
+        [_searchController setActive:NO];
+    }
 }
 
 @end

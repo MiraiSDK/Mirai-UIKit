@@ -15,6 +15,8 @@ import java.lang.CharSequence;
 import java.lang.Override;
 import java.lang.String;
 
+import org.tiny4.util.*;
+
 public class GLTextViewRender extends GLViewRender {
     private GLTextView _view;
     
@@ -139,21 +141,18 @@ public class GLTextViewRender extends GLViewRender {
         };
         runOnUiThreadAsync(aRunnable);
     }
-    
-    private String mText = null;
+
     public String getTextString() {
+        final SyncNode<String> syncNode = new SyncNode<String>();
         Runnable aRunnable = new Runnable() {
             @Override
             public void run() {
-                mText = _view.getText().toString();
-                synchronized (this) {
-                    this.notify() ;
-                }
+                String text = _view.getText().toString();
+                syncNode.notifyAndSetResult(text);
             }
         };
-        
-        runOnUiThreadAndWait(aRunnable);
-        return  mText;
+        runOnUiThreadAsync(aRunnable);
+        return  syncNode.waitUtilGetResult();
     }
     @Override
     public void onDestory() {
