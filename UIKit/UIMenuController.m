@@ -54,8 +54,8 @@
 - (void)_onTappedMenuItemWithIndex:(NSNumber *)index
 {
     UIMenuItem *menuItem = [_menuItems objectAtIndex:index.unsignedIntegerValue];
-    [[UIApplication sharedApplication] sendAction:menuItem.action to:nil from:self forEvent:nil];
     [self setMenuVisible:NO animated:YES];
+    [[UIApplication sharedApplication] sendAction:menuItem.action to:nil from:self forEvent:nil];
 }
 
 #pragma mark - menu appearance.
