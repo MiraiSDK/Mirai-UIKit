@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
+#import "UIPopoverController+UIPrivate.h"
 #import "UIPopoverFloatView.h"
 #import "UIPositionOnRect.h"
 
@@ -50,9 +51,11 @@
 
 - (BOOL)_shouldDismissPopover
 {
-    if (_parent.delegate) {
-        return [_parent.delegate popoverControllerShouldDismissPopover:_parent];
-    }
+    // when object not implements method, iOS work well, but Android will crash.
+    // NextBook's delegate not implements this method, and will crash when run on Android.
+//    if (_parent.delegate) {
+//        return [[_parent _delegateNotNil] popoverControllerShouldDismissPopover:_parent];
+//    }
     return YES;
 }
 
