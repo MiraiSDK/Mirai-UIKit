@@ -50,6 +50,7 @@ static BOOL _animationsEnabled = YES;
     
     BOOL _clearsContextBeforeDrawing;
     BOOL _clipsToBounds;
+    BOOL _readyToBecomeFirstResponder;
     
     __weak UIView *_superview;
     UIWindow *_window;
@@ -532,6 +533,16 @@ static BOOL _animationsEnabled = YES;
 @end
 
 @implementation UIView (UIViewHierarchy)
+
+- (BOOL)becomeFirstResponder
+{
+    BOOL success = [super becomeFirstResponder];
+    if (!success && self.window == nil) {
+        _readyToBecomeFirstResponder = YES;
+    }
+    return success;
+}
+
 - (UIView *)superview
 {
     return _superview;
@@ -587,7 +598,6 @@ static BOOL _animationsEnabled = YES;
         if (_needsDidAppearOrDisappear && [self _viewController]) {
             [[self _viewController] viewWillDisappear:NO];
         }
-        
         [_superview willRemoveSubview:self];
         [self _willMoveFromWindow:oldWindow toWindow:nil];
         [self willMoveToSuperview:nil];
@@ -618,7 +628,10 @@ static BOOL _animationsEnabled = YES;
         if ([self isFirstResponder]) {
             [self resignFirstResponder];
         }
-        
+        if (_readyToBecomeFirstResponder) {
+            [self becomeFirstResponder];
+            _readyToBecomeFirstResponder = NO;
+        }
 //        [self _setAppearanceNeedsUpdate];
         [self willMoveToWindow:toWindow];
         

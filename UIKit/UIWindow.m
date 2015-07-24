@@ -249,7 +249,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 - (BOOL)isKeyWindow
 {
-    return ([UIApplication sharedApplication].keyWindow == self);
+    return ([[UIApplication sharedApplication] _cachedKeyWindow] == self);
 }
 
 - (void)resignKeyWindow

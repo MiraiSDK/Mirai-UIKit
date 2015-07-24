@@ -638,6 +638,7 @@
 		D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNImageBuffer.m; sourceTree = "<group>"; };
 		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
 		D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreNavigationController.m; sourceTree = "<group>"; };
+		D2CC41A91B62402D0078E0A5 /* UIResponder+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+UIPrivate.h"; sourceTree = "<group>"; };
 		D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+UIPrivate.h"; sourceTree = "<group>"; };
 		D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMenuBubbleView.h; sourceTree = "<group>"; };
 		D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMenuBubbleView.m; sourceTree = "<group>"; };
@@ -769,6 +770,7 @@
 				43718E9C18517E3400850F08 /* Public Headers */,
 				4384632C188B3F7A006DA1AA /* View */,
 				43718E9E18517F0500850F08 /* UIResponder.h */,
+				D2CC41A91B62402D0078E0A5 /* UIResponder+UIPrivate.h */,
 				43718E9F18517F0500850F08 /* UIResponder.m */,
 				43E3429218F6947E00463092 /* NSAttributedString.h */,
 				43E3429318F6947E00463092 /* NSAttributedString.m */,

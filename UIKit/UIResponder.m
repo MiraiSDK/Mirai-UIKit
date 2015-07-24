@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIResponder.h"
+#import "UIResponder+UIPrivate.h"
 #import "UIView.h"
 #import "UIWindow.h"
 #import "UIWindow+UIPrivate.h"

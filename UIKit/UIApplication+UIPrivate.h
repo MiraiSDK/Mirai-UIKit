@@ -32,6 +32,7 @@
 @class UIWindow, UIScreen, NSEvent, UIPopoverController;
 
 @interface UIApplication (UIPrivate)
+- (UIWindow *)_cachedKeyWindow;
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow;
 - (void)_windowDidBecomeVisible:(UIWindow *)theWindow;
 - (void)_windowDidBecomeHidden:(UIWindow *)theWindow;

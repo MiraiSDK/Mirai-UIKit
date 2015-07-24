@@ -13,6 +13,7 @@
 #import "UIWindow+UIPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIScreenPrivate.h"
+#import "UIResponder+UIPrivate.h"
 #import "UIGraphics.h"
 #import "UIEvent.h"
 #import "UITouch.h"
@@ -466,6 +467,11 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
     return window;
 }
 
+- (UIWindow *)_cachedKeyWindow
+{
+    return _keyWindow;
+}
+
 - (NSArray *)windows
 {
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"windowLevel" ascending:YES];
@@ -545,7 +551,20 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
         // is the first UIResponder (including the UIControl itself) that responds to the action. It starts with the UIControl (sender) and not with
         // whatever UIResponder may have been set with becomeFirstResponder.
         
-        id responder = sender;
+        id responder;
+        
+        if([sender isKindOfClass:UIResponder.class]) {
+            UIResponder *responderSender = (UIResponder *)sender;
+            UIWindow *window = [responderSender _responderWindow];
+            responder = [window _firstResponder];
+            
+        } else {
+            UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+            if (window) {
+                responder = [window _firstResponder];
+            }
+        }
+        
         while (responder) {
             if ([responder respondsToSelector:action]) {
                 target = responder;
