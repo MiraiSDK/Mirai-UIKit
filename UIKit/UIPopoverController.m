@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIPopoverController+UIPrivate.h"
+#import "UIPopoverController.h"
 #import "UITopFloatViewDelegate.h"
 #import "UITopFloatView.h"
 #import "UIPositionOnRect.h"
@@ -22,8 +22,6 @@
     UIPopoverFloatView *_floatView;
 }
 @end
-
-@interface UIPopoverControllerDefaultDelegate : NSObject<UIPopoverControllerDelegate> @end
 
 @implementation UIPopoverController
 
@@ -94,9 +92,9 @@
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view
       permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
-    // when object not implements method, iOS work well, but Android will crash.
-    // NextBook's delegate not implements this method, and will crash when run on Android.
-//    [[self _delegateNotNil] popoverController:self willRepositionPopoverToRect:&rect inView:&view];
+    if ([_delegate respondsToSelector:@selector(popoverController:willRepositionPopoverToRect:inView:)]) {
+        [_delegate popoverController:self willRepositionPopoverToRect:&rect inView:&view];
+    }
     _floatView.presentArrowDirections = arrowDirections;
     _floatView.floatCloseToTarget = [view convertRect:rect toView:[[UIApplication sharedApplication] keyWindow]];
     [_floatView setVisible:YES animated:animated];
@@ -130,38 +128,10 @@
 - (void)floatViewDidDisappear:(BOOL)animated
 {
     [_contentViewController viewDidDisappear:animated];
-    [[self _delegateNotNil] popoverControllerDidDismissPopover:self];
-}
-
-- (id<UIPopoverControllerDelegate>)_delegateNotNil
-{
-    if (_delegate) {
-        return _delegate;
-    }
-    static UIPopoverControllerDefaultDelegate *defaultDelegate;
-    if (!defaultDelegate) {
-        defaultDelegate = [[UIPopoverControllerDefaultDelegate alloc] init];
-    }
-    return defaultDelegate;
-}
-
-@end
-
-@implementation UIPopoverControllerDefaultDelegate
-
-- (void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view
-{
     
-}
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
-{
-    return YES;
-}
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
-{
-    
+    if ([_delegate respondsToSelector:@selector(popoverControllerDidDismissPopover:)]) {
+        [_delegate popoverControllerDidDismissPopover:self];
+    }
 }
 
 @end
