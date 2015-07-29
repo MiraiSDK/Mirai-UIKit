@@ -340,6 +340,7 @@ typedef enum {
                                                     initWithTarget:self action:@selector(_onTappedSelf:)];
     tapGestureRecognizer.numberOfTapsRequired = 1;
     tapGestureRecognizer.numberOfTouchesRequired = 1;
+    tapGestureRecognizer.cancelsTouchesInView = NO;
     return tapGestureRecognizer;
 }
 
