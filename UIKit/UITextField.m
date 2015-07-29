@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UITextField.h"
+#import "UITextField+UIPrivate.h"
 
 #import "UIAndroidTextView.h"
 @interface UITextField ()
@@ -64,6 +64,16 @@
 - (NSString *)placeholder
 {
     return _backend.placeholder;
+}
+
+- (void)setTextWatcherListener:(TNJavaBridgeProxy *)textWatcherListener
+{
+    [_backend setTextWatcherListener:textWatcherListener];
+}
+
+- (void)setOnFocusChangeListener:(TNJavaBridgeProxy *)focusChangeLisenter
+{
+    [_backend setOnFocusChangeListener:focusChangeLisenter];
 }
 
 - (CGRect)borderRectForBounds:(CGRect)bounds
@@ -251,6 +261,7 @@
     NSLog(@"%s",__PRETTY_FUNCTION__);
     if (![self isFirstResponder]) {
         [self becomeFirstResponder];
+        [_delegate textFieldDidBeginEditing:self];
     }
     [_backend touchesBegan:touches withEvent:event];
 }

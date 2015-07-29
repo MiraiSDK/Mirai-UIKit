@@ -285,6 +285,8 @@
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
+		D24E1DF01B43E55E009814C3 /* JavaBridgeProxy.java in Sources */ = {isa = PBXBuildFile; fileRef = D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */; };
+		D24E1DF11B43E55E009814C3 /* JavaBridgeProxyFactory.java in Sources */ = {isa = PBXBuildFile; fileRef = D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */; };
 		D28E58781B1850E100BAB5D1 /* UITouchMask.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E58761B1850E100BAB5D1 /* UITouchMask.h */; };
 		D28E587D1B1851F800BAB5D1 /* UITopFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */; };
 		D28E587E1B1851F800BAB5D1 /* UITopFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */; };
@@ -292,6 +294,12 @@
 		D28E58821B18620200BAB5D1 /* UITopFloatViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E58801B18620200BAB5D1 /* UITopFloatViewContainer.h */; };
 		D28E58831B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */; };
 		D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */; };
+		D28F683B1B426D8F00AFBF84 /* TNJavaBridgeDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = D28F68391B426D8F00AFBF84 /* TNJavaBridgeDefinition.h */; };
+		D28F683C1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = D28F683A1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m */; };
+		D28F683D1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = D28F683A1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m */; };
+		D28F68401B427E2A00AFBF84 /* TNJavaBridgeProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = D28F683E1B427E2A00AFBF84 /* TNJavaBridgeProxy.h */; };
+		D28F68411B427E2A00AFBF84 /* TNJavaBridgeProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D28F683F1B427E2A00AFBF84 /* TNJavaBridgeProxy.m */; };
+		D28F68421B427E2A00AFBF84 /* TNJavaBridgeProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D28F683F1B427E2A00AFBF84 /* TNJavaBridgeProxy.m */; };
 		D29371B41B2ABFFA00A66047 /* UITopFloatViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29371B31B2ABFFA00A66047 /* UITopFloatViewDelegate.h */; };
 		D2939BB71B231273003E1FCB /* UIPopoverFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D2939BB51B231273003E1FCB /* UIPopoverFloatView.h */; };
 		D2939BB81B231273003E1FCB /* UIPopoverFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */; };
@@ -299,6 +307,14 @@
 		D29A5EB11B1AA87F004EA433 /* UIBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */; };
 		D29A5EB21B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
 		D29A5EB31B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
+		D29E653B1B46266B00A72434 /* UITextField+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */; };
+		D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */; };
+		D2B48A801B46813600F64529 /* UISearchBarDefaultDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B48A7E1B46813600F64529 /* UISearchBarDefaultDelegate.h */; };
+		D2B48A811B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */; };
+		D2B48A821B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */; };
+		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
+		D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
+		D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
 		D2BA4C851AEF3109003D4A35 /* TNImageBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = D2BA4C831AEF3109003D4A35 /* TNImageBuffer.h */; };
 		D2BA4C861AEF3109003D4A35 /* TNImageBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */; };
 		D2BA4C871AEF3109003D4A35 /* TNImageBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */; };
@@ -624,16 +640,30 @@
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
+		D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxy.java; sourceTree = SOURCE_ROOT; };
+		D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxyFactory.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxyFactory.java; sourceTree = SOURCE_ROOT; };
 		D28E58761B1850E100BAB5D1 /* UITouchMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchMask.h; sourceTree = "<group>"; };
 		D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatView.h; sourceTree = "<group>"; };
 		D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatView.m; sourceTree = "<group>"; };
 		D28E58801B18620200BAB5D1 /* UITopFloatViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainer.h; sourceTree = "<group>"; };
 		D28E58811B18620200BAB5D1 /* UITopFloatViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainer.m; sourceTree = "<group>"; };
+		D28F68391B426D8F00AFBF84 /* TNJavaBridgeDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeDefinition.h; sourceTree = "<group>"; };
+		D28F683A1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeDefinition.m; sourceTree = "<group>"; };
+		D28F683E1B427E2A00AFBF84 /* TNJavaBridgeProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeProxy.h; sourceTree = "<group>"; };
+		D28F683F1B427E2A00AFBF84 /* TNJavaBridgeProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeProxy.m; sourceTree = "<group>"; };
 		D29371B31B2ABFFA00A66047 /* UITopFloatViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewDelegate.h; sourceTree = "<group>"; };
 		D2939BB51B231273003E1FCB /* UIPopoverFloatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverFloatView.h; sourceTree = "<group>"; };
 		D2939BB61B231273003E1FCB /* UIPopoverFloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverFloatView.m; sourceTree = "<group>"; };
 		D29A5EAF1B1AA87F004EA433 /* UIBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleView.h; sourceTree = "<group>"; };
 		D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleView.m; sourceTree = "<group>"; };
+		D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+UIPrivate.h"; sourceTree = "<group>"; };
+		D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxyDefinition+UIPrivate.h"; sourceTree = "<group>"; };
+		D29E653E1B46293000A72434 /* TNJavaBridgeProxy+UIJniObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxy+UIJniObj.h"; sourceTree = "<group>"; };
+		D2B48A7E1B46813600F64529 /* UISearchBarDefaultDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISearchBarDefaultDelegate.h; sourceTree = "<group>"; };
+		D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISearchBarDefaultDelegate.m; sourceTree = "<group>"; };
+		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
+		D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeCallbackContext.m; sourceTree = "<group>"; };
+		D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
 		D2BA4C831AEF3109003D4A35 /* TNImageBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNImageBuffer.h; sourceTree = "<group>"; };
 		D2BA4C841AEF3109003D4A35 /* TNImageBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNImageBuffer.m; sourceTree = "<group>"; };
 		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
@@ -813,6 +843,7 @@
 		43718E7318517B7B00850F08 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D23348CA1B42515B00A687B7 /* JavaBrigeTools */,
 				433C4A251AD0FC20005D06BB /* CocoaActivity */,
 				4336782018F1476D00F1D556 /* UIKit+Android.h */,
 				4336782118F1476D00F1D556 /* UIKit+Android.m */,
@@ -975,6 +1006,7 @@
 				436D4ADF19F5314700F6F8F9 /* UIAlertView.h */,
 				436D4AE019F5314700F6F8F9 /* UIAlertView.m */,
 				436D4AE319F531D300F6F8F9 /* UITextField.h */,
+				D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */,
 				436D4AE419F531D300F6F8F9 /* UITextField.m */,
 				436D4AE719F532D700F6F8F9 /* UITextInput.h */,
 				436D4AE819F532D700F6F8F9 /* UITextInput.m */,
@@ -988,6 +1020,8 @@
 				436D4B0919F54FCB00F6F8F9 /* UISearchController.m */,
 				436D4B0C19F5507C00F6F8F9 /* UISearchBar.h */,
 				436D4B0D19F5507C00F6F8F9 /* UISearchBar.m */,
+				D2B48A7E1B46813600F64529 /* UISearchBarDefaultDelegate.h */,
+				D2B48A7F1B46813600F64529 /* UISearchBarDefaultDelegate.m */,
 				432F73781A08AC9C009CEC64 /* UIMenuController.h */,
 				432F73791A08AC9C009CEC64 /* UIMenuController.m */,
 				432F737D1A08AE99009CEC64 /* UISplitViewController.h */,
@@ -1163,6 +1197,24 @@
 			name = ViewControllers;
 			sourceTree = "<group>";
 		};
+		D23348CA1B42515B00A687B7 /* JavaBrigeTools */ = {
+			isa = PBXGroup;
+			children = (
+				D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */,
+				D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */,
+				D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */,
+				D28F68391B426D8F00AFBF84 /* TNJavaBridgeDefinition.h */,
+				D28F683A1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m */,
+				D28F683E1B427E2A00AFBF84 /* TNJavaBridgeProxy.h */,
+				D29E653E1B46293000A72434 /* TNJavaBridgeProxy+UIJniObj.h */,
+				D28F683F1B427E2A00AFBF84 /* TNJavaBridgeProxy.m */,
+				D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */,
+				D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */,
+				D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */,
+			);
+			name = JavaBrigeTools;
+			sourceTree = "<group>";
+		};
 		D24BB0451AD7BCB2006BD749 /* UITabBarController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1227,6 +1279,7 @@
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,
 				4384631C188B3D52006DA1AA /* UIControlAction.h in Headers */,
 				432FF08B18544D7A005486C5 /* UIStringDrawing.h in Headers */,
+				D2B48A801B46813600F64529 /* UISearchBarDefaultDelegate.h in Headers */,
 				D28E58821B18620200BAB5D1 /* UITopFloatViewContainer.h in Headers */,
 				43B447FB1AB6FADF00DC1968 /* ioapi.h in Headers */,
 				43718EC518518FB400850F08 /* UIKitDefines.h in Headers */,
@@ -1298,6 +1351,7 @@
 				436D4AE119F5314700F6F8F9 /* UIAlertView.h in Headers */,
 				439A73C318E84C4E00B1BE40 /* UITableViewController.h in Headers */,
 				439A73C118E84C4E00B1BE40 /* UITableViewCell.h in Headers */,
+				D28F683B1B426D8F00AFBF84 /* TNJavaBridgeDefinition.h in Headers */,
 				439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */,
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
 				D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */,
@@ -1311,12 +1365,14 @@
 				43EBAA7E18AB67C2005DDD8D /* UIInterface.h in Headers */,
 				434CFCF51A0CA05300B6AC9E /* UIInputView.h in Headers */,
 				434CFCFD1A0CA1C500B6AC9E /* UILocalizedIndexedCollation.h in Headers */,
+				D29E653B1B46266B00A72434 /* UITextField+UIPrivate.h in Headers */,
 				43EBAA8218AB7087005DDD8D /* UINavigationBar.h in Headers */,
 				4336782218F1476D00F1D556 /* UIKit+Android.h in Headers */,
 				43EBAA7018AA5923005DDD8D /* UIBezierPath.h in Headers */,
 				43C200CF18EBE0AA00490D59 /* UIActivityIndicatorView.h in Headers */,
 				D29371B41B2ABFFA00A66047 /* UITopFloatViewDelegate.h in Headers */,
 				43EBAA8D18AB83E2005DDD8D /* UIAppearance.h in Headers */,
+				D28F68401B427E2A00AFBF84 /* TNJavaBridgeProxy.h in Headers */,
 				43EBAA9018AB85FB005DDD8D /* UIBarButtonItem.h in Headers */,
 				439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */,
 				43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */,
@@ -1329,6 +1385,7 @@
 				D2D489491B0B1E1E00D0558F /* UIMenuBubbleView.h in Headers */,
 				434CFCEE1A0C9DFD00B6AC9E /* UIAlert.h in Headers */,
 				43C200C418EBBCD400490D59 /* UIPageControl.h in Headers */,
+				D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
 				436D4B0A19F54FCB00F6F8F9 /* UISearchController.h in Headers */,
@@ -1360,6 +1417,7 @@
 				434CFD1D1A0CAC2300B6AC9E /* NSTextContainer.h in Headers */,
 				439A73CD18E84C6300B1BE40 /* UITableViewCellSeparator.h in Headers */,
 				43B819D118E27D550020624F /* UIScrollViewAnimationDeceleration.h in Headers */,
+				D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */,
 				432FF0621853463E005486C5 /* UIScreenPrivate.h in Headers */,
 				436D4AD919F52FB300F6F8F9 /* UISlider.h in Headers */,
 			);
@@ -1534,6 +1592,7 @@
 				436D4ADE19F52FDB00F6F8F9 /* UIStepper.m in Sources */,
 				436D4AF919F5471E00F6F8F9 /* UISegmentedControl.m in Sources */,
 				434CFCF61A0CA05300B6AC9E /* UIInputView.m in Sources */,
+				D24E1DF11B43E55E009814C3 /* JavaBridgeProxyFactory.java in Sources */,
 				434CFD261A0CAFCD00B6AC9E /* NSTextStorage.m in Sources */,
 				D28E58831B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
@@ -1560,6 +1619,7 @@
 				D29A5EB21B1AA87F004EA433 /* UIBubbleView.m in Sources */,
 				434CFD631A0CBAB400B6AC9E /* UIVideoEditorController.m in Sources */,
 				436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */,
+				D28F683C1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m in Sources */,
 				434CFD5F1A0CB9A800B6AC9E /* UIStateRestoration.m in Sources */,
 				D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,
@@ -1567,6 +1627,8 @@
 				43D7627C195039C9003DB7B2 /* BKRenderingService.m in Sources */,
 				434CFD361A0CB29A00B6AC9E /* UIReferenceLibraryViewController.m in Sources */,
 				434CFD2A1A0CB18D00B6AC9E /* UISearchDisplayController.m in Sources */,
+				D2B48A811B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */,
+				D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */,
 				434CFD1A1A0CAAF200B6AC9E /* NSTextAttachment.m in Sources */,
 				432F73801A08AE99009CEC64 /* UISplitViewController.m in Sources */,
 				43B447FA1AB6FADF00DC1968 /* ioapi.c in Sources */,
@@ -1575,6 +1637,7 @@
 				434CFD3A1A0CB40400B6AC9E /* UIPasteboard.m in Sources */,
 				43EBAA1B18A9F11C005DDD8D /* UIViewController.m in Sources */,
 				434CFD0E1A0CA91200B6AC9E /* NSShadow.m in Sources */,
+				D28F68411B427E2A00AFBF84 /* TNJavaBridgeProxy.m in Sources */,
 				4384631D188B3D52006DA1AA /* UIControlAction.m in Sources */,
 				43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */,
 				432FF094185452EC005486C5 /* NSStringDrawing.m in Sources */,
@@ -1599,6 +1662,7 @@
 				D2BA4C861AEF3109003D4A35 /* TNImageBuffer.m in Sources */,
 				43B819E918E2AA870020624F /* UIGestureRecognizer.m in Sources */,
 				439A73D018E84C6300B1BE40 /* UITableViewSection.m in Sources */,
+				D24E1DF01B43E55E009814C3 /* JavaBridgeProxy.java in Sources */,
 				D2939BB81B231273003E1FCB /* UIPopoverFloatView.m in Sources */,
 				434CFD321A0CB24200B6AC9E /* UIRefreshControl.m in Sources */,
 				43CBC1B01A7AA7850060B2AE /* AndroidMain.m in Sources */,
@@ -1616,6 +1680,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D28F683D1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m in Sources */,
+				D28F68421B427E2A00AFBF84 /* TNJavaBridgeProxy.m in Sources */,
+				D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */,
 				D2D4894B1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */,
 				D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				D2BA4C871AEF3109003D4A35 /* TNImageBuffer.m in Sources */,
@@ -1624,6 +1691,7 @@
 				D2939BB91B231273003E1FCB /* UIPopoverFloatView.m in Sources */,
 				D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */,
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
+				D2B48A821B46813600F64529 /* UISearchBarDefaultDelegate.m in Sources */,
 				D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
 				D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,

@@ -10,6 +10,7 @@
 #import <GLES2/gl2.h>
 #import <TNJavaHelper/TNJavaHelper.h>
 #import "UIEvent+Android.h"
+#import "TNJavaBridgeProxy+UIJniObj.h"
 
 typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 
@@ -76,6 +77,32 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
         [self createJavaTextView:tex];
     }
     return self;
+}
+
+- (void)setTextWatcherListener:(TNJavaBridgeProxy *)textWatcherListener
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,
+                                        "addTextChangedListener","(Landroid/text/TextWatcher;)V");
+    
+    if (mid == NULL) {
+        NSLog(@"method id not found:%@",@"addTextChangedListener(Landroid/text/TextWatcher;)V");
+        return;
+    }
+    (*env)->CallVoidMethod(env, _jTextView, mid, textWatcherListener.jProxiedInstance);
+}
+
+- (void)setOnFocusChangeListener:(TNJavaBridgeProxy *)focusChangeListener
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,
+                                        "setOnFocusChangeListener","(Landroid/view/View$OnFocusChangeListener;)V");
+    
+    if (mid == NULL) {
+        NSLog(@"method id not found:%@",@"setOnFocusChangeListener(OnFocusChangeListener)V");
+        return;
+    }
+    (*env)->CallVoidMethod(env, _jTextView, mid, focusChangeListener.jProxiedInstance);
 }
 
 - (BOOL)updaeTextureIfNeeds:(CATransform3D *)transform

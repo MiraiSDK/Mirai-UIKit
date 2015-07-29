@@ -19,9 +19,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         self.colorChangedBlock = action;
         self.currentColorIndex = 0;
-        [self _onClickButton:nil];
         [self addTarget:self action:@selector(_onClickButton:) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
