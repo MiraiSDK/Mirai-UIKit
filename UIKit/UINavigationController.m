@@ -345,9 +345,7 @@ typedef enum {
 		[self.view insertSubview:viewController.view atIndex:0];
 	}
     
-    if (self.view.superview) {
-        [self _setVisibleViewControllerNeedsUpdate];
-    }
+    [self _setVisibleViewControllerNeedsUpdate];
     [viewController becomeFirstResponder];
 }
 
