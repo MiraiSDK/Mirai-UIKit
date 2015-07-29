@@ -369,6 +369,8 @@ static NSMutableArray *_viewControllerInstances;
         _isBeingPresented = NO;
         
         [selfView removeFromSuperview];
+        [self resignFirstResponder];
+        
         [self viewDidDisappear:animated];
         
         [viewControllerToPresent viewDidAppear:animated];

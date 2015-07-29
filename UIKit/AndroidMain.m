@@ -78,6 +78,24 @@ static void _NSLog_android_log_handler (NSString *message)
     __android_log_write(ANDROID_LOG_INFO,"NSLog",[message UTF8String]);
 }
 
+static const char *replacePrefixAsNewString(const char *originalStr, const char *replacedStr, size_t prefixLen) {
+    
+    size_t replacedStrLen = strlen(replacedStr);
+    size_t newStrLen = replacedStrLen + strlen(originalStr) - prefixLen;
+    char *newStr = malloc(sizeof(char)*(newStrLen + 1));
+    
+    for (int i=0; i<replacedStrLen; i++) {
+        newStr[i] = replacedStr[i];
+    }
+    
+    for (int i=0; i<newStrLen - replacedStrLen; i++) {
+        newStr[replacedStrLen + i] = originalStr[prefixLen + i];
+    }
+    newStr[newStrLen] = '\0';
+    
+    return newStr;
+}
+
 static void constructExecutablePath(char *result, struct android_app* state)
 {
     char buffer[1024];
@@ -86,10 +104,16 @@ static void constructExecutablePath(char *result, struct android_app* state)
     // externalDataPath: /storage/emulated/0/Android/data/com.company.example/files
     const char * externalDataPath = app_state->activity->externalDataPath;
     
+    // Some of Android devices (like MIUI3) don't have '0' directory.
+    externalDataPath = replacePrefixAsNewString(externalDataPath,
+                                                "/storage/emulated/legacy",
+                                                strlen("/storage/emulated/0"));
+    
     // remove last component
     // basePath will be formate like /storage/emulated/0/Android/data/com.company.example
     char *lastSlash = strrchr(externalDataPath, '/');
     strncpy(basePath, externalDataPath, lastSlash - externalDataPath);
+    free(externalDataPath);
     
     // get last component
     // activityIdentifier will be formate like com.company.example

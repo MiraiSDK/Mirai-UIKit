@@ -31,6 +31,7 @@ typedef enum {
     BOOL _primaryViewControllerOnStage;
     BOOL _primaryShrink;
     BOOL _secondaryShrink;
+    BOOL _resetPreferredDisplayMode;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -49,8 +50,8 @@ typedef enum {
     _maximumPrimaryColumnWidth = 400.0;
     _minimumPrimaryColumnWidth = 0.0;
     _preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
-    _displayMode = UISplitViewControllerDisplayModeAutomatic;
-    _splitAppearance = UISplitViewControllerSplitAppearncePrimaryOverlay;
+    _displayMode = [self _currentDisplayModeOfAutomatic];
+    _splitAppearance = [self _getSplitAppearanceWithDisplayMode:_preferredDisplayMode];
 }
 
 - (void)loadView
@@ -294,10 +295,25 @@ typedef enum {
 
 #pragma mark - displayMode
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return YES;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                duration:(NSTimeInterval)duration
+{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    _resetPreferredDisplayMode = YES;
+    [self setPreferredDisplayMode:_preferredDisplayMode];
+}
+
 - (void)setPreferredDisplayMode:(UISplitViewControllerDisplayMode)preferredDisplayMode
 {
-    if (_preferredDisplayMode != preferredDisplayMode) {
+    if (_resetPreferredDisplayMode || _preferredDisplayMode != preferredDisplayMode) {
+        _resetPreferredDisplayMode = NO;
         _preferredDisplayMode = preferredDisplayMode;
+        
         _displayMode = preferredDisplayMode;
         [self setSplitAppearance:[self _getSplitAppearanceWithDisplayMode:preferredDisplayMode]
                    tryToAnimated:NO];
@@ -324,6 +340,7 @@ typedef enum {
                                                     initWithTarget:self action:@selector(_onTappedSelf:)];
     tapGestureRecognizer.numberOfTapsRequired = 1;
     tapGestureRecognizer.numberOfTouchesRequired = 1;
+    tapGestureRecognizer.cancelsTouchesInView = NO;
     return tapGestureRecognizer;
 }
 
@@ -345,6 +362,10 @@ typedef enum {
 
 - (void)_onTappedSelf:(UITapGestureRecognizer *)tapGestureRecognizer
 {
+    if (_splitAppearance == UISplitViewControllerSplitAppearnceBoth) {
+        // it won't hide primary view because we need to show both them.
+        return;
+    }
     if (!self.collapsed && [self _isOperateAtVaildArea:tapGestureRecognizer]) {
         [self _hidePrimaryViewController];
     }
@@ -379,23 +400,40 @@ typedef enum {
     self.splitAppearance = UISplitViewControllerSplitAppearncePrimaryHidden;
 }
 
+- (UISplitViewControllerDisplayMode)_currentDisplayModeOfAutomatic
+{
+    if ([self _showLandscapeLayout]) {
+        
+        return UISplitViewControllerDisplayModeAllVisible;
+    } else {
+        return UISplitViewControllerDisplayModePrimaryOverlay;
+    }
+}
+
 - (void)_recoverPrimaryViewController
 {
-    switch (_preferredDisplayMode) {
+    UISplitViewControllerDisplayMode asMode = _preferredDisplayMode;
+    if (asMode == UISplitViewControllerDisplayModeAutomatic) {
+        asMode = [self _currentDisplayModeOfAutomatic];
+    }
+    
+    switch (asMode) {
         case UISplitViewControllerDisplayModeAllVisible:
-            self.displayMode = _preferredDisplayMode;
+            self.displayMode = asMode;
             self.splitAppearance = UISplitViewControllerSplitAppearnceBoth;
             break;
             
         case UISplitViewControllerDisplayModePrimaryOverlay:
-        case UISplitViewControllerDisplayModeAutomatic:
-            self.displayMode = _preferredDisplayMode;
+            self.displayMode = asMode;
             self.splitAppearance = UISplitViewControllerSplitAppearncePrimaryOverlay;
             break;
             
         case UISplitViewControllerDisplayModePrimaryHidden:
             self.displayMode = UISplitViewControllerDisplayModePrimaryOverlay;
             self.splitAppearance = UISplitViewControllerSplitAppearncePrimaryOverlay;
+            break;
+            
+        default:
             break;
     }
 }
@@ -435,6 +473,13 @@ typedef enum {
 {
     switch (mode) {
         case UISplitViewControllerDisplayModeAutomatic:
+            if ([self _showLandscapeLayout]) {
+                
+                return UISplitViewControllerSplitAppearnceBoth;
+            } else {
+                return UISplitViewControllerSplitAppearncePrimaryOverlay;
+            }
+            
         case UISplitViewControllerDisplayModePrimaryOverlay:
             return UISplitViewControllerSplitAppearncePrimaryOverlay;
             
@@ -449,6 +494,16 @@ typedef enum {
 - (UISplitViewController *)splitViewController
 {
     return self;
+}
+
+- (BOOL)_showLandscapeLayout
+{
+    // Now, MiraiSDK-UIKit seems like can't get right interfaceOrientation.
+    // Mostly, we use UISplitViewController to show both primaray and secondary page.
+    return YES;
+    
+//    return self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+//           self.interfaceOrientation == UIInterfaceOrientationLandscapeRight;
 }
 
 @end

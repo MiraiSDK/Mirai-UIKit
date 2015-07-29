@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
+#import "UIPopoverController.h"
 #import "UIPopoverFloatView.h"
 #import "UIPositionOnRect.h"
 
@@ -50,7 +51,7 @@
 
 - (BOOL)_shouldDismissPopover
 {
-    if (_parent.delegate) {
+    if ([_parent.delegate respondsToSelector:@selector(popoverControllerShouldDismissPopover:)]) {
         return [_parent.delegate popoverControllerShouldDismissPopover:_parent];
     }
     return YES;

@@ -92,7 +92,9 @@
 - (void)presentPopoverFromRect:(CGRect)rect inView:(UIView *)view
       permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated
 {
-    [_delegate popoverController:self willRepositionPopoverToRect:&rect inView:&view];
+    if ([_delegate respondsToSelector:@selector(popoverController:willRepositionPopoverToRect:inView:)]) {
+        [_delegate popoverController:self willRepositionPopoverToRect:&rect inView:&view];
+    }
     _floatView.presentArrowDirections = arrowDirections;
     _floatView.floatCloseToTarget = [view convertRect:rect toView:[[UIApplication sharedApplication] keyWindow]];
     [_floatView setVisible:YES animated:animated];
@@ -126,7 +128,10 @@
 - (void)floatViewDidDisappear:(BOOL)animated
 {
     [_contentViewController viewDidDisappear:animated];
-    [_delegate popoverControllerDidDismissPopover:self];
+    
+    if ([_delegate respondsToSelector:@selector(popoverControllerDidDismissPopover:)]) {
+        [_delegate popoverControllerDidDismissPopover:self];
+    }
 }
 
 @end

@@ -104,7 +104,8 @@ extern CGFloat _UITableViewDefaultRowHeight;
         [self bringSubviewToFront:_seperatorView];
     }
     
-    if (_style == UITableViewCellStyleDefault) {
+    // other _style didn't implement.
+//    if (_style == UITableViewCellStyleDefault) {
         const CGFloat padding = 5;
 
         const BOOL showImage = (_imageView.image != nil);
@@ -122,7 +123,7 @@ extern CGFloat _UITableViewDefaultRowHeight;
         textRect.origin = CGPointMake(padding+imageWidth+padding,0);
         textRect.size = CGSizeMake(MAX(0,contentFrame.size.width-textRect.origin.x-padding),contentFrame.size.height);
         _textLabel.frame = textRect;
-    }
+//    }
 }
 
 - (UIView *)contentView

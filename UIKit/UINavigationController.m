@@ -345,9 +345,8 @@ typedef enum {
 		[self.view insertSubview:viewController.view atIndex:0];
 	}
     
-    if (self.view.superview) {
-        [self _setVisibleViewControllerNeedsUpdate];
-    }
+    [self _setVisibleViewControllerNeedsUpdate];
+    [viewController becomeFirstResponder];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
@@ -407,6 +406,9 @@ typedef enum {
     
     if (self.view.superview) {
         [self _setVisibleViewControllerNeedsUpdate];
+    }
+    if (self.topViewController) {
+        [self.topViewController becomeFirstResponder];
     }
     
 	return formerTopViewController;
