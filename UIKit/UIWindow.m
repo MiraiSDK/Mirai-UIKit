@@ -143,8 +143,11 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 - (void)_setLandscaped:(BOOL)landscaped
 {
     if (_landscaped != landscaped) {
+        CGRect newFrame = self.frame;
+        newFrame.size = CGSizeMake(newFrame.size.height, newFrame.size.width);
+        self.frame = newFrame;
+        
         UIViewController *vc = [self _topestViewController];
-        vc.view.transform = landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
         vc.view.frame = self.window.bounds;
         _landscaped = landscaped;
     }

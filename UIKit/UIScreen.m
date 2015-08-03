@@ -162,15 +162,10 @@ static UIScreen *_mainScreen = nil;
         CGFloat shortSide = MIN(_pixelBounds.size.width,_pixelBounds.size.height);
         CGRect pixelBounds = landscaped? CGRectMake(0, 0, longSide, shortSide): CGRectMake(0, 0, shortSide, longSide);
         [self _setPixelBounds:pixelBounds];
+        [__windowLayer setFrame:pixelBounds];
         
+        __windowLayer.frame = pixelBounds;
         __windowLayer.position = CGPointMake(pixelBounds.size.width/2, pixelBounds.size.height/2);
-        if (landscaped) {
-            CATransform3D scale = CATransform3DMakeScale(_scale, _scale, 1);
-            CATransform3D t = CATransform3DRotate(scale, M_PI_2, 0, 0, 1);
-            __windowLayer.transform = t;
-        } else {
-            __windowLayer.transform = CATransform3DMakeScale(_scale, _scale, 1);
-        }
         
         NSArray *windows =  [UIApplication sharedApplication].windows;
         for (UIWindow *window in windows) {
