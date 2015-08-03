@@ -11,13 +11,12 @@
 
 #import "UITextField+UIPrivate.h"
 #import "TNJavaBridgeProxy.h"
-#import "UISearchBarDefaultDelegate.h"
 
-#define kSearchInputBackgroundHeight 40
-#define kCompoentInterval 10
-#define kCancelButtonWidth 100
-#define kTinyIconButtonSize 35
-#define kScopeBarHeight 40
+#define kSearchInputBackgroundHeight 18
+#define kCompoentInterval 5
+#define kCancelButtonWidth 80
+#define kTinyIconButtonSize 17
+#define kScopeBarHeight 20
 
 typedef enum {
     UISearchBarRightOperateButtonStateClear,
@@ -108,7 +107,9 @@ typedef enum {
     if (_selectedScopeButtonIndex != scopeBar.selectedSegmentIndex) {
         _selectedScopeButtonIndex = scopeBar.selectedSegmentIndex;
         
-        [[self _delegateNotNil] searchBar:self selectedScopeButtonIndexDidChange:_selectedScopeButtonIndex];
+        if ([_delegate respondsToSelector:@selector(searchBar:selectedScopeButtonIndexDidChange:)]) {
+            [_delegate searchBar:self selectedScopeButtonIndexDidChange:_selectedScopeButtonIndex];
+        }
     }
 }
 
@@ -163,7 +164,7 @@ typedef enum {
 
 - (CGFloat)_countSearchInputBackgroundTopLocationAndResizeSelf
 {
-    CGFloat contentHeight = kSearchInputBackgroundHeight + 2*kCompoentInterval;
+    CGFloat contentHeight = kSearchInputBackgroundHeight;
     if (_scopeBar) {
         contentHeight += kScopeBarHeight + kCompoentInterval;
     }
@@ -174,7 +175,7 @@ typedef enum {
         self.frame = resizeFrame;
         selfMoreThanHeightOfContent = 0;
     }
-    return selfMoreThanHeightOfContent/2 + kCompoentInterval;
+    return selfMoreThanHeightOfContent/2;
 }
 
 - (CGFloat)_refreshCancelButtonLayoutThenReturnSearchRightXLocationWithTopLocation:(CGFloat)topLocation
@@ -382,7 +383,9 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
     [self _refreshRightOperateIcon];
     [self _refreshAllComponentsLayout];
     
-    [[self _delegateNotNil] searchBar:self textDidChange:_searchTextField.text];
+    if ([_delegate respondsToSelector:@selector(searchBar:textDidChange:)]) {
+        [_delegate searchBar:self textDidChange:_searchTextField.text];
+    }
 }
 
 - (void)_beforeTextChanged:(TNJavaBridgeCallbackContext *)context
@@ -399,13 +402,16 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [[self _delegateNotNil] searchBarTextDidBeginEditing:self];
+    if ([_delegate respondsToSelector:@selector(searchBarTextDidBeginEditing:)]) {
+        [_delegate searchBarTextDidBeginEditing:self];
+    }
 }
 
-- (void)resignFirstResponder
+- (BOOL)resignFirstResponder
 {
-    [super resignFirstResponder];
+    BOOL result = [super resignFirstResponder];
     [_searchTextField resignFirstResponder];
+    return result;
 }
 
 #pragma mark - button callback
@@ -439,7 +445,9 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 
 - (void)_onTappedCancelButton:(id)sender
 {
-    [[self _delegateNotNil] searchBarCancelButtonClicked:self];
+    if ([_delegate respondsToSelector:@selector(searchBarCancelButtonClicked:)]) {
+        [_delegate searchBarCancelButtonClicked:self];
+    }
 }
 
 - (void)_onTappedRightOperateButton:(id)sender
@@ -453,15 +461,21 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
             break;
         
         case UISearchBarRightOperateButtonStateSearchResultSelected:
-            [[self _delegateNotNil] searchBarResultsListButtonClicked:self];
+            if ([_delegate respondsToSelector:@selector(searchBarResultsListButtonClicked:)]) {
+                [_delegate searchBarResultsListButtonClicked:self];
+            }
             break;
         
         case UISearchBarRightOperateButtonStateSearchResult:
-            [[self _delegateNotNil] searchBarResultsListButtonClicked:self];
+            if ([_delegate respondsToSelector:@selector(searchBarResultsListButtonClicked:)]) {
+                [_delegate searchBarResultsListButtonClicked:self];
+            }
             break;
         
         case UISearchBarRightOperateButtonStateBookMark:
-            [[self _delegateNotNil] searchBarBookmarkButtonClicked:self];
+            if ([_delegate respondsToSelector:@selector(searchBarBookmarkButtonClicked:)]) {
+                [_delegate searchBarBookmarkButtonClicked:self];
+            }
             break;
         
         default:
@@ -470,18 +484,6 @@ static TNJavaBridgeDefinition *_textWatcherListenerDefinition;
 }
 
 #pragma mark - util methodes
-
-- (id<UISearchBarDelegate>)_delegateNotNil
-{
-    if (_delegate) {
-        return _delegate;
-    }
-    static UISearchBarDefaultDelegate *defaultDelegate;
-    if (!defaultDelegate) {
-        defaultDelegate = [[UISearchBarDefaultDelegate alloc] init];
-    }
-    return defaultDelegate;
-}
 
 - (BOOL)_willShowScopBar
 {
