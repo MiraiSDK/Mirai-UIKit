@@ -102,7 +102,6 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         [self addSubview:_rootViewController.view];
         
         UIViewController *vc = rootViewController;
-        vc.view.transform = _landscaped ? CGAffineTransformMakeRotation(-M_PI_2) : CGAffineTransformIdentity;
         vc.view.frame = self.window.bounds;
     }
 }
