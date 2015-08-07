@@ -104,6 +104,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
             _currentOrientationInfo = orrientationInfo;
             
             _mainActivity.setRequestedOrientation(orrientationInfo);
+            _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
             nativeChangeOrientationTo(orrientationInfo);
         }
     }

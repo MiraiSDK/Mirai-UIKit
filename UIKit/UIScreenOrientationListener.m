@@ -45,7 +45,8 @@ static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientati
     UIInterfaceOrientationMask orientation = [orientationNumber unsignedIntegerValue];
     _currentOrientationMask = orientation;
     
-    BOOL isLandsacpe = (orientation & UIInterfaceOrientationMaskLandscape);
+    BOOL isLandsacpe = (orientation == UIInterfaceOrientationMaskLandscapeLeft ||
+                        orientation == UIInterfaceOrientationMaskLandscapeRight);
     
     [[UIScreen mainScreen] _setLandscaped:isLandsacpe];
 }
