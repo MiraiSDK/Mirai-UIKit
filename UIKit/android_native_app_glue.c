@@ -128,13 +128,6 @@ void android_app_pre_exec_cmd(struct android_app* android_app, int8_t cmd) {
             pthread_mutex_unlock(&android_app->mutex);
             break;
 
-        case APP_CMD_CONFIG_CHANGED:
-            LOGV("APP_CMD_CONFIG_CHANGED\n");
-            AConfiguration_fromAssetManager(android_app->config,
-                    android_app->activity->assetManager);
-            print_cur_config(android_app);
-            break;
-
         case APP_CMD_DESTROY:
             LOGV("APP_CMD_DESTROY\n");
             android_app->destroyRequested = 1;
@@ -387,9 +380,7 @@ static void onStop(ANativeActivity* activity) {
 }
 
 static void onConfigurationChanged(ANativeActivity* activity) {
-    struct android_app* android_app = (struct android_app*)activity->instance;
-    LOGV("ConfigurationChanged: %p\n", activity);
-    android_app_write_cmd(android_app, APP_CMD_CONFIG_CHANGED);
+    
 }
 
 static void onLowMemory(ANativeActivity* activity) {

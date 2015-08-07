@@ -265,11 +265,6 @@ enum {
     APP_CMD_LOST_FOCUS,
 
     /**
-     * Command from main thread: the current device configuration has changed.
-     */
-    APP_CMD_CONFIG_CHANGED,
-
-    /**
      * Command from main thread: the system is running low on memory.
      * Try to reduce your memory use.
      */
