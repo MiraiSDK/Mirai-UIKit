@@ -73,12 +73,6 @@ typedef enum {
     return self.viewControllers.count <= 1 || _splitAppearance == UISplitViewControllerSplitAppearncePrimaryHidden;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size
-{
-    [self _refreshPrimaryColumnWidth];
-    [self _synchronizeSubViewControllerAppearnce];
-}
-
 - (void)setPreferredPrimaryColumnWidthFraction:(CGFloat)preferredPrimaryColumnWidthFraction
 {
     preferredPrimaryColumnWidthFraction = MAX(0.0, MIN(1.0, preferredPrimaryColumnWidthFraction));
@@ -125,9 +119,7 @@ typedef enum {
     // this method must be called before loadView:
     // so, when call this method, self.view may be probable not ready to invoke.
     if (self.isViewLoaded) {
-        _forcedSynchronizeSubViewControllerppearance = YES;
-        [self _synchronizeSubViewControllerAppearnce];
-        _forcedSynchronizeSubViewControllerppearance = NO;
+        [self _forceSynchronizeSubViewControllerAppearnce];
     }
 }
 
@@ -138,6 +130,13 @@ typedef enum {
     [self _clearOldViewController:_secondaryViewController];
     _primaryViewController = [self _getObjectAt:0 returnNilIfNotExistsFromArray:viewControllers];
     _secondaryViewController = [self _getObjectAt:1 returnNilIfNotExistsFromArray:viewControllers];
+}
+
+- (void)_forceSynchronizeSubViewControllerAppearnce
+{
+    _forcedSynchronizeSubViewControllerppearance = YES;
+    [self _synchronizeSubViewControllerAppearnce];
+    _forcedSynchronizeSubViewControllerppearance = NO;
 }
 
 - (void)_synchronizeSubViewControllerAppearnce
@@ -439,6 +438,12 @@ typedef enum {
 }
 
 #pragma mark - split appearance changes.
+
+- (void)viewDidLayoutSubviews
+{
+    [self _refreshPrimaryColumnWidth];
+    [self _forceSynchronizeSubViewControllerAppearnce];
+}
 
 - (void)setSplitAppearance:(UISplitViewControllerSplitAppearnce)splitAppearance
 {
