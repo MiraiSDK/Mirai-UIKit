@@ -89,6 +89,8 @@
 		D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
 		D221B3331B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */; };
 		D221B3341B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */; };
+		D22284A71B7B1327003B5996 /* UIScrollViewInertance.m in Sources */ = {isa = PBXBuildFile; fileRef = D22284A61B7B1327003B5996 /* UIScrollViewInertance.m */; };
+		D22284A81B7B1327003B5996 /* UIScrollViewInertance.m in Sources */ = {isa = PBXBuildFile; fileRef = D22284A61B7B1327003B5996 /* UIScrollViewInertance.m */; };
 		D2239E301B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E2F1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m */; };
 		D2239E311B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E2F1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m */; };
 		D2239E3B1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E3A1B048AF700810377 /* TNDisplayModeTestViewController.m */; };
@@ -269,6 +271,8 @@
 		D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSplitViewControllerTestViewController.m; sourceTree = "<group>"; };
 		D221B3311B292CA800C15C63 /* TNPopoverPropertiesTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPopoverPropertiesTestViewController.h; sourceTree = "<group>"; };
 		D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPopoverPropertiesTestViewController.m; sourceTree = "<group>"; };
+		D22284A51B7B1327003B5996 /* UIScrollViewInertance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewInertance.h; sourceTree = "<group>"; };
+		D22284A61B7B1327003B5996 /* UIScrollViewInertance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollViewInertance.m; sourceTree = "<group>"; };
 		D2239E2E1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPrintSplitViewControllerDelegateMessage.h; sourceTree = "<group>"; };
 		D2239E2F1B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPrintSplitViewControllerDelegateMessage.m; sourceTree = "<group>"; };
 		D2239E391B048AF700810377 /* TNDisplayModeTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNDisplayModeTestViewController.h; sourceTree = "<group>"; };
@@ -467,6 +471,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D22284AB1B7B132E003B5996 /* UIScrollViewInertance */,
 				D2A9FB981B1FF35300C88751 /* UIPopoverController */,
 				D269FACD1B3AB42000A0AB7A /* UISearchController */,
 				438FAEA61AFB8D370069983F /* UITextField */,
@@ -670,6 +675,15 @@
 				D2239E3A1B048AF700810377 /* TNDisplayModeTestViewController.m */,
 			);
 			name = UISplitViewController;
+			sourceTree = "<group>";
+		};
+		D22284AB1B7B132E003B5996 /* UIScrollViewInertance */ = {
+			isa = PBXGroup;
+			children = (
+				D22284A51B7B1327003B5996 /* UIScrollViewInertance.h */,
+				D22284A61B7B1327003B5996 /* UIScrollViewInertance.m */,
+			);
+			name = UIScrollViewInertance;
 			sourceTree = "<group>";
 		};
 		D269FACD1B3AB42000A0AB7A /* UISearchController */ = {
@@ -1009,6 +1023,7 @@
 				D2EB64361B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */,
 				D2BB4E051B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
 				D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */,
+				D22284A81B7B1327003B5996 /* UIScrollViewInertance.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
@@ -1085,6 +1100,7 @@
 				D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
 				4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
 				D2239E411B04915000810377 /* TNBlockButton.m in Sources */,
+				D22284A71B7B1327003B5996 /* UIScrollViewInertance.m in Sources */,
 				D2A5F4821AB07C830011AF7B /* TNComponentCreator.m in Sources */,
 				D2A9FB941B1FED8100C88751 /* TNTopFloatTestViewController.m in Sources */,
 				D2D64D261B3BD2F900AC3AF7 /* TNTitleChangedButton.m in Sources */,

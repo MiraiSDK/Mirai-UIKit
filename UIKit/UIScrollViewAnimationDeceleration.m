@@ -75,9 +75,9 @@
 
 static const CGFloat minimumBounceVelocityBeforeReturning = 100;
 static const NSTimeInterval returnAnimationDuration = 0.33;
-static const NSTimeInterval physicsTimeStep = 1/120.;
+static const NSTimeInterval physicsTimeStep = 1/20.;
 static const CGFloat springTightness = 7;
-static const CGFloat springDampening = 15;
+static const CGFloat springDampening = 0.45;
 
 static CGFloat Clamp(CGFloat v, CGFloat min, CGFloat max)
 {
@@ -102,7 +102,8 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
         const NSTimeInterval returnBounceTime = MIN(1, ((t - c->returnTime) / returnAnimationDuration));
         c->position = UIQuadraticEaseOut(returnBounceTime, c->returnFrom, to);
         return (returnBounceTime == 1);
-    } else if (fabs(to - c->position) > 0) {
+        
+    } else {
         const CGFloat F = Spring(c->velocity, c->position, to, springTightness, springDampening);
         
         c->velocity += F * physicsTimeStep;
@@ -114,11 +115,9 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
             c->returnFrom = c->position;
             c->returnTime = t;
         }
-        
         return NO;
-    } else {
-        return YES;
     }
+    return YES;
 }
 
 @implementation UIScrollViewAnimationDeceleration
@@ -175,7 +174,7 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
         const BOOL horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
         
         finished = (verticalIsFinished && horizontalIsFinished && isFinishedWaitingForMomentumScroll);
-
+        
         beginTime += physicsTimeStep;
     }
 
