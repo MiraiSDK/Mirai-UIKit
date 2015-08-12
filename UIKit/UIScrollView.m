@@ -44,6 +44,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define kConfinedShrinkRate 0.32
+#define kSlideMinimumVelocity 170
 
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 static const NSTimeInterval UIScrollViewQuickAnimationDuration = 0.22;
@@ -534,6 +535,10 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 {
     const CGPoint confinedOffset = [self _confinedContentOffset:_contentOffset];
     velocity = CGPointMake(-velocity.x, -velocity.y);
+    
+    if (fabs(velocity.x) + fabs(velocity.y) <= kSlideMinimumVelocity) {
+        return nil;
+    }
     
     // if we've pulled up the content outside it's bounds, we don't want to register any flick momentum there and instead just
     // have the animation pull the content back into place immediately.

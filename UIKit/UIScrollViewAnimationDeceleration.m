@@ -77,7 +77,7 @@ static const CGFloat minimumBounceVelocityBeforeReturning = 100;
 static const NSTimeInterval returnAnimationDuration = 0.33;
 static const NSTimeInterval physicsTimeStep = 1/20.;
 static const CGFloat springTightness = 7;
-static const CGFloat springDampening = 0.45;
+static const CGFloat springDampening = 1.24;
 
 static CGFloat Clamp(CGFloat v, CGFloat min, CGFloat max)
 {
@@ -86,7 +86,7 @@ static CGFloat Clamp(CGFloat v, CGFloat min, CGFloat max)
 
 static CGFloat ClampedVelocty(CGFloat v)
 {
-    const CGFloat V = 200;
+    const CGFloat V = 1500;
     return Clamp(v, -V, V);
 }
 
