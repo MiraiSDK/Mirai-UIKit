@@ -76,8 +76,6 @@
 static const CGFloat minimumBounceVelocityBeforeReturning = 100;
 static const NSTimeInterval returnAnimationDuration = 0.33;
 static const NSTimeInterval physicsTimeStep = 1/20.;
-static const CGFloat springTightness = 7;
-static const CGFloat springDampening = 1.24;
 
 static CGFloat Clamp(CGFloat v, CGFloat min, CGFloat max)
 {
@@ -90,10 +88,15 @@ static CGFloat ClampedVelocty(CGFloat v)
     return Clamp(v, -V, V);
 }
 
-static CGFloat Spring(CGFloat velocity, CGFloat position, CGFloat restPosition, CGFloat tightness, CGFloat dampening)
-{
-    const CGFloat d = position - restPosition;
-    return (-tightness * d) - (dampening * velocity);
+static CGFloat Resistance(CGFloat velocity) {
+    
+    CGFloat resistance = 1.6*fabs(velocity) + 54.0;
+    
+    if (velocity > 0) {
+        return -resistance;
+    } else {
+        return resistance;
+    }
 }
 
 static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationComponent *c, CGFloat to)
@@ -104,8 +107,7 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
         return (returnBounceTime == 1);
         
     } else {
-        const CGFloat F = Spring(c->velocity, c->position, to, springTightness, springDampening);
-        
+        const CGFloat F = Resistance(c->velocity);
         c->velocity += F * physicsTimeStep;
         c->position += c->velocity * physicsTimeStep;
 
