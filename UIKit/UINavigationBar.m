@@ -102,7 +102,7 @@ typedef enum {
     view.frame = frame;
 }
 
-+ (UIButton *)_backButtonWithBarButtonItem:(UIBarButtonItem *)item
+- (UIButton *)_backButtonWithBarButtonItem:(UIBarButtonItem *)item
 {
     if (!item) return nil;
     
@@ -111,8 +111,8 @@ typedef enum {
     backButton.titleLabel.font = [UIFont systemFontOfSize:kDefaultBackButtonsFontSize];
     [backButton setTitleColor:[UIColor _systemTextColor] forState:UIControlStateNormal];
     backButton.contentEdgeInsets = UIEdgeInsetsMake(0,15,0,7);
-    [backButton addTarget:nil action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self _setBarButtonSize:backButton];
+    [backButton addTarget:self action:@selector(_backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [[self class ]_setBarButtonSize:backButton];
     return backButton;
 }
 
@@ -265,7 +265,7 @@ typedef enum {
         CGRect rightFrame = CGRectZero;
         
         if (backItem) {
-            _leftView = [[self class] _backButtonWithBarButtonItem:backItem.backBarButtonItem];
+            _leftView = [self _backButtonWithBarButtonItem:backItem.backBarButtonItem];
         } else {
             _leftView = [[self class] _viewWithBarButtonItems:topItem.leftBarButtonItems];
         }
