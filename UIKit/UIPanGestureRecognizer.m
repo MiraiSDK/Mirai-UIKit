@@ -34,6 +34,8 @@
 #import "UIGeometry.h"
 #import "UIWindow.h"
 
+#define kCurrentVelocityWeight 0.35
+
 static UITouch *PanTouch(NSSet *touches)
 {
     for (UITouch *touch in touches) {
@@ -87,13 +89,23 @@ static UITouch *PanTouch(NSSet *touches)
     const NSTimeInterval timeDiff = event.timestamp - _lastMovementTime;
     
     if (!CGPointEqualToPoint(delta, CGPointZero) && timeDiff > 0) {
-        _velocity.x = delta.x / timeDiff;
-        _velocity.y = delta.y / timeDiff;
+        _velocity.x = [self _mergeVelocity0:_velocity.x andVelocity1:(delta.x / timeDiff)];
+        _velocity.y = [self _mergeVelocity0:_velocity.y andVelocity1:(delta.y / timeDiff)];
         _lastMovementTime = event.timestamp;
         return YES;
     } else {
         return NO;
     }
+}
+
+- (CGFloat)_mergeVelocity0:(CGFloat)v0 andVelocity1:(CGFloat)v1
+{
+    if (v0 == 0) {
+        return v1;
+    } else if (v0*v1 < 0) {
+        v0 = 0;
+    }
+    return (1-kCurrentVelocityWeight)*v0 + kCurrentVelocityWeight*v1;
 }
 
 - (void)reset
@@ -108,10 +120,7 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (CGPoint)velocityInView:(UIView *)view
 {
-    CGPoint p = [view convertPoint:_velocity fromView:nil];
-    p.x = -p.x;
-    p.y = -p.y;
-    return p;
+    return CGPointMake(-_velocity.x, -_velocity.y);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

@@ -43,6 +43,9 @@
 //#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define kConfinedShrinkRate 0.32
+#define kSlideMinimumVelocity 170
+
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 static const NSTimeInterval UIScrollViewQuickAnimationDuration = 0.22;
 static const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
@@ -531,6 +534,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (UIScrollViewAnimation *)_decelerationAnimationWithVelocity:(CGPoint)velocity
 {
     const CGPoint confinedOffset = [self _confinedContentOffset:_contentOffset];
+    velocity = CGPointMake(-velocity.x, -velocity.y);
+    
+    if (fabs(velocity.x) + fabs(velocity.y) <= kSlideMinimumVelocity) {
+        return nil;
+    }
     
     // if we've pulled up the content outside it's bounds, we don't want to register any flick momentum there and instead just
     // have the animation pull the content back into place immediately.
@@ -623,11 +631,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
             BOOL shouldVerticalBounce = (fabs(proposedOffset.y - confinedOffset.y) > 0);
             
             if (shouldHorizontalBounce) {
-                proposedOffset.x = originalOffset.x + (0.055 * delta.x);
+                proposedOffset.x = originalOffset.x + (kConfinedShrinkRate * delta.x);
             }
             
             if (shouldVerticalBounce) {
-                proposedOffset.y = originalOffset.y + (0.055 * delta.y);
+                proposedOffset.y = originalOffset.y + (kConfinedShrinkRate * delta.y);
             }
             
             [self _setRestrainedContentOffset:proposedOffset];
