@@ -3,6 +3,7 @@ package org.tiny4.CocoaActivity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.NativeActivity;
+import android.hardware.SensorManager;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
@@ -15,24 +16,32 @@ public class CocoaActivity extends NativeActivity
     public native int nativeSupportedOrientation(int orientation);
 
     private native void nativeOnTrimMemory(int level);
-    
+
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        ScreenOrientationHandler.initInstance(this, SensorManager.SENSOR_DELAY_NORMAL);
     }
+
+    public void onDestroy() {
+        super.onDestroy();
+        ScreenOrientationHandler.clearInstance();
+    }
+
+    public void onPause() {
+        super.onResume();
+        ScreenOrientationHandler.instance().onPause();
+    }
+
+    public void onResume() {
+        super.onPause();
+        ScreenOrientationHandler.instance().onResume();
+    }
+
     public void onConfigurationChanged (Configuration newConfig)
     {
         super.onConfigurationChanged (newConfig);
     }
 
-    public void updateSupportedOrientation (int orientation)
-    {
-        // called from native while supportedInterfaceOrientations changed
-        int currentOrientation = this.getRequestedOrientation();
-        if (currentOrientation != orientation) {
-            this.setRequestedOrientation(orientation);
-        }
-    }
-    
 	@Override
     public void onTrimMemory (int level)
     {

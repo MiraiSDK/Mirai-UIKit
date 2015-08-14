@@ -158,25 +158,14 @@ static UIScreen *_mainScreen = nil;
 - (void)_setLandscaped:(BOOL)landscaped
 {
     if (_landscaped != landscaped) {
-        CGFloat longSide = MAX(_pixelBounds.size.width,_pixelBounds.size.height);
-        CGFloat shortSide = MIN(_pixelBounds.size.width,_pixelBounds.size.height);
-        CGRect pixelBounds = landscaped? CGRectMake(0, 0, longSide, shortSide): CGRectMake(0, 0, shortSide, longSide);
-        [self _setPixelBounds:pixelBounds];
+        _landscaped = landscaped;
         
-        __windowLayer.position = CGPointMake(pixelBounds.size.width/2, pixelBounds.size.height/2);
-        if (landscaped) {
-            CATransform3D scale = CATransform3DMakeScale(_scale, _scale, 1);
-            CATransform3D t = CATransform3DRotate(scale, M_PI_2, 0, 0, 1);
-            __windowLayer.transform = t;
-        } else {
-            __windowLayer.transform = CATransform3DMakeScale(_scale, _scale, 1);
-        }
+        [self _setScreenBounds:_bounds scale:0.0 fitMode:UIScreenFitModeScaleAspectFit];
         
         NSArray *windows =  [UIApplication sharedApplication].windows;
         for (UIWindow *window in windows) {
             [window _setLandscaped:landscaped];
         }
-        _landscaped = landscaped;
     }
 }
 
@@ -185,29 +174,52 @@ static UIScreen *_mainScreen = nil;
 
 - (void)_setScreenBounds:(CGRect)bounds scale:(CGFloat)scale fitMode:(UIScreenFitMode)mode
 {
+    CGRect portraitBounds = [self _toPortraitRect:bounds];
+    CGRect portraitPixelBounds = [self _toPortraitRect:_pixelBounds];
+    
     if (mode == UIScreenFitModeScaleAspectFit) {
-        CGFloat shortSide = MIN(_pixelBounds.size.width, _pixelBounds.size.height);
-        CGFloat longSide = MAX(_pixelBounds.size.width, _pixelBounds.size.height);
-
-        CGFloat widthScale = shortSide / bounds.size.width;
-        CGFloat heightScale = longSide / bounds.size.height;
+        CGFloat widthScale = portraitPixelBounds.size.width / portraitBounds.size.width;
+        CGFloat heightScale = portraitPixelBounds.size.height / portraitBounds.size.height;
         scale = MIN(widthScale, heightScale);
-
     }
     
     NSLog(@"pixel bounds:%@",NSStringFromCGRect(_pixelBounds));
     NSLog(@"set screen bounds:%@ scale:%.2f",NSStringFromCGRect(bounds),scale);
+    
     _scale = scale;
-    CGRect portraitBounds = bounds;
-    if (bounds.size.width > bounds.size.height) {
-        portraitBounds.size.width = bounds.size.height;
-        portraitBounds.size.height = bounds.size.width;
-    }
-    _bounds = portraitBounds;
-    _applicationFrame = portraitBounds;
-    __windowLayer.bounds = portraitBounds;
+    [self _setPixelBounds:[self _toOrientedRect:_pixelBounds]];
+    CGRect orientedBounds = [self _toOrientedRect:bounds];
+    
+    _bounds = orientedBounds;
+    _applicationFrame = orientedBounds;
+    __windowLayer.bounds = orientedBounds;
     __windowLayer.position = CGPointMake(_pixelBounds.size.width/2, _pixelBounds.size.height/2);
     __windowLayer.transform = CATransform3DMakeScale(scale, scale, 1);
+}
+
+- (CGRect)_toOrientedRect:(CGRect)originalRect
+{
+    if ((!_landscaped && originalRect.size.width > originalRect.size.height) ||
+        (_landscaped && originalRect.size.height > originalRect.size.width)) {
+        
+        originalRect = [self _swapeWidthAndHeight:originalRect];
+    }
+    return originalRect;
+}
+
+- (CGRect)_toPortraitRect:(CGRect)originalRect
+{
+    if (originalRect.size.width > originalRect.size.height) {
+        originalRect = [self _swapeWidthAndHeight:originalRect];
+    }
+    return originalRect;
+}
+
+- (CGRect)_swapeWidthAndHeight:(CGRect)originalRect
+{
+    CGRect newRect = originalRect;
+    newRect.size = CGSizeMake(originalRect.size.height, originalRect.size.width);
+    return newRect;
 }
 
 - (CALayer *)_windowLayer

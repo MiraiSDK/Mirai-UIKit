@@ -388,6 +388,7 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setTransform:(CGAffineTransform)aTransform
 {
+    NSLog(@"### setTransform : %@", NSStringFromCGAffineTransform(aTransform));
     _layer.affineTransform = aTransform;
 }
 

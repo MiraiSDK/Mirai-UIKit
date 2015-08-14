@@ -309,6 +309,9 @@
 		D29A5EB31B1AA87F004EA433 /* UIBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29A5EB01B1AA87F004EA433 /* UIBubbleView.m */; };
 		D29E653B1B46266B00A72434 /* UITextField+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */; };
 		D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */; };
+		D2A5B40F1B73120E0046C265 /* ScreenOrientationHandler.java in Sources */ = {isa = PBXBuildFile; fileRef = D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */; };
+		D2ADA3681B71EBAD000637EF /* UIScreenOrientationListener.h in Headers */ = {isa = PBXBuildFile; fileRef = D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */; };
+		D2ADA3691B71EBAD000637EF /* UIScreenOrientationListener.m in Sources */ = {isa = PBXBuildFile; fileRef = D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */; };
 		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
 		D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
 		D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
@@ -656,6 +659,9 @@
 		D29E653A1B46266B00A72434 /* UITextField+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+UIPrivate.h"; sourceTree = "<group>"; };
 		D29E653C1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxyDefinition+UIPrivate.h"; sourceTree = "<group>"; };
 		D29E653E1B46293000A72434 /* TNJavaBridgeProxy+UIJniObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeProxy+UIJniObj.h"; sourceTree = "<group>"; };
+		D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = ScreenOrientationHandler.java; sourceTree = "<group>"; };
+		D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScreenOrientationListener.h; sourceTree = "<group>"; };
+		D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScreenOrientationListener.m; sourceTree = "<group>"; };
 		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
 		D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeCallbackContext.m; sourceTree = "<group>"; };
 		D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
@@ -703,6 +709,7 @@
 			isa = PBXGroup;
 			children = (
 				433C4A261AD0FC20005D06BB /* CocoaActivity.java */,
+				D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */,
 				433C4A271AD0FC20005D06BB /* GLViewRender.java */,
 				433C4A281AD0FC20005D06BB /* GLWebView.java */,
 				433C4A291AD0FC20005D06BB /* GLWebViewRender.java */,
@@ -974,6 +981,8 @@
 				43ECCF101851CAA80076535C /* UIWindow.h */,
 				4315799B18B0EC3200AE4256 /* UIWindow+UIPrivate.h */,
 				43ECCF111851CAA80076535C /* UIWindow.m */,
+				D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */,
+				D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */,
 				439A73B318E84C1E00B1BE40 /* UIScrollView */,
 				4384632D188B4025006DA1AA /* UIImageView.h */,
 				4384632E188B4025006DA1AA /* UIImageView.m */,
@@ -1379,6 +1388,7 @@
 				43C200C418EBBCD400490D59 /* UIPageControl.h in Headers */,
 				D29E653D1B46280300A72434 /* TNJavaBridgeProxyDefinition+UIPrivate.h in Headers */,
 				43846320188B3D5B006DA1AA /* UIControl.h in Headers */,
+				D2ADA3681B71EBAD000637EF /* UIScreenOrientationListener.h in Headers */,
 				43718EA018517F0500850F08 /* UIResponder.h in Headers */,
 				436D4B0A19F54FCB00F6F8F9 /* UISearchController.h in Headers */,
 				43C200B418EBB70B00490D59 /* UITextInputTraits.h in Headers */,
@@ -1563,6 +1573,7 @@
 				436D4B1319F553D300F6F8F9 /* UITabBarController.m in Sources */,
 				439A73CE18E84C6300B1BE40 /* UITableViewCellSeparator.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
+				D2ADA3691B71EBAD000637EF /* UIScreenOrientationListener.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
 				433C4A331AD11754005D06BB /* UIAndroidTextView.m in Sources */,
 				436D4AE219F5314700F6F8F9 /* UIAlertView.m in Sources */,
@@ -1612,6 +1623,7 @@
 				434CFD631A0CBAB400B6AC9E /* UIVideoEditorController.m in Sources */,
 				436D4A6719F2621300F6F8F9 /* UIAndroidWebView.m in Sources */,
 				D28F683C1B426D8F00AFBF84 /* TNJavaBridgeDefinition.m in Sources */,
+				D2A5B40F1B73120E0046C265 /* ScreenOrientationHandler.java in Sources */,
 				434CFD5F1A0CB9A800B6AC9E /* UIStateRestoration.m in Sources */,
 				D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */,
 				432FF09018544EE4005486C5 /* NSText.m in Sources */,

@@ -31,11 +31,34 @@
 
 @class UIWindow, UIScreen, NSEvent, UIPopoverController;
 
+typedef NS_ENUM(NSInteger, SCREEN_ORIENTATION) {
+    SCREEN_ORIENTATION_UNSPECIFIED = -1,
+    
+    SCREEN_ORIENTATION_LANDSCAPE = 0,
+    SCREEN_ORIENTATION_PORTRAIT = 1,
+    SCREEN_ORIENTATION_USER = 2,
+    SCREEN_ORIENTATION_BEHIND = 3,
+    
+    SCREEN_ORIENTATION_SENSOR = 4,
+    SCREEN_ORIENTATION_NOSENSOR = 5,
+    
+    SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6,
+    SCREEN_ORIENTATION_SENSOR_PORTRAIT = 7,
+    SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 8,
+    SCREEN_ORIENTATION_REVERSE_PORTRAIT = 9,
+    SCREEN_ORIENTATION_FULL_SENSOR = 10,
+    SCREEN_ORIENTATION_USER_LANDSCAPE = 11,
+    SCREEN_ORIENTATION_USER_PORTRAIT = 12,
+    SCREEN_ORIENTATION_FULL_USER = 13,
+    SCREEN_ORIENTATION_LOCKED = 14,
+};
+
 @interface UIApplication (UIPrivate)
 - (UIWindow *)_cachedKeyWindow;
 - (void)_setKeyWindow:(UIWindow *)newKeyWindow;
 - (void)_windowDidBecomeVisible:(UIWindow *)theWindow;
 - (void)_windowDidBecomeHidden:(UIWindow *)theWindow;
++ (BOOL)_isSharedInstanceReady;
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen;	// checks for CMD-Return/Enter and returns YES if it was handled, NO if not
 - (BOOL)_sendKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen;		// returns YES if it was handled within UIKit (first calls _sendGlobalKeyboardNSEvent:fromScreen:)
 - (void)_sendMouseNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen;
@@ -44,6 +67,7 @@
 - (UIResponder *)_firstResponderForScreen:(UIScreen *)screen;
 - (BOOL)_firstResponderCanPerformAction:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen;
 - (BOOL)_sendActionToFirstResponder:(SEL)action withSender:(id)sender fromScreen:(UIScreen *)theScreen;
+- (NSUInteger)supportedInterfaceOrientations;
 
 - (void)_appDidEnterBackground;
 - (void)_appWillResignActive;

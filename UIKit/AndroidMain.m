@@ -502,12 +502,6 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
             ARect rect = app->contentRect;
             NSLog(@"contentRect:{%d,%d %d,%d}", rect.top,rect.left,rect.bottom,rect.right);
         } break;
-        case APP_CMD_CONFIG_CHANGED: {
-            NSLog(@"CMD: CONFIG_CHANGED");
-
-            TNAConfiguration *config = [[TNAConfiguration alloc] initWithAConfiguration:app->config];
-            _landscaped = (config.orientation == TNAConfigurationOrientationLand);
-        } break;
         case APP_CMD_LOW_MEMORY:
             NSLog(@"CMD: LOW_MEMORY");
             break;
