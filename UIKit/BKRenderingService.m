@@ -23,7 +23,11 @@
 #import "UIKit+Android.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <QuartzCore/CADisplayLink.h>
 #import <UIKit/UIKit.h>
+@interface CADisplayLink(Private)
++ (void)_endFrame;
+@end
 
 @interface BKRenderingService ()
 @property (nonatomic, strong) NSOperationQueue *renderQueue;
@@ -244,6 +248,9 @@ static BKRenderingService *currentService = nil;
             [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallback) withObject:nil waitUntilDone:YES];
         }
         
+
+        // notify main thread on frame end?
+        [CADisplayLink _endFrame];
     }
 
 }
