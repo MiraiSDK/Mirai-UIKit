@@ -71,6 +71,12 @@ typedef NS_OPTIONS(NSUInteger, NSAttributedStringEnumerationOptions) {
 + (id)fileURLWithPath:(NSString *)path isDirectory:(BOOL) isDir;
 @end
 
+@interface NSString (NSURLUtilities)
+- (NSString *)stringByAddingPercentEncodingWithAllowedCharacters:(NSCharacterSet *)allowedCharacters ;
+@property (readonly, copy) NSString *stringByRemovingPercentEncoding;
+
+@end
+
 @interface NSIndexSet (Android)
 - (NSIndexSet *)indexesInRange:(NSRange)range options:(NSEnumerationOptions)opts passingTest:(BOOL (^)(NSUInteger idx, BOOL *stop))predicate;
 - (void)enumerateRangesUsingBlock:(void (^)(NSRange range, BOOL *stop))block;
