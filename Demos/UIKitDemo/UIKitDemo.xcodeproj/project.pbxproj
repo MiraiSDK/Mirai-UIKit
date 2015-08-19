@@ -145,6 +145,12 @@
 		D2BB4E051B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BB4E031B4B6F8E002E976A /* TNViewIneritedPrinter.m */; };
 		D2BD53BB1B11B6D30009D138 /* TNMenuNotificationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BD53BA1B11B6D30009D138 /* TNMenuNotificationTestViewController.m */; };
 		D2BD53BE1B11C78B0009D138 /* TNMenuNotificationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BD53BA1B11B6D30009D138 /* TNMenuNotificationTestViewController.m */; };
+		D2C4017D1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C4017C1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m */; };
+		D2C4017E1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C4017C1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m */; };
+		D2C401811B846F7E0055BF2E /* TNTouchShowMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C401801B846F7E0055BF2E /* TNTouchShowMessage.m */; };
+		D2C401821B846F7E0055BF2E /* TNTouchShowMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C401801B846F7E0055BF2E /* TNTouchShowMessage.m */; };
+		D2C401851B8481F40055BF2E /* TNTouchConfirmSuperview.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C401841B8481F40055BF2E /* TNTouchConfirmSuperview.m */; };
+		D2C401861B8481F40055BF2E /* TNTouchConfirmSuperview.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C401841B8481F40055BF2E /* TNTouchConfirmSuperview.m */; };
 		D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2CEEEA11ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
@@ -326,6 +332,12 @@
 		D2BB4E081B4B752A002E976A /* TNUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNUtils.h; sourceTree = "<group>"; };
 		D2BD53B91B11B6D30009D138 /* TNMenuNotificationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMenuNotificationTestViewController.h; sourceTree = "<group>"; };
 		D2BD53BA1B11B6D30009D138 /* TNMenuNotificationTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMenuNotificationTestViewController.m; sourceTree = "<group>"; };
+		D2C4017B1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureRecognizerTestViewController.h; sourceTree = "<group>"; };
+		D2C4017C1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNGestureRecognizerTestViewController.m; sourceTree = "<group>"; };
+		D2C4017F1B846F7E0055BF2E /* TNTouchShowMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTouchShowMessage.h; sourceTree = "<group>"; };
+		D2C401801B846F7E0055BF2E /* TNTouchShowMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTouchShowMessage.m; sourceTree = "<group>"; };
+		D2C401831B8481F40055BF2E /* TNTouchConfirmSuperview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTouchConfirmSuperview.h; sourceTree = "<group>"; };
+		D2C401841B8481F40055BF2E /* TNTouchConfirmSuperview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTouchConfirmSuperview.m; sourceTree = "<group>"; };
 		D2CEEE991ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNViewWillAppearListenerTestViewController.h; sourceTree = "<group>"; };
 		D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNViewWillAppearListenerTestViewController.m; sourceTree = "<group>"; };
 		D2CEEE9F1ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreListEditorTestViewController.h; sourceTree = "<group>"; };
@@ -471,6 +483,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				D2C401781B846E1C0055BF2E /* UIGestureRecognizer */,
 				D22284AB1B7B132E003B5996 /* UIScrollViewInertance */,
 				D2A9FB981B1FF35300C88751 /* UIPopoverController */,
 				D269FACD1B3AB42000A0AB7A /* UISearchController */,
@@ -797,6 +810,19 @@
 			name = UIPopoverController;
 			sourceTree = "<group>";
 		};
+		D2C401781B846E1C0055BF2E /* UIGestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				D2C4017B1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.h */,
+				D2C4017C1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m */,
+				D2C4017F1B846F7E0055BF2E /* TNTouchShowMessage.h */,
+				D2C401801B846F7E0055BF2E /* TNTouchShowMessage.m */,
+				D2C401831B8481F40055BF2E /* TNTouchConfirmSuperview.h */,
+				D2C401841B8481F40055BF2E /* TNTouchConfirmSuperview.m */,
+			);
+			name = UIGestureRecognizer;
+			sourceTree = "<group>";
+		};
 		D2DB8D191AB727D0007BA560 /* UIProgressView */ = {
 			isa = PBXGroup;
 			children = (
@@ -985,6 +1011,7 @@
 				D2BD53BE1B11C78B0009D138 /* TNMenuNotificationTestViewController.m in Sources */,
 				D2239E3C1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */,
 				4390B8651A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
+				D2C401861B8481F40055BF2E /* TNTouchConfirmSuperview.m in Sources */,
 				4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
 				D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
 				D2D64D211B3B9FC900AC3AF7 /* TNTargetActionToBlock.m in Sources */,
@@ -1006,6 +1033,7 @@
 				D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */,
 				D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */,
 				D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */,
+				D2C401821B846F7E0055BF2E /* TNTouchShowMessage.m in Sources */,
 				D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
 				D24BB0411AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
 				432D2C001AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */,
@@ -1033,6 +1061,7 @@
 				D2A9FBA01B1FF3EC00C88751 /* TNPopoverPositionTestViewController.m in Sources */,
 				D2726A731ABE707A0010F435 /* TNTabBarControlTestViewController.m in Sources */,
 				4390B8501A8353480082B0F1 /* TNPresentTestViewController.m in Sources */,
+				D2C4017E1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m in Sources */,
 				D2239E421B04915000810377 /* TNBlockButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1086,9 +1115,11 @@
 				D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
 				D270F49F1AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */,
 				438FAEAB1AFB8D550069983F /* TNTextFieldTestViewController.m in Sources */,
+				D2C401811B846F7E0055BF2E /* TNTouchShowMessage.m in Sources */,
 				4390B8721A8353B50082B0F1 /* TNTouchesCancelTestViewController.m in Sources */,
 				4390B8201A8352590082B0F1 /* TNImageTestViewController.m in Sources */,
 				D292796A1B4A650600C5AD45 /* TNSearchControllerTestViewController.m in Sources */,
+				D2C4017D1B846E4B0055BF2E /* TNGestureRecognizerTestViewController.m in Sources */,
 				D2B6977C1B2A79BF006D397C /* TNPopoverListenersViewController.m in Sources */,
 				D2EB64351B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */,
 				4390B8081A8351470082B0F1 /* TNTestViewController.m in Sources */,
@@ -1096,6 +1127,7 @@
 				D210A8DE1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */,
 				4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
+				D2C401851B8481F40055BF2E /* TNTouchConfirmSuperview.m in Sources */,
 				D2BD53BB1B11B6D30009D138 /* TNMenuNotificationTestViewController.m in Sources */,
 				D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
 				4390B8321A8352990082B0F1 /* TNScrollViewPagingTestViewController.m in Sources */,
