@@ -64,21 +64,34 @@
 
 - (void)sendEvent:(UIEvent *)event
 {
-    [self _sendGesturesForEvent:event];
-    [self _sendAttachedViewsForEvent:event];
-}
-
-- (void)_sendGesturesForEvent:(UIEvent *)event
-{
     NSSet *touches = [event touchesForWindow:_window];
     
-    // remember new touches
+    [self _collectNewTouches:touches];
+    [self _sendGesturesForEvent:event touches:touches];
+    [self _sendAttachedViewsForEvent:event touches:touches];
+    [self _removeCancelledOrEndedTouches:touches];
+}
+
+- (void)_collectNewTouches:(NSSet *)touches
+{
     for (UITouch *touch in touches) {
         if (touch.phase == UITouchPhaseBegan) {
             [_touches addObject:touch];
         }
     }
-    
+}
+
+- (void)_removeCancelledOrEndedTouches:(NSSet *)touches
+{
+    for (UITouch *touch in touches) {
+        if (touch.phase == UITouchPhaseEnded || touch.phase == UITouchPhaseCancelled) {
+            [_touches removeObject:touch];
+        }
+    }
+}
+
+- (void)_sendGesturesForEvent:(UIEvent *)event touches:(NSSet *)touches
+{
     // remove disabled gesture recognizer
     NSMutableSet *disabled = [NSMutableSet set];
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
@@ -146,17 +159,11 @@
             [recognizer _sendActions];
         }
     }
-    
-    for (UITouch *touch in touches) {
-        if (touch.phase == UITouchPhaseEnded || touch.phase == UITouchPhaseCancelled) {
-            [_touches removeObject:touch];
-        }
-    }
 }
 
-- (void)_sendAttachedViewsForEvent:(UIEvent *)event
+- (void)_sendAttachedViewsForEvent:(UIEvent *)event touches:(NSSet *)sendedTouches
 {
-    NSMutableSet *touches = [[event touchesForWindow:_window] mutableCopy];
+    NSMutableSet *touches = [sendedTouches mutableCopy];
     [self _removeEatenTouchesByGestureRecognizerFromTouches:touches];
     
     for (UITouch *touch in touches) {
