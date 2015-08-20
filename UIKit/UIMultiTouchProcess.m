@@ -16,6 +16,7 @@
     UIWindow *_window;
     
     BOOL _hasGestureRecognized;
+    
     NSMutableSet *_touches;
     NSMutableSet *_effectRecognizers;
     NSMutableSet *_excludedRecognizers;
@@ -44,9 +45,21 @@
     return _window;
 }
 
-- (void)onBegan
+- (void)onBeganWithEvent:(UIEvent *)event
 {
+    NSSet *touches = [event touchesForWindow:_window];
+    NSMutableSet *gestureRecognizers = [self _collectAllGestureRecognizersFromTouches:touches];
+    [_effectRecognizers unionSet:gestureRecognizers];
+}
+
+- (NSMutableSet *)_collectAllGestureRecognizersFromTouches:(NSSet *)touches
+{
+    NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
     
+    for (UITouch *touch in touches) {
+        [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
+    }
+    return gestureRecognizers;
 }
 
 - (void)sendEvent:(UIEvent *)event
@@ -58,20 +71,6 @@
 - (void)_sendGesturesForEvent:(UIEvent *)event
 {
     NSSet *touches = [event touchesForWindow:_window];
-    
-    NSMutableSet *gestureRecognizers = [NSMutableSet setWithCapacity:0];
-    
-    for (UITouch *touch in touches) {
-        [gestureRecognizers addObjectsFromArray:touch.gestureRecognizers];
-    }
-    
-    BOOL isFirstTouchDownEvent = (_touches.count == 0);
-    // if first touch down
-    if (isFirstTouchDownEvent) {
-        //    collect effect gestures
-        [_effectRecognizers unionSet:gestureRecognizers];
-        _hasGestureRecognized = NO;
-    }
     
     // remember new touches
     for (UITouch *touch in touches) {

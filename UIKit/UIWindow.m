@@ -325,7 +325,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         if (touchBegin) {
             NSLog(@"[begin multi-touch]");
             _currentMultiTouchProcess = [[UIMultiTouchProcess alloc] initWithWindow:self];
-            [_currentMultiTouchProcess onBegan];
+            [_currentMultiTouchProcess onBeganWithEvent:event];
         }
         
         if (_currentMultiTouchProcess) {

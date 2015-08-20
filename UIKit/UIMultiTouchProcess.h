@@ -15,7 +15,7 @@
 
 - (instancetype)initWithWindow:(UIWindow *)window;
 
-- (void)onBegan;
+- (void)onBeganWithEvent:(UIEvent *)event;
 - (void)onEnded;
 
 - (void)sendEvent:(UIEvent *)event;
