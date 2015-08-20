@@ -36,7 +36,7 @@ static void ShowMessageWithTouches(UIView *view, NSSet *touches, NSString *mark)
 
 + (NSString *)testName
 {
-    return @"show muti-touch message";
+    return @"show multi-touch message";
 }
 
 - (void)viewDidLoad
