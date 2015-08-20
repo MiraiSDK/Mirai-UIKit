@@ -15,8 +15,6 @@
 {
     UIWindow *_window;
     
-    BOOL _hasGestureRecognized;
-    
     NSMutableSet *_touches;
     NSMutableSet *_effectRecognizers;
     NSMutableSet *_excludedRecognizers;
@@ -92,7 +90,27 @@
 
 - (void)_sendGesturesForEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    // remove disabled gesture recognizer
+    [self _clearEffectRecognizerWhichBecomeDisabled];
+    
+    // before send event to recognizer, send pending actions
+    [self _sendActionIfNeedForEachGestureRecognizers];
+    
+    // send event to effect gesture recognizers
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        [recognizer _recognizeTouches:touches withEvent:event];
+    }
+    [self _checkAndClearExcluedRecognizers];
+    
+    if ([self _shouldSendsTouchCancelled]) {
+        for (UITouch *touch in touches) {
+            [touch.view touchesCancelled:touches withEvent:event];
+        }
+    }
+    [self _sendActionIfNeedForEachGestureRecognizers];
+}
+
+- (void)_clearEffectRecognizerWhichBecomeDisabled
+{
     NSMutableSet *disabled = [NSMutableSet set];
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         if (!recognizer.isEnabled) {
@@ -100,60 +118,48 @@
         }
     }
     [_effectRecognizers minusSet:disabled];
-    
-    
-    // before send event to recognizer, send pending actions
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        if ([recognizer _shouldSendActions]) {
-            [recognizer _sendActions];
-        }
-    }
-    
-    // send event to effect gesture recognizers
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        [recognizer _recognizeTouches:touches withEvent:event];
-    }
-    
-    // determine relationship
+}
+
+- (void)_checkAndClearExcluedRecognizers
+{
     NSMutableSet *toRemove = [NSMutableSet set];
+    
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        if (![recognizer _isFailed]) {
-            for (UIGestureRecognizer *other in _effectRecognizers) {
-                if (![other _isFailed]) {
-                    BOOL exclued = [recognizer _isExcludedByGesture:other];
-                    if (exclued) {
-                        [recognizer _setExcluded];
-                        [_excludedRecognizers addObject:recognizer];
-                        
-                        [toRemove addObject:recognizer];
-                    }
-                }
-            }
+        
+        if ([recognizer _isFailed]) {
+            continue;
+        }
+        if ([self _isRecognizerExcluedByOther:recognizer]) {
+            [recognizer _setExcluded];
+            [toRemove addObject:recognizer];
         }
     }
-    
-    // remove invaild gestures
     [_effectRecognizers minusSet:toRemove];
-    
-    // cancel touches if needs
-    BOOL shouldSendsTouchCancelled = NO;
-    if (!_hasGestureRecognized) {
-        for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-            if ([recognizer _shouldSendActions] &&
-                [recognizer cancelsTouchesInView]) {
-                shouldSendsTouchCancelled = YES;
-                break;
-            }
+}
+
+- (BOOL)_isRecognizerExcluedByOther:(UIGestureRecognizer *)recognizer
+{
+    for (UIGestureRecognizer *other in _effectRecognizers) {
+        if (![other _isFailed] && [recognizer _isExcludedByGesture:other]) {
+            return YES;
         }
     }
-    
-    if (shouldSendsTouchCancelled) {
-        for (UITouch *touch in touches) {
-            [touch.view touchesCancelled:touches withEvent:event];
+    return NO;
+}
+
+- (BOOL)_shouldSendsTouchCancelled
+{
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if ([recognizer _shouldSendActions] &&
+            [recognizer cancelsTouchesInView]) {
+            return YES;
         }
     }
-    
-    // send action if needs
+    return NO;
+}
+
+- (void)_sendActionIfNeedForEachGestureRecognizers
+{
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         if ([recognizer _shouldSendActions]) {
             [recognizer _sendActions];
