@@ -52,55 +52,7 @@
 - (void)sendEvent:(UIEvent *)event
 {
     [self _sendGesturesForEvent:event];
-    
-    NSMutableSet *touches = [[event touchesForWindow:_window] mutableCopy];
-    
-    NSMutableSet *eaten = [NSMutableSet set];
-    for (UITouch *touch in touches) {
-        for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-            if ([recognizer _isEatenTouche:touch]) {
-                [eaten addObject:touch];
-                break;
-            }
-        }
-    }
-    
-    [touches minusSet:eaten];
-    
-    for (UITouch *touch in touches) {
-        UIView *view = touch.view;
-        
-        const UITouchPhase phase = touch.phase;
-        const _UITouchGesture gesture = [touch _gesture];
-        
-        static NSDictionary *map = nil;
-        if (!map) {
-            map = @{
-                    @(UITouchPhaseBegan):@"UITouchPhaseBegan",
-                    @(UITouchPhaseMoved):@"UITouchPhaseMoved",
-                    @(UITouchPhaseEnded):@"UITouchPhaseEnded",
-                    @(UITouchPhaseCancelled):@"UITouchPhaseCancelled",
-                    @(UITouchPhaseStationary):@"UITouchPhaseStationary",
-                    @(_UITouchPhaseGestureBegan):@"_UITouchPhaseGestureBegan",
-                    @(_UITouchPhaseGestureChanged):@"_UITouchPhaseGestureChanged",
-                    @(_UITouchPhaseGestureEnded):@"_UITouchPhaseGestureEnded",
-                    @(_UITouchPhaseDiscreteGesture):@"_UITouchPhaseDiscreteGesture",};
-        }
-        
-        NSLog(@"phase:%@",[map objectForKey:@(phase)]);
-        
-        if (phase == UITouchPhaseBegan) {
-            [view touchesBegan:touches withEvent:event];
-        } else if (phase == UITouchPhaseMoved) {
-            [view touchesMoved:touches withEvent:event];
-        } else if (phase == UITouchPhaseEnded) {
-            [view touchesEnded:touches withEvent:event];
-        } else if (phase == UITouchPhaseCancelled) {
-            [view touchesCancelled:touches withEvent:event];
-        } else {
-            NSLog(@"Unknow touch phase:%ld",phase);
-        }
-    }
+    [self _sendAttachedViewsForEvent:event];
 }
 
 - (void)_sendGesturesForEvent:(UIEvent *)event
@@ -201,6 +153,65 @@
             [_touches removeObject:touch];
         }
     }
+}
+
+- (void)_sendAttachedViewsForEvent:(UIEvent *)event
+{
+    NSMutableSet *touches = [[event touchesForWindow:_window] mutableCopy];
+    [self _removeEatenTouchesByGestureRecognizerFromTouches:touches];
+    
+    for (UITouch *touch in touches) {
+        
+        UIView *view = touch.view;
+        const UITouchPhase phase = touch.phase;
+        
+        [self _printLogForTouchPhase:phase];
+        
+        if (phase == UITouchPhaseBegan) {
+            [view touchesBegan:touches withEvent:event];
+        } else if (phase == UITouchPhaseMoved) {
+            [view touchesMoved:touches withEvent:event];
+        } else if (phase == UITouchPhaseEnded) {
+            [view touchesEnded:touches withEvent:event];
+        } else if (phase == UITouchPhaseCancelled) {
+            [view touchesCancelled:touches withEvent:event];
+        } else {
+            NSLog(@"Unknow touch phase:%ld",phase);
+        }
+    }
+}
+
+- (void)_removeEatenTouchesByGestureRecognizerFromTouches:(NSMutableSet *)touches
+{
+    NSMutableSet *eaten = [NSMutableSet set];
+    for (UITouch *touch in touches) {
+        for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+            if ([recognizer _isEatenTouche:touch]) {
+                [eaten addObject:touch];
+                break;
+            }
+        }
+    }
+    [touches minusSet:eaten];
+}
+
+- (void)_printLogForTouchPhase:(UITouchPhase)phase
+{
+    static NSDictionary *map = nil;
+    if (!map) {
+        map = @{
+                @(UITouchPhaseBegan):@"UITouchPhaseBegan",
+                @(UITouchPhaseMoved):@"UITouchPhaseMoved",
+                @(UITouchPhaseEnded):@"UITouchPhaseEnded",
+                @(UITouchPhaseCancelled):@"UITouchPhaseCancelled",
+                @(UITouchPhaseStationary):@"UITouchPhaseStationary",
+                @(_UITouchPhaseGestureBegan):@"_UITouchPhaseGestureBegan",
+                @(_UITouchPhaseGestureChanged):@"_UITouchPhaseGestureChanged",
+                @(_UITouchPhaseGestureEnded):@"_UITouchPhaseGestureEnded",
+                @(_UITouchPhaseDiscreteGesture):@"_UITouchPhaseDiscreteGesture",};
+    }
+    
+    NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
 - (void)onEnded
