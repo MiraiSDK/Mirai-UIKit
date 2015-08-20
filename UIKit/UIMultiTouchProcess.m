@@ -15,17 +15,13 @@
 {
     UIWindow *_window;
     
-    NSMutableSet *_touches;
     NSMutableSet *_effectRecognizers;
-    NSMutableSet *_excludedRecognizers;
 }
 
 - (instancetype)init
 {
     if (self = [super init]) {
-        _touches = [NSMutableSet set];
         _effectRecognizers = [NSMutableSet set];
-        _excludedRecognizers = [NSMutableSet set];
     }
     return self;
 }
@@ -64,28 +60,8 @@
 {
     NSSet *touches = [event touchesForWindow:_window];
     
-    [self _collectNewTouches:touches];
     [self _sendGesturesForEvent:event touches:touches];
     [self _sendAttachedViewsForEvent:event touches:touches];
-    [self _removeCancelledOrEndedTouches:touches];
-}
-
-- (void)_collectNewTouches:(NSSet *)touches
-{
-    for (UITouch *touch in touches) {
-        if (touch.phase == UITouchPhaseBegan) {
-            [_touches addObject:touch];
-        }
-    }
-}
-
-- (void)_removeCancelledOrEndedTouches:(NSSet *)touches
-{
-    for (UITouch *touch in touches) {
-        if (touch.phase == UITouchPhaseEnded || touch.phase == UITouchPhaseCancelled) {
-            [_touches removeObject:touch];
-        }
-    }
 }
 
 - (void)_sendGesturesForEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -232,11 +208,6 @@
     
     //  reset
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        [recognizer reset];
-    }
-    
-    // reset exclued ges
-    for (UIGestureRecognizer *recognizer in _excludedRecognizers) {
         [recognizer reset];
     }
 }
