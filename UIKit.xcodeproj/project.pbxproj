@@ -312,6 +312,8 @@
 		D2A5B40F1B73120E0046C265 /* ScreenOrientationHandler.java in Sources */ = {isa = PBXBuildFile; fileRef = D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */; };
 		D2ADA3681B71EBAD000637EF /* UIScreenOrientationListener.h in Headers */ = {isa = PBXBuildFile; fileRef = D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */; };
 		D2ADA3691B71EBAD000637EF /* UIScreenOrientationListener.m in Sources */ = {isa = PBXBuildFile; fileRef = D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */; };
+		D2B120A41B85C54C003382EE /* UIMultiTouchProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */; };
+		D2B120A51B85C54C003382EE /* UIMultiTouchProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */; };
 		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
 		D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
 		D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
@@ -662,6 +664,8 @@
 		D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = ScreenOrientationHandler.java; sourceTree = "<group>"; };
 		D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScreenOrientationListener.h; sourceTree = "<group>"; };
 		D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScreenOrientationListener.m; sourceTree = "<group>"; };
+		D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMultiTouchProcess.h; sourceTree = "<group>"; };
+		D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMultiTouchProcess.m; sourceTree = "<group>"; };
 		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
 		D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeCallbackContext.m; sourceTree = "<group>"; };
 		D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
@@ -962,6 +966,8 @@
 				4384631B188B3D52006DA1AA /* UIControlAction.m */,
 				43846324188B3D7C006DA1AA /* UIAction.h */,
 				43846325188B3D7C006DA1AA /* UIAction.m */,
+				D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */,
+				D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */,
 			);
 			name = "Private Classes";
 			sourceTree = "<group>";
@@ -1335,6 +1341,7 @@
 				D2BA4C851AEF3109003D4A35 /* TNImageBuffer.h in Headers */,
 				434CFD491A0CB77B00B6AC9E /* UINibDeclarations.h in Headers */,
 				434CFD0D1A0CA91200B6AC9E /* NSShadow.h in Headers */,
+				D2B120A41B85C54C003382EE /* UIMultiTouchProcess.h in Headers */,
 				43846332188B4031006DA1AA /* UIImageView+UIPrivate.h in Headers */,
 				436D4B0E19F5507C00F6F8F9 /* UISearchBar.h in Headers */,
 				432F737F1A08AE99009CEC64 /* UISplitViewController.h in Headers */,
@@ -1596,6 +1603,7 @@
 				436D4AF919F5471E00F6F8F9 /* UISegmentedControl.m in Sources */,
 				434CFCF61A0CA05300B6AC9E /* UIInputView.m in Sources */,
 				D24E1DF11B43E55E009814C3 /* JavaBridgeProxyFactory.java in Sources */,
+				D2B120A51B85C54C003382EE /* UIMultiTouchProcess.m in Sources */,
 				434CFD261A0CAFCD00B6AC9E /* NSTextStorage.m in Sources */,
 				D28E58831B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
