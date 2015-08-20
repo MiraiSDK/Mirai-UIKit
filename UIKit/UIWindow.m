@@ -317,16 +317,31 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 {
     if (event.type == UIEventTypeTouches) {
         
-        if (!_currentMultiTouchProcess) {
+        BOOL touchBegin = NO;
+        BOOL touchEnd = NO;
+        
+        [self _reciveEvent:event andCheckMultiTouchProcessStateWithTouchBegin:&touchBegin touchEnd:&touchEnd];
+        
+        if (touchBegin) {
+            NSLog(@"[begin multi-touch]");
             _currentMultiTouchProcess = [[UIMultiTouchProcess alloc] initWithWindow:self];
+            [_currentMultiTouchProcess onBegan];
         }
         
-//        [self _updateMutiTouchProcessPhaseWithEvent:event];
-        [_currentMultiTouchProcess sendEvent:event];
+        if (_currentMultiTouchProcess) {
+            [_currentMultiTouchProcess sendEvent:event];
+        }
+        
+        if (touchEnd) {
+            NSLog(@"[end multi-touch]");
+            [_currentMultiTouchProcess onEnded];
+            _currentMultiTouchProcess = nil;
+        }
     }
 }
 
-- (void)_updateMutiTouchProcessPhaseWithEvent:(UIEvent *)event
+- (void)_reciveEvent:(UIEvent *)event andCheckMultiTouchProcessStateWithTouchBegin:(BOOL *)touchBegin
+            touchEnd:(BOOL *)touchEnd
 {
     NSInteger originalPressFingersCount = _currentPressFingersCount;
     NSInteger incrementCount = [self _incrementPressFingersCountWithEvent:event];
@@ -334,16 +349,10 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     _currentPressFingersCount += incrementCount;
     
     if (originalPressFingersCount == 0 && incrementCount > 0) {
-        // the first finger touched screen.
-        NSLog(@"[begin multi-touch]");
-        _currentMultiTouchProcess = [[UIMultiTouchProcess alloc] initWithWindow:self];
-        [_currentMultiTouchProcess onBegan];
+        *touchBegin = YES;
         
     } else if (_currentPressFingersCount == 0 && incrementCount < 0) {
-        // the last fingers left screen.
-        NSLog(@"[end multi-touch]");
-        [_currentMultiTouchProcess onEnded];
-        _currentMultiTouchProcess = nil;
+        *touchEnd = YES;
     }
 }
 

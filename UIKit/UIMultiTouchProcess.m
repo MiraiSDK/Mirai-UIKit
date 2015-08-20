@@ -49,11 +49,6 @@
     
 }
 
-- (void)onEnded
-{
-    
-}
-
 - (void)sendEvent:(UIEvent *)event
 {
     [self _sendGesturesForEvent:event];
@@ -225,39 +220,21 @@
             [_touches removeObject:touch];
         }
     }
-    
-    // if all touch up
-    NSSet *set = [event allTouches];
-    BOOL allTouchUp = YES;
-    for (UITouch *t in set) {
-        if (t.phase != UITouchPhaseCancelled &&
-            t.phase != UITouchPhaseEnded) {
-            allTouchUp = NO;
-            break;
-        }
-    }
-    if (allTouchUp) {
-        NSLog(@"reset all gesture recognizer");
-        
-        //  reset
-        for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-            [recognizer reset];
-        }
-        
-        // reset exclued ges
-        for (UIGestureRecognizer *recognizer in _excludedRecognizers) {
-            [recognizer reset];
-        }
-        
-        //  clean up
-        [_effectRecognizers removeAllObjects];
-        [_excludedRecognizers removeAllObjects];
-        
-        _hasGestureRecognized = NO;
-        
-        [_touches removeAllObjects];
-    }
 }
 
+- (void)onEnded
+{
+    NSLog(@"reset all gesture recognizer");
+    
+    //  reset
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        [recognizer reset];
+    }
+    
+    // reset exclued ges
+    for (UIGestureRecognizer *recognizer in _excludedRecognizers) {
+        [recognizer reset];
+    }
+}
 
 @end
