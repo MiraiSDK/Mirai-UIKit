@@ -9,6 +9,7 @@
 #import "TNGestureRecognizerTestViewController.h"
 #import "TNTouchShowMessage.h"
 #import "TNTouchConfirmSuperview.h"
+#import "TNGestureEffectTouch.h"
 
 @implementation TNGestureRecognizerTestViewController
 
@@ -27,6 +28,7 @@
     return @[
              TNTouchShowMessage.class,
              TNTouchConfirmSuperview.class,
+             TNGestureEffectTouch.class,
              ];
 }
 
