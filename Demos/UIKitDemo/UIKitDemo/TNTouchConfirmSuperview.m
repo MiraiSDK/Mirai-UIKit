@@ -60,6 +60,11 @@
     return view;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"view controller's touchesBegan:withEvent callback.");
+}
+
 @end
 
 @implementation _TNTouchConfirmSuperviewCustomView
