@@ -14,6 +14,7 @@
 @implementation UIMultiTouchProcess
 {
     UIWindow *_window;
+    NSInteger _currentPressFingersCount;
     
     NSMutableSet *_effectRecognizers;
 }
@@ -39,9 +40,74 @@
     return _window;
 }
 
-- (void)onBeganWithEvent:(UIEvent *)event
+- (void)sendEvent:(UIEvent *)event
 {
     NSSet *touches = [event touchesForWindow:_window];
+    
+    BOOL touchBegin = NO;
+    BOOL touchEnd = NO;
+    
+    [self _reciveTouches:touches andCheckMultiTouchProcessStateWithTouchBegin:&touchBegin
+                touchEnd:&touchEnd];
+    
+    if (touchBegin) {
+        NSLog(@"[begin multi-touch]");
+        [self _beginWithEvent:event touches:touches];
+    }
+    
+    [self _handleEvent:event touches:touches];
+    
+    if (touchEnd) {
+        NSLog(@"[end multi-touch]");
+        [self _end];
+    }
+}
+
+- (void)_reciveTouches:(NSSet *)touches andCheckMultiTouchProcessStateWithTouchBegin:(BOOL *)touchBegin
+            touchEnd:(BOOL *)touchEnd
+{
+    // I can't set _currentPressFingersCount as [touches count].
+    // because when [touches count] become 0, the sendEvent: will never be called.
+    // but I must call _end method when touches ended.
+    
+    // So, I check [UITouch phase] and get the next [touches count] will be.
+    
+    NSInteger originalPressFingersCount = _currentPressFingersCount;
+    NSInteger incrementCount = [self _incrementPressFingersCountWithTouches:touches];
+    
+    _currentPressFingersCount += incrementCount;
+    
+    if (incrementCount != 0) {
+        
+        if (originalPressFingersCount == 0) {
+            *touchBegin = YES;
+            
+        } else if (_currentPressFingersCount == 0) {
+            *touchEnd = YES;
+        }
+    }
+}
+
+- (NSInteger)_incrementPressFingersCountWithTouches:(NSSet *)touches
+{
+    NSInteger incrementCount = 0;
+    
+    for (UITouch *touch in touches) {
+        
+        UITouchPhase phase = touch.phase;
+        
+        if (phase == UITouchPhaseBegan) {
+            incrementCount++;
+            
+        } else if(phase == UITouchPhaseEnded || phase == UITouchPhaseCancelled) {
+            incrementCount--;
+        }
+    }
+    return incrementCount;
+}
+
+- (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
+{
     NSMutableSet *gestureRecognizers = [self _collectAllGestureRecognizersFromTouches:touches];
     [_effectRecognizers unionSet:gestureRecognizers];
 }
@@ -56,10 +122,8 @@
     return gestureRecognizers;
 }
 
-- (void)sendEvent:(UIEvent *)event
+- (void)_handleEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    NSSet *touches = [event touchesForWindow:_window];
-    
     [self _sendGesturesForEvent:event touches:touches];
     [self _sendAttachedViewsForEvent:event touches:touches];
 }
@@ -202,7 +266,7 @@
     NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
-- (void)onEnded
+- (void)_end
 {
     NSLog(@"reset all gesture recognizer");
     
@@ -210,6 +274,7 @@
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         [recognizer reset];
     }
+    [_effectRecognizers removeAllObjects];
 }
 
 @end

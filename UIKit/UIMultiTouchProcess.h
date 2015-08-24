@@ -14,10 +14,6 @@
 @property (nonatomic, readonly) UIWindow *window;
 
 - (instancetype)initWithWindow:(UIWindow *)window;
-
-- (void)onBeganWithEvent:(UIEvent *)event;
-- (void)onEnded;
-
 - (void)sendEvent:(UIEvent *)event;
 
 @end

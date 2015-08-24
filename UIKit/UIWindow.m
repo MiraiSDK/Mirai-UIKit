@@ -40,8 +40,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 @implementation UIWindow
 {
-    UIMultiTouchProcess *_currentMultiTouchProcess;
-    NSInteger _currentPressFingersCount;
+    UIMultiTouchProcess *_multiTouchProcess;
     BOOL _landscaped;
 
 }
@@ -52,6 +51,8 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         [self _makeHidden];	// do this first because before the screen is set, it will prevent any visibility notifications from being sent.
         self.screen = [UIScreen mainScreen];
         self.opaque = NO;
+        
+        _multiTouchProcess = [[UIMultiTouchProcess alloc] initWithWindow:self];
     }
     return self;
 }
@@ -316,62 +317,8 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 - (void)sendEvent:(UIEvent *)event
 {
     if (event.type == UIEventTypeTouches) {
-        
-        BOOL touchBegin = NO;
-        BOOL touchEnd = NO;
-        
-        [self _reciveEvent:event andCheckMultiTouchProcessStateWithTouchBegin:&touchBegin touchEnd:&touchEnd];
-        
-        if (touchBegin) {
-            NSLog(@"[begin multi-touch]");
-            _currentMultiTouchProcess = [[UIMultiTouchProcess alloc] initWithWindow:self];
-            [_currentMultiTouchProcess onBeganWithEvent:event];
-        }
-        
-        if (_currentMultiTouchProcess) {
-            [_currentMultiTouchProcess sendEvent:event];
-        }
-        
-        if (touchEnd) {
-            NSLog(@"[end multi-touch]");
-            [_currentMultiTouchProcess onEnded];
-            _currentMultiTouchProcess = nil;
-        }
+        [_multiTouchProcess sendEvent:event];
     }
-}
-
-- (void)_reciveEvent:(UIEvent *)event andCheckMultiTouchProcessStateWithTouchBegin:(BOOL *)touchBegin
-            touchEnd:(BOOL *)touchEnd
-{
-    NSInteger originalPressFingersCount = _currentPressFingersCount;
-    NSInteger incrementCount = [self _incrementPressFingersCountWithEvent:event];
-    
-    _currentPressFingersCount += incrementCount;
-    
-    if (originalPressFingersCount == 0 && incrementCount > 0) {
-        *touchBegin = YES;
-        
-    } else if (_currentPressFingersCount == 0 && incrementCount < 0) {
-        *touchEnd = YES;
-    }
-}
-
-- (NSInteger)_incrementPressFingersCountWithEvent:(UIEvent *)event
-{
-    NSInteger incrementCount = 0;
-    
-    for (UITouch *touch in [event touchesForWindow:self]) {
-        
-        UITouchPhase phase = touch.phase;
-        
-        if (phase == UITouchPhaseBegan) {
-            incrementCount++;
-            
-        } else if(phase == UITouchPhaseEnded || phase == UITouchPhaseCancelled) {
-            incrementCount--;
-        }
-    }
-    return incrementCount;
 }
 
 - (BOOL)_topFloatView:(UITopFloatView *)topFloatView willMaskTouchWithView:(UIView *)checkedView
