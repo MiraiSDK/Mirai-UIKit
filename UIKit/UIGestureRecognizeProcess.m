@@ -16,6 +16,8 @@
     UIView *_view;
     NSMutableSet *_effectRecognizers;
     NSMutableSet *_trackingTouches;
+    
+    BOOL _hasMakeConclusion;
 }
 
 - (instancetype) initWithView:(UIView *)view
@@ -35,7 +37,7 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return YES;
+    return _hasMakeConclusion;
 }
 
 + (BOOL)canViewCatchTouches:(UIView *)view
@@ -261,6 +263,14 @@
 
 - (void)multiTouchEnd
 {
+    NSUInteger count = [self _callResetForEachGestureReconizersAndGetCalledCount];
+    _hasMakeConclusion = count >= _effectRecognizers.count;
+}
+
+- (NSUInteger)_callResetForEachGestureReconizersAndGetCalledCount
+{
+    NSUInteger count = 0;
+    
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         
         UIGestureRecognizerState state = recognizer.state;
@@ -269,9 +279,11 @@
             state == UIGestureRecognizerStateEnded ||
             state == UIGestureRecognizerStateFailed) {
             
+            count++;
             [recognizer reset];
         }
     }
+    return count;
 }
 
 @end
