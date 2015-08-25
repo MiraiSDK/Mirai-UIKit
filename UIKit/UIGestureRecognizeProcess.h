@@ -20,6 +20,7 @@
 - (void)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches;
+- (void)multiTouchEnd;
 
 + (BOOL)canViewCatchTouches:(UIView *)view;
 

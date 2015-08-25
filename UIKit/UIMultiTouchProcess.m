@@ -162,6 +162,10 @@
 
 - (void)_end
 {
+    for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+        [recognizeProcess multiTouchEnd];
+    }
+    
     [self _clearHasMakeConclusionReconizeProcesses];
     _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
 }

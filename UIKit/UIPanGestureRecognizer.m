@@ -134,6 +134,8 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSLog(@"=> %s", __FUNCTION__);
+    
     UITouch *touch = PanTouch(touches);
 
     _lastScreenLocation = [touch locationInView:self.view.window];

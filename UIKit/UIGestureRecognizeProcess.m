@@ -8,6 +8,7 @@
 
 #import "UIGestureRecognizeProcess.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
 
 @implementation UIGestureRecognizeProcess
@@ -84,24 +85,51 @@
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
 {
-    [self _filter:_effectRecognizers condition:^BOOL(UIGestureRecognizer *recognizer) {
-        return recognizer.isEnabled;
-    }];
+    static NSPredicate *predicate;
+    
+    if (!predicate) {
+        predicate = [NSPredicate predicateWithFormat:@"isEnabled = YES"];
+    }
+    [_effectRecognizers filterUsingPredicate:predicate];
 }
 
 - (void)_checkAndClearExcluedRecognizers
 {
-    [self _filter:_effectRecognizers condition:^(UIGestureRecognizer *recognizer) {
-        if ([recognizer _isFailed]) {
-            return YES;
-        }
+    
+    // [NSPredicate predicateWithBlock:] didn't implemented.
+    // I can only replace with another way.
+    
+//    static NSPredicate *predicate;
+//    
+//    if (!predicate) {
+//        predicate = [NSPredicate predicateWithBlock:^BOOL(UIGestureRecognizer *recognizer, NSDictionary *bindings) {
+//            
+//            NSLog(@"=> call filter block");
+//            
+//            if ([recognizer _isFailed]) {
+//                return YES;
+//            }
+//            
+//            if ([self _isRecognizerExcluedByOther:recognizer]) {
+//                [recognizer _setExcluded];
+//                return NO;
+//            }
+//            return YES;
+//        }];
+//    }
+//    
+//    [_effectRecognizers filterUsingPredicate:predicate];
+    
+    NSMutableSet *toRemove = [NSMutableSet new];
+    
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         
-        if ([self _isRecognizerExcluedByOther:recognizer]) {
+        if (![recognizer _isFailed] && [self _isRecognizerExcluedByOther:recognizer]) {
             [recognizer _setExcluded];
-            return NO;
+            [toRemove addObject:recognizer];
         }
-        return YES;
-    }];
+    }
+    [_effectRecognizers minusSet:toRemove];
 }
 
 - (BOOL)_isRecognizerExcluedByOther:(UIGestureRecognizer *)recognizer
@@ -207,7 +235,6 @@
         
         for (UITouch *touch in touches) {
             NSSet *wrapTouch = [[NSSet alloc] initWithObjects:touch, nil];
-            NSLog(@"-> call %@", NSStringFromSelector(callbackMethod));
             [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
         }
     }
@@ -232,13 +259,19 @@
     NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
-- (void)_filter:(NSMutableSet *)container condition:(BOOL (^)(UIGestureRecognizer *recognizer))conditionBlock
+- (void)multiTouchEnd
 {
-    [container filterUsingPredicate:[NSPredicate predicateWithBlock:
-                                     ^BOOL(UIGestureRecognizer *recognizer, NSDictionary *bindings) {
-                                         
-        return conditionBlock(recognizer);
-    }]];
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        
+        UIGestureRecognizerState state = recognizer.state;
+        
+        if (state == UIGestureRecognizerStateCancelled ||
+            state == UIGestureRecognizerStateEnded ||
+            state == UIGestureRecognizerStateFailed) {
+            
+            [recognizer reset];
+        }
+    }
 }
 
 @end
