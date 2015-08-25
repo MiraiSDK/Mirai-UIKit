@@ -37,7 +37,7 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return _effectRecognizers.count > 0;
+    return _effectRecognizers.count == 0;
 }
 
 - (NSSet *)trackingTouches
@@ -197,6 +197,23 @@
 
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
+    if ([self _needSendEventToAttachedView]) {
+        [self _sendToAttachedViewWithEvent:event touches:touches];
+    }
+}
+
+- (BOOL)_needSendEventToAttachedView
+{
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if (recognizer.state != UIGestureRecognizerStatePossible) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (void)_sendToAttachedViewWithEvent:(UIEvent *)event touches:(NSSet *)touches
+{
     NSMutableSet *touchesBeganSet = nil;
     NSMutableSet *touchesMovedSet = nil;
     NSMutableSet *touchesEndedSet = nil;
@@ -233,7 +250,6 @@
     
     [self _callAttachedViewMethod:@selector(touchesCancelled:withEvent:)
                             event:event touches:touchesCancelledSet phase:UITouchPhaseCancelled];
-    
 }
 
 - (BOOL)_willHandleAndSendThisTouche:(UITouch *)touch
@@ -304,17 +320,19 @@
 {
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
-        UIGestureRecognizerState state = recognizer.state;
+        // some UIGestureRecognizer's subclass can't set state as Ended.
         
-        if (state == UIGestureRecognizerStateCancelled ||
-            state == UIGestureRecognizerStateEnded ||
-            state == UIGestureRecognizerStateFailed) {
-            
-            [recognizer reset];
-            
-            return YES;
-        }
-        return NO;
+//        UIGestureRecognizerState state = recognizer.state;
+//        
+//        if (state == UIGestureRecognizerStateCancelled ||
+//            state == UIGestureRecognizerStateEnded ||
+//            state == UIGestureRecognizerStateFailed) {
+//            
+//            [recognizer reset];
+//            
+//            return YES;
+//        }
+//        return NO;
         
         [recognizer reset];
         

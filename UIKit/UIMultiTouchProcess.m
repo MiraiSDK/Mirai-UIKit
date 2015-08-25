@@ -113,6 +113,10 @@
     if (!_legacyAnyRecognizeProcesses) {
         [self _collectAndGenerateGestureReconizeProcessesFromTouches:touches];
     }
+    
+    for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+        [recognizeProcess multiTouchBegin];
+    }
 }
 
 - (void)_collectAndGenerateGestureReconizeProcessesFromTouches:(NSSet *)touches
@@ -168,6 +172,10 @@
     
     [self _clearHasMakeConclusionReconizeProcesses];
     _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
+    
+    if (_legacyAnyRecognizeProcesses) {
+        NSLog(@"multi touch left some recognize processes.");
+    }
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses
