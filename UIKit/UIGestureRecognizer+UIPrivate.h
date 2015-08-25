@@ -28,10 +28,14 @@
  */
 
 #import "UIGestureRecognizer.h"
+#import "UIGestureRecognizeProcess.h"
 
 @interface UIGestureRecognizer (UIPrivate)
 - (void)_setView:(UIView *)v;
 - (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event;
+
+- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess;
+- (void)_unbindRecognizeProcess;
 
 - (BOOL)_isExcludedByGesture:(UIGestureRecognizer *)otherGesture;
 - (BOOL)_isExcluded;

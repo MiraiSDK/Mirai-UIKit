@@ -14,12 +14,15 @@
 @property (nonatomic, readonly) UIView *view;
 @property (nonatomic, readonly) BOOL hasMakeConclusion;
 @property (nonatomic, readonly) NSArray *gestureRecognizer;
+@property (nonatomic, readonly) NSSet *trackingTouches;
 
 - (instancetype)initWithView:(UIView *)view;
 
 - (void)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches;
+
+- (void)multiTouchBegin;
 - (void)multiTouchEnd;
 
 + (BOOL)canViewCatchTouches:(UIView *)view;

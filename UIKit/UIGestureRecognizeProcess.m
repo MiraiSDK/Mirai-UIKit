@@ -16,8 +16,6 @@
     UIView *_view;
     NSMutableSet *_effectRecognizers;
     NSMutableSet *_trackingTouches;
-    
-    BOOL _hasMakeConclusion;
 }
 
 - (instancetype) initWithView:(UIView *)view
@@ -37,7 +35,12 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return _hasMakeConclusion;
+    return _effectRecognizers.count > 0;
+}
+
+- (NSSet *)trackingTouches
+{
+    return _trackingTouches;
 }
 
 + (BOOL)canViewCatchTouches:(UIView *)view
@@ -64,6 +67,13 @@
     [_trackingTouches addObject:touch];
 }
 
+- (void)multiTouchBegin
+{
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        [recognizer _bindRecognizeProcess:self];
+    }
+}
+
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches
 {
     [self _clearEffectRecognizerWhichBecomeDisabled];
@@ -87,12 +97,10 @@
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
 {
-    static NSPredicate *predicate;
-    
-    if (!predicate) {
-        predicate = [NSPredicate predicateWithFormat:@"isEnabled = YES"];
-    }
-    [_effectRecognizers filterUsingPredicate:predicate];
+    [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
+        
+        return !recognizer.isEnabled;
+    }];
 }
 
 - (void)_checkAndClearExcluedRecognizers
@@ -122,16 +130,10 @@
 //    
 //    [_effectRecognizers filterUsingPredicate:predicate];
     
-    NSMutableSet *toRemove = [NSMutableSet new];
-    
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+    [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
-        if (![recognizer _isFailed] && [self _isRecognizerExcluedByOther:recognizer]) {
-            [recognizer _setExcluded];
-            [toRemove addObject:recognizer];
-        }
-    }
-    [_effectRecognizers minusSet:toRemove];
+        return [recognizer _isFailed] || [self _isRecognizerExcluedByOther:recognizer];
+    }];
 }
 
 - (BOOL)_isRecognizerExcluedByOther:(UIGestureRecognizer *)recognizer
@@ -263,15 +265,7 @@
 
 - (void)multiTouchEnd
 {
-    NSUInteger count = [self _callResetForEachGestureReconizersAndGetCalledCount];
-    _hasMakeConclusion = count >= _effectRecognizers.count;
-}
-
-- (NSUInteger)_callResetForEachGestureReconizersAndGetCalledCount
-{
-    NSUInteger count = 0;
-    
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+    [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
         UIGestureRecognizerState state = recognizer.state;
         
@@ -279,11 +273,25 @@
             state == UIGestureRecognizerStateEnded ||
             state == UIGestureRecognizerStateFailed) {
             
-            count++;
             [recognizer reset];
+            
+            return YES;
+        }
+        return NO;
+    }];
+}
+
+- (void)_removeEffectGestureRecognizersWithCondition:(BOOL(^)(UIGestureRecognizer *recognizer))condition
+{
+    NSMutableSet *toRemove = [NSMutableSet new];
+    
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        if (condition(recognizer)) {
+            [recognizer _unbindRecognizeProcess];
+            [toRemove addObject:recognizer];
         }
     }
-    return count;
+    [_effectRecognizers minusSet:toRemove];
 }
 
 @end

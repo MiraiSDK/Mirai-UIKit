@@ -27,7 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIGestureRecognizer.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch+Private.h"
 #import "UIAction.h"
@@ -40,6 +40,8 @@
     NSMutableSet *_excludedTouches;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
+    
+    UIGestureRecognizeProcess *_bindingRecognizeProcess;
 }
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
 @synthesize state=_state, enabled=_enabled, view=_view;
@@ -60,12 +62,22 @@
     return self;
 }
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)initWithTarget:(id)target action:(SEL)action
 {
     if ((self=[self init])) {
         [self addTarget:target action:action];
     }
     return self;
+}
+
+- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess
+{
+    _bindingRecognizeProcess = recognizeProcess;
+}
+
+- (void)_unbindRecognizeProcess
+{
+    _bindingRecognizeProcess = nil;
 }
 
 - (void)_setView:(UIView *)v
