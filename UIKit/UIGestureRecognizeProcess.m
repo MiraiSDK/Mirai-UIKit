@@ -14,8 +14,10 @@
 @implementation UIGestureRecognizeProcess
 {
     UIView *_view;
-    NSMutableSet *_effectRecognizers;
     NSMutableSet *_trackingTouches;
+    NSMutableSet *_effectRecognizers;
+    
+    NSArray *_trackingTouchesArrayCache;
 }
 
 - (instancetype) initWithView:(UIView *)view
@@ -43,6 +45,20 @@
     return _trackingTouches;
 }
 
+- (NSArray *)trackingTouchesArray
+{
+    static NSArray *descriptors;
+    
+    if (!descriptors) {
+        descriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];
+    }
+    
+    if (!_trackingTouchesArrayCache) {
+        _trackingTouchesArrayCache = [_trackingTouches sortedArrayUsingDescriptors:descriptors];
+    }
+    return _trackingTouchesArrayCache;
+}
+
 + (BOOL)canViewCatchTouches:(UIView *)view
 {
     return [self _hasRegisteredAnyGestureRecognizer:view] ||
@@ -65,6 +81,7 @@
 - (void)trackTouch:(UITouch *)touch
 {
     [_trackingTouches addObject:touch];
+    _trackingTouchesArrayCache = nil;
 }
 
 - (void)multiTouchBegin
@@ -83,7 +100,10 @@
     
     // send event to effect gesture recognizers
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        [recognizer _recognizeTouches:touches withEvent:event];
+        if ([recognizer _shouldAttemptToRecognize]) {
+            [self _searchNewTouchFrom:touches andTellRecognizer:recognizer];
+            [recognizer _recognizeTouches:touches withEvent:event];
+        }
     }
     [self _checkAndClearExcluedRecognizers];
     
@@ -101,6 +121,15 @@
         
         return !recognizer.isEnabled;
     }];
+}
+
+- (void)_searchNewTouchFrom:(NSSet *)touches andTellRecognizer:(UIGestureRecognizer *)recognizer
+{
+    for (UITouch *touch in touches) {
+        if (touch.phase == UITouchPhaseBegan) {
+            [recognizer _foundNewTouch:touch];
+        }
+    }
 }
 
 - (void)_checkAndClearExcluedRecognizers
@@ -213,11 +242,11 @@
         return NO;
     }
     
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        if ([recognizer _isEatenTouche:touch]) {
-            return NO;
-        }
-    }
+//    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+//        if ([recognizer _isEatenTouche:touch]) {
+//            return NO;
+//        }
+//    }
     
     return YES;
 }
@@ -265,6 +294,14 @@
 
 - (void)multiTouchEnd
 {
+    [self _clearAndCallResetIfRecognizersMakeConclusion];
+    
+    [_trackingTouches removeAllObjects];
+    _trackingTouchesArrayCache = @[];
+}
+
+- (void)_clearAndCallResetIfRecognizersMakeConclusion
+{
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
         UIGestureRecognizerState state = recognizer.state;
@@ -278,6 +315,10 @@
             return YES;
         }
         return NO;
+        
+        [recognizer reset];
+        
+        return YES;
     }];
 }
 

@@ -37,6 +37,9 @@
 - (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess;
 - (void)_unbindRecognizeProcess;
 
+- (BOOL)_shouldAttemptToRecognize;
+- (void)_foundNewTouch:(UITouch *)touch;
+
 - (BOOL)_isExcludedByGesture:(UIGestureRecognizer *)otherGesture;
 - (BOOL)_isExcluded;
 - (void)_setExcluded;
@@ -44,8 +47,6 @@
 
 - (BOOL)_shouldSendActions;
 - (BOOL)_shouldReset;
-- (BOOL)_isEatenTouche:(UITouch *)touch;
-
 
 - (BOOL)_isFailed;
 - (BOOL)_canReceiveTouches;

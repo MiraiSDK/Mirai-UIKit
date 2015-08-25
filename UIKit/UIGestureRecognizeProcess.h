@@ -15,6 +15,7 @@
 @property (nonatomic, readonly) BOOL hasMakeConclusion;
 @property (nonatomic, readonly) NSArray *gestureRecognizer;
 @property (nonatomic, readonly) NSSet *trackingTouches;
+@property (nonatomic, readonly) NSArray *trackingTouchesArray;
 
 - (instancetype)initWithView:(UIView *)view;
 
