@@ -43,7 +43,8 @@
     
     UIGestureRecognizeProcess *_bindingRecognizeProcess;
 }
-@synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
+@synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
+
 @synthesize state=_state, enabled=_enabled, view=_view;
 
 - (instancetype)init
@@ -93,6 +94,18 @@
         _delegateHas.shouldReceiveTouch = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)];
         _delegateHas.shouldRecognizeSimultaneouslyWithGestureRecognizer = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)];
     }
+}
+
+- (void)setDelaysTouchesBegan:(BOOL)delaysTouchesBegan
+{
+    _delaysTouchesBegan = delaysTouchesBegan;
+    [self reset];
+}
+
+- (void)setDelaysTouchesEnded:(BOOL)delaysTouchesEnded
+{
+    _delaysTouchesEnded = delaysTouchesEnded;
+    [self reset];
 }
 
 - (void)addTarget:(id)target action:(SEL)action

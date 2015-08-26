@@ -17,8 +17,12 @@
     UIView *_view;
     NSMutableSet *_trackingTouches;
     NSMutableSet *_effectRecognizers;
+    NSMutableArray *_delaysBufferedBlocks;
     
     NSArray *_trackingTouchesArrayCache;
+    
+    BOOL _delaysTouchesBegan;
+    BOOL _delaysTouchesEnded;
     
     BOOL _lastTimeHasMakeConclusion;
     BOOL _hasCallAttachedViewCancelledMethod;
@@ -32,10 +36,26 @@
         _lastTimeHasMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
+        _delaysBufferedBlocks = [[NSMutableArray alloc] init];
+        
+        //UIGestureRecognizer's delaysTouchesXXX may be changed, so I cached them when called init method.
+        _delaysTouchesBegan = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesBegan"];
+        _delaysTouchesEnded = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesEnded"];
     }
     NSLog(@"generate UIGestureRecognizeProcess view - %@", _view.className);
     
     return self;
+}
+
+- (BOOL)_anyGestureRecognizerWillDelaysProperty:(NSString *)property
+{
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        NSNumber *propertyNumber = [recognizer valueForKey:property];
+        if ([propertyNumber boolValue]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (UIView *)view
@@ -192,9 +212,14 @@
         
         if ([self _anyRecognizerRecognizedCancelsTouchesInView]) {
             
-            if ([self _needCallAttachedViewCancelledMethod]) {
-                [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
-                _hasCallAttachedViewCancelledMethod = YES;
+            if (_delaysTouchesBegan) {
+                [self _runAndClearDelaysBufferedBlocks];
+                
+            } else {
+                if ([self _needCallAttachedViewCancelledMethod]) {
+                    [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
+                    _hasCallAttachedViewCancelledMethod = YES;
+                }
             }
         } else {
             [self _sendToAttachedViewWithEvent:event touches:touches];
@@ -224,6 +249,16 @@
         }
     }
     return NO;
+}
+
+- (void)_runAndClearDelaysBufferedBlocks
+{
+    if (_delaysBufferedBlocks.count > 0) {
+        for (void (^block)(void) in _delaysBufferedBlocks) {
+            block();
+        }
+        [_delaysBufferedBlocks removeAllObjects];
+    }
 }
 
 - (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -263,13 +298,17 @@
     }
     
     [self _callAttachedViewMethod:@selector(touchesBegan:withEvent:)
-                            event:event touches:touchesBeganSet phase:UITouchPhaseBegan];
+                            event:event touches:touchesBeganSet phase:UITouchPhaseBegan
+                           delays:_delaysTouchesBegan];
     
-    [self _callAttachedViewMethod:@selector(touchesMoved:withEvent:)
-                            event:event touches:touchesMovedSet phase:UITouchPhaseMoved];
+    if (!_delaysTouchesBegan) {
+        [self _callAttachedViewMethod:@selector(touchesMoved:withEvent:)
+                                event:event touches:touchesMovedSet phase:UITouchPhaseMoved delays:NO];
+    }
     
     [self _callAttachedViewMethod:@selector(touchesEnded:withEvent:)
-                            event:event touches:touchesEndedSet phase:UITouchPhaseEnded];
+                            event:event touches:touchesEndedSet phase:UITouchPhaseEnded
+                           delays:_delaysTouchesBegan || _delaysTouchesEnded];
 }
 
 - (BOOL)_willHandleAndSendThisTouche:(UITouch *)touch
@@ -297,14 +336,21 @@
 
 - (void)_callAttachedViewMethod:(SEL)callbackMethod
                           event:(UIEvent *)event touches:(NSMutableSet *)touches
-                          phase:(UITouchPhase)phase
+                          phase:(UITouchPhase)phase delays:(BOOL)delays
 {
     if (touches) {
         [self _printLogForTouchPhase:phase];
         
         for (UITouch *touch in touches) {
             NSSet *wrapTouch = [[NSSet alloc] initWithObjects:touch, nil];
-            [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
+            
+            if (delays) {
+                [_delaysBufferedBlocks addObject:^{
+                    [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
+                }];
+            } else {
+                [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
+            }
         }
     }
 }
@@ -330,9 +376,11 @@
 
 - (void)multiTouchEnd
 {
+    [self _runAndClearDelaysBufferedBlocks];
     [self _clearAndCallResetIfRecognizersMakeConclusion];
     
     [_trackingTouches removeAllObjects];
+    
     _trackingTouchesArrayCache = @[];
     _lastTimeHasMakeConclusion = _effectRecognizers.count == 0;
 }
