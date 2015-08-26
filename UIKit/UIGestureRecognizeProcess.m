@@ -10,6 +10,7 @@
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
+#import "UITouch+Private.h"
 
 @implementation UIGestureRecognizeProcess
 {
@@ -18,12 +19,16 @@
     NSMutableSet *_effectRecognizers;
     
     NSArray *_trackingTouchesArrayCache;
+    
+    BOOL _lastTimeHasMakeConclusion;
+    BOOL _hasCallAttachedViewCancelledMethod;
 }
 
-- (instancetype) initWithView:(UIView *)view
+- (instancetype)initWithView:(UIView *)view
 {
     if (self = [self init]) {
         _view = view;
+        _lastTimeHasMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
     }
@@ -37,7 +42,7 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return _effectRecognizers.count == 0;
+    return _lastTimeHasMakeConclusion;
 }
 
 - (NSSet *)trackingTouches
@@ -106,12 +111,6 @@
         }
     }
     [self _checkAndClearExcluedRecognizers];
-    
-    if ([self _shouldSendsTouchCancelled]) {
-        for (UITouch *touch in touches) {
-            [touch.view touchesCancelled:touches withEvent:event];
-        }
-    }
     [self _sendActionIfNeedForEachGestureRecognizers];
 }
 
@@ -184,32 +183,61 @@
     }
 }
 
-- (BOOL)_shouldSendsTouchCancelled
-{
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        if ([recognizer _shouldSendActions] &&
-            [recognizer cancelsTouchesInView]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
     if ([self _needSendEventToAttachedView]) {
-        [self _sendToAttachedViewWithEvent:event touches:touches];
+        
+        if ([self _anyRecognizerRecognizedGesture]) {
+            
+            if (_hasCallAttachedViewCancelledMethod) {
+                [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
+                _hasCallAttachedViewCancelledMethod = YES;
+            }
+        } else if ([self _allRecognizerFail]) {
+            
+            [self _sendToAttachedViewWithEvent:event touches:touches];
+        }
     }
 }
 
 - (BOOL)_needSendEventToAttachedView
 {
+    return _lastTimeHasMakeConclusion;
+}
+
+- (BOOL)_anyRecognizerRecognizedGesture
+{
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        if (recognizer.state != UIGestureRecognizerStatePossible) {
-            return NO;
+        
+        if ([recognizer cancelsTouchesInView]) {
+            return recognizer.state == UIGestureRecognizerStateBegan ||
+                   recognizer.state == UIGestureRecognizerStateChanged ||
+                   recognizer.state == UIGestureRecognizerStateEnded;
         }
     }
+    return NO;
+}
+
+- (BOOL)_allRecognizerFail
+{
+    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+        
+        return recognizer.state == UIGestureRecognizerStateFailed;
+    }
     return YES;
+}
+
+- (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
+{
+    for (UITouch *touch in touches) {
+        [touch _setOnlyShowPhaseAsCancelled:YES];
+    }
+    
+    [_view touchesCancelled:touches withEvent:event];
+    
+    for (UITouch *touch in touches) {
+        [touch _setOnlyShowPhaseAsCancelled:NO];
+    }
 }
 
 - (void)_sendToAttachedViewWithEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -314,6 +342,7 @@
     
     [_trackingTouches removeAllObjects];
     _trackingTouchesArrayCache = @[];
+    _lastTimeHasMakeConclusion = _effectRecognizers.count == 0;
 }
 
 - (void)_clearAndCallResetIfRecognizersMakeConclusion
