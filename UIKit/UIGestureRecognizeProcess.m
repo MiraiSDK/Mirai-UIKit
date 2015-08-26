@@ -32,6 +32,8 @@
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
     }
+    NSLog(@"generate UIGestureRecognizeProcess view - %@", _view.className);
+    
     return self;
 }
 
@@ -189,12 +191,11 @@
         
         if ([self _anyRecognizerRecognizedGesture]) {
             
-            if (_hasCallAttachedViewCancelledMethod) {
+            if (!_hasCallAttachedViewCancelledMethod) {
                 [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
                 _hasCallAttachedViewCancelledMethod = YES;
             }
-        } else if ([self _allRecognizerFail]) {
-            
+        } else {
             [self _sendToAttachedViewWithEvent:event touches:touches];
         }
     }
@@ -216,15 +217,6 @@
         }
     }
     return NO;
-}
-
-- (BOOL)_allRecognizerFail
-{
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        
-        return recognizer.state == UIGestureRecognizerStateFailed;
-    }
-    return YES;
 }
 
 - (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
