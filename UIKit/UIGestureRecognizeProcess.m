@@ -22,6 +22,7 @@
     
     BOOL _lastTimeHasMakeConclusion;
     BOOL _hasCallAttachedViewCancelledMethod;
+    BOOL _hasCallAttachedViewAnyMethod;
 }
 
 - (instancetype)initWithView:(UIView *)view
@@ -189,14 +190,15 @@
 {
     if ([self _needSendEventToAttachedView]) {
         
-        if ([self _anyRecognizerRecognizedGesture]) {
+        if ([self _anyRecognizerRecognizedCancelsTouchesInView]) {
             
-            if (!_hasCallAttachedViewCancelledMethod) {
+            if ([self _needCallAttachedViewCancelledMethod]) {
                 [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
                 _hasCallAttachedViewCancelledMethod = YES;
             }
         } else {
             [self _sendToAttachedViewWithEvent:event touches:touches];
+            _hasCallAttachedViewAnyMethod = YES;
         }
     }
 }
@@ -206,7 +208,12 @@
     return _lastTimeHasMakeConclusion;
 }
 
-- (BOOL)_anyRecognizerRecognizedGesture
+- (BOOL)_needCallAttachedViewCancelledMethod
+{
+    return _hasCallAttachedViewAnyMethod && !_hasCallAttachedViewCancelledMethod;
+}
+
+- (BOOL)_anyRecognizerRecognizedCancelsTouchesInView
 {
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         
