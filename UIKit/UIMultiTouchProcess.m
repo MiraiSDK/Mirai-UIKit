@@ -20,12 +20,14 @@
     BOOL _legacyAnyRecognizeProcesses;
     
     NSMutableDictionary *_effectRecognizeProcesses;
+    NSMutableSet *_trackedTouches;
 }
 
 - (instancetype)init
 {
     if (self = [super init]) {
         _effectRecognizeProcesses = [NSMutableDictionary dictionary];
+        _trackedTouches = [NSMutableSet set];
     }
     return self;
 }
@@ -111,7 +113,7 @@
 - (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
     if (!_legacyAnyRecognizeProcesses) {
-        [self _collectAndGenerateGestureReconizeProcessesFromTouches:touches];
+        [self _trackTouchesAndGenerateGestureReconizeProcessesFromTouches:touches];
     }
     
     for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
@@ -119,7 +121,7 @@
     }
 }
 
-- (void)_collectAndGenerateGestureReconizeProcessesFromTouches:(NSSet *)touches
+- (void)_trackTouchesAndGenerateGestureReconizeProcessesFromTouches:(NSSet *)touches
 {
     for (UITouch *touch in touches) {
         
@@ -141,6 +143,7 @@
             [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
         }
         [recognizeProcess trackTouch:touch];
+        [_trackedTouches addObject:touch];
     }
 }
 
@@ -162,6 +165,52 @@
     for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
         [recognizeProcess sendToAttachedViewIfNeedWithEvent:event touches:touches];
     }
+    [self _handleNotTrackedTouches:touches event:event];
+}
+
+- (void)_handleNotTrackedTouches:(NSSet *)touches event:(UIEvent *)event
+{
+    for (UITouch *touch in touches) {
+        if (![_trackedTouches containsObject:touch]) {
+            [self _callViewAndSuperviewsWithForNotTrackedTouch:touch event:event];
+        }
+    }
+}
+
+- (void)_callViewAndSuperviewsWithForNotTrackedTouch:(UITouch *)touch event:(UIEvent *)event
+{
+    NSSet *wrapTouchSet = [[NSSet alloc] initWithObjects:touch, nil];
+    SEL callbackMethod = [self _callbackMethodForTouchPhase:touch.phase];
+    
+    if (callbackMethod) {
+        
+        UIView *view = touch.view;
+        
+        while (view) {
+            [view performSelector:callbackMethod withObject:wrapTouchSet withObject:event];
+            view = view.superview;
+        }
+    }
+}
+
+- (SEL)_callbackMethodForTouchPhase:(UITouchPhase)phase
+{
+    switch (phase) {
+        case UITouchPhaseBegan:
+            return @selector(touchesBegan:withEvent:);
+            
+        case UITouchPhaseMoved:
+            return @selector(touchesMoved:withEvent:);
+            
+        case UITouchPhaseEnded:
+            return @selector(touchesEnded:withEvent:);
+            
+        case UITouchPhaseCancelled:
+            return @selector(touchesCancelled:withEvent:);
+            
+        default:
+            return NULL;
+    }
 }
 
 - (void)_end
@@ -169,6 +218,7 @@
     for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
         [recognizeProcess multiTouchEnd];
     }
+    [_trackedTouches removeAllObjects];
     
     [self _clearHasMakeConclusionReconizeProcesses];
     _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
