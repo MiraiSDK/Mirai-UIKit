@@ -403,6 +403,158 @@
     
 }
 
+- (void)handleInputEvent:(InputEvent *)inputEvent
+{
+    NSMutableSet *removedTouches = [[NSMutableSet alloc] init];
+    NSMutableSet *newPointerIdentifiers = [[NSMutableSet alloc] init];
+    
+    [self _compareInputEvent:inputEvent andGetRemovedTouches:&removedTouches andNewPointerIdentifiers:&newPointerIdentifiers];
+    
+    switch (inputEvent.trueAction) {
+        case AMOTION_EVENT_ACTION_DOWN:
+            [self _setAllTouchesAsPhase:UITouchPhaseStationary];
+            [self _generateNewTouchesWithNewPointerIdentifiers:newPointerIdentifiers];
+            break;
+            
+        case AMOTION_EVENT_ACTION_UP:
+            [self _setAllTouchesAsPhase:UITouchPhaseEnded];
+            break;
+            
+        case AMOTION_EVENT_ACTION_MOVE:
+            [self _setAllTouchesAsPhase:UITouchPhaseStationary];
+            break;
+            
+        case AMOTION_EVENT_ACTION_POINTER_DOWN:
+            [self _setAllTouchesAsPhase:UITouchPhaseStationary];
+            [self _generateNewTouchesWithNewPointerIdentifiers:newPointerIdentifiers];
+            break;
+            
+        case AMOTION_EVENT_ACTION_POINTER_UP:
+            [self _setAllTouchesAsPhase:UITouchPhaseStationary];
+            [self _setActivityTouchPhaseAsEnedWithInputEvent:inputEvent];
+            break;
+            
+        case AMOTION_EVENT_ACTION_CANCEL:
+            [self _setAllTouchesAsPhase:UITouchPhaseCancelled];
+            break;
+            
+        default:
+            break;
+    }
+    [self _setAllTouchesAsPhase:UITouchPhaseStationary];
+    [self _generateNewTouchesWithNewPointerIdentifiers:newPointerIdentifiers];
+    [self _removeTouches:removedTouches];
+    
+    [self _refreshTimeStampAndLocationInfoFromInputEvent:inputEvent];
+}
+
+- (void)_compareInputEvent:(InputEvent *)inputEvent andGetRemovedTouches:(NSMutableSet **)removedTouches andNewPointerIdentifiers:(NSMutableSet **)newPointerIdentifiers
+{
+    NSMutableDictionary *prevExists = [_touchesByIdentifier mutableCopy];
+    
+    for (MotionPointer *pointer in inputEvent.pointers) {
+        int32_t pointerIdentifier = pointer.pointerId;
+        if (![self _touchForIdentifier:pointerIdentifier]) {
+            [*newPointerIdentifiers addObject:@(pointerIdentifier)];
+        }
+        [prevExists removeObjectForKey:@(pointerIdentifier)];
+    }
+    
+    // clean touch
+    for (NSString *key in prevExists.allKeys) {
+        UITouch *touch = [_touchesByIdentifier objectForKey:key];
+        [*removedTouches addObject:touch];
+    }
+}
+
+- (void)_setActivityTouchPhaseAsEnedWithInputEvent:(InputEvent *)inputEvent
+{
+    UITouch *activityTouch = [self _touchForIdentifier:inputEvent.activityPointer.pointerId];
+    [activityTouch _updatePhase:UITouchPhaseEnded];
+}
+
+- (void)_setAllTouchesAsPhase:(UITouchPhase)phase
+{
+    for (UITouch *touch in _touches) {
+        [touch _updatePhase:phase];
+    }
+}
+
+- (void)_generateNewTouchesWithNewPointerIdentifiers:(NSSet *)newPointerIdentifiers
+{
+    for (NSNumber *identifierNumber in newPointerIdentifiers) {
+        
+        UITouch *touch = [[UITouch alloc] init];
+        int32_t pointerIdentifier = [identifierNumber intValue];
+        
+        touch.identifier = pointerIdentifier;
+        [touch _updatePhase:UITouchPhaseBegan];
+        
+        [_touches addObject:touch];
+        [_touchesByIdentifier setObject:touch forKey:@(pointerIdentifier)];
+    }
+}
+
+- (void)_removeTouches:(NSSet *)touches
+{
+    for (UITouch *touch in touches) {
+        [_touches removeObject:touch];
+        [_touchesByIdentifier removeObjectForKey:@(touch.identifier)];
+    }
+}
+
+- (void)_refreshTimeStampAndLocationInfoFromInputEvent:(InputEvent *)inputEvent
+{
+    _aEvent = inputEvent.aEvent;
+    
+    // has been refactored.
+//    [self _updateTouchesWithInputEvent:inputEvent];
+    
+    NSTimeInterval eventTimestamp = [inputEvent timestamp];
+    [self _setTimestamp:eventTimestamp];
+    
+    for (MotionPointer *pointer in inputEvent.pointers) {
+        [self _refreshLocationForMotionPointer:pointer eventTimestamp:eventTimestamp];
+    }
+}
+
+- (void)_refreshLocationForMotionPointer:(MotionPointer *)pointer
+                          eventTimestamp:(NSTimeInterval)eventTimestamp
+{
+    int32_t pointerIdentifier = pointer.pointerId;
+    
+    float x = pointer.rawX;
+    float y = pointer.rawY;
+    
+    const CGPoint screenLocation = CGPointMake(x, y);
+    CALayer *keyWindowLayer = [[[UIApplication sharedApplication] keyWindow] layer];
+    CGPoint windowLocation = [[[UIScreen mainScreen] _pixelLayer] convertPoint:screenLocation
+                                                                       toLayer:keyWindowLayer];
+    windowLocation.x = ceilf(windowLocation.x);
+    windowLocation.y = ceilf(windowLocation.y);
+    
+    UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
+    
+    if (touch.phase == UITouchPhaseStationary &&
+        !CGPointEqualToPoint(touch.screenLocation, windowLocation)) {
+        
+        [touch _updatePhase:UITouchPhaseMoved];
+    }
+    
+    if (touch.phase == UITouchPhaseEnded) {
+        [touch _setPhase:touch.phase screenLocation:windowLocation
+                tapCount:1 timestamp:eventTimestamp];
+        
+    } else {
+        if (touch.phase == UITouchPhaseBegan) {
+            UIScreen *theScreen = [UIScreen mainScreen];
+            [touch _setTouchedView:[theScreen _hitTest:screenLocation event:self]];
+        }
+        [touch _updatePhase:touch.phase screenLocation:windowLocation timestamp:eventTimestamp];
+    }
+}
+
+//TODO delete it
 - (void)configureWithInputEvent:(InputEvent *)inputEvent
 {
     _aEvent = inputEvent.aEvent;

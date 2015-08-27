@@ -110,28 +110,22 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 - (void)getEvent:(UIEvent *)event
 {
     [_eventQueueLock lock];
-    InputEvent *matchedEvent = nil;
-    NSUInteger idx = 0;
-    for (InputEvent *ie in _eventQueue) {
-        int32_t trueAction = ie.trueAction;
-        if (trueAction == AMOTION_EVENT_ACTION_DOWN ||
-            trueAction == AMOTION_EVENT_ACTION_CANCEL ||
-            trueAction == AMOTION_EVENT_ACTION_UP) {
-            matchedEvent = ie;
-            break;
+    
+    for (InputEvent *inputEvent in _eventQueue) {
+        int32_t action = inputEvent.trueAction;
+        
+        if (action == AMOTION_EVENT_ACTION_DOWN ||
+            action == AMOTION_EVENT_ACTION_UP ||
+            action == AMOTION_EVENT_ACTION_MOVE ||
+            action == AMOTION_EVENT_ACTION_POINTER_DOWN ||
+            action == AMOTION_EVENT_ACTION_POINTER_UP ||
+            action == AMOTION_EVENT_ACTION_CANCEL) {
+            
+            [event handleInputEvent:inputEvent];
         }
-        idx ++;
     }
-    
-    if (matchedEvent) {
-        [_eventQueue removeObjectsInRange:NSMakeRange(0, idx+1)];
-    } else {
-        matchedEvent = [_eventQueue lastObject];
-        [_eventQueue removeAllObjects];
-    }
+    [_eventQueue removeAllObjects];
     [_eventQueueLock unlock];
-    
-    [event configureWithInputEvent:matchedEvent];
 }
 
 - (void)resume

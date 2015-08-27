@@ -41,6 +41,7 @@ typedef enum {
 - (void)_updatePhase:(UITouchPhase)phase;
 
 @property (nonatomic, assign) NSInteger identifier;
+@property (nonatomic, readonly) CGPoint screenLocation;
 
 @end
 

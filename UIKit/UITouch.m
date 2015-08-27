@@ -65,6 +65,11 @@ static NSArray *GestureRecognizersForView(UIView *view)
     return _phase;
 }
 
+- (CGPoint)screenLocation
+{
+    return _location;
+}
+
 - (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled
 {
     _onlyShowPhaseAsCancelled = onlyShowPhaseAsCancelled;
