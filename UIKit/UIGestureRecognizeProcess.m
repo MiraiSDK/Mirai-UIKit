@@ -171,11 +171,7 @@
 //        predicate = [NSPredicate predicateWithBlock:^BOOL(UIGestureRecognizer *recognizer, NSDictionary *bindings) {
 //            
 //            NSLog(@"=> call filter block");
-//            
-//            if ([recognizer _isFailed]) {
-//                return YES;
-//            }
-//            
+//
 //            if ([self _isRecognizerExcluedByOther:recognizer]) {
 //                [recognizer _setExcluded];
 //                return NO;
@@ -188,7 +184,7 @@
     
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
-        return [recognizer _isFailed] || [self _isRecognizerExcluedByOther:recognizer];
+        return [self _isRecognizerExcluedByOther:recognizer];
     }];
 }
 
@@ -205,7 +201,7 @@
 - (void)_sendActionIfNeedForEachGestureRecognizers
 {
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        if ([recognizer _shouldSendActions]) {
+        if (![recognizer _isFailed] && [recognizer _shouldSendActions]) {
             [recognizer _sendActions];
         }
     }

@@ -59,11 +59,23 @@
         NSLog(@"[begin multi-touch]");
         [self _beginWithEvent:event touches:touches];
     }
-    [self _handleEvent:event touches:touches];
+    NSArray *recognizerProcesses = [_effectRecognizeProcesses allValues];
+    
+    for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
+        [recognizeProcess recognizeEvent:event touches:touches];
+    }
+    
+    if (touchEnd) {
+        [self _end];
+    }
+    
+    for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
+        [recognizeProcess sendToAttachedViewIfNeedWithEvent:event touches:touches];
+    }
+    [self _handleNotTrackedTouches:touches event:event];
     
     if (touchEnd) {
         NSLog(@"[end multi-touch]");
-        [self _end];
     }
 }
 
@@ -154,19 +166,6 @@
         view = view.superview;
     }
     return view;
-}
-
-- (void)_handleEvent:(UIEvent *)event touches:(NSSet *)touches
-{
-    NSArray *recognizerProcesses = [_effectRecognizeProcesses allValues];
-    
-    for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
-        [recognizeProcess recognizeEvent:event touches:touches];
-    }
-    for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
-        [recognizeProcess sendToAttachedViewIfNeedWithEvent:event touches:touches];
-    }
-    [self _handleNotTrackedTouches:touches event:event];
 }
 
 - (void)_handleNotTrackedTouches:(NSSet *)touches event:(UIEvent *)event
