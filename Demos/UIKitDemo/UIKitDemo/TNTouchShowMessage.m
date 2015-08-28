@@ -53,7 +53,7 @@ static void ShowMessageWithTouches(UIView *view, NSSet *touches, NSString *mark)
 
 - (UIView *)_newRedView
 {
-    UIEdgeInsets edgeInset = UIEdgeInsetsMake(210, 75, 75, 75);
+    UIEdgeInsets edgeInset = UIEdgeInsetsMake(170, 75, 75, 75);
     UIView *redView = [[UIView alloc] initWithFrame:UIEdgeInsetsInsetRect(self.view.bounds, edgeInset)];
     redView.backgroundColor = [UIColor redColor];
     [redView setTag:kRedViewSpecialTag];
@@ -86,17 +86,20 @@ static void ShowMessageWithTouches(UIView *view, NSSet *touches, NSString *mark)
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    self.state = UIGestureRecognizerStateBegan;
     ShowMessageWithTouches(self.view, touches, @"GR-began");
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     ShowMessageWithTouches(self.view, touches, @"GR-ended");
+    self.state = UIGestureRecognizerStateEnded;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     ShowMessageWithTouches(self.view, touches, @"GR-cancelled");
+    self.state = UIGestureRecognizerStateCancelled;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
