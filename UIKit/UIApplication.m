@@ -290,11 +290,14 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
                 NSTimeInterval eventUsage = 0.0;
                 if (UIAndroidEventsServerHasEvents()) {
                     NSDate *evenStart = [NSDate date];
-                    UIAndroidEventsGetEvent(_currentEvent);
                     
-                    [self sendEvent:_currentEvent];
-                    
-                    [_currentEvent _cleanTouches];
+                    do {
+                        UIAndroidEventsGetEvent(_currentEvent);
+                        [self sendEvent:_currentEvent];
+                        [_currentEvent _cleanTouches];
+                        
+                    } while (UIAndroidEventsServerHasEvents());
+                
                     int32_t handled = 1;
                     
                     eventUsage = -[evenStart timeIntervalSinceNow];
