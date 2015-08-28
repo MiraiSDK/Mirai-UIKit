@@ -112,16 +112,14 @@
 
 - (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    if (!_legacyAnyRecognizeProcesses) {
-        [self _trackTouchesAndGenerateGestureReconizeProcessesFromTouches:touches];
-    }
+    [self _trackTouches:touches generateRecognizeProcessIfNotExist:!_legacyAnyRecognizeProcesses];
     
     for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
         [recognizeProcess multiTouchBegin];
     }
 }
 
-- (void)_trackTouchesAndGenerateGestureReconizeProcessesFromTouches:(NSSet *)touches
+- (void)_trackTouches:(NSSet *)touches generateRecognizeProcessIfNotExist:(BOOL)generate
 {
     for (UITouch *touch in touches) {
         
@@ -138,12 +136,15 @@
         NSValue *keyView = [NSValue valueWithNonretainedObject:view];
         UIGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
         
-        if (!recognizeProcess) {
+        if (!recognizeProcess && generate) {
             recognizeProcess = [[UIGestureRecognizeProcess alloc] initWithView:view];
             [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
         }
-        [recognizeProcess trackTouch:touch];
-        [_trackedTouches addObject:touch];
+        
+        if (recognizeProcess) {
+            [recognizeProcess trackTouch:touch];
+            [_trackedTouches addObject:touch];
+        }
     }
 }
 

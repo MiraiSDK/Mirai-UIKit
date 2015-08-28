@@ -284,6 +284,7 @@
     NSMutableSet *touchesBeganSet = nil;
     NSMutableSet *touchesMovedSet = nil;
     NSMutableSet *touchesEndedSet = nil;
+    NSMutableSet *touchesCancelledSet = nil;
     
     for (UITouch *touch in touches) {
         if ([self _willHandleAndSendThisTouche:touch]) {
@@ -298,6 +299,9 @@
                 
             } else if (phase == UITouchPhaseEnded) {
                 [self _setTouch:touch intoMutableSet:&touchesEndedSet];
+                
+            } else if (phase == UITouchPhaseCancelled) {
+                [self _setTouch:touch intoMutableSet:&touchesCancelledSet];
             }
         }
     }
@@ -314,6 +318,10 @@
     [self _callAttachedViewMethod:@selector(touchesEnded:withEvent:)
                             event:event touches:touchesEndedSet phase:UITouchPhaseEnded
                            delays:_delaysTouchesBegan || _delaysTouchesEnded];
+    
+    [self _callAttachedViewMethod:@selector(touchesCancelled:withEvent:)
+                            event:event touches:touchesCancelledSet
+                            phase:UITouchPhaseCancelled delays:NO];
 }
 
 - (BOOL)_willHandleAndSendThisTouche:(UITouch *)touch
