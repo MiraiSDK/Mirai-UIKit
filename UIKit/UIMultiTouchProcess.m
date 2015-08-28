@@ -224,8 +224,19 @@
     _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
     
     if (_legacyAnyRecognizeProcesses) {
-        NSLog(@"multi touch left some recognize processes.");
+        NSLog(@"multi touch left some recognize processes: %@", [self _leftRecognizerNames]);
     }
+}
+
+- (NSSet *)_leftRecognizerNames
+{
+    NSMutableSet *leftRecognizerNames = [[NSMutableSet alloc] init];
+    for (UIGestureRecognizeProcess *recognizerProcess in [_effectRecognizeProcesses allValues]) {
+        for (UIGestureRecognizer *recognizer in recognizerProcess.gestureRecognizers) {
+            [leftRecognizerNames addObject:recognizer.className];
+        }
+    }
+    return leftRecognizerNames;
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses

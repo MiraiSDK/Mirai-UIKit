@@ -13,7 +13,7 @@
 
 @property (nonatomic, readonly) UIView *view;
 @property (nonatomic, readonly) BOOL hasMakeConclusion;
-@property (nonatomic, readonly) NSArray *gestureRecognizer;
+@property (nonatomic, readonly) NSArray *gestureRecognizers;
 @property (nonatomic, readonly) NSSet *trackingTouches;
 @property (nonatomic, readonly) NSArray *trackingTouchesArray;
 

@@ -73,6 +73,11 @@
     return _trackingTouches;
 }
 
+- (NSArray *)gestureRecognizers
+{
+    return [_effectRecognizers allObjects];
+}
+
 - (NSArray *)trackingTouchesArray
 {
     static NSArray *descriptors;
@@ -389,23 +394,17 @@
 {
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
-        // some UIGestureRecognizer's subclass can't set state as Ended.
+        UIGestureRecognizerState state = recognizer.state;
         
-//        UIGestureRecognizerState state = recognizer.state;
-//        
-//        if (state == UIGestureRecognizerStateCancelled ||
-//            state == UIGestureRecognizerStateEnded ||
-//            state == UIGestureRecognizerStateFailed) {
-//            
-//            [recognizer reset];
-//            
-//            return YES;
-//        }
-//        return NO;
-        
-        [recognizer reset];
-        
-        return YES;
+        if (state == UIGestureRecognizerStateCancelled ||
+            state == UIGestureRecognizerStateEnded ||
+            state == UIGestureRecognizerStateFailed) {
+            
+            [recognizer reset];
+            
+            return YES;
+        }
+        return NO;
     }];
 }
 
