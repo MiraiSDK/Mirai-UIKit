@@ -66,7 +66,9 @@
     }
     
     if (touchEnd) {
-        [self _end];
+        for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+            [recognizeProcess clearAndCallResetIfRecognizersMakeConclusion];
+        }
     }
     
     for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
@@ -75,6 +77,7 @@
     [self _handleNotTrackedTouches:touches event:event];
     
     if (touchEnd) {
+        [self _end];
         NSLog(@"[end multi-touch]");
     }
 }

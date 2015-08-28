@@ -27,6 +27,8 @@
     BOOL _lastTimeHasMakeConclusion;
     BOOL _hasCallAttachedViewCancelledMethod;
     BOOL _hasCallAttachedViewAnyMethod;
+    
+    BOOL _cancelsTouchesInView;
 }
 
 - (instancetype)initWithView:(UIView *)view
@@ -140,6 +142,7 @@
     }
     [self _checkAndClearExcluedRecognizers];
     [self _sendActionIfNeedForEachGestureRecognizers];
+    _cancelsTouchesInView = [self _checkHasAnyRecognizerRecognizedCancelsTouchesInView];
 }
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
@@ -211,20 +214,13 @@
 {
     if ([self _needSendEventToAttachedView]) {
         
-        if ([self _anyRecognizerRecognizedCancelsTouchesInView]) {
-            
-            if (_delaysTouchesBegan) {
-                [self _runAndClearDelaysBufferedBlocks];
-                
-            } else {
-                if ([self _needCallAttachedViewCancelledMethod]) {
-                    [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
-                    _hasCallAttachedViewCancelledMethod = YES;
-                }
+        if (_cancelsTouchesInView) {
+            if ([self _needCallAttachedViewCancelledMethod]) {
+                [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
+                _hasCallAttachedViewCancelledMethod = YES;
             }
         } else {
             [self _sendToAttachedViewWithEvent:event touches:touches];
-            _hasCallAttachedViewAnyMethod = YES;
         }
     }
 }
@@ -239,14 +235,17 @@
     return _hasCallAttachedViewAnyMethod && !_hasCallAttachedViewCancelledMethod;
 }
 
-- (BOOL)_anyRecognizerRecognizedCancelsTouchesInView
+- (BOOL)_checkHasAnyRecognizerRecognizedCancelsTouchesInView
 {
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         
         if ([recognizer cancelsTouchesInView]) {
-            return recognizer.state == UIGestureRecognizerStateBegan ||
-                   recognizer.state == UIGestureRecognizerStateChanged ||
-                   recognizer.state == UIGestureRecognizerStateEnded;
+            
+            if (recognizer.state == UIGestureRecognizerStateBegan ||
+                recognizer.state == UIGestureRecognizerStateChanged ||
+                recognizer.state == UIGestureRecognizerStateEnded) {
+                return YES;
+            }
         }
     }
     return NO;
@@ -359,6 +358,7 @@
                 }];
             } else {
                 [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
+                _hasCallAttachedViewAnyMethod = YES;
             }
         }
     }
@@ -383,18 +383,8 @@
     NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
-- (void)multiTouchEnd
-{
-    [self _runAndClearDelaysBufferedBlocks];
-    [self _clearAndCallResetIfRecognizersMakeConclusion];
-    
-    [_trackingTouches removeAllObjects];
-    
-    _trackingTouchesArrayCache = @[];
-    _lastTimeHasMakeConclusion = _effectRecognizers.count == 0;
-}
 
-- (void)_clearAndCallResetIfRecognizersMakeConclusion
+- (void)clearAndCallResetIfRecognizersMakeConclusion
 {
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
@@ -411,6 +401,19 @@
         return NO;
     }];
 }
+
+- (void)multiTouchEnd
+{
+    if (!_cancelsTouchesInView) {
+        [self _runAndClearDelaysBufferedBlocks];
+    }
+    
+    [_trackingTouches removeAllObjects];
+    
+    _trackingTouchesArrayCache = @[];
+    _lastTimeHasMakeConclusion = _effectRecognizers.count == 0;
+}
+
 
 - (void)_removeEffectGestureRecognizersWithCondition:(BOOL(^)(UIGestureRecognizer *recognizer))condition
 {
