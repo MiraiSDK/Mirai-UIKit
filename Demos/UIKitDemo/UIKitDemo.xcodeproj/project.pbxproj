@@ -87,6 +87,8 @@
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		D210A8DE1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
 		D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
+		D220A8C61B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */; };
+		D220A8C71B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */; };
 		D221B3331B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */; };
 		D221B3341B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */; };
 		D22284A71B7B1327003B5996 /* UIScrollViewInertance.m in Sources */ = {isa = PBXBuildFile; fileRef = D22284A61B7B1327003B5996 /* UIScrollViewInertance.m */; };
@@ -277,6 +279,8 @@
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
 		D210A8DC1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSplitViewControllerTestViewController.h; sourceTree = "<group>"; };
 		D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSplitViewControllerTestViewController.m; sourceTree = "<group>"; };
+		D220A8C41B943883001B906F /* TNTapGestureRecognizerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTapGestureRecognizerTestViewController.h; sourceTree = "<group>"; };
+		D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTapGestureRecognizerTestViewController.m; sourceTree = "<group>"; };
 		D221B3311B292CA800C15C63 /* TNPopoverPropertiesTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPopoverPropertiesTestViewController.h; sourceTree = "<group>"; };
 		D221B3321B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPopoverPropertiesTestViewController.m; sourceTree = "<group>"; };
 		D22284A51B7B1327003B5996 /* UIScrollViewInertance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollViewInertance.h; sourceTree = "<group>"; };
@@ -825,6 +829,8 @@
 				D2C401841B8481F40055BF2E /* TNTouchConfirmSuperview.m */,
 				D2E2AB751B86D2C100FF14EB /* TNGestureEffectTouch.h */,
 				D2E2AB761B86D2C100FF14EB /* TNGestureEffectTouch.m */,
+				D220A8C41B943883001B906F /* TNTapGestureRecognizerTestViewController.h */,
+				D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */,
 			);
 			name = UIGestureRecognizer;
 			sourceTree = "<group>";
@@ -1058,6 +1064,7 @@
 				D2EB64361B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */,
 				D2BB4E051B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
 				D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */,
+				D220A8C71B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */,
 				D22284A81B7B1327003B5996 /* UIScrollViewInertance.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
@@ -1119,6 +1126,7 @@
 				D2D64D201B3B9FC900AC3AF7 /* TNTargetActionToBlock.m in Sources */,
 				D2239E3B1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */,
 				D291282D1AFA1A19009FA62F /* TNShowedSplitViewController.m in Sources */,
+				D220A8C61B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */,
 				D2CEEE9B1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
 				D270F49F1AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */,
 				438FAEAB1AFB8D550069983F /* TNTextFieldTestViewController.m in Sources */,
