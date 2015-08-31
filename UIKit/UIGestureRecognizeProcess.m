@@ -218,6 +218,7 @@
             if ([self _needCallAttachedViewCancelledMethod]) {
                 [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
                 _hasCallAttachedViewCancelledMethod = YES;
+                [_delaysBufferedBlocks removeAllObjects];
             }
         } else {
             [self _sendToAttachedViewWithEvent:event touches:touches];
@@ -227,12 +228,12 @@
 
 - (BOOL)_needSendEventToAttachedView
 {
-    return _lastTimeHasMakeConclusion;
+    return _lastTimeHasMakeConclusion && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (BOOL)_needCallAttachedViewCancelledMethod
 {
-    return _hasCallAttachedViewAnyMethod && !_hasCallAttachedViewCancelledMethod;
+    return _hasCallAttachedViewAnyMethod;
 }
 
 - (BOOL)_checkHasAnyRecognizerRecognizedCancelsTouchesInView
@@ -253,12 +254,17 @@
 
 - (void)_runAndClearDelaysBufferedBlocks
 {
-    if (_delaysBufferedBlocks.count > 0) {
+    if ([self _needToRunDelaysBlockedBlocks]) {
         for (void (^block)(void) in _delaysBufferedBlocks) {
             block();
         }
         [_delaysBufferedBlocks removeAllObjects];
     }
+}
+
+- (BOOL)_needToRunDelaysBlockedBlocks
+{
+    return _delaysBufferedBlocks.count > 0 && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -317,6 +323,11 @@
     [self _callAttachedViewMethod:@selector(touchesCancelled:withEvent:)
                             event:event touches:touchesCancelledSet
                             phase:UITouchPhaseCancelled delays:NO];
+    
+    if (touchesCancelledSet && touchesCancelledSet.count > 0) {
+        _hasCallAttachedViewCancelledMethod = YES;
+        [_delaysBufferedBlocks removeAllObjects];
+    }
 }
 
 - (BOOL)_willHandleAndSendThisTouche:(UITouch *)touch
