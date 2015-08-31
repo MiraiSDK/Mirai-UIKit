@@ -31,9 +31,9 @@
 //    unsigned int      _endsOnSingleTouch:1;
 }
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)init
 {
-    self = [super initWithTarget:target action:action];
+    self = [super init];
     if (self) {
         _touches = [NSMutableArray array];
     }

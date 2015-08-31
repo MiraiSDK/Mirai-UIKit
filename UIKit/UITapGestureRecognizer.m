@@ -41,9 +41,9 @@
 @implementation UITapGestureRecognizer
 @synthesize numberOfTapsRequired=_numberOfTapsRequired, numberOfTouchesRequired=_numberOfTouchesRequired;
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)init
 {
-    if ((self=[super initWithTarget:target action:action])) {
+    if (self = [super init]) {
         _numberOfTapsRequired = 1;
         _numberOfTouchesRequired = 1;
         _touches = [NSMutableArray array];

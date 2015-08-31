@@ -57,9 +57,9 @@ static UITouch *PanTouch(NSSet *touches)
 }
 @synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)init
 {
-    if ((self=[super initWithTarget:target action:action])) {
+    if ((self=[super init])) {
         _minimumNumberOfTouches = 1;
         _maximumNumberOfTouches = NSUIntegerMax;
         _velocity = CGPointZero;

@@ -43,9 +43,9 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
 @synthesize numberOfTouchesRequired=_numberOfTouchesRequired;
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)init
 {
-    if ((self=[super initWithTarget:target action:action])) {
+    if ((self=[super init])) {
         _allowableMovement = 10;
         _minimumPressDuration = 0.5;
         _numberOfTapsRequired = 0;
