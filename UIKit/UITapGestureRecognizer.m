@@ -37,7 +37,8 @@
 
 @interface UITapGestureRecognizer()
 @property (nonatomic, strong) NSMutableArray *touches;
-@property (nonatomic, assign) NSInteger numTouches;
+@property (nonatomic, assign) NSUInteger numTaps;
+@property (nonatomic, assign) NSUInteger numTouches;
 @property (nonatomic, strong) NSMutableDictionary *beganLocations;
 @property (nonatomic, strong) NSTimer *invalidTimer;
 @property (nonatomic, assign) BOOL waitForNewTouchBegin;
@@ -73,20 +74,30 @@
 {
     [super reset];
     
+    [self _resetOneTap];
+    [self _stopInvalidTimer];
+    
+    _numTaps = 0;
+}
+
+- (void)_resetOneTap
+{
     _numTouches = 0;
     _waitForNewTouchBegin = YES;
     [_touches removeAllObjects];
-    [self _stopInvalidTimer];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_waitForNewTouchBegin) {
+    [_touches addObjectsFromArray:touches.allObjects];
+    
+    NSLog(@"[self _pressedTouchesCount] %li self.numberOfTouchesRequired %li",
+          [self _pressedTouchesCount], self.numberOfTouchesRequired);
+    
+    if (!_waitForNewTouchBegin || [self _pressedTouchesCount] > self.numberOfTouchesRequired) {
         self.state = UIGestureRecognizerStateFailed;
         [self _stopInvalidTimer];
     }
-    
-    [_touches addObjectsFromArray:touches.allObjects];
     
     for (UITouch *t in touches) {
         NSInteger idx = [_touches indexOfObject:t];
@@ -147,7 +158,21 @@
 
 - (void)_completeOneTap
 {
+    _numTaps++;
+    
+    if (_numTaps >= self.numberOfTapsRequired) {
+        [self _completeAllTaps];
+        return;
+    }
+    
+    [self _resetOneTap];
+    [self _restartInvalidTimer];
+}
+
+- (void)_completeAllTaps
+{
     self.state = UIGestureRecognizerStateRecognized;
+    [self _stopInvalidTimer];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
