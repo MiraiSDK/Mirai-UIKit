@@ -44,19 +44,25 @@
 @synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
 @synthesize state=_state, enabled=_enabled, view=_view;
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)init
 {
-    if ((self=[super init])) {
+    if (self = [super init]) {
         _state = UIGestureRecognizerStatePossible;
         _cancelsTouchesInView = YES;
         _delaysTouchesBegan = NO;
         _delaysTouchesEnded = YES;
         _enabled = YES;
-
+        
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
         _trackingTouches = [[NSMutableArray alloc] initWithCapacity:1];
         _excludedTouches = [[NSMutableSet alloc] initWithCapacity:1];
+    }
+    return self;
+}
 
+- (id)initWithTarget:(id)target action:(SEL)action
+{
+    if ((self=[self init])) {
         [self addTarget:target action:action];
     }
     return self;
