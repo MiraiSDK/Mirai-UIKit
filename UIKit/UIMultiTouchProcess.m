@@ -55,6 +55,8 @@
     [self _reciveTouches:touches andCheckMultiTouchProcessStateWithTouchBegin:&touchBegin
                 touchEnd:&touchEnd];
     
+    [self _trackTouches:touches generateRecognizeProcessIfNotExist:!_legacyAnyRecognizeProcesses];
+    
     if (touchBegin) {
         NSLog(@"[begin multi-touch]");
         [self _beginWithEvent:event touches:touches];
@@ -127,8 +129,6 @@
 
 - (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    [self _trackTouches:touches generateRecognizeProcessIfNotExist:!_legacyAnyRecognizeProcesses];
-    
     for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
         [recognizeProcess multiTouchBegin];
     }
