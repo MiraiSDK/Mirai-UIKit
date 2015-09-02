@@ -40,6 +40,7 @@
 @interface _UIPanGestureRecognizerScreenLocation : NSObject
 
 @property (nonatomic, readonly) NSUInteger index;
+@property (nonatomic, assign) BOOL hasMoved;
 @property (nonatomic, assign) CGPoint firstScreenLocation;
 @property (nonatomic, assign) CGPoint lastScreenLocation;
 
@@ -71,6 +72,8 @@
 {
     NSMutableArray *_touches;
     NSMutableDictionary *_touchToScreenLocationDictionary;
+    
+    NSUInteger _hasMovedTouchesCount;
 }
 @synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
 
@@ -143,6 +146,7 @@
     [super reset];
     _velocity = CGPointZero;
     _lastMovementTime = 0.0;
+    _hasMovedTouchesCount = 0;
     
     [_touches removeAllObjects];
     [_touchToScreenLocationDictionary removeAllObjects];
@@ -169,12 +173,16 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self _updateAllLastScreenLocationsWithTouches:touches];
+    [self _updateAllLastScreenLocationsAndStateWithTouches:touches];
     
     if (self.state == UIGestureRecognizerStatePossible) {
-        if ([self _anyTouchMoveOutOfAreaWithTouches:touches]) {
-            _lastMovementTime = event.timestamp;
-            self.state = UIGestureRecognizerStateBegan;
+        if (_hasMovedTouchesCount > _maximumNumberOfTouches) {
+            self.state = UIGestureRecognizerStateFailed;
+        } else {
+            if (_hasMovedTouchesCount >= _minimumNumberOfTouches) {
+                _lastMovementTime = event.timestamp;
+                self.state = UIGestureRecognizerStateBegan;
+            }
         }
     } else {
         [self _translateTouches:touches withEvent:event];
@@ -182,29 +190,24 @@
     }
 }
 
-- (void)_updateAllLastScreenLocationsWithTouches:(NSSet *)touches
+- (void)_updateAllLastScreenLocationsAndStateWithTouches:(NSSet *)touches
 {
     for (UITouch *touch in touches) {
         NSUInteger index = [_touches indexOfObject:touch];
         _UIPanGestureRecognizerScreenLocation *screenLocation = [_touchToScreenLocationDictionary objectForKey:@(index)];
+        
+        if (!screenLocation.hasMoved && [self _screenLocationHasMoved:screenLocation]) {
+            screenLocation.hasMoved = YES;
+            _hasMovedTouchesCount++;
+        }
         screenLocation.lastScreenLocation = [touch locationInView:self.view.window];
     }
 }
 
-- (BOOL)_anyTouchMoveOutOfAreaWithTouches:(NSSet *)touches
+- (BOOL)_screenLocationHasMoved:(_UIPanGestureRecognizerScreenLocation *)sl
 {
-    for (UITouch *touch in touches) {
-        NSUInteger index = [_touches indexOfObject:touch];
-        _UIPanGestureRecognizerScreenLocation *sl =
-            [_touchToScreenLocationDictionary objectForKey:@(index)];
-        
-        if ((ABS(sl.firstScreenLocation.x - sl.lastScreenLocation.x) > kTapLimitAreaSize ||
-             ABS(sl.firstScreenLocation.y - sl.lastScreenLocation.y) > kTapLimitAreaSize)) {
-            
-            return YES;
-        }
-    }
-    return NO;
+    return ABS(sl.firstScreenLocation.x - sl.lastScreenLocation.x) > kTapLimitAreaSize ||
+           ABS(sl.firstScreenLocation.y - sl.lastScreenLocation.y) > kTapLimitAreaSize;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
