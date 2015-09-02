@@ -92,7 +92,6 @@
     
     for (_UIPanGestureRecognizerScreenLocation *screenLocation in [self _screenLocations]) {
         CGPoint translation = [screenLocation translationInView:view];
-        return translation;
         averageTranslation.x += translation.x;
         averageTranslation.y += translation.y;
     }
