@@ -112,17 +112,18 @@
     const NSTimeInterval timeDiff = event.timestamp - _lastMovementTime;
     
     if (timeDiff > 0) {
-        CGPoint averageVelocity = CGPointZero;
+        CGPoint averageDelta = CGPointZero;
         
         for (UITouch *touch in touches) {
             CGPoint delta = [touch _delta];
-            if (!CGPointEqualToPoint(delta, CGPointZero)) {
-                averageVelocity.x += [self _mergeVelocity0:_velocity.x andVelocity1:(delta.x / timeDiff)];
-                averageVelocity.y += [self _mergeVelocity0:_velocity.y andVelocity1:(delta.y / timeDiff)];
-            }
+            averageDelta.x += delta.x;
+            averageDelta.y += delta.y;
         }
-        _velocity.x = averageVelocity.x/touches.count;
-        _velocity.y = averageVelocity.y/touches.count;
+        averageDelta.x /= touches.count;
+        averageDelta.y /= touches.count;
+        
+        _velocity.x += [self _mergeVelocity0:_velocity.x andVelocity1:(averageDelta.x / timeDiff)];
+        _velocity.y += [self _mergeVelocity0:_velocity.y andVelocity1:(averageDelta.y / timeDiff)];
     }
     _lastMovementTime = event.timestamp;
 }
