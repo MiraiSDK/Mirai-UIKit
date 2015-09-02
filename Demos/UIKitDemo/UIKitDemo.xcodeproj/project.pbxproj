@@ -157,6 +157,8 @@
 		D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */; };
 		D2CEEEA11ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
 		D2CEEEA21ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */; };
+		D2D12EEB1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D12EEA1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m */; };
+		D2D12EEC1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D12EEA1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m */; };
 		D2D454AF1AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 		D2D454B01AC3151700E70C6D /* TNTabBarItemTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */; };
 		D2D64D201B3B9FC900AC3AF7 /* TNTargetActionToBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D64D1F1B3B9FC900AC3AF7 /* TNTargetActionToBlock.m */; };
@@ -348,6 +350,8 @@
 		D2CEEE9A1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNViewWillAppearListenerTestViewController.m; sourceTree = "<group>"; };
 		D2CEEE9F1ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreListEditorTestViewController.h; sourceTree = "<group>"; };
 		D2CEEEA01ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMoreListEditorTestViewController.m; sourceTree = "<group>"; };
+		D2D12EE91B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPanGestureRecognizerTestViewController.h; sourceTree = "<group>"; };
+		D2D12EEA1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPanGestureRecognizerTestViewController.m; sourceTree = "<group>"; };
 		D2D454AD1AC3151700E70C6D /* TNTabBarItemTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTabBarItemTestController.h; sourceTree = "<group>"; };
 		D2D454AE1AC3151700E70C6D /* TNTabBarItemTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNTabBarItemTestController.m; sourceTree = "<group>"; };
 		D2D64D1E1B3B9FC900AC3AF7 /* TNTargetActionToBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTargetActionToBlock.h; sourceTree = "<group>"; };
@@ -831,6 +835,8 @@
 				D2E2AB761B86D2C100FF14EB /* TNGestureEffectTouch.m */,
 				D220A8C41B943883001B906F /* TNTapGestureRecognizerTestViewController.h */,
 				D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */,
+				D2D12EE91B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.h */,
+				D2D12EEA1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m */,
 			);
 			name = UIGestureRecognizer;
 			sourceTree = "<group>";
@@ -1002,6 +1008,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2D12EEC1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m in Sources */,
 				D2A5F48C1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */,
 				4390B82F1A8352990082B0F1 /* TNScrollViewNestingTestViewController.m in Sources */,
 				D2A9FB9C1B1FF3AE00C88751 /* TNPopoverControllerTestViewController.m in Sources */,
@@ -1095,6 +1102,7 @@
 				D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
 				D269FAD21B3AB45300A0AB7A /* TNSearchControllerTestMenu.m in Sources */,
 				4390B8641A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
+				D2D12EEB1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m in Sources */,
 				432D2BFF1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */,
 				D2A5F48B1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */,
 				4390B82C1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,

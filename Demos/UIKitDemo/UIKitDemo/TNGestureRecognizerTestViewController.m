@@ -11,6 +11,7 @@
 #import "TNTouchConfirmSuperview.h"
 #import "TNGestureEffectTouch.h"
 #import "TNTapGestureRecognizerTestViewController.h"
+#import "TNPanGestureRecognizerTestViewController.h"
 
 @implementation TNGestureRecognizerTestViewController
 
@@ -31,6 +32,7 @@
              TNTouchConfirmSuperview.class,
              TNGestureEffectTouch.class,
              TNTapGestureRecognizerTestViewController.class,
+             TNPanGestureRecognizerTestViewController.class,
              ];
 }
 
