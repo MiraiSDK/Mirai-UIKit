@@ -71,7 +71,6 @@
 {
     NSMutableArray *_touches;
     NSMutableDictionary *_touchToScreenLocationDictionary;
-    CGPoint _adjustTranslation;
 }
 @synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
 
@@ -83,24 +82,11 @@
         _minimumNumberOfTouches = 1;
         _maximumNumberOfTouches = NSUIntegerMax;
         _velocity = CGPointZero;
-        _adjustTranslation = CGPointZero;
     }
     return self;
 }
 
 - (CGPoint)translationInView:(UIView *)view
-{
-    CGPoint translation = CGPointZero;
-    
-    if (!view.window) {
-        CGPoint absoluteTranslation = [self _absoluteTranslationInView:view];
-        translation = CGPointMake(absoluteTranslation.x + _adjustTranslation.x,
-                                  absoluteTranslation.y + _adjustTranslation.y);
-    }
-    return translation;
-}
-
-- (CGPoint)_absoluteTranslationInView:(UIView *)view
 {
     CGPoint averageTranslation = CGPointZero;
     
@@ -118,14 +104,7 @@
 
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view
 {
-    if (!view.window) {
-        return;
-    }
-    CGPoint targetTranslation = [view convertPoint:translation fromView:view.window];
-    CGPoint absoluteTranslation = [self _absoluteTranslationInView:view];
-    
-    _adjustTranslation = CGPointMake(targetTranslation.x - absoluteTranslation.x,
-                                     targetTranslation.y - absoluteTranslation.y);
+    //TODO
     _velocity = CGPointZero;
 }
 
@@ -197,9 +176,7 @@
             _lastMovementTime = event.timestamp;
             self.state = UIGestureRecognizerStateBegan;
         }
-    } else if (self.state == UIGestureRecognizerStateBegan ||
-               self.state == UIGestureRecognizerStateChanged) {
-        
+    } else {
         [self _translateTouches:touches withEvent:event];
         self.state = UIGestureRecognizerStateChanged;
     }
@@ -218,11 +195,12 @@
 {
     for (UITouch *touch in touches) {
         NSUInteger index = [_touches indexOfObject:touch];
-        _UIPanGestureRecognizerScreenLocation *screenLocation = [_touchToScreenLocationDictionary objectForKey:@(index)];
+        _UIPanGestureRecognizerScreenLocation *sl =
+            [_touchToScreenLocationDictionary objectForKey:@(index)];
         
-        CGPoint translate = [screenLocation translationInView:self.view];
-        
-        if ((ABS(translate.x) > kTapLimitAreaSize || ABS(translate.y) > kTapLimitAreaSize)) {
+        if ((ABS(sl.firstScreenLocation.x - sl.lastScreenLocation.x) > kTapLimitAreaSize ||
+             ABS(sl.firstScreenLocation.y - sl.lastScreenLocation.y) > kTapLimitAreaSize)) {
+            
             return YES;
         }
     }
@@ -239,6 +217,7 @@
             [self _endTouch:touch screenLocation:screenLocation event:event];
         }
         [self _translateTouches:touches withEvent:event];
+        self.state = UIGestureRecognizerStateEnded;
         
     } else {
         self.state = UIGestureRecognizerStateFailed;
@@ -249,7 +228,6 @@
             event:(UIEvent *)event
 {
     screenLocation.lastScreenLocation = [touch locationInView:self.view.window];
-    self.state = UIGestureRecognizerStateEnded;
 }
 
 - (NSArray *)_screenLocations
