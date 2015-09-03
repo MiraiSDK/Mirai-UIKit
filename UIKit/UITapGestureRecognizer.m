@@ -59,6 +59,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [self _stopInvalidTimer];
+}
+
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
 {
     // this logic is here based on a note in the docs for -canPreventGestureRecognizer:
@@ -90,9 +95,6 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [_touches addObjectsFromArray:touches.allObjects];
-    
-    NSLog(@"[self _pressedTouchesCount] %li self.numberOfTouchesRequired %li",
-          [self _pressedTouchesCount], self.numberOfTouchesRequired);
     
     if (!_waitForNewTouchBegin || [self _pressedTouchesCount] > self.numberOfTouchesRequired) {
         self.state = UIGestureRecognizerStateFailed;
@@ -151,7 +153,7 @@
         // all touches ended
         if (_numTouches >= self.numberOfTouchesRequired) {
             [self _completeOneTap];
-            [self _stopInvalidTimer];
+            [self _restartInvalidTimer];
         }
     }
 }
