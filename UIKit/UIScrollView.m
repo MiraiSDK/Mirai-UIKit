@@ -583,6 +583,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_endDraggingWithDecelerationVelocity:(CGPoint)velocity
 {
+    NSLog(@"-> %s %@", __FUNCTION__, NSStringFromCGPoint(velocity));
+    
     if (_dragging) {
         _dragging = NO;
         

@@ -238,7 +238,9 @@
         _shouldReset = transition->shouldReset;
     }
     
-    if (originalState != _state) {
+    if (originalState == UIGestureRecognizerStateChanged ||
+        originalState != _state) {
+        
         [_bindingRecognizeProcess gestureRecognizerChangedState:self];
     }
 }
@@ -252,7 +254,7 @@
         state != UIGestureRecognizerStateEnded) {
         return NO;
     }
-    return [self _shouldBegan];
+    return ![self _shouldBegan];
 }
 
 - (BOOL)_shouldBegan
