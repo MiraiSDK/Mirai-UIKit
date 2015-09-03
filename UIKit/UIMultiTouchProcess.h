@@ -8,6 +8,9 @@
 
 #import "UIWindow.h"
 #import "UIEvent.h"
+#import "UIGestureRecognizeProcess.h"
+
+@class UIGestureRecognizeProcess;
 
 @interface UIMultiTouchProcess : NSObject
 
@@ -16,5 +19,6 @@
 
 - (instancetype)initWithWindow:(UIWindow *)window;
 - (void)sendEvent:(UIEvent *)event;
+- (void)gestureRecognizeProcessMakeConclusion:(UIGestureRecognizeProcess *)gestureRecognizeProcess;
 
 @end

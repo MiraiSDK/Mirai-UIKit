@@ -222,28 +222,37 @@
     }
 
     NSAssert2((transition != NULL), @"invalid state transition from %d to %d", _state, state);
-
-    // should began? (possible -> began) or (possible -> end)
-    if (_state == UIGestureRecognizerStatePossible &&
-            (state == UIGestureRecognizerStateBegan ||
-             state == UIGestureRecognizerStateEnded)) {
-        BOOL shouldBegan = [self _shouldBegan];
-        if (!shouldBegan) {
-            [self _setExcluded];
-            _state = UIGestureRecognizerStateFailed;
-            _shouldSendActions = NO;
-            _shouldReset = YES;
-            return;
-        }
-    }
+    UIGestureRecognizerState originalState = _state;
     
-    if (transition) {
+    if ([self _shouldBeginContinuesContinuityRecognizeWithState:state]) {
+        
+        [self _setExcluded];
+        _state = UIGestureRecognizerStateFailed;
+        _shouldSendActions = NO;
+        _shouldReset = YES;
+        
+    } else if (transition) {
+        
         _state = transition->toState;
         _shouldSendActions = transition->shouldNotify;
         _shouldReset = transition->shouldReset;
-
     }
     
+    if (originalState != _state) {
+        [_bindingRecognizeProcess gestureRecognizerChangedState:self];
+    }
+}
+
+- (BOOL)_shouldBeginContinuesContinuityRecognizeWithState:(UIGestureRecognizerState)state
+{
+    if (_state == UIGestureRecognizerStatePossible) {
+        return NO;
+    }
+    if (state != UIGestureRecognizerStateBegan &&
+        state != UIGestureRecognizerStateEnded) {
+        return NO;
+    }
+    return [self _shouldBegan];
 }
 
 - (BOOL)_shouldBegan
@@ -390,6 +399,20 @@
 - (BOOL)_shouldReset
 {
     return _shouldReset;
+}
+
+- (BOOL)_hasRecognizedGesture
+{
+    return _state == UIGestureRecognizerStateBegan ||
+           _state == UIGestureRecognizerStateChanged ||
+           _state == UIGestureRecognizerStateEnded;
+}
+
+- (BOOL)_hasMadeConclusion
+{
+    return _state == UIGestureRecognizerStateCancelled ||
+           _state == UIGestureRecognizerStateEnded ||
+           _state == UIGestureRecognizerStateFailed;
 }
 
 - (BOOL)_isFailed

@@ -69,12 +69,6 @@
         [recognizeProcess recognizeEvent:event touches:touches];
     }
     
-    if (touchEnd) {
-        for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
-            [recognizeProcess clearAndCallResetIfRecognizersMakeConclusion];
-        }
-    }
-    
     for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
         [recognizeProcess sendToAttachedViewIfNeedWithEvent:event touches:touches];
     }
@@ -228,11 +222,16 @@
     [_trackedTouches removeAllObjects];
     
     [self _clearHasMakeConclusionReconizeProcesses];
-    _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
+    [self _refreshLegacyAnyRecognizeProcesses];
     
     if (_legacyAnyRecognizeProcesses) {
         NSLog(@"multi touch left some recognize processes: %@", [self _leftRecognizerNames]);
     }
+}
+
+- (void)_refreshLegacyAnyRecognizeProcesses
+{
+    _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
 }
 
 - (NSSet *)_leftRecognizerNames
@@ -244,6 +243,13 @@
         }
     }
     return leftRecognizerNames;
+}
+
+- (void)gestureRecognizeProcessMakeConclusion:(UIGestureRecognizeProcess *)gestureRecognizeProcess
+{
+    NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
+    [_effectRecognizeProcesses removeObjectForKey:keyView];
+    [self _refreshLegacyAnyRecognizeProcesses];
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses

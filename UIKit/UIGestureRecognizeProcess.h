@@ -8,6 +8,9 @@
 
 #import "UIView.h"
 #import "UITouch.h"
+#import "UIMultiTouchProcess.h"
+
+@class UIMultiTouchProcess;
 
 @interface UIGestureRecognizeProcess : NSObject
 
@@ -22,12 +25,11 @@
 - (void)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches;
-- (void)clearAndCallResetIfRecognizersMakeConclusion;
 
 - (void)multiTouchBegin;
 - (void)multiTouchEnd;
 
-- (void)gestureRecognizerMakeConclusion:(UIGestureRecognizer *)getureRecognizer;
+- (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer;
 
 + (BOOL)canViewCatchTouches:(UIView *)view;
 
