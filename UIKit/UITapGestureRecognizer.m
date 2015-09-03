@@ -194,6 +194,7 @@
     _invalidTimer = [NSTimer scheduledTimerWithTimeInterval:kBeInvalidTime
                                                      target:self selector:@selector(_onInvalid:)
                                                    userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
 }
 
 - (void)_stopInvalidTimer
