@@ -22,6 +22,7 @@
     NSMutableDictionary *_effectRecognizeProcesses;
     NSMutableSet *_trackedTouches;
 }
+@synthesize handingTouchEvent=_handingTouchEvent;
 
 - (instancetype)init
 {
@@ -55,6 +56,7 @@
     [self _reciveTouches:touches andCheckMultiTouchProcessStateWithTouchBegin:&touchBegin
                 touchEnd:&touchEnd];
     
+    _handingTouchEvent = YES;
     [self _trackTouches:touches generateRecognizeProcessIfNotExist:!_legacyAnyRecognizeProcesses];
     
     if (touchBegin) {
@@ -82,6 +84,7 @@
         [self _end];
         NSLog(@"[end multi-touch]");
     }
+    _handingTouchEvent = NO;
 }
 
 - (void)_reciveTouches:(NSSet *)touches andCheckMultiTouchProcessStateWithTouchBegin:(BOOL *)touchBegin
@@ -152,7 +155,8 @@
         UIGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
         
         if (!recognizeProcess && generate) {
-            recognizeProcess = [[UIGestureRecognizeProcess alloc] initWithView:view];
+            recognizeProcess = [[UIGestureRecognizeProcess alloc] initWithView:view
+                                                             multiTouchProcess:self];
             [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
         }
         

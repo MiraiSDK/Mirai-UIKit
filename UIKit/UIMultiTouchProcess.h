@@ -12,6 +12,7 @@
 @interface UIMultiTouchProcess : NSObject
 
 @property (nonatomic, readonly) UIWindow *window;
+@property (nonatomic, readonly) BOOL handingTouchEvent;
 
 - (instancetype)initWithWindow:(UIWindow *)window;
 - (void)sendEvent:(UIEvent *)event;

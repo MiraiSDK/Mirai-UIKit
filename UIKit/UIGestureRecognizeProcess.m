@@ -7,6 +7,7 @@
 //
 
 #import "UIGestureRecognizeProcess.h"
+#import "UIMultiTouchProcess.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
@@ -15,6 +16,8 @@
 @implementation UIGestureRecognizeProcess
 {
     UIView *_view;
+    UIMultiTouchProcess *_multiTouchProcess;
+    
     NSMutableSet *_trackingTouches;
     NSMutableSet *_effectRecognizers;
     NSMutableArray *_delaysBufferedBlocks;
@@ -31,10 +34,12 @@
     BOOL _cancelsTouchesInView;
 }
 
-- (instancetype)initWithView:(UIView *)view
+- (instancetype)initWithView:(UIView *)view multiTouchProcess:(UIMultiTouchProcess *)multiTouchProcess
 {
     if (self = [self init]) {
         _view = view;
+        _multiTouchProcess = multiTouchProcess;
+        
         _lastTimeHasMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
@@ -65,6 +70,7 @@
     return _view;
 }
 
+//MARK - END
 - (BOOL)hasMakeConclusion
 {
     return _lastTimeHasMakeConclusion;
@@ -141,8 +147,8 @@
         }
     }
     [self _checkAndClearExcluedRecognizers];
-    [self _sendActionIfNeedForEachGestureRecognizers];
-    _cancelsTouchesInView = [self _checkHasAnyRecognizerRecognizedCancelsTouchesInView];
+    [self _sendActionIfNeedForEachGestureRecognizers]; // MARK
+    _cancelsTouchesInView = [self _checkHasAnyRecognizerRecognizedCancelsTouchesInView]; //MARK
 }
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
@@ -394,7 +400,7 @@
     NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
-
+//MARK
 - (void)clearAndCallResetIfRecognizersMakeConclusion
 {
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
@@ -413,6 +419,7 @@
     }];
 }
 
+//MARK - END
 - (void)multiTouchEnd
 {
     if (!_cancelsTouchesInView) {

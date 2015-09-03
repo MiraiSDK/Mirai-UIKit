@@ -17,7 +17,7 @@
 @property (nonatomic, readonly) NSSet *trackingTouches;
 @property (nonatomic, readonly) NSArray *trackingTouchesArray;
 
-- (instancetype)initWithView:(UIView *)view;
+- (instancetype)initWithView:(UIView *)view multiTouchProcess:(UIMultiTouchProcess *)multiTouchProcess;
 
 - (void)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;
@@ -26,6 +26,8 @@
 
 - (void)multiTouchBegin;
 - (void)multiTouchEnd;
+
+- (void)gestureRecognizerMakeConclusion:(UIGestureRecognizer *)getureRecognizer;
 
 + (BOOL)canViewCatchTouches:(UIView *)view;
 
