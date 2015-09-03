@@ -31,16 +31,16 @@
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch.h"
 #import "UIGeometry.h"
+#import "TNMultiTapHelper.h"
 
 #define kBeInvalidTime 0.8
 #define kTapLimitAreaSize 5
 
 @interface UITapGestureRecognizer()
 @property (nonatomic, strong) NSMutableArray *touches;
-@property (nonatomic, assign) NSUInteger numTaps;
 @property (nonatomic, assign) NSUInteger numTouches;
 @property (nonatomic, strong) NSMutableDictionary *beganLocations;
-@property (nonatomic, strong) NSTimer *invalidTimer;
+@property (nonatomic, strong) TNMultiTapHelper *multiTapHelper;
 @property (nonatomic, assign) BOOL waitForNewTouchBegin;
 @end
 
@@ -54,14 +54,17 @@
         _numberOfTouchesRequired = 1;
         _touches = [NSMutableArray array];
         _beganLocations = [NSMutableDictionary dictionary];
+        _multiTapHelper = [[TNMultiTapHelper alloc] initWithTimeInterval:kBeInvalidTime
+                                                       gestureRecognizer:self];
         _waitForNewTouchBegin = YES;
     }
     return self;
 }
 
-- (void)dealloc
+- (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
 {
-    [self _stopInvalidTimer];
+    _numberOfTapsRequired = numberOfTapsRequired;
+    _multiTapHelper.numberOfTapsRequired = numberOfTapsRequired;
 }
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
@@ -78,18 +81,15 @@
 - (void)reset
 {
     [super reset];
-    
+    [_multiTapHelper reset];
+    [_touches removeAllObjects];
     [self _resetOneTap];
-    [self _stopInvalidTimer];
-    
-    _numTaps = 0;
 }
 
 - (void)_resetOneTap
 {
     _numTouches = 0;
     _waitForNewTouchBegin = YES;
-    [_touches removeAllObjects];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -97,8 +97,8 @@
     [_touches addObjectsFromArray:touches.allObjects];
     
     if (!_waitForNewTouchBegin || [self _pressedTouchesCount] > self.numberOfTouchesRequired) {
-        self.state = UIGestureRecognizerStateFailed;
-        [self _stopInvalidTimer];
+        [_multiTapHelper cancelTap];
+        return;
     }
     
     for (UITouch *t in touches) {
@@ -107,14 +107,13 @@
         NSValue *v = [NSValue valueWithCGPoint:initPoint];
         _beganLocations[@(idx)] = v;
     }
-    [self _restartInvalidTimer];
+    [_multiTapHelper beginOneTap];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if ([self _anyTouchesOutOfArea:touches]) {
-        self.state = UIGestureRecognizerStateFailed;
-        [self _stopInvalidTimer];
+        [_multiTapHelper cancelTap];
     }
 }
 
@@ -152,57 +151,15 @@
     if (_touches.count == 0) {
         // all touches ended
         if (_numTouches >= self.numberOfTouchesRequired) {
-            [self _completeOneTap];
-            [self _restartInvalidTimer];
+            [_multiTapHelper completeOneTap];
+            [self _resetOneTap];
         }
     }
 }
 
-- (void)_completeOneTap
-{
-    _numTaps++;
-    
-    if (_numTaps >= self.numberOfTapsRequired) {
-        [self _completeAllTaps];
-        return;
-    }
-    
-    [self _resetOneTap];
-    [self _restartInvalidTimer];
-}
-
-- (void)_completeAllTaps
-{
-    self.state = UIGestureRecognizerStateRecognized;
-    [self _stopInvalidTimer];
-}
-
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
-}
-
-- (void)_onInvalid:(NSTimer *)timer
-{
-    self.state = UIGestureRecognizerStateFailed;
-    _invalidTimer = nil;
-}
-
-- (void)_restartInvalidTimer
-{
-    [self _stopInvalidTimer];
-    _invalidTimer = [NSTimer scheduledTimerWithTimeInterval:kBeInvalidTime
-                                                     target:self selector:@selector(_onInvalid:)
-                                                   userInfo:nil repeats:NO];
-    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
-}
-
-- (void)_stopInvalidTimer
-{
-    if (_invalidTimer) {
-        [_invalidTimer invalidate];
-        _invalidTimer = nil;
-    }
+    [_multiTapHelper cancelTap];
 }
 
 - (NSUInteger)_pressedTouchesCount

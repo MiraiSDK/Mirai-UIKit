@@ -25,7 +25,7 @@
     
     [self.view addGestureRecognizer:tapRecognizer];
     
-    tapRecognizer.numberOfTapsRequired = 1;
+    tapRecognizer.numberOfTapsRequired = 2;
     tapRecognizer.numberOfTouchesRequired = 1;
     
 }
