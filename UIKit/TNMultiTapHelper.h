@@ -8,6 +8,12 @@
 
 #import "UIGestureRecognizer.h"
 
+@protocol TNMultiTapHelperDelegate <NSObject>
+
+- (BOOL)willTimeOutLeadToFail;
+
+@end
+
 @interface TNMultiTapHelper : NSObject
 
 @property (nonatomic, assign) NSUInteger numberOfTapsRequired;
@@ -15,10 +21,10 @@
 @property (nonatomic, readonly) NSUInteger pressedTouchesCount;
 
 - (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval
-                   gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+                   gestureRecognizer:(UIGestureRecognizer<TNMultiTapHelperDelegate> *)gestureRecognizer;
 
 - (void)beginOneTapWithTouches:(NSSet *)touches;
-- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(BOOL *)completeOneTap;
+- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(void (^)(void))completeBlock;
 - (void)cancelTap;
 - (void)reset;
 

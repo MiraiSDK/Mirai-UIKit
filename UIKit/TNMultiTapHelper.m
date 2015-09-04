@@ -21,14 +21,14 @@
     NSUInteger _numTouches;
     
     NSTimer *_invalidTimer;
-    UIGestureRecognizer *_gestureRecognizer;
+    UIGestureRecognizer<TNMultiTapHelperDelegate> *_gestureRecognizer;
     
     NSMutableArray *_touches;
     NSMutableDictionary *_beganLocations;
 }
 
 - (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval
-                   gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+                   gestureRecognizer:(UIGestureRecognizer<TNMultiTapHelperDelegate> *)gestureRecognizer
 {
     if (self = [super init]) {
         _timeInterval = timeInterval;
@@ -52,6 +52,7 @@
 - (void)reset
 {
     _numTaps = 0;
+    
     [self _stopInvalidTimer];
     [_touches removeAllObjects];
 }
@@ -82,10 +83,8 @@
     [self _stopInvalidTimer];
 }
 
-- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(BOOL *)completeOneTap
+- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(void (^)(void))completeBlock
 {
-    *completeOneTap = NO;
-    
     [_touches removeObjectsInArray:touches.allObjects];
     _numTouches += touches.count;
     
@@ -93,7 +92,9 @@
         // all touches ended
         if (_numTouches >= self.numberOfTouchesRequired) {
             [self _completeOneTap];
-            *completeOneTap = YES;
+            completeBlock();
+        } else {
+            [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
         }
     }
 }
@@ -105,9 +106,9 @@
     
     if (_numTaps >= self.numberOfTapsRequired) {
         [self _completeAllTaps];
-        return;
+    } else {
+        [self _restartInvalidTimer];
     }
-    [self _restartInvalidTimer];
 }
 
 - (void)_completeAllTaps
@@ -116,17 +117,19 @@
     [self _stopInvalidTimer];
 }
 
-- (void)_onInvalid:(NSTimer *)timer
+- (void)_onTimeOut:(NSTimer *)timer
 {
-    [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
-    _invalidTimer = nil;
+    if ([_gestureRecognizer willTimeOutLeadToFail]) {
+        [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
+        _invalidTimer = nil;
+    }
 }
 
 - (void)_restartInvalidTimer
 {
     [self _stopInvalidTimer];
     _invalidTimer = [NSTimer scheduledTimerWithTimeInterval:_timeInterval
-                                                     target:self selector:@selector(_onInvalid:)
+                                                     target:self selector:@selector(_onTimeOut:)
                                                    userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
 }

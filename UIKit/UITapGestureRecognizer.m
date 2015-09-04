@@ -36,7 +36,7 @@
 #define kBeInvalidTime 0.8
 #define kTapLimitAreaSize 5
 
-@interface UITapGestureRecognizer()
+@interface UITapGestureRecognizer() <TNMultiTapHelperDelegate>
 @property (nonatomic, strong) TNMultiTapHelper *multiTapHelper;
 @property (nonatomic, assign) BOOL waitForNewTouchBegin;
 @end
@@ -54,6 +54,11 @@
         _waitForNewTouchBegin = YES;
     }
     return self;
+}
+
+- (BOOL)willTimeOutLeadToFail
+{
+    return YES;
 }
 
 - (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
@@ -132,13 +137,9 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    BOOL completeOnTap = NO;
-    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:&completeOnTap];
-    _waitForNewTouchBegin = NO;
-    
-    if (completeOnTap) {
+    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
         [self _resetOneTap];
-    }
+    }];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event

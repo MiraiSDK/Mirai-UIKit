@@ -31,6 +31,7 @@
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch+Private.h"
 #import "UIEvent.h"
+#import "TNMultiTapHelper.h"
 
 static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 {
@@ -40,6 +41,10 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 }
 
 @implementation UILongPressGestureRecognizer
+{
+    TNMultiTapHelper *_multiTapHelper;
+}
+
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
 @synthesize numberOfTouchesRequired=_numberOfTouchesRequired;
 
