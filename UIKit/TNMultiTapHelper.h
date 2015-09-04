@@ -16,6 +16,7 @@
 
 @interface TNMultiTapHelper : NSObject
 
+@property (nonatomic, assign) NSTimeInterval timeInterval;
 @property (nonatomic, assign) NSUInteger numberOfTapsRequired;
 @property (nonatomic, assign) NSUInteger numberOfTouchesRequired;
 @property (nonatomic, readonly) NSUInteger pressedTouchesCount;
@@ -29,5 +30,6 @@
 - (void)reset;
 
 - (CGPoint)beginLocationWithTouch:(UITouch *)touch;
+- (BOOL)anyTouches:(NSSet *)touches outOfArea:(CGFloat)areaSize;
 
 @end

@@ -12,6 +12,7 @@
 #import "TNGestureEffectTouch.h"
 #import "TNTapGestureRecognizerTestViewController.h"
 #import "TNPanGestureRecognizerTestViewController.h"
+#import "TNLongPressGestureRecognizerTestViewController.h"
 
 @implementation TNGestureRecognizerTestViewController
 
@@ -33,6 +34,7 @@
              TNGestureEffectTouch.class,
              TNTapGestureRecognizerTestViewController.class,
              TNPanGestureRecognizerTestViewController.class,
+             TNLongPressGestureRecognizerTestViewController.class,
              ];
 }
 

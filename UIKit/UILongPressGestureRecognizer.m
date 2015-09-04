@@ -33,18 +33,16 @@
 #import "UIEvent.h"
 #import "TNMultiTapHelper.h"
 
-static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
-{
-    CGFloat a = B.x - A.x;
-    CGFloat b = B.y - A.y;
-    return sqrtf((a*a) + (b*b));
-}
+#define kFingerMovementDistance 10.0
+
+@interface UILongPressGestureRecognizer () <TNMultiTapHelperDelegate> @end
 
 @implementation UILongPressGestureRecognizer
 {
     TNMultiTapHelper *_multiTapHelper;
+    BOOL _waitForNewTouchBegin;
+    BOOL _hasTimeOut;
 }
-
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
 @synthesize numberOfTouchesRequired=_numberOfTouchesRequired;
 
@@ -55,85 +53,92 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
         _minimumPressDuration = 0.5;
         _numberOfTapsRequired = 0;
         _numberOfTouchesRequired = 1;
+        _waitForNewTouchBegin = YES;
+        _multiTapHelper = [[TNMultiTapHelper alloc] initWithTimeInterval:_minimumPressDuration
+                                                       gestureRecognizer:self];
     }
     return self;
 }
 
-- (void)_discreteGestures:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)setMinimumPressDuration:(CFTimeInterval)minimumPressDuration
 {
-    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
+    _minimumPressDuration = minimumPressDuration;
+    _multiTapHelper.timeInterval = minimumPressDuration;
+}
+
+- (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
+{
+    _numberOfTapsRequired = numberOfTapsRequired;
+    _multiTapHelper.numberOfTapsRequired = numberOfTapsRequired;
+}
+
+- (void)setNumberOfTouchesRequired:(NSInteger)numberOfTouchesRequired
+{
+    _numberOfTouchesRequired = numberOfTouchesRequired;
+    _multiTapHelper.numberOfTouchesRequired = numberOfTouchesRequired + 1;
+}
+
+- (BOOL)willTimeOutLeadToFail
+{
+    _hasTimeOut = YES;
     
-    if (self.state == UIGestureRecognizerStatePossible && [touch _gesture] == _UITouchDiscreteGestureRightClick) {
-        self.state = UIGestureRecognizerStateBegan;
-        [self performSelector:@selector(_endFakeContinuousGesture) withObject:nil afterDelay:0];
+    // fail when no fingers touching screen.
+    if (_multiTapHelper.pressedTouchesCount == 0) {
+        return YES;
     }
+    if (_multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
+        [self setState:UIGestureRecognizerStateBegan];
+    }
+    return NO;
 }
 
-- (void)_endFakeContinuousGesture
+- (void)reset
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateEnded;
-    }
-}
-
-- (void)_beginGesture
-{
-    _waiting = NO;
-    if (self.state == UIGestureRecognizerStatePossible) {
-        self.state = UIGestureRecognizerStateBegan;
-    }
-}
-
-- (void)_cancelWaiting
-{
-    if (_waiting) {
-        _waiting = NO;
-        [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_beginGesture) object:nil];
-    }
+    [super reset];
+    [_multiTapHelper reset];
+    
+    _waitForNewTouchBegin = YES;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
+    [_multiTapHelper beginOneTapWithTouches:touches];
     
-    if (!_waiting && self.state == UIGestureRecognizerStatePossible && touch.tapCount >= self.numberOfTapsRequired) {
-        _beginLocation = [touch locationInView:self.view];
-        _waiting = YES;
-        [self performSelector:@selector(_beginGesture) withObject:nil afterDelay:self.minimumPressDuration];
+    if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
+        [_multiTapHelper cancelTap];
     }
+    _hasTimeOut = NO;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStatePossible) {
-        UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];        
-        const CGFloat distance = DistanceBetweenTwoPoints([touch locationInView:self.view], _beginLocation);
+    if (self.allowableMovement &&
+        [_multiTapHelper anyTouches:touches outOfArea:kFingerMovementDistance]) {
+        [_multiTapHelper cancelTap];
         
-        if (distance > self.allowableMovement) {
-            self.state = UIGestureRecognizerStateFailed;
-        }
-    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged)
-    {
-        self.state = UIGestureRecognizerStateChanged;
+    } else if (self.state == UIGestureRecognizerStateBegan ||
+               self.state == UIGestureRecognizerStateChanged) {
+        [self setState:UIGestureRecognizerStateChanged];
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateEnded;
-    } else {
-        [self _cancelWaiting];
+    if (!_hasTimeOut) {
+        [self setState:UIGestureRecognizerStateFailed];
+        return;
     }
+    _waitForNewTouchBegin = NO;
+    
+    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
+        _waitForNewTouchBegin = YES;
+        _hasTimeOut = NO;
+    }];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateCancelled;
-    } else {
-        [self _cancelWaiting];
-    }
+    [_multiTapHelper cancelTap];
 }
 
 @end

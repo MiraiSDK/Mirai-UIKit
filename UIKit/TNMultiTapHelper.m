@@ -10,9 +10,17 @@
 
 #import "TNMultiTapHelper.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import "UITouch.h"
 
 #import "UIGeometry.h"
+
+static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
+{
+    CGFloat a = B.x - A.x;
+    CGFloat b = B.y - A.y;
+    return sqrtf((a*a) + (b*b));
+}
 
 @implementation TNMultiTapHelper
 {
@@ -79,9 +87,33 @@
 
 - (void)cancelTap
 {
-    [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
+    [self _failOrEnd];
     [self _stopInvalidTimer];
 }
+
+- (BOOL)anyTouches:(NSSet *)touches outOfArea:(CGFloat)areaSize
+{
+    for (UITouch *touch in touches) {
+        if ([self _isTouch:touch outOfArea:areaSize]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)_isTouch:(UITouch *)touch outOfArea:(CGFloat)areaSize
+{
+    CGPoint currentLocation = [_gestureRecognizer locationInView:nil];
+    CGPoint beginPoint = [self beginLocationWithTouch:touch];
+    
+    if (ABS(currentLocation.x - beginPoint.x) > areaSize ||
+        ABS(currentLocation.y - beginPoint.y) > areaSize) {
+        // if move so far, failed
+        return YES;
+    }
+    return NO;
+}
+
 
 - (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(void (^)(void))completeBlock
 {
@@ -91,10 +123,10 @@
     if (_touches.count == 0) {
         // all touches ended
         if (_numTouches >= self.numberOfTouchesRequired) {
-            [self _completeOneTap];
             completeBlock();
+            [self _completeOneTap];
         } else {
-            [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
+            [self _failOrEnd];
         }
     }
 }
@@ -120,8 +152,19 @@
 - (void)_onTimeOut:(NSTimer *)timer
 {
     if ([_gestureRecognizer willTimeOutLeadToFail]) {
-        [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
+        [self _failOrEnd];
         _invalidTimer = nil;
+    }
+}
+
+- (void)_failOrEnd
+{
+    if (_gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        _gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        
+        [_gestureRecognizer setState:UIGestureRecognizerStateEnded];
+    } else {
+        [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
     }
 }
 

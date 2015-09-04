@@ -88,11 +88,7 @@
 {
     [super reset];
     [_multiTapHelper reset];
-    [self _resetOneTap];
-}
-
-- (void)_resetOneTap
-{
+    
     _waitForNewTouchBegin = YES;
 }
 
@@ -107,38 +103,17 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([self _anyTouchesOutOfArea:touches]) {
+    if ([_multiTapHelper anyTouches:touches outOfArea:kTapLimitAreaSize]) {
         [_multiTapHelper cancelTap];
     }
 }
 
-- (BOOL)_anyTouchesOutOfArea:(NSSet *)touches
-{
-    for (UITouch *touch in touches) {
-        if ([self _isTouchOutOfArea:touch]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)_isTouchOutOfArea:(UITouch *)touch
-{
-    CGPoint currentLocation = [self locationInView:nil];
-    CGPoint beginPoint = [_multiTapHelper beginLocationWithTouch:touch];
-    
-    if (ABS(currentLocation.x - beginPoint.x) > kTapLimitAreaSize ||
-        ABS(currentLocation.y - beginPoint.y) > kTapLimitAreaSize) {
-        // if move so far, failed
-        return YES;
-    }
-    return NO;
-}
-
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    _waitForNewTouchBegin = NO;
+    
     [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
-        [self _resetOneTap];
+        _waitForNewTouchBegin = YES;
     }];
 }
 
