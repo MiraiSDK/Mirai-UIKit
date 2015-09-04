@@ -11,13 +11,17 @@
 @interface TNMultiTapHelper : NSObject
 
 @property (nonatomic, assign) NSUInteger numberOfTapsRequired;
+@property (nonatomic, assign) NSUInteger numberOfTouchesRequired;
+@property (nonatomic, readonly) NSUInteger pressedTouchesCount;
 
 - (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval
                    gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
 
-- (void)beginOneTap;
+- (void)beginOneTapWithTouches:(NSSet *)touches;
+- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(BOOL *)completeOneTap;
 - (void)cancelTap;
-- (void)completeOneTap;
 - (void)reset;
+
+- (CGPoint)beginLocationWithTouch:(UITouch *)touch;
 
 @end

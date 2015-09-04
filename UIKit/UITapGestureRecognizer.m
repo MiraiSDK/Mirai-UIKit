@@ -37,9 +37,6 @@
 #define kTapLimitAreaSize 5
 
 @interface UITapGestureRecognizer()
-@property (nonatomic, strong) NSMutableArray *touches;
-@property (nonatomic, assign) NSUInteger numTouches;
-@property (nonatomic, strong) NSMutableDictionary *beganLocations;
 @property (nonatomic, strong) TNMultiTapHelper *multiTapHelper;
 @property (nonatomic, assign) BOOL waitForNewTouchBegin;
 @end
@@ -52,8 +49,6 @@
     if (self = [super init]) {
         _numberOfTapsRequired = 1;
         _numberOfTouchesRequired = 1;
-        _touches = [NSMutableArray array];
-        _beganLocations = [NSMutableDictionary dictionary];
         _multiTapHelper = [[TNMultiTapHelper alloc] initWithTimeInterval:kBeInvalidTime
                                                        gestureRecognizer:self];
         _waitForNewTouchBegin = YES;
@@ -65,6 +60,12 @@
 {
     _numberOfTapsRequired = numberOfTapsRequired;
     _multiTapHelper.numberOfTapsRequired = numberOfTapsRequired;
+}
+
+- (void)setNumberOfTouchesRequired:(NSUInteger)numberOfTouchesRequired
+{
+    _numberOfTouchesRequired = numberOfTouchesRequired;
+    _multiTapHelper.numberOfTouchesRequired = numberOfTouchesRequired;
 }
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
@@ -82,32 +83,21 @@
 {
     [super reset];
     [_multiTapHelper reset];
-    [_touches removeAllObjects];
     [self _resetOneTap];
 }
 
 - (void)_resetOneTap
 {
-    _numTouches = 0;
     _waitForNewTouchBegin = YES;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_touches addObjectsFromArray:touches.allObjects];
+    [_multiTapHelper beginOneTapWithTouches:touches];
     
-    if (!_waitForNewTouchBegin || [self _pressedTouchesCount] > self.numberOfTouchesRequired) {
+    if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
         [_multiTapHelper cancelTap];
-        return;
     }
-    
-    for (UITouch *t in touches) {
-        NSInteger idx = [_touches indexOfObject:t];
-        CGPoint initPoint = [t locationInView:nil];
-        NSValue *v = [NSValue valueWithCGPoint:initPoint];
-        _beganLocations[@(idx)] = v;
-    }
-    [_multiTapHelper beginOneTap];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -130,9 +120,7 @@
 - (BOOL)_isTouchOutOfArea:(UITouch *)touch
 {
     CGPoint currentLocation = [self locationInView:nil];
-    
-    NSInteger idx = [_touches indexOfObject:touch];
-    CGPoint beginPoint = [_beganLocations[@(idx)] CGPointValue];
+    CGPoint beginPoint = [_multiTapHelper beginLocationWithTouch:touch];
     
     if (ABS(currentLocation.x - beginPoint.x) > kTapLimitAreaSize ||
         ABS(currentLocation.y - beginPoint.y) > kTapLimitAreaSize) {
@@ -144,27 +132,18 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_touches removeObjectsInArray:touches.allObjects];
-    _numTouches += touches.count;
+    BOOL completeOnTap = NO;
+    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:&completeOnTap];
     _waitForNewTouchBegin = NO;
     
-    if (_touches.count == 0) {
-        // all touches ended
-        if (_numTouches >= self.numberOfTouchesRequired) {
-            [_multiTapHelper completeOneTap];
-            [self _resetOneTap];
-        }
+    if (completeOnTap) {
+        [self _resetOneTap];
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [_multiTapHelper cancelTap];
-}
-
-- (NSUInteger)_pressedTouchesCount
-{
-    return _touches.count;
 }
 
 @end
