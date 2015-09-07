@@ -33,9 +33,9 @@
 @implementation UISwipeGestureRecognizer
 @synthesize direction=_direction, numberOfTouchesRequired=_numberOfTouchesRequired;
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)init
 {
-    if ((self=[super initWithTarget:target action:action])) {
+    if ((self=[super init])) {
         _direction = UISwipeGestureRecognizerDirectionRight;
         _numberOfTouchesRequired = 1;
     }

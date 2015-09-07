@@ -35,34 +35,25 @@
 #import "UIWindow.h"
 
 #define kCurrentVelocityWeight 0.35
+#define kTapLimitAreaSize 5
 
-static UITouch *PanTouch(NSSet *touches)
-{
-    for (UITouch *touch in touches) {
-        return touch;
-        
-        if ([touch _gesture] == _UITouchGesturePan) {
-            return touch;
-        }
-    }
-    return nil;
-}
+@interface _UIPanGestureRecognizerScreenLocation : NSObject
 
-@implementation UIPanGestureRecognizer
-{
-    CGPoint _firstScreenLocation;
-    CGPoint _lastScreenLocation;
-    
-    NSMutableArray *_touches;
-}
-@synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
+@property (nonatomic, readonly) NSUInteger index;
+@property (nonatomic, assign) BOOL hasMoved;
+@property (nonatomic, assign) CGPoint firstScreenLocation;
+@property (nonatomic, assign) CGPoint lastScreenLocation;
 
-- (id)initWithTarget:(id)target action:(SEL)action
+@end
+
+@implementation _UIPanGestureRecognizerScreenLocation
+
+@synthesize index=_index;
+
+- (instancetype)initWithIndex:(NSUInteger)index
 {
-    if ((self=[super initWithTarget:target action:action])) {
-        _minimumNumberOfTouches = 1;
-        _maximumNumberOfTouches = NSUIntegerMax;
-        _velocity = CGPointZero;
+    if (self = [super init]) {
+        _index = index;
     }
     return self;
 }
@@ -72,30 +63,72 @@ static UITouch *PanTouch(NSSet *touches)
     CGPoint firstPoint = [view.window convertPoint:_firstScreenLocation toView:view];
     CGPoint lastPoint = [view.window convertPoint:_lastScreenLocation toView:view];
     CGPoint translation = CGPointMake(lastPoint.x - firstPoint.x , lastPoint.y - firstPoint.y);
-    
     return translation;
+}
+
+@end
+
+@implementation UIPanGestureRecognizer
+{
+    NSMutableArray *_touches;
+    NSMutableDictionary *_touchToScreenLocationDictionary;
+    
+    NSUInteger _hasMovedTouchesCount;
+}
+@synthesize maximumNumberOfTouches=_maximumNumberOfTouches, minimumNumberOfTouches=_minimumNumberOfTouches;
+
+- (instancetype)init
+{
+    if ((self=[super init])) {
+        _touches = [[NSMutableArray alloc] init];
+        _touchToScreenLocationDictionary = [[NSMutableDictionary alloc] init];
+        _minimumNumberOfTouches = 1;
+        _maximumNumberOfTouches = NSUIntegerMax;
+        _velocity = CGPointZero;
+    }
+    return self;
+}
+
+- (CGPoint)translationInView:(UIView *)view
+{
+    CGPoint averageTranslation = CGPointZero;
+    
+    for (_UIPanGestureRecognizerScreenLocation *screenLocation in [self _screenLocations]) {
+        CGPoint translation = [screenLocation translationInView:view];
+        averageTranslation.x += translation.x;
+        averageTranslation.y += translation.y;
+    }
+    CGFloat count = _touchToScreenLocationDictionary.count;
+    averageTranslation =  CGPointMake(averageTranslation.x/count, averageTranslation.y/count);
+    
+    return averageTranslation;
 }
 
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view
 {
+    //TODO
     _velocity = CGPointZero;
-    CGPoint lastPoint = [view convertPoint:_lastScreenLocation fromView:view.window];
-    CGPoint translatedPoint = CGPointMake(lastPoint.x + translation.x, lastPoint.y + translation.y);
-    _firstScreenLocation = [view convertPoint:translatedPoint toView:view.window];
 }
 
-- (BOOL)_translate:(CGPoint)delta withEvent:(UIEvent *)event
+- (void)_translateTouches:(NSSet *)touches withEvent:(UIEvent *)event
 {
     const NSTimeInterval timeDiff = event.timestamp - _lastMovementTime;
     
-    if (!CGPointEqualToPoint(delta, CGPointZero) && timeDiff > 0) {
-        _velocity.x = [self _mergeVelocity0:_velocity.x andVelocity1:(delta.x / timeDiff)];
-        _velocity.y = [self _mergeVelocity0:_velocity.y andVelocity1:(delta.y / timeDiff)];
-        _lastMovementTime = event.timestamp;
-        return YES;
-    } else {
-        return NO;
+    if (timeDiff > 0) {
+        CGPoint averageDelta = CGPointZero;
+        
+        for (UITouch *touch in touches) {
+            CGPoint delta = [touch _delta];
+            averageDelta.x += delta.x;
+            averageDelta.y += delta.y;
+        }
+        averageDelta.x /= touches.count;
+        averageDelta.y /= touches.count;
+        
+        _velocity.x += [self _mergeVelocity0:_velocity.x andVelocity1:(averageDelta.x / timeDiff)];
+        _velocity.y += [self _mergeVelocity0:_velocity.y andVelocity1:(averageDelta.y / timeDiff)];
     }
+    _lastMovementTime = event.timestamp;
 }
 
 - (CGFloat)_mergeVelocity0:(CGFloat)v0 andVelocity1:(CGFloat)v1
@@ -113,9 +146,10 @@ static UITouch *PanTouch(NSSet *touches)
     [super reset];
     _velocity = CGPointZero;
     _lastMovementTime = 0.0;
-    _firstScreenLocation = CGPointZero;
-    _lastScreenLocation = CGPointZero;
+    _hasMovedTouchesCount = 0;
+    
     [_touches removeAllObjects];
+    [_touchToScreenLocationDictionary removeAllObjects];
 }
 
 - (CGPoint)velocityInView:(UIView *)view
@@ -125,56 +159,83 @@ static UITouch *PanTouch(NSSet *touches)
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (_touches.count == 0) {
-        UITouch *touch = [touches anyObject];
-        _firstScreenLocation = [touch locationInView:self.view.window];
+    [_touches addObjectsFromArray:[touches allObjects]];
+    
+    for (UITouch *touch in touches) {
+        NSUInteger index = [_touches indexOfObject:touch];
+        _UIPanGestureRecognizerScreenLocation *screenLocation = [[_UIPanGestureRecognizerScreenLocation alloc] initWithIndex:index];
+        CGPoint firstScreenLocation = [touch locationInView:self.view.window];
+        screenLocation.firstScreenLocation = firstScreenLocation;
+        screenLocation.lastScreenLocation = firstScreenLocation;
+        [_touchToScreenLocationDictionary setObject:screenLocation forKey:@(index)];
     }
-    [_touches addObjectsFromArray:touches.allObjects];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch *touch = PanTouch(touches);
-
-    _lastScreenLocation = [touch locationInView:self.view.window];
+    [self _updateAllLastScreenLocationsAndStateWithTouches:touches];
     
-    CGPoint translate = [self translationInView:self.view];
-    // note that we being the gesture here in the _gesturesMoved:withEvent: method instead of the _gesturesBegan:withEvent:
-    // method because the pan gesture cannot be recognized until the user moves their fingers a bit and OSX won't tag the
-    // gesture as a pan until that movement has actually happened so we have to do the checking here.
-    if (self.state == UIGestureRecognizerStatePossible && touch && (ABS(translate.x) > 5 || ABS(translate.y) > 5)) {
-//        [self setTranslation:[touch _delta] inView:touch.view];
-        _lastMovementTime = event.timestamp;
-        self.state = UIGestureRecognizerStateBegan;
-    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        if (touch) {
-            if ([self _translate:[touch _delta] withEvent:event]) {
-//                NSLog(@"pan changed");
-                self.state = UIGestureRecognizerStateChanged;
-            } else {
-                NSLog(@"translate failed");
-            }
+    if (self.state == UIGestureRecognizerStatePossible) {
+        if (_hasMovedTouchesCount > _maximumNumberOfTouches) {
+            self.state = UIGestureRecognizerStateFailed;
         } else {
-            self.state = UIGestureRecognizerStateCancelled;
+            if (_hasMovedTouchesCount >= _minimumNumberOfTouches) {
+                _lastMovementTime = event.timestamp;
+                self.state = UIGestureRecognizerStateBegan;
+            }
         }
+    } else {
+        [self _translateTouches:touches withEvent:event];
+        self.state = UIGestureRecognizerStateChanged;
     }
+}
+
+- (void)_updateAllLastScreenLocationsAndStateWithTouches:(NSSet *)touches
+{
+    for (UITouch *touch in touches) {
+        NSUInteger index = [_touches indexOfObject:touch];
+        _UIPanGestureRecognizerScreenLocation *screenLocation = [_touchToScreenLocationDictionary objectForKey:@(index)];
+        
+        if (!screenLocation.hasMoved && [self _screenLocationHasMoved:screenLocation]) {
+            screenLocation.hasMoved = YES;
+            _hasMovedTouchesCount++;
+        }
+        screenLocation.lastScreenLocation = [touch locationInView:self.view.window];
+    }
+}
+
+- (BOOL)_screenLocationHasMoved:(_UIPanGestureRecognizerScreenLocation *)sl
+{
+    return ABS(sl.firstScreenLocation.x - sl.lastScreenLocation.x) > kTapLimitAreaSize ||
+           ABS(sl.firstScreenLocation.y - sl.lastScreenLocation.y) > kTapLimitAreaSize;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
-        _lastScreenLocation = [touch locationInView:self.view.window];
-
-        if (touch) {
-            [self _translate:[touch _delta] withEvent:event];
-            self.state = UIGestureRecognizerStateEnded;
-        } else {
-            self.state = UIGestureRecognizerStateCancelled;
+        
+        for (UITouch *touch in touches) {
+            NSUInteger index = [_touches indexOfObject:touch];
+            _UIPanGestureRecognizerScreenLocation *screenLocation = [_touchToScreenLocationDictionary objectForKey:@(index)];
+            [self _endTouch:touch screenLocation:screenLocation event:event];
         }
+        [self _translateTouches:touches withEvent:event];
+        self.state = UIGestureRecognizerStateEnded;
+        
     } else {
         self.state = UIGestureRecognizerStateFailed;
     }
+}
+
+- (void)_endTouch:(UITouch *)touch screenLocation:(_UIPanGestureRecognizerScreenLocation *)screenLocation
+            event:(UIEvent *)event
+{
+    screenLocation.lastScreenLocation = [touch locationInView:self.view.window];
+}
+
+- (NSArray *)_screenLocations
+{
+    return [_touchToScreenLocationDictionary allValues];
 }
 
 @end

@@ -15,8 +15,11 @@
 @implementation UIGestureRecognizeProcess
 {
     UIView *_view;
+    UIMultiTouchProcess *_multiTouchProcess;
+    
     NSMutableSet *_trackingTouches;
     NSMutableSet *_effectRecognizers;
+    NSMutableSet *_changedStateRecognizersCache;
     NSMutableArray *_delaysBufferedBlocks;
     
     NSArray *_trackingTouchesArrayCache;
@@ -31,13 +34,16 @@
     BOOL _cancelsTouchesInView;
 }
 
-- (instancetype)initWithView:(UIView *)view
+- (instancetype)initWithView:(UIView *)view multiTouchProcess:(UIMultiTouchProcess *)multiTouchProcess
 {
     if (self = [self init]) {
         _view = view;
+        _multiTouchProcess = multiTouchProcess;
+        
         _lastTimeHasMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
+        _changedStateRecognizersCache = [[NSMutableSet alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
         
         //UIGestureRecognizer's delaysTouchesXXX may be changed, so I cached them when called init method.
@@ -141,8 +147,7 @@
         }
     }
     [self _checkAndClearExcluedRecognizers];
-    [self _sendActionIfNeedForEachGestureRecognizers];
-    _cancelsTouchesInView = [self _checkHasAnyRecognizerRecognizedCancelsTouchesInView];
+    [self _clearAndHandleAllMadeConclusionGestureRecognizers];
 }
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
@@ -201,6 +206,22 @@
     return NO;
 }
 
+- (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
+{
+    if (![recognizer _isFailed] && [recognizer _shouldSendActions]) {
+        [recognizer _sendActions];
+    }
+    
+    if ([self _checkRecognizerRecognizedCancelsTouchesInView:recognizer]) {
+        _cancelsTouchesInView = YES;
+    }
+    
+    if ([recognizer _hasMadeConclusion]) {
+        [recognizer reset];
+        [_effectRecognizers removeObject:recognizer];
+    }
+}
+
 - (void)_sendActionIfNeedForEachGestureRecognizers
 {
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
@@ -236,18 +257,10 @@
     return _hasCallAttachedViewAnyMethod;
 }
 
-- (BOOL)_checkHasAnyRecognizerRecognizedCancelsTouchesInView
+- (BOOL)_checkRecognizerRecognizedCancelsTouchesInView:(UIGestureRecognizer *)recognizer
 {
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        
-        if ([recognizer cancelsTouchesInView]) {
-            
-            if (recognizer.state == UIGestureRecognizerStateBegan ||
-                recognizer.state == UIGestureRecognizerStateChanged ||
-                recognizer.state == UIGestureRecognizerStateEnded) {
-                return YES;
-            }
-        }
+    if ([recognizer cancelsTouchesInView] && [recognizer _hasRecognizedGesture]) {
+        return YES;
     }
     return NO;
 }
@@ -394,37 +407,21 @@
     NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
-
-- (void)clearAndCallResetIfRecognizersMakeConclusion
-{
-    [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
-        
-        UIGestureRecognizerState state = recognizer.state;
-        
-        if (state == UIGestureRecognizerStateCancelled ||
-            state == UIGestureRecognizerStateEnded ||
-            state == UIGestureRecognizerStateFailed) {
-            
-            [recognizer reset];
-            
-            return YES;
-        }
-        return NO;
-    }];
-}
-
 - (void)multiTouchEnd
 {
     if (!_cancelsTouchesInView) {
         [self _runAndClearDelaysBufferedBlocks];
     }
+    _trackingTouchesArrayCache = @[];
     
     [_trackingTouches removeAllObjects];
-    
-    _trackingTouchesArrayCache = @[];
-    _lastTimeHasMakeConclusion = _effectRecognizers.count == 0;
+    [self _refreshLastTimeHasMakeConclusion];
 }
 
+- (void)_refreshLastTimeHasMakeConclusion
+{
+    _lastTimeHasMakeConclusion = _effectRecognizers.count == 0;
+}
 
 - (void)_removeEffectGestureRecognizersWithCondition:(BOOL(^)(UIGestureRecognizer *recognizer))condition
 {
@@ -437,6 +434,28 @@
         }
     }
     [_effectRecognizers minusSet:toRemove];
+}
+
+- (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer
+{
+    if (_multiTouchProcess.handingTouchEvent) {
+        [_changedStateRecognizersCache addObject:getureRecognizer];
+        return;
+    }
+    
+    [self _handleChangedStateGestureRecognizer:getureRecognizer];
+    [self _refreshLastTimeHasMakeConclusion];
+    if (self.hasMakeConclusion) {
+        [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
+    }
+}
+
+- (void)_clearAndHandleAllMadeConclusionGestureRecognizers
+{
+    for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
+        [self _handleChangedStateGestureRecognizer:recognizer];
+    }
+    [_changedStateRecognizersCache removeAllObjects];
 }
 
 @end

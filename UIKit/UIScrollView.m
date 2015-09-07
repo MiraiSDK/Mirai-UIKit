@@ -62,6 +62,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 @private
     CGPoint _contentOffset;
     CGSize _contentSize;
+    CGPoint _lastTranslation;
     UIEdgeInsets _contentInset;
     UIEdgeInsets _scrollIndicatorInsets;
     UIScroller *_verticalScroller;
@@ -582,6 +583,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_endDraggingWithDecelerationVelocity:(CGPoint)velocity
 {
+    NSLog(@"-> %s %@", __FUNCTION__, NSStringFromCGPoint(velocity));
+    
     if (_dragging) {
         _dragging = NO;
         
@@ -684,9 +687,16 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     if (gesture == _panGestureRecognizer) {
         if (_panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
             [self _beginDragging];
+            _lastTranslation = [_panGestureRecognizer translationInView:self];
+            
         } else if (_panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-            [self _dragBy:[_panGestureRecognizer translationInView:self]];
+            CGPoint currentTranslation = [_panGestureRecognizer translationInView:self];
+            CGPoint delta = CGPointMake(currentTranslation.x - _lastTranslation.x,
+                                        currentTranslation.y - _lastTranslation.y);
+            [self _dragBy:delta];
             [_panGestureRecognizer setTranslation:CGPointZero inView:self];
+            _lastTranslation = currentTranslation;
+            
         } else if (_panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
             [self _endDraggingWithDecelerationVelocity:[_panGestureRecognizer velocityInView:self]];
         }

@@ -48,6 +48,9 @@
 - (BOOL)_shouldSendActions;
 - (BOOL)_shouldReset;
 
+- (BOOL)_hasRecognizedGesture;
+- (BOOL)_hasMadeConclusion;
+
 - (BOOL)_isFailed;
 - (BOOL)_canReceiveTouches;
 - (BOOL)_isActivity;
