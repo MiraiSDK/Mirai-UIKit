@@ -18,6 +18,7 @@
     
     NSInteger _currentPressFingersCount;
     BOOL _legacyAnyRecognizeProcesses;
+    BOOL _multiTouchNotEnded;
     
     NSMutableDictionary *_effectRecognizeProcesses;
     NSMutableSet *_trackedTouches;
@@ -61,6 +62,7 @@
     
     if (touchBegin) {
         NSLog(@"[begin multi-touch]");
+        _multiTouchNotEnded = YES;
         [self _beginWithEvent:event touches:touches];
     }
     NSArray *recognizerProcesses = [_effectRecognizeProcesses allValues];
@@ -76,6 +78,7 @@
     
     if (touchEnd) {
         [self _end];
+        _multiTouchNotEnded = NO;
         NSLog(@"[end multi-touch]");
     }
     _handingTouchEvent = NO;
@@ -247,9 +250,13 @@
 
 - (void)gestureRecognizeProcessMakeConclusion:(UIGestureRecognizeProcess *)gestureRecognizeProcess
 {
-    NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
-    [_effectRecognizeProcesses removeObjectForKey:keyView];
-    [self _refreshLegacyAnyRecognizeProcesses];
+    if (!_multiTouchNotEnded) {
+        
+        NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
+        
+        [_effectRecognizeProcesses removeObjectForKey:keyView];
+        [self _refreshLegacyAnyRecognizeProcesses];
+    }
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses
