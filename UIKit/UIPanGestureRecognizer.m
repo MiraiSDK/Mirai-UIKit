@@ -172,6 +172,8 @@ static UITouch *PanTouch(NSSet *touches)
         } else {
             self.state = UIGestureRecognizerStateCancelled;
         }
+    } else {
+        self.state = UIGestureRecognizerStateFailed;
     }
 }
 

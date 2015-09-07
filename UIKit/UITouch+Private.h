@@ -24,6 +24,8 @@ typedef enum {
 } _UITouchGesture;
 
 @interface UITouch (Private)
+
+- (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled;
 - (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
 - (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
 - (void)_updateGesture:(_UITouchGesture)gesture screenLocation:(CGPoint)screenLocation delta:(CGPoint)delta rotation:(CGFloat)rotation magnification:(CGFloat)magnification timestamp:(NSTimeInterval)timestamp;
@@ -39,6 +41,7 @@ typedef enum {
 - (void)_updatePhase:(UITouchPhase)phase;
 
 @property (nonatomic, assign) NSInteger identifier;
+@property (nonatomic, readonly) CGPoint screenLocation;
 
 @end
 

@@ -27,5 +27,6 @@
 - (void)_updateWithAEvent:(AInputEvent *)aEvent;
 
 - (AInputEvent *)_AInputEvent;
+- (void)handleInputEvent:(InputEvent *)inputEvent;
 - (void)configureWithInputEvent:(InputEvent *)inputEvent;
 @end

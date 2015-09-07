@@ -27,7 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIGestureRecognizer.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch+Private.h"
 #import "UIAction.h"
@@ -40,8 +40,11 @@
     NSMutableSet *_excludedTouches;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
+    
+    UIGestureRecognizeProcess *_bindingRecognizeProcess;
 }
-@synthesize delegate=_delegate, delaysTouchesBegan=_delaysTouchesBegan, delaysTouchesEnded=_delaysTouchesEnded, cancelsTouchesInView=_cancelsTouchesInView;
+@synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
+
 @synthesize state=_state, enabled=_enabled, view=_view;
 
 - (instancetype)init
@@ -54,18 +57,27 @@
         _enabled = YES;
         
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
-        _trackingTouches = [[NSMutableArray alloc] initWithCapacity:1];
         _excludedTouches = [[NSMutableSet alloc] initWithCapacity:1];
     }
     return self;
 }
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (instancetype)initWithTarget:(id)target action:(SEL)action
 {
     if ((self=[self init])) {
         [self addTarget:target action:action];
     }
     return self;
+}
+
+- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess
+{
+    _bindingRecognizeProcess = recognizeProcess;
+}
+
+- (void)_unbindRecognizeProcess
+{
+    _bindingRecognizeProcess = nil;
 }
 
 - (void)_setView:(UIView *)v
@@ -82,6 +94,18 @@
         _delegateHas.shouldReceiveTouch = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)];
         _delegateHas.shouldRecognizeSimultaneouslyWithGestureRecognizer = [_delegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)];
     }
+}
+
+- (void)setDelaysTouchesBegan:(BOOL)delaysTouchesBegan
+{
+    _delaysTouchesBegan = delaysTouchesBegan;
+    [self reset];
+}
+
+- (void)setDelaysTouchesEnded:(BOOL)delaysTouchesEnded
+{
+    _delaysTouchesEnded = delaysTouchesEnded;
+    [self reset];
 }
 
 - (void)addTarget:(id)target action:(SEL)action
@@ -109,7 +133,11 @@
 
 - (NSUInteger)numberOfTouches
 {
-    return [_trackingTouches count];
+    if (!_bindingRecognizeProcess) {
+        return 0;
+    }
+    
+    return _bindingRecognizeProcess.trackingTouches.count - _excludedTouches.count;
 }
 
 - (CGPoint)locationInView:(UIView *)view
@@ -122,11 +150,15 @@
     CGFloat y = 0;
     CGFloat k = 0;
     
-    for (UITouch *touch in _trackingTouches) {
-        const CGPoint p = [touch locationInView:view];
-        x += p.x;
-        y += p.y;
-        k++;
+    if (_bindingRecognizeProcess) {
+        for (UITouch *touch in _bindingRecognizeProcess.trackingTouches) {
+            if (![_excludedTouches containsObject:touch]) {
+                const CGPoint p = [touch locationInView:view];
+                x += p.x;
+                y += p.y;
+                k++;
+            }
+        }
     }
     
     if (k > 0) {
@@ -138,7 +170,23 @@
 
 - (CGPoint)locationOfTouch:(NSUInteger)touchIndex inView:(UIView *)view
 {
-    return [[_trackingTouches objectAtIndex:touchIndex] locationInView:view];
+    if (!_bindingRecognizeProcess) {
+        return CGPointZero;
+    }
+    
+    // Because the _bindingRecognizeProcess.trackingTouchesArray may includes exclued touches.
+    
+    NSUInteger index = 0;
+    
+    for (UITouch *touch in _bindingRecognizeProcess.trackingTouchesArray) {
+        if (![_excludedTouches containsObject:touch]) {
+            if (index == touchIndex) {
+                return [touch locationInView:view];
+            }
+            index++;
+        }
+    }
+    return CGPointZero;
 }
 
 - (void)setState:(UIGestureRecognizerState)state
@@ -222,16 +270,6 @@
     return shouldBegan;
 }
 
-- (BOOL)_isEatenTouche:(UITouch *)touch
-{
-    if (self.cancelsTouchesInView && (self.state == UIGestureRecognizerStateBegan ||
-                                      self.state == UIGestureRecognizerStateChanged ||
-                                      self.state == UIGestureRecognizerStateEnded)) {
-        return [_trackingTouches containsObject:touch];
-    }
-    return NO;
-}
-
 - (void)_sendActions
 {
     if (![self _isExcluded]) {
@@ -249,7 +287,6 @@
     _shouldReset = NO;
     _shouldSendActions = NO;
     _state = UIGestureRecognizerStatePossible;
-    [_trackingTouches removeAllObjects];
     [_excludedTouches removeAllObjects];
 }
 
@@ -388,58 +425,55 @@
             self.state != UIGestureRecognizerStateEnded);
 }
 
+- (void)_foundNewTouch:(UITouch *)touch
+{
+    if (!self.delegate) {
+        return;
+    }
+    
+    if (![_excludedTouches containsObject:touch] &&
+        [_bindingRecognizeProcess.trackingTouches containsObject:touch]) {
+        
+        if ([self _shouldReciveTouch:touch]) {
+            [_excludedTouches addObject:touch];
+        }
+    }
+}
+
+- (BOOL)_shouldReciveTouch:(UITouch *)touch
+{
+    if ([self.delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]) {
+        return [self.delegate gestureRecognizer:self shouldReceiveTouch:touch];
+    }
+    return YES;
+}
+
 - (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([self _shouldAttemptToRecognize]) {
-        for (UITouch *touch in touches) {
-            if (touch.phase == UITouchPhaseBegan &&
-                self.delegate &&
-                ![_trackingTouches containsObject:touch] &&
-                ![_excludedTouches containsObject:touch] &&
-                [self.delegate respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]&&
-                ![self.delegate gestureRecognizer:self shouldReceiveTouch:touch]) {
-                
-                [_excludedTouches addObject:touch];
-            }
-        }
-
+    NSMutableSet *touchesBeginSet = nil;
+    NSMutableSet *touchesMovedSet = nil;
+    NSMutableSet *touchesEndedSet = nil;
+    NSMutableSet *touchesCancelledSet = nil;
+    
+    for (UITouch *touch in touches) {
         
-        NSMutableSet *ts = [touches mutableCopy];
-        [ts minusSet:_excludedTouches];
-        [_trackingTouches setArray:[ts allObjects]];
-
-        for (UITouch *touch in _trackingTouches) {
+        if ([_bindingRecognizeProcess.trackingTouches containsObject:touch]) {
+            
             switch (touch.phase) {
                 case UITouchPhaseBegan:
-                    [self touchesBegan:touches withEvent:event];
+                    [self _setTouch:touch intoMutableSet:&touchesBeginSet];
                     break;
-
+                    
                 case UITouchPhaseMoved:
-                    [self touchesMoved:touches withEvent:event];
+                    [self _setTouch:touch intoMutableSet:&touchesMovedSet];
                     break;
-                                    
+                    
                 case UITouchPhaseEnded:
-                    [self touchesEnded:touches withEvent:event];
+                    [self _setTouch:touch intoMutableSet:&touchesEndedSet];
                     break;
                     
                 case UITouchPhaseCancelled:
-                    [self touchesCancelled:touches withEvent:event];
-                    break;
-
-                case _UITouchPhaseGestureBegan:
-                    [self _gesturesBegan:touches withEvent:event];
-                    break;
-
-                case _UITouchPhaseGestureChanged:
-                    [self _gesturesMoved:touches withEvent:event];
-                    break;
-
-                case _UITouchPhaseGestureEnded:
-                    [self _gesturesEnded:touches withEvent:event];
-                    break;
-                    
-                case _UITouchPhaseDiscreteGesture:
-                    [self _discreteGestures:touches withEvent:event];
+                    [self _setTouch:touch intoMutableSet:&touchesCancelledSet];
                     break;
                     
                 default:
@@ -447,6 +481,30 @@
             }
         }
     }
+    
+    if (touchesBeginSet) {
+        [self touchesBegan:touchesBeginSet withEvent:event];
+    }
+    
+    if (touchesMovedSet) {
+        [self touchesMoved:touchesMovedSet withEvent:event];
+    }
+    
+    if (touchesEndedSet) {
+        [self touchesEnded:touchesEndedSet withEvent:event];
+    }
+    
+    if (touchesCancelledSet) {
+        [self touchesCancelled:touchesCancelledSet withEvent:event];
+    }
+}
+
+- (void)_setTouch:(UITouch *)touch intoMutableSet:(NSMutableSet **)set
+{
+    if (!*set) {
+        *set = [[NSMutableSet alloc] init];
+    }
+    [*set addObject:touch];
 }
 
 - (NSString *)description

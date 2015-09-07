@@ -287,6 +287,9 @@
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24E1DF01B43E55E009814C3 /* JavaBridgeProxy.java in Sources */ = {isa = PBXBuildFile; fileRef = D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */; };
 		D24E1DF11B43E55E009814C3 /* JavaBridgeProxyFactory.java in Sources */ = {isa = PBXBuildFile; fileRef = D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */; };
+		D286A1641B8AAE5200EBD344 /* UIGestureRecognizeProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = D286A1621B8AAE5200EBD344 /* UIGestureRecognizeProcess.h */; };
+		D286A1651B8AAE5200EBD344 /* UIGestureRecognizeProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D286A1631B8AAE5200EBD344 /* UIGestureRecognizeProcess.m */; };
+		D286A1661B8AAE5200EBD344 /* UIGestureRecognizeProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D286A1631B8AAE5200EBD344 /* UIGestureRecognizeProcess.m */; };
 		D28E58781B1850E100BAB5D1 /* UITouchMask.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E58761B1850E100BAB5D1 /* UITouchMask.h */; };
 		D28E587D1B1851F800BAB5D1 /* UITopFloatView.h in Headers */ = {isa = PBXBuildFile; fileRef = D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */; };
 		D28E587E1B1851F800BAB5D1 /* UITopFloatView.m in Sources */ = {isa = PBXBuildFile; fileRef = D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */; };
@@ -312,6 +315,8 @@
 		D2A5B40F1B73120E0046C265 /* ScreenOrientationHandler.java in Sources */ = {isa = PBXBuildFile; fileRef = D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */; };
 		D2ADA3681B71EBAD000637EF /* UIScreenOrientationListener.h in Headers */ = {isa = PBXBuildFile; fileRef = D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */; };
 		D2ADA3691B71EBAD000637EF /* UIScreenOrientationListener.m in Sources */ = {isa = PBXBuildFile; fileRef = D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */; };
+		D2B120A41B85C54C003382EE /* UIMultiTouchProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */; };
+		D2B120A51B85C54C003382EE /* UIMultiTouchProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */; };
 		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
 		D2B8DAB81B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
 		D2B8DAB91B438D5B00314D24 /* TNJavaBridgeCallbackContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */; };
@@ -642,6 +647,8 @@
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
 		D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxy.java; sourceTree = SOURCE_ROOT; };
 		D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxyFactory.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxyFactory.java; sourceTree = SOURCE_ROOT; };
+		D286A1621B8AAE5200EBD344 /* UIGestureRecognizeProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizeProcess.h; sourceTree = "<group>"; };
+		D286A1631B8AAE5200EBD344 /* UIGestureRecognizeProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizeProcess.m; sourceTree = "<group>"; };
 		D28E58761B1850E100BAB5D1 /* UITouchMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchMask.h; sourceTree = "<group>"; };
 		D28E587B1B1851F800BAB5D1 /* UITopFloatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatView.h; sourceTree = "<group>"; };
 		D28E587C1B1851F800BAB5D1 /* UITopFloatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatView.m; sourceTree = "<group>"; };
@@ -662,6 +669,8 @@
 		D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = ScreenOrientationHandler.java; sourceTree = "<group>"; };
 		D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScreenOrientationListener.h; sourceTree = "<group>"; };
 		D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScreenOrientationListener.m; sourceTree = "<group>"; };
+		D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMultiTouchProcess.h; sourceTree = "<group>"; };
+		D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMultiTouchProcess.m; sourceTree = "<group>"; };
 		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
 		D2B8DAB61B438D5B00314D24 /* TNJavaBridgeCallbackContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNJavaBridgeCallbackContext.m; sourceTree = "<group>"; };
 		D2B8DABB1B439C2500314D24 /* TNJavaBridgeCallbackContext+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TNJavaBridgeCallbackContext+UIPrivate.h"; sourceTree = "<group>"; };
@@ -962,6 +971,10 @@
 				4384631B188B3D52006DA1AA /* UIControlAction.m */,
 				43846324188B3D7C006DA1AA /* UIAction.h */,
 				43846325188B3D7C006DA1AA /* UIAction.m */,
+				D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */,
+				D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */,
+				D286A1621B8AAE5200EBD344 /* UIGestureRecognizeProcess.h */,
+				D286A1631B8AAE5200EBD344 /* UIGestureRecognizeProcess.m */,
 			);
 			name = "Private Classes";
 			sourceTree = "<group>";
@@ -1321,6 +1334,7 @@
 				43846348188C5977006DA1AA /* UIFontDescriptor.h in Headers */,
 				D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */,
 				434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */,
+				D286A1641B8AAE5200EBD344 /* UIGestureRecognizeProcess.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
 				43846340188C540F006DA1AA /* NSParagraphStyle.h in Headers */,
 				43B819F318E2AA870020624F /* UISwipeGestureRecognizer.h in Headers */,
@@ -1335,6 +1349,7 @@
 				D2BA4C851AEF3109003D4A35 /* TNImageBuffer.h in Headers */,
 				434CFD491A0CB77B00B6AC9E /* UINibDeclarations.h in Headers */,
 				434CFD0D1A0CA91200B6AC9E /* NSShadow.h in Headers */,
+				D2B120A41B85C54C003382EE /* UIMultiTouchProcess.h in Headers */,
 				43846332188B4031006DA1AA /* UIImageView+UIPrivate.h in Headers */,
 				436D4B0E19F5507C00F6F8F9 /* UISearchBar.h in Headers */,
 				432F737F1A08AE99009CEC64 /* UISplitViewController.h in Headers */,
@@ -1592,10 +1607,12 @@
 				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
 				43E3429518F6947E00463092 /* NSAttributedString.m in Sources */,
 				43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */,
+				D286A1651B8AAE5200EBD344 /* UIGestureRecognizeProcess.m in Sources */,
 				436D4ADE19F52FDB00F6F8F9 /* UIStepper.m in Sources */,
 				436D4AF919F5471E00F6F8F9 /* UISegmentedControl.m in Sources */,
 				434CFCF61A0CA05300B6AC9E /* UIInputView.m in Sources */,
 				D24E1DF11B43E55E009814C3 /* JavaBridgeProxyFactory.java in Sources */,
+				D2B120A51B85C54C003382EE /* UIMultiTouchProcess.m in Sources */,
 				434CFD261A0CAFCD00B6AC9E /* NSTextStorage.m in Sources */,
 				D28E58831B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
 				43ECCF131851CAA80076535C /* UIWindow.m in Sources */,
@@ -1696,6 +1713,7 @@
 				43718E8E18517B7B00850F08 /* UIKitTests.m in Sources */,
 				D28E587F1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				D28E58841B18620200BAB5D1 /* UITopFloatViewContainer.m in Sources */,
+				D286A1661B8AAE5200EBD344 /* UIGestureRecognizeProcess.m in Sources */,
 				D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

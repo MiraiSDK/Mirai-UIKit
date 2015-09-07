@@ -31,7 +31,9 @@ static NSArray *GestureRecognizersForView(UIView *view)
 @end
 
 @implementation UITouch {
+    UITouchPhase _phase;
     _UITouchGesture _gesture;
+    BOOL _onlyShowPhaseAsCancelled;
     CGPoint _delta;
     CGFloat _rotation;
     CGFloat _magnification;
@@ -49,6 +51,28 @@ static NSArray *GestureRecognizersForView(UIView *view)
 
     }
     return self;
+}
+
+- (UITouchPhase)phase
+{
+    // when call attached view's touchesCancelled:withEvent method, all of the UITouch's phase is UITouchPhaseCancelled.
+    
+    // but they are not actually cancelled. just look like cancelled only in the method's context.
+    
+    if (_onlyShowPhaseAsCancelled) {
+        return UITouchPhaseCancelled;
+    }
+    return _phase;
+}
+
+- (CGPoint)screenLocation
+{
+    return _location;
+}
+
+- (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled
+{
+    _onlyShowPhaseAsCancelled = onlyShowPhaseAsCancelled;
 }
 
 - (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
