@@ -62,8 +62,6 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    
     for (UITouch *t in touches) {
         if (![_touches containsObject:t]) {
             [_touches addObject:t];
@@ -71,7 +69,11 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
     }
     
     if (_touches.count > 2) {
-        self.state = UIGestureRecognizerStateFailed;
+        if (self.state == UIGestureRecognizerStatePossible) {
+            self.state = UIGestureRecognizerStateFailed;
+        } else {
+            self.state = UIGestureRecognizerStateEnded;
+        }
     } else if (_touches.count == 2) {
         _initialTouchDistance = [self currentTouchDistance];
         _initialTouchAngle = [self currentTouchAngle];
