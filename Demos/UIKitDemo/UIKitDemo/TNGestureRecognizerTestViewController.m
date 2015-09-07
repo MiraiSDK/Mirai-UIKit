@@ -12,6 +12,7 @@
 #import "TNGestureEffectTouch.h"
 #import "TNTapGestureRecognizerTestViewController.h"
 #import "TNPanGestureRecognizerTestViewController.h"
+#import "TNRecognizerToFailTestViewController.h"
 
 @implementation TNGestureRecognizerTestViewController
 
@@ -28,6 +29,7 @@
 + (NSArray *)subTests
 {
     return @[
+             TNRecognizerToFailTestViewController.class,
              TNTouchShowMessage.class,
              TNTouchConfirmSuperview.class,
              TNGestureEffectTouch.class,

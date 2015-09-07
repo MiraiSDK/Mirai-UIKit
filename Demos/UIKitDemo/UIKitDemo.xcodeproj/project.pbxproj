@@ -121,6 +121,8 @@
 		D291282E1AFA1A19009FA62F /* TNShowedSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D291282C1AFA1A19009FA62F /* TNShowedSplitViewController.m */; };
 		D292796A1B4A650600C5AD45 /* TNSearchControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D29279691B4A650600C5AD45 /* TNSearchControllerTestViewController.m */; };
 		D292796B1B4A650600C5AD45 /* TNSearchControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D29279691B4A650600C5AD45 /* TNSearchControllerTestViewController.m */; };
+		D2A4386A1B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A438691B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m */; };
+		D2A4386B1B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A438691B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m */; };
 		D2A5F4801AB07C830011AF7B /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */; };
 		D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */; };
 		D2A5F4821AB07C830011AF7B /* TNComponentCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F47F1AB07C830011AF7B /* TNComponentCreator.m */; };
@@ -314,6 +316,8 @@
 		D291282C1AFA1A19009FA62F /* TNShowedSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNShowedSplitViewController.m; sourceTree = "<group>"; };
 		D29279681B4A650600C5AD45 /* TNSearchControllerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSearchControllerTestViewController.h; sourceTree = "<group>"; };
 		D29279691B4A650600C5AD45 /* TNSearchControllerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSearchControllerTestViewController.m; sourceTree = "<group>"; };
+		D2A438681B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNRecognizerToFailTestViewController.h; sourceTree = "<group>"; };
+		D2A438691B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNRecognizerToFailTestViewController.m; sourceTree = "<group>"; };
 		D2A5F47C1AB07C830011AF7B /* TNChangedColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangedColorButton.h; sourceTree = "<group>"; };
 		D2A5F47D1AB07C830011AF7B /* TNChangedColorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangedColorButton.m; sourceTree = "<group>"; };
 		D2A5F47E1AB07C830011AF7B /* TNComponentCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNComponentCreator.h; sourceTree = "<group>"; };
@@ -837,6 +841,8 @@
 				D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */,
 				D2D12EE91B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.h */,
 				D2D12EEA1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m */,
+				D2A438681B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.h */,
+				D2A438691B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m */,
 			);
 			name = UIGestureRecognizer;
 			sourceTree = "<group>";
@@ -1070,6 +1076,7 @@
 				D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
 				D2EB64361B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */,
 				D2BB4E051B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
+				D2A4386B1B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m in Sources */,
 				D2DB8D1F1AB7280C007BA560 /* TNProgressTestViewController.m in Sources */,
 				D220A8C71B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */,
 				D22284A81B7B1327003B5996 /* UIScrollViewInertance.m in Sources */,
@@ -1132,6 +1139,7 @@
 				D2EB64311B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */,
 				D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
 				D2D64D201B3B9FC900AC3AF7 /* TNTargetActionToBlock.m in Sources */,
+				D2A4386A1B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m in Sources */,
 				D2239E3B1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */,
 				D291282D1AFA1A19009FA62F /* TNShowedSplitViewController.m in Sources */,
 				D220A8C61B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */,
