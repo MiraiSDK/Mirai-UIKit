@@ -28,7 +28,7 @@
     BOOL _delaysTouchesEnded;
     
     BOOL _lastTimeHasMakeConclusion;
-    BOOL _currentTimeMakeConclusion;
+    BOOL _anyRecognizersMakeConclusion;
     BOOL _hasCallAttachedViewCancelledMethod;
     BOOL _hasCallAttachedViewAnyMethod;
     
@@ -41,7 +41,7 @@
         _view = view;
         _multiTouchProcess = multiTouchProcess;
         
-        _currentTimeMakeConclusion = YES;
+        _anyRecognizersMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
         _changedStateRecognizersCache = [[NSMutableSet alloc] init];
@@ -74,7 +74,7 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return _currentTimeMakeConclusion;
+    return _anyRecognizersMakeConclusion || _effectRecognizers.count == 0;
 }
 
 - (NSSet *)trackingTouches
@@ -131,8 +131,8 @@
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         [recognizer _bindRecognizeProcess:self];
     }
-    _lastTimeHasMakeConclusion = _currentTimeMakeConclusion;
-    _currentTimeMakeConclusion = NO;
+    _lastTimeHasMakeConclusion = self.hasMakeConclusion;
+    _anyRecognizersMakeConclusion = NO;
     _cancelsTouchesInView = NO;
 }
 
@@ -222,7 +222,7 @@
     
     if ([recognizer _hasMadeConclusion]) {
         [recognizer reset];
-        _currentTimeMakeConclusion = YES;
+        _anyRecognizersMakeConclusion = YES;
     }
 }
 
@@ -433,6 +433,10 @@
         }
     }
     [_effectRecognizers minusSet:toRemove];
+    
+    if (_effectRecognizers.count == 0) {
+        [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
+    }
 }
 
 - (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer

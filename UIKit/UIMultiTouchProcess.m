@@ -57,12 +57,15 @@
     [self _reciveTouches:touches andCheckMultiTouchProcessStateWithTouchBegin:&touchBegin
                 touchEnd:&touchEnd];
     
+    if (touchBegin) {
+        NSLog(@"[begin multi-touch]");
+        [self _initializeMultiTouchContextWhenBegin];
+    }
     _handingTouchEvent = YES;
+    
     [self _trackTouches:touches generateRecognizeProcessIfNotExist:!_legacyAnyRecognizeProcesses];
     
     if (touchBegin) {
-        NSLog(@"[begin multi-touch]");
-        _multiTouchNotEnded = YES;
         [self _beginWithEvent:event touches:touches];
     }
     NSArray *recognizerProcesses = [_effectRecognizeProcesses allValues];
@@ -125,6 +128,26 @@
         }
     }
     return incrementCount;
+}
+
+- (void)_initializeMultiTouchContextWhenBegin
+{
+    _multiTouchNotEnded = YES;
+    _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
+    
+    if (_legacyAnyRecognizeProcesses) {
+        
+        NSMutableSet *legacyNames = [NSMutableSet set];
+        for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+            for (UIGestureRecognizer *recognizer in recognizeProcess.gestureRecognizers) {
+                [legacyNames addObject:recognizer.className];
+            }
+        }
+        
+        NSLog(@"legacy any recognize processes. it won't generate any new recognize processes before legacy processes make conclusion.");
+        NSLog(@"there are %li recognize processes didn't make conclusion. list : %@",
+              _effectRecognizeProcesses.count, legacyNames);
+    }
 }
 
 - (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -223,18 +246,7 @@
         [recognizeProcess multiTouchEnd];
     }
     [_trackedTouches removeAllObjects];
-    
     [self _clearHasMakeConclusionReconizeProcesses];
-    [self _refreshLegacyAnyRecognizeProcesses];
-    
-    if (_legacyAnyRecognizeProcesses) {
-        NSLog(@"multi touch left some recognize processes: %@", [self _leftRecognizerNames]);
-    }
-}
-
-- (void)_refreshLegacyAnyRecognizeProcesses
-{
-    _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
 }
 
 - (NSSet *)_leftRecognizerNames
@@ -253,9 +265,7 @@
     if (!_multiTouchNotEnded) {
         
         NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
-        
         [_effectRecognizeProcesses removeObjectForKey:keyView];
-        [self _refreshLegacyAnyRecognizeProcesses];
     }
 }
 
