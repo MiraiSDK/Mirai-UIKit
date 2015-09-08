@@ -18,6 +18,7 @@
     UIMultiTouchProcess *_multiTouchProcess;
     
     UIGestureRecognizer *_firstRecognizedRecognizer;
+    NSMutableSet *_canSimultaneouslyRecognizers;
     
     NSMutableSet *_trackingTouches;
     NSMutableSet *_effectRecognizers;
@@ -44,6 +45,7 @@
         _multiTouchProcess = multiTouchProcess;
         
         _anyRecognizersMakeConclusion = YES;
+        _canSimultaneouslyRecognizers = [[NSMutableSet alloc] init];
         _trackingTouches = [[NSMutableSet alloc] init];
         _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
         _changedStateRecognizersCache = [[NSMutableSet alloc] init];
@@ -147,12 +149,7 @@
     [self _sendActionIfNeedForEachGestureRecognizers];
     
     if ([self _anyRecognizerDeclareRecognizedGesture]) {
-        UIGestureRecognizer *declareRecognizedRecognizer = _firstRecognizedRecognizer;
-        [self _sendTouches:touches event:event toRecognizer:declareRecognizedRecognizer];
-        if ([declareRecognizedRecognizer _isFailed]) {
-            [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
-                                                    exceptRecognizer:declareRecognizedRecognizer];
-        }
+        [self _sendToCanSimultaneouslyRecognizersWithTouches:touches evetn:event];
     } else {
         [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event];
     }
@@ -178,17 +175,36 @@
     }
 }
 
-- (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
+- (void)_sendToCanSimultaneouslyRecognizersWithTouches:(NSSet *)touches evetn:(UIEvent *)event
 {
-    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event exceptRecognizer:nil];
+    BOOL allFail = YES;
+    for (UIGestureRecognizer *recognizer in _canSimultaneouslyRecognizers) {
+        [self _sendTouches:touches event:event toRecognizer:recognizer];
+        allFail = allFail && [recognizer _isFailed];
+    }
+    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
+                                           exceptRecognizers:_canSimultaneouslyRecognizers];
 }
 
 - (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
-                                          exceptRecognizer:(UIGestureRecognizer *)exceptRecognizer
+{
+    static NSSet *emptySet;
+    if (!emptySet) {
+        emptySet = [[NSSet alloc] init];
+    }
+    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
+                                           exceptRecognizers:emptySet];
+}
+
+- (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
+                                         exceptRecognizers:(NSSet *)exceptRecognizers
 {
     for (UIGestureRecognizer *recognizer in _effectRecognizers) {
         
-        if (recognizer != exceptRecognizer && [recognizer _shouldAttemptToRecognize]) {
+        if (![exceptRecognizers containsObject:recognizer] &&
+            ![recognizer _requireToFailRecognizer] &&
+            [recognizer _shouldAttemptToRecognize]) {
+            
             [self _sendTouches:touches event:event toRecognizer:recognizer];
             if ([self _anyRecognizerDeclareRecognizedGesture]) {
                 return;
@@ -254,7 +270,37 @@
 
 - (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
-    if (![recognizer _isFailed] && [recognizer _shouldSendActions]) {
+    // the next line is a recursion invoking.
+    // but UIGestureRecognizer requireGestureRecognizerToFail relationship may have Ring in them.
+    // Ring will make a death-recursion invoking.
+    // So, I make a exceptSet to exclude duplicated UIGestureRecognizer objects.
+    NSMutableSet *exceptSet = [NSMutableSet set];
+    
+    [self _handleChangedStateGestureRecognizer:recognizer exceptSet:exceptSet];
+}
+
+- (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
+                                   exceptSet:(NSMutableSet *)exceptSet
+{
+    if ([exceptSet containsObject:recognizer]) {
+        return;
+    }
+    [exceptSet addObject:recognizer];
+    
+    [self _handleResultThroughStateOfGestureRecognozer:recognizer];
+    
+    if ([recognizer _isFailed]) {
+        for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
+            [self _handleChangedStateGestureRecognizer:afterFailRecognizer exceptSet:exceptSet];
+        }
+    }
+}
+
+- (void)_handleResultThroughStateOfGestureRecognozer:(UIGestureRecognizer *)recognizer
+{
+    if (![recognizer _isFailed] &&
+        [recognizer _shouldSendActions]) {
+        
         [recognizer _sendActions];
     }
     
@@ -456,14 +502,18 @@
 
 - (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer
 {
-    [self _recordAsFirstRecognizedRecognizerIfNeed:getureRecognizer];
-    
-    if (_multiTouchProcess.handingTouchEvent) {
-        [_changedStateRecognizersCache addObject:getureRecognizer];
+    if (![getureRecognizer _requireToFailRecognizer] ||
+        [[getureRecognizer _requireToFailRecognizer] _isFailed]) {
         
-    } else {
-        [self _handleChangedStateGestureRecognizer:getureRecognizer];
-        [self _tellMultiTouchProcessMadeConclusionIfNeed];
+        [self _recordAsFirstRecognizedRecognizerIfNeed:getureRecognizer];
+        
+        if (_multiTouchProcess.handingTouchEvent) {
+            [_changedStateRecognizersCache addObject:getureRecognizer];
+            
+        } else {
+            [self _handleChangedStateGestureRecognizer:getureRecognizer];
+            [self _tellMultiTouchProcessMadeConclusionIfNeed];
+        }
     }
 }
 
@@ -471,6 +521,28 @@
 {
     if ([getureRecognizer _hasRecognizedGesture] && ![self _anyRecognizerDeclareRecognizedGesture]) {
         _firstRecognizedRecognizer = getureRecognizer;
+        [self _collectCanSimultaneouslyRecognizersOfRecognizer:getureRecognizer];
+    }
+}
+
+- (void)_collectCanSimultaneouslyRecognizersOfRecognizer:(UIGestureRecognizer *)recognizer
+{
+    [_canSimultaneouslyRecognizers removeAllObjects];
+    [_canSimultaneouslyRecognizers addObject:recognizer];
+    
+    [self _collectAllRecognizersWhoRequireFailTo:recognizer into:_canSimultaneouslyRecognizers];
+}
+
+- (void)_collectAllRecognizersWhoRequireFailTo:(UIGestureRecognizer *)recognizer
+                                          into:(NSMutableSet *)container
+{
+    for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
+        
+        if ([container containsObject:afterFailRecognizer]) {
+            continue;
+        }
+        [container addObject:afterFailRecognizer];
+        [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:container];
     }
 }
 
