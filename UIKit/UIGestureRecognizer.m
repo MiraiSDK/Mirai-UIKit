@@ -417,6 +417,11 @@
            _state == UIGestureRecognizerStateFailed;
 }
 
+- (BOOL)_isFinishedRecognizing
+{
+    return _state == UIGestureRecognizerStateEnded;
+}
+
 - (BOOL)_isFailed
 {
     return self.state == UIGestureRecognizerStateFailed;

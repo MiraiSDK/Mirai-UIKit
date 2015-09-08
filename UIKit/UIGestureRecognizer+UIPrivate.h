@@ -51,6 +51,7 @@
 - (BOOL)_hasRecognizedGesture;
 - (BOOL)_hasMadeConclusion;
 
+- (BOOL)_isFinishedRecognizing;
 - (BOOL)_isFailed;
 - (BOOL)_canReceiveTouches;
 - (BOOL)_isActivity;
