@@ -104,7 +104,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"class:%@ %s",NSStringFromClass([self class]), __PRETTY_FUNCTION__);
     [[self nextResponder] touchesBegan:touches withEvent:event];
 }
 

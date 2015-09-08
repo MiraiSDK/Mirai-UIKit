@@ -86,7 +86,6 @@ static UIAndroidEventsServer *eventServer;
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
-    NSLog(@"handle_input");
     int32_t aType = AInputEvent_getType(event);
     if (aType == AINPUT_EVENT_TYPE_MOTION) {
         InputEvent *ie = [[InputEvent alloc] initWithInputEvent:event];
