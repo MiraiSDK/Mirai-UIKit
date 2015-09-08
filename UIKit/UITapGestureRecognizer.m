@@ -94,7 +94,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"====> %s", __FUNCTION__);
     [_multiTapHelper beginOneTapWithTouches:touches];
     
     if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
@@ -104,7 +103,6 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"====> %s", __FUNCTION__);
     if ([_multiTapHelper anyTouches:touches outOfArea:kTapLimitAreaSize]) {
         [_multiTapHelper cancelTap];
     }
@@ -112,7 +110,6 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"====> %s", __FUNCTION__);
     _waitForNewTouchBegin = NO;
     
     [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
@@ -122,7 +119,6 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"====> %s", __FUNCTION__);
     [_multiTapHelper cancelTap];
 }
 
