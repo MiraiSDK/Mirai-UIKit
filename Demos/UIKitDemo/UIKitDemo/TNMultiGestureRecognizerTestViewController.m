@@ -35,14 +35,14 @@
     [self.view addGestureRecognizer:neverMakeConclusionRecognizer];
 }
 
-- (void)_onGestureRecognized0:(UIGestureRecognizer *)gestureRecognzer
+- (void)_onGestureRecognized0:(UIGestureRecognizer *)gestureRecognizer
 {
-    NSLog(@"gesture recognized 0");
+    NSLog(@"gesture recognized 0 state %zi", gestureRecognizer.state);
 }
 
 - (void)_onGestureRecognized1:(UIGestureRecognizer *)gestureRecognizer
 {
-    NSLog(@"gesture recognized 1");
+    NSLog(@"gesture recognized 1 state %zi", gestureRecognizer.state);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
