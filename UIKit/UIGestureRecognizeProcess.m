@@ -7,6 +7,7 @@
 //
 
 #import "UIGestureRecognizeProcess.h"
+#import "UIGestureRecognizerSimultaneouslyGroup.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
@@ -17,11 +18,10 @@
     UIView *_view;
     UIMultiTouchProcess *_multiTouchProcess;
     
-    UIGestureRecognizer *_firstRecognizedRecognizer;
-    NSMutableSet *_canSimultaneouslyRecognizers;
+    UIGestureRecognizerSimultaneouslyGroup *_effectRecognizersNode;
+    NSMutableSet *_banSimultaneouslyGroups;
     
     NSMutableSet *_trackingTouches;
-    NSMutableSet *_effectRecognizers;
     NSMutableSet *_changedStateRecognizersCache;
     NSMutableArray *_delaysBufferedBlocks;
     
@@ -45,9 +45,9 @@
         _multiTouchProcess = multiTouchProcess;
         
         _anyRecognizersMakeConclusion = YES;
-        _canSimultaneouslyRecognizers = [[NSMutableSet alloc] init];
+        _banSimultaneouslyGroups = [[NSMutableSet alloc] init];
         _trackingTouches = [[NSMutableSet alloc] init];
-        _effectRecognizers = [[NSMutableSet alloc] initWithArray:[view gestureRecognizers]];
+        _effectRecognizersNode = [[UIGestureRecognizerSimultaneouslyGroup alloc] initWithView:view];
         _changedStateRecognizersCache = [[NSMutableSet alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
         
@@ -56,20 +56,16 @@
         _delaysTouchesEnded = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesEnded"];
     }
     NSLog(@"generate UIGestureRecognizeProcess [%@] includes %li gesture recognizers.",
-          _view.className, _effectRecognizers.count);
+          _view.className, _effectRecognizersNode.count);
     
     return self;
 }
 
 - (BOOL)_anyGestureRecognizerWillDelaysProperty:(NSString *)property
 {
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        NSNumber *propertyNumber = [recognizer valueForKey:property];
-        if ([propertyNumber boolValue]) {
-            return YES;
-        }
-    }
-    return NO;
+    return nil != [_effectRecognizersNode findGestureRecognizer:^BOOL(UIGestureRecognizer *recognizer) {
+        return [[recognizer valueForKey:property] boolValue];
+    }];
 }
 
 - (UIView *)view
@@ -79,7 +75,7 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return _anyRecognizersMakeConclusion || _effectRecognizers.count == 0;
+    return _anyRecognizersMakeConclusion || _effectRecognizersNode.count == 0;
 }
 
 - (NSSet *)trackingTouches
@@ -89,7 +85,7 @@
 
 - (NSArray *)gestureRecognizers
 {
-    return [_effectRecognizers allObjects];
+    return [_effectRecognizersNode allGestureRecognizers];
 }
 
 - (NSArray *)trackingTouchesArray
@@ -133,9 +129,9 @@
 
 - (void)multiTouchBegin
 {
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
         [recognizer _bindRecognizeProcess:self];
-    }
+    }];
     _lastTimeHasMakeConclusion = self.hasMakeConclusion;
     _anyRecognizersMakeConclusion = NO;
     _cancelsTouchesInView = NO;
@@ -148,11 +144,13 @@
     // before send event to recognizer, send pending actions
     [self _sendActionIfNeedForEachGestureRecognizers];
     
-    if ([self _anyRecognizerDeclareRecognizedGesture]) {
-        [self _sendToCanSimultaneouslyRecognizersWithTouches:touches evetn:event];
-    } else {
-        [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event];
-    }
+//    if ([self _anyRecognizerDeclareRecognizedGesture]) {
+//        [self _sendToCanSimultaneouslyRecognizersWithTouches:touches evetn:event];
+//    } else {
+//        [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event];
+//    }
+    
+    [self _sendToRecognizersWithTouches:touches event:event];
     
     [self _checkAndClearExcluedRecognizers];
     [self _clearAndHandleAllMadeConclusionGestureRecognizers];
@@ -168,22 +166,46 @@
 
 - (void)_sendActionIfNeedForEachGestureRecognizers
 {
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
         if (![recognizer _isFailed] && [recognizer _shouldSendActions]) {
             [recognizer _sendActions];
+        }
+    }];
+}
+
+- (void)_sendToRecognizersWithTouches:(NSSet *)touches event:(UIEvent *)event
+{
+    for (NSSet *group in [_effectRecognizersNode allSimulataneouslyGroups]) {
+        
+        if ([_banSimultaneouslyGroups containsObject:group]) {
+            continue;
+        }
+        
+        BOOL allFail = YES;
+        for (UIGestureRecognizer *recognizer in group) {
+            [self _sendTouches:touches event:event toRecognizer:recognizer];
+            if (![recognizer _isFailed]) {
+                allFail = NO;
+            }
+        }
+        
+        if (allFail) {
+            [_banSimultaneouslyGroups addObject:group];
+        } else {
+            break;
         }
     }
 }
 
 - (void)_sendToCanSimultaneouslyRecognizersWithTouches:(NSSet *)touches evetn:(UIEvent *)event
 {
-    BOOL allFail = YES;
-    for (UIGestureRecognizer *recognizer in _canSimultaneouslyRecognizers) {
-        [self _sendTouches:touches event:event toRecognizer:recognizer];
-        allFail = allFail && [recognizer _isFailed];
-    }
-    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
-                                           exceptRecognizers:_canSimultaneouslyRecognizers];
+//    BOOL allFail = YES;
+//    for (UIGestureRecognizer *recognizer in _canSimultaneouslyRecognizers) {
+//        [self _sendTouches:touches event:event toRecognizer:recognizer];
+//        allFail = allFail && [recognizer _isFailed];
+//    }
+//    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
+//                                           exceptRecognizers:_canSimultaneouslyRecognizers];
 }
 
 - (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
@@ -199,18 +221,18 @@
 - (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
                                          exceptRecognizers:(NSSet *)exceptRecognizers
 {
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-        
-        if (![exceptRecognizers containsObject:recognizer] &&
-            ![recognizer _requireToFailRecognizer] &&
-            [recognizer _shouldAttemptToRecognize]) {
-            
-            [self _sendTouches:touches event:event toRecognizer:recognizer];
-            if ([self _anyRecognizerDeclareRecognizedGesture]) {
-                return;
-            }
-        }
-    }
+//    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+//        
+//        if (![exceptRecognizers containsObject:recognizer] &&
+//            ![recognizer _requireToFailRecognizer] &&
+//            [recognizer _shouldAttemptToRecognize]) {
+//            
+//            [self _sendTouches:touches event:event toRecognizer:recognizer];
+//            if ([self _anyRecognizerDeclareRecognizedGesture]) {
+//                return;
+//            }
+//        }
+//    }
 }
 
 - (void)_sendTouches:(NSSet *)touches event:(UIEvent *)event
@@ -231,27 +253,6 @@
 
 - (void)_checkAndClearExcluedRecognizers
 {
-    
-    // [NSPredicate predicateWithBlock:] didn't implemented.
-    // I can only replace with another way.
-    
-//    static NSPredicate *predicate;
-//    
-//    if (!predicate) {
-//        predicate = [NSPredicate predicateWithBlock:^BOOL(UIGestureRecognizer *recognizer, NSDictionary *bindings) {
-//            
-//            NSLog(@"=> call filter block");
-//
-//            if ([self _isRecognizerExcluedByOther:recognizer]) {
-//                [recognizer _setExcluded];
-//                return NO;
-//            }
-//            return YES;
-//        }];
-//    }
-//    
-//    [_effectRecognizers filterUsingPredicate:predicate];
-    
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         
         return [self _isRecognizerExcluedByOther:recognizer];
@@ -260,12 +261,9 @@
 
 - (BOOL)_isRecognizerExcluedByOther:(UIGestureRecognizer *)recognizer
 {
-    for (UIGestureRecognizer *other in _effectRecognizers) {
-        if (![other _isFailed] && [recognizer _isExcludedByGesture:other]) {
-            return YES;
-        }
-    }
-    return NO;
+    return nil != [_effectRecognizersNode findGestureRecognizer:^BOOL(UIGestureRecognizer *other) {
+        return ![other _isFailed] && [recognizer _isExcludedByGesture:other];
+    }];
 }
 
 - (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
@@ -470,7 +468,7 @@
                 @(_UITouchPhaseDiscreteGesture):@"_UITouchPhaseDiscreteGesture",};
     }
     
-    NSLog(@"phase:%@",[map objectForKey:@(phase)]);
+//    NSLog(@"phase:%@",[map objectForKey:@(phase)]);
 }
 
 - (void)multiTouchEnd
@@ -485,17 +483,15 @@
 
 - (void)_removeEffectGestureRecognizersWithCondition:(BOOL(^)(UIGestureRecognizer *recognizer))condition
 {
-    NSMutableSet *toRemove = [NSMutableSet new];
-    
-    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
+    [_effectRecognizersNode removeWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         if (condition(recognizer)) {
             [recognizer _unbindRecognizeProcess];
-            [toRemove addObject:recognizer];
+            return YES;
         }
-    }
-    [_effectRecognizers minusSet:toRemove];
+        return NO;
+    }];
     
-    if (_effectRecognizers.count == 0) {
+    if (_effectRecognizersNode.count == 0) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
     }
 }
@@ -505,8 +501,6 @@
     if (![getureRecognizer _requireToFailRecognizer] ||
         [[getureRecognizer _requireToFailRecognizer] _isFailed]) {
         
-        [self _recordAsFirstRecognizedRecognizerIfNeed:getureRecognizer];
-        
         if (_multiTouchProcess.handingTouchEvent) {
             [_changedStateRecognizersCache addObject:getureRecognizer];
             
@@ -514,35 +508,6 @@
             [self _handleChangedStateGestureRecognizer:getureRecognizer];
             [self _tellMultiTouchProcessMadeConclusionIfNeed];
         }
-    }
-}
-
-- (void)_recordAsFirstRecognizedRecognizerIfNeed:(UIGestureRecognizer *)getureRecognizer
-{
-    if ([getureRecognizer _hasRecognizedGesture] && ![self _anyRecognizerDeclareRecognizedGesture]) {
-        _firstRecognizedRecognizer = getureRecognizer;
-        [self _collectCanSimultaneouslyRecognizersOfRecognizer:getureRecognizer];
-    }
-}
-
-- (void)_collectCanSimultaneouslyRecognizersOfRecognizer:(UIGestureRecognizer *)recognizer
-{
-    [_canSimultaneouslyRecognizers removeAllObjects];
-    [_canSimultaneouslyRecognizers addObject:recognizer];
-    
-    [self _collectAllRecognizersWhoRequireFailTo:recognizer into:_canSimultaneouslyRecognizers];
-}
-
-- (void)_collectAllRecognizersWhoRequireFailTo:(UIGestureRecognizer *)recognizer
-                                          into:(NSMutableSet *)container
-{
-    for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-        
-        if ([container containsObject:afterFailRecognizer]) {
-            continue;
-        }
-        [container addObject:afterFailRecognizer];
-        [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:container];
     }
 }
 
@@ -560,11 +525,6 @@
     if (self.hasMakeConclusion) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
     }
-}
-
-- (BOOL)_anyRecognizerDeclareRecognizedGesture
-{
-    return _firstRecognizedRecognizer && ![_firstRecognizedRecognizer _isFailed];
 }
 
 @end
