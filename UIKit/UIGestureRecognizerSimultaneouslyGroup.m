@@ -30,6 +30,11 @@
 
 #pragma mark - read properties.
 
+- (NSUInteger)count
+{
+    return _recognizerToGroupDictionary.count;
+}
+
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
     NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
@@ -43,7 +48,7 @@
             [_allSimulataneouslyGroups removeObject:includesRecognizerGroup];
         }
     }
-    _allGestureRecognizersCache = nil;
+    [self _clearCache];
 }
 
 - (void)removeWithCondition:(BOOL (^)(UIGestureRecognizer *))conditionMethod
@@ -64,7 +69,7 @@
             [groupToRemove addObject:group];
         }
     }
-    _allGestureRecognizersCache = nil;
+    [self _clearCache];
 }
 
 - (NSSet *)allSimulataneouslyGroups
@@ -102,6 +107,23 @@
     }
 }
 
+- (UIGestureRecognizer *)findGestureRecognizer:(BOOL (^)(UIGestureRecognizer *recognizer))finderMethod
+{
+    for (NSMutableSet *group in _allSimulataneouslyGroups) {
+        for (UIGestureRecognizer *recognizer in group) {
+            if (finderMethod(recognizer)) {
+                return recognizer;
+            }
+        }
+    }
+    return nil;
+}
+
+- (void)_clearCache
+{
+    _allGestureRecognizersCache = nil;
+}
+
 #pragma mark collect gesture recognizers
 
 - (void)_collectGestureRecognizersWithView:(UIView *)view
@@ -109,6 +131,9 @@
     for (UIGestureRecognizer *recognizer in view.gestureRecognizers) {
         NSMutableSet *group = [NSMutableSet set];
         [self _collectAllRecognizersWhoRequireFailTo:recognizer into:group];
+        if (group.count > 0) {
+            [_allSimulataneouslyGroups addObject:group];
+        }
     }
 }
 

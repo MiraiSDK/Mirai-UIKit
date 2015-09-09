@@ -13,6 +13,8 @@
 
 @interface UIGestureRecognizerSimultaneouslyGroup : NSObject
 
+@property (nonatomic, readonly) NSUInteger count;
+
 - (instancetype)initWithView:(UIView *)view;
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer;
@@ -23,5 +25,6 @@
 - (NSSet *)simultaneouslyGroupIncludes:(UIGestureRecognizer *)recognizer;
 
 - (void)eachGestureRecognizer:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (UIGestureRecognizer *)findGestureRecognizer:(BOOL (^)(UIGestureRecognizer *recognizer))finderMethod;
 
 @end
