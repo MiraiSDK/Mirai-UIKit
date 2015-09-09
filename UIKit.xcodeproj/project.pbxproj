@@ -315,6 +315,8 @@
 		D2A5B40F1B73120E0046C265 /* ScreenOrientationHandler.java in Sources */ = {isa = PBXBuildFile; fileRef = D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */; };
 		D2ADA3681B71EBAD000637EF /* UIScreenOrientationListener.h in Headers */ = {isa = PBXBuildFile; fileRef = D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */; };
 		D2ADA3691B71EBAD000637EF /* UIScreenOrientationListener.m in Sources */ = {isa = PBXBuildFile; fileRef = D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */; };
+		D2B043EF1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B043ED1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.h */; };
+		D2B043F01BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B043EE1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.m */; };
 		D2B120A41B85C54C003382EE /* UIMultiTouchProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */; };
 		D2B120A51B85C54C003382EE /* UIMultiTouchProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */; };
 		D2B8DAB71B438D5B00314D24 /* TNJavaBridgeCallbackContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */; };
@@ -671,6 +673,8 @@
 		D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = ScreenOrientationHandler.java; sourceTree = "<group>"; };
 		D2ADA3661B71EBAD000637EF /* UIScreenOrientationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScreenOrientationListener.h; sourceTree = "<group>"; };
 		D2ADA3671B71EBAD000637EF /* UIScreenOrientationListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScreenOrientationListener.m; sourceTree = "<group>"; };
+		D2B043ED1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGestureRecognizerSimultaneouslyGroup.h; sourceTree = "<group>"; };
+		D2B043EE1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIGestureRecognizerSimultaneouslyGroup.m; sourceTree = "<group>"; };
 		D2B120A21B85C54C003382EE /* UIMultiTouchProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMultiTouchProcess.h; sourceTree = "<group>"; };
 		D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMultiTouchProcess.m; sourceTree = "<group>"; };
 		D2B8DAB51B438D5B00314D24 /* TNJavaBridgeCallbackContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNJavaBridgeCallbackContext.h; sourceTree = "<group>"; };
@@ -979,6 +983,8 @@
 				D2B120A31B85C54C003382EE /* UIMultiTouchProcess.m */,
 				D286A1621B8AAE5200EBD344 /* UIGestureRecognizeProcess.h */,
 				D286A1631B8AAE5200EBD344 /* UIGestureRecognizeProcess.m */,
+				D2B043ED1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.h */,
+				D2B043EE1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.m */,
 			);
 			name = "Private Classes";
 			sourceTree = "<group>";
@@ -1402,6 +1408,7 @@
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				436D4AE519F531D300F6F8F9 /* UITextField.h in Headers */,
 				43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */,
+				D2B043EF1BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.h in Headers */,
 				43E2AC9D18ACD9370029EE86 /* UIToolbar.h in Headers */,
 				43846339188B41D2006DA1AA /* UIRoundedRectButton.h in Headers */,
 				431412DD18C0B958001AF732 /* UIViewBlockAnimationDelegate.h in Headers */,
@@ -1580,6 +1587,7 @@
 				43C200D018EBE0AA00490D59 /* UIActivityIndicatorView.m in Sources */,
 				D2E098001B189E32002DB2A4 /* UIPositionOnRect.m in Sources */,
 				43846341188C540F006DA1AA /* NSParagraphStyle.m in Sources */,
+				D2B043F01BA01F990063DECF /* UIGestureRecognizerSimultaneouslyGroup.m in Sources */,
 				43846349188C5977006DA1AA /* UIFontDescriptor.m in Sources */,
 				434CFD221A0CACD900B6AC9E /* NSLayoutManager.m in Sources */,
 				43ECCF0F1851CA9A0076535C /* UIView.m in Sources */,
