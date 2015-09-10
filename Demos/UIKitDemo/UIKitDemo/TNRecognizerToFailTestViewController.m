@@ -62,6 +62,18 @@
 
 @implementation _TNShowMessageGestureRecognizer
 
+- (void)setState:(UIGestureRecognizerState)state
+{
+    NSLog(@"-> %@ state change to %zi from %zi", self.mark, state, self.state);
+    [super setState:state];
+}
+
+- (void)reset
+{
+    [super reset];
+    NSLog(@"-> %@ reset", self.mark);
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
