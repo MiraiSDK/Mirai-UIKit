@@ -142,25 +142,30 @@
 {
     if (![group containsObject:recognizer]) {
         
-        BOOL success = [self _recordRecognizer:recognizer withGroup:group];
-        if (success) {
-            [group addObject:recognizer];
-            for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-                [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:group];
+        NSSet *originalGroup = [self simultaneouslyGroupIncludes:recognizer];
+        
+        if (originalGroup) {
+            for (UIGestureRecognizer *otherRecognizer in originalGroup) {
+                [self _saveGroup:group forRecognizer:otherRecognizer];
             }
+            [_allSimulataneouslyGroups removeObject:originalGroup];
+            [group unionSet:originalGroup];
+            
+        } else {
+            [self _saveGroup:group forRecognizer:recognizer];
+            [group addObject:recognizer];
+        }
+        
+        for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
+            [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:group];
         }
     }
 }
 
-- (BOOL)_recordRecognizer:(UIGestureRecognizer *)recognizer withGroup:(NSMutableSet *)group
+- (void)_saveGroup:(NSSet *)group forRecognizer:(UIGestureRecognizer *)recognizer
 {
     NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
-    
-    if ([_recognizerToGroupDictionary objectForKey:recognizerKey]) {
-        return NO;
-    }
     [_recognizerToGroupDictionary setObject:group forKey:recognizerKey];
-    return YES;
 }
 
 @end
