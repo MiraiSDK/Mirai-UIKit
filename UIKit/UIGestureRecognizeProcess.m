@@ -140,18 +140,9 @@
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches
 {
     [self _clearEffectRecognizerWhichBecomeDisabled];
-    
     // before send event to recognizer, send pending actions
     [self _sendActionIfNeedForEachGestureRecognizers];
-    
-//    if ([self _anyRecognizerDeclareRecognizedGesture]) {
-//        [self _sendToCanSimultaneouslyRecognizersWithTouches:touches evetn:event];
-//    } else {
-//        [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event];
-//    }
-    
     [self _sendToRecognizersWithTouches:touches event:event];
-    
     [self _checkAndClearExcluedRecognizers];
     [self _clearAndHandleAllMadeConclusionGestureRecognizers];
 }
@@ -195,44 +186,6 @@
             break;
         }
     }
-}
-
-- (void)_sendToCanSimultaneouslyRecognizersWithTouches:(NSSet *)touches evetn:(UIEvent *)event
-{
-//    BOOL allFail = YES;
-//    for (UIGestureRecognizer *recognizer in _canSimultaneouslyRecognizers) {
-//        [self _sendTouches:touches event:event toRecognizer:recognizer];
-//        allFail = allFail && [recognizer _isFailed];
-//    }
-//    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
-//                                           exceptRecognizers:_canSimultaneouslyRecognizers];
-}
-
-- (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
-{
-    static NSSet *emptySet;
-    if (!emptySet) {
-        emptySet = [[NSSet alloc] init];
-    }
-    [self _sendToAllRecognizersUntilAnyRecognizedWithTouches:touches event:event
-                                           exceptRecognizers:emptySet];
-}
-
-- (void)_sendToAllRecognizersUntilAnyRecognizedWithTouches:(NSSet *)touches event:(UIEvent *)event
-                                         exceptRecognizers:(NSSet *)exceptRecognizers
-{
-//    for (UIGestureRecognizer *recognizer in _effectRecognizers) {
-//        
-//        if (![exceptRecognizers containsObject:recognizer] &&
-//            ![recognizer _requireToFailRecognizer] &&
-//            [recognizer _shouldAttemptToRecognize]) {
-//            
-//            [self _sendTouches:touches event:event toRecognizer:recognizer];
-//            if ([self _anyRecognizerDeclareRecognizedGesture]) {
-//                return;
-//            }
-//        }
-//    }
 }
 
 - (void)_sendTouches:(NSSet *)touches event:(UIEvent *)event
