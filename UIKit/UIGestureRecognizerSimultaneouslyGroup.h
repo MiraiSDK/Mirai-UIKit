@@ -14,10 +14,15 @@
 @interface UIGestureRecognizerSimultaneouslyGroup : NSObject
 
 @property (nonatomic, readonly) NSUInteger count;
+@property (nonatomic, readonly) NSUInteger choosedSimulataneouslyRecognizersCount;
+@property (nonatomic, readonly) NSSet * choosedSimultaneouslyGroup;
 
 - (instancetype)initWithView:(UIView *)view;
 
+- (void)giveUpCurrentSimultaneouslyGroup;
+
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer;
+- (void)removeSimultaneouslyGroup:(NSSet *)group;
 - (void)removeWithCondition:(BOOL (^)(UIGestureRecognizer *recognizer))conditionMethod;
 
 - (NSSet *)allSimulataneouslyGroups;

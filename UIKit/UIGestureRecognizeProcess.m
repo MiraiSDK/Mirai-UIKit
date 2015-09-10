@@ -13,6 +13,8 @@
 #import "UIResponder.h"
 #import "UITouch+Private.h"
 
+typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* requiredWasFialed);
+
 @implementation UIGestureRecognizeProcess
 {
     UIView *_view;
@@ -75,7 +77,8 @@
 
 - (BOOL)hasMakeConclusion
 {
-    return _anyRecognizersMakeConclusion || _effectRecognizersNode.count == 0;
+    return _anyRecognizersMakeConclusion ||
+           _effectRecognizersNode.choosedSimulataneouslyRecognizersCount == 0;
 }
 
 - (NSSet *)trackingTouches
@@ -166,14 +169,10 @@
 
 - (void)_sendToRecognizersWithTouches:(NSSet *)touches event:(UIEvent *)event
 {
-    for (NSSet *group in [_effectRecognizersNode allSimulataneouslyGroups]) {
-        
-        if ([_banSimultaneouslyGroups containsObject:group]) {
-            continue;
-        }
+    while (_effectRecognizersNode.choosedSimultaneouslyGroup) {
         
         BOOL allFail = YES;
-        for (UIGestureRecognizer *recognizer in group) {
+        for (UIGestureRecognizer *recognizer in _effectRecognizersNode.choosedSimultaneouslyGroup) {
             [self _sendTouches:touches event:event toRecognizer:recognizer];
             if (![recognizer _isFailed]) {
                 allFail = NO;
@@ -181,7 +180,7 @@
         }
         
         if (allFail) {
-            [_banSimultaneouslyGroups addObject:group];
+            [_effectRecognizersNode giveUpCurrentSimultaneouslyGroup];
         } else {
             break;
         }
@@ -221,49 +220,25 @@
 
 - (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
-    // the next line is a recursion invoking.
-    // but UIGestureRecognizer requireGestureRecognizerToFail relationship may have Ring in them.
-    // Ring will make a death-recursion invoking.
-    // So, I make a exceptSet to exclude duplicated UIGestureRecognizer objects.
-    NSMutableSet *exceptSet = [NSMutableSet set];
-    
-    [self _handleChangedStateGestureRecognizer:recognizer exceptSet:exceptSet];
-}
-
-- (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
-                                   exceptSet:(NSMutableSet *)exceptSet
-{
-    if ([exceptSet containsObject:recognizer]) {
-        return;
-    }
-    [exceptSet addObject:recognizer];
-    
-    BOOL isFailedBeforeHandleResult = [recognizer _isFailed];
-    [self _handleResultThroughStateOfGestureRecognozer:recognizer];
-    
-    if (isFailedBeforeHandleResult) {
-        for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-            [self _handleChangedStateGestureRecognizer:afterFailRecognizer exceptSet:exceptSet];
-        }
-    }
-}
-
-- (void)_handleResultThroughStateOfGestureRecognozer:(UIGestureRecognizer *)recognizer
-{
-    if (![recognizer _isFailed] &&
-        [recognizer _shouldSendActions]) {
-        
-        [recognizer _sendActions];
-    }
-    
-    if ([recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView]) {
-        _cancelsTouchesInView = YES;
-    }
-    
-    if ([recognizer _hasMadeConclusion]) {
-        [recognizer reset];
-        _anyRecognizersMakeConclusion = YES;
-    }
+    [self _callRecognizersItsSelfAndRequireToFail:recognizer callbackAndCheckNeedHandleRequireThisToFailRecognizers:
+     ^BOOL(UIGestureRecognizer *recognizer, BOOL *requiredWasFailed)
+     {
+         if (![recognizer _isFailed] &&
+             [recognizer _shouldSendActions]) {
+             
+             [recognizer _sendActions];
+         }
+         
+         if ([recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView]) {
+             _cancelsTouchesInView = YES;
+         }
+         
+         if ([recognizer _hasMadeConclusion]) {
+             [recognizer reset];
+             _anyRecognizersMakeConclusion = YES;
+         }
+         return requiredWasFailed;
+    }];
 }
 
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -445,7 +420,7 @@
         return NO;
     }];
     
-    if (_effectRecognizersNode.count == 0) {
+    if (_effectRecognizersNode.choosedSimulataneouslyRecognizersCount == 0) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
     }
 }
@@ -477,6 +452,43 @@
 {
     if (self.hasMakeConclusion) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
+    }
+}
+
+- (void)_callRecognizersItsSelfAndRequireToFail:(UIGestureRecognizer *)recognizer
+callbackAndCheckNeedHandleRequireThisToFailRecognizers:(CallbackAndCheckerMethod)checker
+{
+    // the next line is a recursion invoking.
+    // but UIGestureRecognizer requireGestureRecognizerToFail relationship may have Ring in them.
+    // Ring will make a death-recursion invoking.
+    // So, I make a exceptSet to exclude duplicated UIGestureRecognizer objects.
+    NSMutableSet *exceptSet = [NSMutableSet set];
+    
+    [self _callRecognizersItsSelfAndRequireToFail:recognizer requiredWasFailed:YES
+                                        exceptSet:exceptSet
+callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
+}
+
+- (void)_callRecognizersItsSelfAndRequireToFail:(UIGestureRecognizer *)recognizer
+                              requiredWasFailed:(BOOL)requiredWasFailed
+                                      exceptSet:(NSMutableSet *)exceptSet
+callbackAndCheckNeedHandleRequireThisToFailRecognizers:(CallbackAndCheckerMethod)checker
+{
+    if ([exceptSet containsObject:recognizer]) {
+        return;
+    }
+    [exceptSet addObject:recognizer];
+    
+    BOOL recognizerWasFailed = [recognizer _isFailed];
+    BOOL callWhoRequireThisToFail = checker(recognizer, requiredWasFailed);
+    
+    if (callWhoRequireThisToFail) {
+        for (UIGestureRecognizer *calledRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
+            [self _callRecognizersItsSelfAndRequireToFail:calledRecognizer
+                                        requiredWasFailed:recognizerWasFailed
+                                                exceptSet:exceptSet
+   callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
+        }
     }
 }
 

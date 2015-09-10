@@ -13,6 +13,7 @@
 
 @implementation UIGestureRecognizerSimultaneouslyGroup
 {
+    NSSet *_currentChoosedGroup;
     NSMutableSet *_allSimulataneouslyGroups;
     NSMutableDictionary *_recognizerToGroupDictionary;
     NSArray *_allGestureRecognizersCache;
@@ -24,6 +25,7 @@
         _allSimulataneouslyGroups = [NSMutableSet set];
         _recognizerToGroupDictionary = [NSMutableDictionary dictionary];
         [self _collectGestureRecognizersWithView:view];
+        [self _chooseNextSimulatneouslyGroup];
     }
     return self;
 }
@@ -33,6 +35,36 @@
 - (NSUInteger)count
 {
     return _recognizerToGroupDictionary.count;
+}
+
+- (NSUInteger)choosedSimulataneouslyRecognizersCount
+{
+    if (!_currentChoosedGroup) {
+        return 0;
+    }
+    return _currentChoosedGroup.count;
+}
+
+- (NSSet *)choosedSimultaneouslyGroup
+{
+    return _currentChoosedGroup;
+}
+
+- (void)giveUpCurrentSimultaneouslyGroup
+{
+    if (_currentChoosedGroup) {
+        [self removeSimultaneouslyGroup:_currentChoosedGroup];
+        [self _chooseNextSimulatneouslyGroup];
+    }
+}
+
+- (void)_chooseNextSimulatneouslyGroup
+{
+    if (_allSimulataneouslyGroups.count > 0) {
+        _currentChoosedGroup = [_allSimulataneouslyGroups anyObject];
+    } else {
+        _currentChoosedGroup = nil;
+    }
 }
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer
@@ -49,6 +81,19 @@
         }
     }
     [self _clearCache];
+}
+
+- (void)removeSimultaneouslyGroup:(NSSet *)group
+{
+    for (UIGestureRecognizer *recognizer in group) {
+        NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
+        [_recognizerToGroupDictionary removeObjectForKey:recognizerKey];
+    }
+    [_allSimulataneouslyGroups removeObject:group];
+    
+    if (_currentChoosedGroup == group) {
+        [self _chooseNextSimulatneouslyGroup];
+    }
 }
 
 - (void)removeWithCondition:(BOOL (^)(UIGestureRecognizer *))conditionMethod
