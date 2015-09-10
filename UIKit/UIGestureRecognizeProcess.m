@@ -238,9 +238,10 @@
     }
     [exceptSet addObject:recognizer];
     
+    BOOL isFailedBeforeHandleResult = [recognizer _isFailed];
     [self _handleResultThroughStateOfGestureRecognozer:recognizer];
     
-    if ([recognizer _isFailed]) {
+    if (isFailedBeforeHandleResult) {
         for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
             [self _handleChangedStateGestureRecognizer:afterFailRecognizer exceptSet:exceptSet];
         }
@@ -451,8 +452,7 @@
 
 - (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer
 {
-    if (![getureRecognizer _requireToFailRecognizer] ||
-        [[getureRecognizer _requireToFailRecognizer] _isFailed]) {
+    if (![getureRecognizer _requireToFailRecognizer]) {
         
         if (_multiTouchProcess.handingTouchEvent) {
             [_changedStateRecognizersCache addObject:getureRecognizer];
