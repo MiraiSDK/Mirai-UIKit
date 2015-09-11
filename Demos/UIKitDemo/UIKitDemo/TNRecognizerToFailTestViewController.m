@@ -51,6 +51,11 @@
 - (void)_onOriginalGestureRecognize:(_TNShowMessageGestureRecognizer *)gestureRecognizer
 {
     NSLog(@"TEST-METHOD Original state(%zi)", gestureRecognizer.state);
+    
+    NSLog(@"show all gesture recongizers' state.");
+    for (_TNShowMessageGestureRecognizer *recongizer in gestureRecognizer.view.gestureRecognizers) {
+        NSLog(@"-> %@'s state is %zi", recongizer.mark, recongizer.state);
+    }
 }
 
 - (void)_onFailToGestureRecognizer:(_TNShowMessageGestureRecognizer *)gestureRecognizer
@@ -77,25 +82,25 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
-    NSLog(@"recive %@ - %s", self.mark, __FUNCTION__);
+    NSLog(@"recive %@(%zi) - %s", self.mark, self.state, __FUNCTION__);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesMoved:touches withEvent:event];
-    NSLog(@"recive %@ - %s", self.mark, __FUNCTION__);
+    NSLog(@"recive %@(%zi) - %s", self.mark, self.state, __FUNCTION__);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
-    NSLog(@"recive %@ - %s", self.mark, __FUNCTION__);
+    NSLog(@"recive %@(%zi) - %s", self.mark, self.state, __FUNCTION__);
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesCancelled:touches withEvent:event];
-    NSLog(@"recive %@ - %s", self.mark, __FUNCTION__);
+    NSLog(@"recive %@(%zi) - %s", self.mark, self.state, __FUNCTION__);
 }
 
 @end
