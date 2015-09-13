@@ -8,11 +8,12 @@
 
 #import "UIScreen.h"
 #import "UIScreenPrivate.h"
-#import "UIApplication.h"
+#import "UIApplication+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIWindow+UIPrivate.h"
 #import "UIGeometry.h"
 #import "UIColor.h"
+#import "UIScreenOrientationListener.h"
 
 #import "android_native_app_glue.h"
 #import <android/native_activity.h>
@@ -51,6 +52,7 @@ static UIScreen *_mainScreen = nil;
         // on android, surface size changed on orientation change
         //  __pixelLayer always pixel-equal screen pixel size
         //  __windowLayer is been used to simulate iOS screen
+        _landscaped = [UIScreenOrientationListener isLandscaped];
         __pixelLayer = [CALayer layer];
         __pixelLayer.masksToBounds = YES;
 //        __pixelLayer.backgroundColor =[UIColor redColor].CGColor;
@@ -168,7 +170,6 @@ static UIScreen *_mainScreen = nil;
         }
     }
 }
-
 
 #pragma mark - scale support
 

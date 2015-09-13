@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.OrientationEventListener;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.view.Surface;
 
 import android.util.Log;
 
@@ -26,9 +27,11 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         _instance = null;
     }
 
-    private native boolean nativeAllowOrientationChangeTo(int orrientationInfo);
+    private native void nativeInitOrientation(int orientationInfo);
+    
+    private native boolean nativeAllowOrientationChangeTo(int orientationInfo);
 
-    private native void nativeChangeOrientationTo(int orrientationInfo);
+    private native void nativeChangeOrientationTo(int orientationInfo);
 
     public static ScreenOrientationHandler instance() {
         if (_instance == null) {
@@ -37,11 +40,11 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         return _instance;
     }
 
-    public static void setScreenOrientationInfo(final int orrientationInfo) {
+    public static void setScreenOrientationInfo(final int orientationInfo) {
         final ScreenOrientationHandler instance = instance();
         instance._mainActivity.runOnUiThread(new Runnable() {
             public void run() {
-                instance.changeOrientationInfoTo(orrientationInfo);
+                instance.changeOrientationInfoTo(orientationInfo);
             }
         });
     }
@@ -50,12 +53,16 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         super(mainActivity, rate);
         _mainActivity = mainActivity;
         _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        
+        int rotation = _mainActivity.getWindowManager().getDefaultDisplay().getRotation();
+        int orientationInfo = normalizeScreenRotation(rotation);
+        nativeInitOrientation(orientationInfo);
     }
 
 
     public void onResume() {
         enable();
-        onOrientationChanged(_mainActivity.getResources().getConfiguration().orientation);
+        synchronizeToCurrentScreenRotation();
     }
 
     public void onPause() {
@@ -70,7 +77,15 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         int orientationInfo = normalizeOrientationInfo(orientation);
         tryToChangeOrientationTo(orientationInfo);
     }
-
+    
+    private void synchronizeToCurrentScreenRotation() {
+        
+        _lastGetOrientationInfo = -1;
+        int rotation = _mainActivity.getWindowManager().getDefaultDisplay().getRotation();
+        int orientationInfo = normalizeScreenRotation(rotation);
+        tryToChangeOrientationTo(orientationInfo);
+    }
+    
     private int normalizeOrientationInfo(int orientation) {
 
         if (orientation >= 315 || orientation < 45) {
@@ -87,25 +102,42 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         }
     }
 
-    private void tryToChangeOrientationTo(int orrientationInfo) {
-
-        if (_lastGetOrientationInfo != orrientationInfo) {
+    private int normalizeScreenRotation(int rotation) {
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                
+            case Surface.ROTATION_90:
+                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                
+            case Surface.ROTATION_180:
+                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                
+            case Surface.ROTATION_270:
+                return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        }
+        return -1;
+    }
+    
+    private void tryToChangeOrientationTo(int orientationInfo) {
+        
+        if (_lastGetOrientationInfo != orientationInfo) {
             
-            if (nativeAllowOrientationChangeTo(orrientationInfo)) {
-                changeOrientationInfoTo(orrientationInfo);
+            if (nativeAllowOrientationChangeTo(orientationInfo)) {
+                changeOrientationInfoTo(orientationInfo);
             }
-            _lastGetOrientationInfo = orrientationInfo;
+            _lastGetOrientationInfo = orientationInfo;
         }
     }
     
-    private void changeOrientationInfoTo(int orrientationInfo) {
+    private void changeOrientationInfoTo(int orientationInfo) {
         
-        if (_currentOrientationInfo != orrientationInfo) {
-            _currentOrientationInfo = orrientationInfo;
+        if (_currentOrientationInfo != orientationInfo) {
+            _currentOrientationInfo = orientationInfo;
             
-            _mainActivity.setRequestedOrientation(orrientationInfo);
+            _mainActivity.setRequestedOrientation(orientationInfo);
             _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-            nativeChangeOrientationTo(orrientationInfo);
+            nativeChangeOrientationTo(orientationInfo);
         }
     }
 }
