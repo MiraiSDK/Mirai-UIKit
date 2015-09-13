@@ -10,6 +10,7 @@
 #import "TNMultiGestureRecognizerTestViewController.h"
 
 @interface _TNNeverMakeConclusionGestureRecognizer : UIGestureRecognizer @end
+@interface _TNShowMessagePanGestureRecognizer : UIPanGestureRecognizer @end
 
 @implementation TNMultiGestureRecognizerTestViewController
 
@@ -22,8 +23,8 @@
 {
     [super viewDidLoad];
     
-    UIGestureRecognizer *gestureRecognizer0 = [[UIPanGestureRecognizer alloc] init];
-    UIGestureRecognizer *gestureRecognizer1 = [[UIPanGestureRecognizer alloc] init];
+    UIGestureRecognizer *gestureRecognizer0 = [[_TNShowMessagePanGestureRecognizer alloc] init];
+    UIGestureRecognizer *gestureRecognizer1 = [[_TNShowMessagePanGestureRecognizer alloc] init];
     UIGestureRecognizer *neverMakeConclusionRecognizer =
                 [[_TNNeverMakeConclusionGestureRecognizer alloc] init];
     
@@ -48,6 +49,34 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     NSLog(@"attched view recive touchesBegan method.");
+}
+
+@end
+
+@implementation _TNShowMessagePanGestureRecognizer
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    NSLog(@"<< %s", __FUNCTION__);
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+    NSLog(@"<< %s", __FUNCTION__);
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    NSLog(@"<< %s", __FUNCTION__);
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+    NSLog(@"<< %s", __FUNCTION__);
 }
 
 @end
