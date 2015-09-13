@@ -25,6 +25,12 @@ static jint toOrientationInfo(UIInterfaceOrientationMask orientationMask);
 
 static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientationMaskPortrait;
 
++ (BOOL)isLandscaped
+{
+    return _currentOrientationMask == UIInterfaceOrientationMaskLandscapeLeft ||
+           _currentOrientationMask == UIInterfaceOrientationMaskLandscapeRight;
+}
+
 - (void)applicationAllowOrientationChangeTo:(NSNumber *)orientationNumber
 {
     UIInterfaceOrientationMask orientation = [orientationNumber unsignedIntegerValue];
@@ -45,8 +51,7 @@ static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientati
     UIInterfaceOrientationMask orientation = [orientationNumber unsignedIntegerValue];
     _currentOrientationMask = orientation;
     
-    BOOL isLandsacpe = (orientation == UIInterfaceOrientationMaskLandscapeLeft ||
-                        orientation == UIInterfaceOrientationMaskLandscapeRight);
+    BOOL isLandsacpe = [UIScreenOrientationListener isLandscaped];
     
     [[UIScreen mainScreen] _setLandscaped:isLandsacpe];
 }
@@ -138,6 +143,12 @@ static jint toOrientationInfo(UIInterfaceOrientationMask orientationMask) {
         default:
             return -1;
     }
+}
+
+void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeInitOrientation(
+                                                        JNIEnv *env, jobject obj, jint orrientationInfo)
+{
+    _currentOrientationMask = toOrientationMask(orrientationInfo);
 }
 
 jboolean Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeAllowOrientationChangeTo(

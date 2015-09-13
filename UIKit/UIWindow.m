@@ -143,13 +143,23 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 {
     if (_landscaped != landscaped) {
         CGRect newFrame = self.frame;
-        newFrame.size = CGSizeMake(newFrame.size.height, newFrame.size.width);
+        newFrame.size = [self _changeSize:newFrame.size toMatchLandscaped:landscaped];
         self.frame = newFrame;
         
         UIViewController *vc = [self _topestViewController];
         vc.view.frame = self.window.bounds;
         _landscaped = landscaped;
     }
+}
+
+- (CGSize)_changeSize:(CGSize)originalSize toMatchLandscaped:(BOOL)landscaped
+{
+    if ((landscaped && originalSize.width < originalSize.height) ||
+        (!landscaped && originalSize.width > originalSize.height)) {
+        
+        return CGSizeMake(originalSize.height, originalSize.width);
+    }
+    return originalSize;
 }
 
 - (UIInterfaceOrientation)_currentOrientation
