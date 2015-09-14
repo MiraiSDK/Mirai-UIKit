@@ -41,7 +41,6 @@
     NSUInteger _numberOfTapsRequired;
     NSInteger _numberOfTouchesRequired;
     CGPoint _beginLocation;
-    BOOL _waiting;
 }
 
 @property (nonatomic) CFTimeInterval minimumPressDuration;

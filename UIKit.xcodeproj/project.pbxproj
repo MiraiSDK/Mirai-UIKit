@@ -333,6 +333,8 @@
 		D2E097FF1B189E32002DB2A4 /* UIPositionOnRect.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */; };
 		D2E098001B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
 		D2E098011B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
+		D2E1DDC51B988DCD0035D139 /* TNMultiTapHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */; };
+		D2E1DDC61B988DCD0035D139 /* TNMultiTapHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */; };
 		D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */; };
 		D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
 		D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
@@ -684,6 +686,8 @@
 		D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMenuBubbleView.m; sourceTree = "<group>"; };
 		D2E097FD1B189E32002DB2A4 /* UIPositionOnRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPositionOnRect.h; sourceTree = "<group>"; };
 		D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPositionOnRect.m; sourceTree = "<group>"; };
+		D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiTapHelper.h; sourceTree = "<group>"; };
+		D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTapHelper.m; sourceTree = "<group>"; };
 		D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainerWindow.h; sourceTree = "<group>"; };
 		D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainerWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1151,6 +1155,8 @@
 		43B819F918E2B3C20020624F /* GestureRecognizer */ = {
 			isa = PBXGroup;
 			children = (
+				D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */,
+				D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */,
 				43DD64C819910984000884BA /* TNGestureRecognizerMath.h */,
 				43DD64C919910984000884BA /* TNGestureRecognizerMath.m */,
 				43B819D918E2AA870020624F /* UIGestureRecognizer.h */,
@@ -1336,6 +1342,7 @@
 				434CFD5E1A0CB9A800B6AC9E /* UIStateRestoration.h in Headers */,
 				D286A1641B8AAE5200EBD344 /* UIGestureRecognizeProcess.h in Headers */,
 				431412D618C0AA77001AF732 /* UIView+UIPrivate.h in Headers */,
+				D2E1DDC51B988DCD0035D139 /* TNMultiTapHelper.h in Headers */,
 				43846340188C540F006DA1AA /* NSParagraphStyle.h in Headers */,
 				43B819F318E2AA870020624F /* UISwipeGestureRecognizer.h in Headers */,
 				43B819EA18E2AA870020624F /* UIGestureRecognizerSubclass.h in Headers */,
@@ -1599,6 +1606,7 @@
 				D28E587E1B1851F800BAB5D1 /* UITopFloatView.m in Sources */,
 				43846345188C58F9006DA1AA /* UIFont.m in Sources */,
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,
+				D2E1DDC61B988DCD0035D139 /* TNMultiTapHelper.m in Sources */,
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
 				43846303188B1ED9006DA1AA /* UIColor.m in Sources */,
 				43EBAA9118AB85FB005DDD8D /* UIBarButtonItem.m in Sources */,
