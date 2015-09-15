@@ -173,38 +173,74 @@
 
 - (void)_collectGestureRecognizersWithView:(UIView *)view
 {
-    for (UIGestureRecognizer *recognizer in view.gestureRecognizers) {
-        NSMutableSet *group = [NSMutableSet set];
-        [self _collectAllRecognizersWhoRequireFailTo:recognizer into:group];
-        if (group.count > 0) {
-            [_allSimulataneouslyGroups addObject:group];
+    NSArray *recongizers = view.gestureRecognizers;
+    
+    for (UIGestureRecognizer *r0 in recongizers) {
+        for (UIGestureRecognizer *r1 in recongizers) {
+            if (r0 != r1) {
+                [self _findRecongizer0:r0 recongizer1:r1];
+            }
+        }
+    }
+    
+    for (UIGestureRecognizer *recongizer in recongizers) {
+        if (![self simultaneouslyGroupIncludes:recongizer]) {
+            NSMutableSet *singleGroup = [[NSMutableSet alloc] initWithObjects:recongizer, nil];
+            [self _saveGroup:singleGroup forRecognizer:recongizer];
+            [_allSimulataneouslyGroups addObject:singleGroup];
         }
     }
 }
 
-- (void)_collectAllRecognizersWhoRequireFailTo:(UIGestureRecognizer *)recognizer
-                                          into:(NSMutableSet *)group
+- (void)_findRecongizer0:(UIGestureRecognizer *)r0 recongizer1:(UIGestureRecognizer *)r1
 {
-    if (![group containsObject:recognizer]) {
+    if ([self _isRecongizer:r0 shouldRecongizeSimultaneouslyWithRecongizer:r1]) {
         
-        NSSet *originalGroup = [self simultaneouslyGroupIncludes:recognizer];
+        NSMutableSet *group0 = (NSMutableSet *)[self simultaneouslyGroupIncludes:r0];
+        NSMutableSet *group1 = (NSMutableSet *)[self simultaneouslyGroupIncludes:r1];
         
-        if (originalGroup) {
-            for (UIGestureRecognizer *otherRecognizer in originalGroup) {
-                [self _saveGroup:group forRecognizer:otherRecognizer];
-            }
-            [_allSimulataneouslyGroups removeObject:originalGroup];
-            [group unionSet:originalGroup];
+        [self _standardizeGroup0:&group0 group1:&group1];
+        
+        if (group0 == nil && group1 == nil) {
+            NSMutableSet *group = [[NSMutableSet alloc] initWithObjects:r0, r1, nil];
+            [self _saveGroup:group forRecognizer:r0];
+            [self _saveGroup:group forRecognizer:r1];
+            [_allSimulataneouslyGroups addObject:group];
             
-        } else {
-            [self _saveGroup:group forRecognizer:recognizer];
-            [group addObject:recognizer];
+        } else if (group0 != nil && group1 == nil) {
+            [group0 addObject:r1];
+            [self _saveGroup:group0 forRecognizer:r1];
+            
+        } else if (group0 != nil && group1 != nil && group0 != group1) {
+            
+            for (UIGestureRecognizer *otherRecongizer in group1) {
+                [group0 addObject:otherRecongizer];
+                [self _saveGroup:group0 forRecognizer:otherRecongizer];
+            }
+            [_allSimulataneouslyGroups removeObject:group1];
         }
-        
-//        for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-//            [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:group];
-//        }
     }
+}
+
+- (void)_standardizeGroup0:(NSMutableSet **)group0 group1:(NSMutableSet **)group1
+{
+    NSUInteger count0 = (*group0).count;
+    NSUInteger count1 = (*group1).count;
+    
+    if (count0 < count1) {
+        NSMutableSet *temp = *group0;
+        *group0 = *group1;
+        *group1 = temp;
+    }
+}
+
+- (BOOL)_isRecongizer:(UIGestureRecognizer *)r0 shouldRecongizeSimultaneouslyWithRecongizer:(UIGestureRecognizer *)r1
+{
+    if (!r0.delegate ||
+        [r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecongizeSimultaneouslyWithRecongizer:)]) {
+        return NO;
+    }
+    return [r0.delegate gestureRecognizer:r0 shouldRecognizeSimultaneouslyWithGestureRecognizer:r1];
 }
 
 - (void)_saveGroup:(NSSet *)group forRecognizer:(UIGestureRecognizer *)recognizer
