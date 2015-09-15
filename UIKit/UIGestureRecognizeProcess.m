@@ -7,7 +7,7 @@
 //
 
 #import "UIGestureRecognizeProcess.h"
-#import "UIGestureRecognizerSimultaneouslyGroup.h"
+#import "UIGestureRecognizerSimultaneouslyRelationship.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
@@ -20,7 +20,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     UIView *_view;
     UIMultiTouchProcess *_multiTouchProcess;
     
-    UIGestureRecognizerSimultaneouslyGroup *_effectRecognizersNode;
+    UIGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
     NSMutableSet *_banSimultaneouslyGroups;
     
     NSMutableSet *_trackingTouches;
@@ -49,7 +49,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         _anyRecognizersMakeConclusion = YES;
         _banSimultaneouslyGroups = [[NSMutableSet alloc] init];
         _trackingTouches = [[NSMutableSet alloc] init];
-        _effectRecognizersNode = [[UIGestureRecognizerSimultaneouslyGroup alloc] initWithView:view];
+        _effectRecognizersNode = [[UIGestureRecognizerSimultaneouslyRelationship alloc] initWithView:view];
         _changedStateRecognizersCache = [[NSMutableSet alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
         

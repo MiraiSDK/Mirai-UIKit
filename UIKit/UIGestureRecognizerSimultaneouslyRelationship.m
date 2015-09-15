@@ -6,12 +6,12 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIGestureRecognizerSimultaneouslyGroup.h"
+#import "UIGestureRecognizerSimultaneouslyRelationship.h"
 
 #import "UIView.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 
-@implementation UIGestureRecognizerSimultaneouslyGroup
+@implementation UIGestureRecognizerSimultaneouslyRelationship
 {
     NSSet *_currentChoosedGroup;
     NSMutableSet *_allSimulataneouslyGroups;

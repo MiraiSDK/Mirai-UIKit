@@ -11,7 +11,7 @@
 @class UIView;
 @class UIGestureRecognizer;
 
-@interface UIGestureRecognizerSimultaneouslyGroup : NSObject
+@interface UIGestureRecognizerSimultaneouslyRelationship : NSObject
 
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) NSUInteger choosedSimulataneouslyRecognizersCount;
