@@ -29,6 +29,7 @@
 
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UIGestureRecognizeProcess.h"
 #import "UITouch+Private.h"
 #import "UIAction.h"
 #import "UIApplication.h"
@@ -42,9 +43,7 @@
     BOOL _shouldReset;
     
     UIGestureRecognizeProcess *_bindingRecognizeProcess;
-    
     UIGestureRecognizer *_requireToFailRecognizer;
-    NSMutableSet *_recognizersWhoRequireThisToFail;
 }
 @synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
 
@@ -61,7 +60,6 @@
         
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
         _excludedTouches = [[NSMutableSet alloc] initWithCapacity:1];
-        _recognizersWhoRequireThisToFail = [NSMutableSet set];
     }
     return self;
 }
@@ -72,12 +70,6 @@
         [self addTarget:target action:action];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [self _releaseCurrentRequireToFailRecognizer];
-    [self _releaseCurrentRecognizersWhoRetuireThisToFail];
 }
 
 - (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess
@@ -94,11 +86,6 @@
 {
     [self reset];	// not sure about this, but it kinda makes sense
     _view = v;
-    
-    if (!v) {
-        [self _releaseCurrentRequireToFailRecognizer];
-        [self _releaseCurrentRecognizersWhoRetuireThisToFail];
-    }
 }
 
 - (void)setDelegate:(id<UIGestureRecognizerDelegate>)aDelegate
@@ -144,42 +131,12 @@
 
 - (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    if (otherGestureRecognizer == _requireToFailRecognizer ||
-        otherGestureRecognizer == self) {
-        return;
-    }
-    [self _releaseCurrentRequireToFailRecognizer];
-    
-    if (otherGestureRecognizer) {
-        _requireToFailRecognizer = otherGestureRecognizer;
-        [otherGestureRecognizer->_recognizersWhoRequireThisToFail addObject:self];
-    }
+    _requireToFailRecognizer = otherGestureRecognizer;
 }
 
 - (UIGestureRecognizer *)_requireToFailRecognizer
 {
     return _requireToFailRecognizer;
-}
-
-- (NSSet *)_recognizersWhoRequireThisToFail
-{
-    return _recognizersWhoRequireThisToFail;
-}
-
-- (void)_releaseCurrentRequireToFailRecognizer
-{
-    if (_requireToFailRecognizer) {
-        [_requireToFailRecognizer->_recognizersWhoRequireThisToFail removeObject:self];
-        _requireToFailRecognizer = nil;
-    }
-}
-
-- (void)_releaseCurrentRecognizersWhoRetuireThisToFail
-{
-    for (UIGestureRecognizer *otherRecognizer in _recognizersWhoRequireThisToFail) {
-        otherRecognizer->_requireToFailRecognizer = nil;
-    }
-    [_recognizersWhoRequireThisToFail removeAllObjects];
 }
 
 - (NSUInteger)numberOfTouches

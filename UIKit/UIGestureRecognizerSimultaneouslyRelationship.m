@@ -201,9 +201,9 @@
             [group addObject:recognizer];
         }
         
-        for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-            [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:group];
-        }
+//        for (UIGestureRecognizer *afterFailRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
+//            [self _collectAllRecognizersWhoRequireFailTo:afterFailRecognizer into:group];
+//        }
     }
 }
 

@@ -474,22 +474,22 @@ callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
                                       exceptSet:(NSMutableSet *)exceptSet
 callbackAndCheckNeedHandleRequireThisToFailRecognizers:(CallbackAndCheckerMethod)checker
 {
-    if ([exceptSet containsObject:recognizer]) {
-        return;
-    }
-    [exceptSet addObject:recognizer];
-    
-    BOOL recognizerWasFailed = [recognizer _isFailed];
-    BOOL callWhoRequireThisToFail = checker(recognizer, requiredWasFailed);
-    
-    if (callWhoRequireThisToFail) {
-        for (UIGestureRecognizer *calledRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-            [self _callRecognizersItsSelfAndRequireToFail:calledRecognizer
-                                        requiredWasFailed:recognizerWasFailed
-                                                exceptSet:exceptSet
-   callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
-        }
-    }
+//    if ([exceptSet containsObject:recognizer]) {
+//        return;
+//    }
+//    [exceptSet addObject:recognizer];
+//    
+//    BOOL recognizerWasFailed = [recognizer _isFailed];
+//    BOOL callWhoRequireThisToFail = checker(recognizer, requiredWasFailed);
+//    
+//    if (callWhoRequireThisToFail) {
+//        for (UIGestureRecognizer *calledRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
+//            [self _callRecognizersItsSelfAndRequireToFail:calledRecognizer
+//                                        requiredWasFailed:recognizerWasFailed
+//                                                exceptSet:exceptSet
+//   callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
+//        }
+//    }
 }
 
 @end
