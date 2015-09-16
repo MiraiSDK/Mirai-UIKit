@@ -29,7 +29,6 @@
         _allSimulataneouslyGroups = [NSMutableSet set];
         _recognizerToGroupDictionary = [NSMutableDictionary dictionary];
         [self _collectGestureRecognizersWithView:view];
-        [self _chooseNextSimulatneouslyGroup];
     }
     return self;
 }
@@ -48,34 +47,28 @@
     return _recognizerToGroupDictionary.count;
 }
 
-- (NSUInteger)choosedSimulataneouslyRecognizersCount
+- (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer
 {
-    if (!_currentChoosedGroup) {
-        return 0;
-    }
-    return _currentChoosedGroup.count;
+    _currentChoosedGroup = [self simultaneouslyGroupIncludes:recongizer];
 }
 
-- (NSSet *)choosedSimultaneouslyGroup
+- (BOOL)hasChoosedAnySimultaneouslyGroup
 {
-    return _currentChoosedGroup;
+    return _currentChoosedGroup != nil;
 }
 
-- (void)giveUpCurrentSimultaneouslyGroup
+- (BOOL)canRecongizerBeHandledSimultaneously:(UIGestureRecognizer *)recongizer
 {
     if (_currentChoosedGroup) {
-        [self removeSimultaneouslyGroup:_currentChoosedGroup];
-        [self _chooseNextSimulatneouslyGroup];
+        return [_currentChoosedGroup containsObject:recongizer];
+    } else {
+        return YES;
     }
 }
 
-- (void)_chooseNextSimulatneouslyGroup
+- (void)_clearChoosedSimultaneouslyGroup
 {
-    if (_allSimulataneouslyGroups.count > 0) {
-        _currentChoosedGroup = [_allSimulataneouslyGroups anyObject];
-    } else {
-        _currentChoosedGroup = nil;
-    }
+    _currentChoosedGroup = nil;
 }
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer
@@ -105,7 +98,7 @@
     [_allSimulataneouslyGroups removeObject:group];
     
     if (_currentChoosedGroup == group) {
-        [self _chooseNextSimulatneouslyGroup];
+        [self _clearChoosedSimultaneouslyGroup];
     }
 }
 

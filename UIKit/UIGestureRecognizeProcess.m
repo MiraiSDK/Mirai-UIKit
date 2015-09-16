@@ -79,8 +79,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (BOOL)hasMakeConclusion
 {
-    return _anyRecognizersMakeConclusion ||
-           _effectRecognizersNode.choosedSimulataneouslyRecognizersCount == 0;
+    return _anyRecognizersMakeConclusion || _effectRecognizersNode.count == 0;
 }
 
 - (NSSet *)trackingTouches
@@ -142,48 +141,22 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches
 {
     [self _clearEffectRecognizerWhichBecomeDisabled];
-    // before send event to recognizer, send pending actions
-    [self _sendActionIfNeedForEachGestureRecognizers];
     [self _sendToRecognizersWithTouches:touches event:event];
-    [self _checkAndClearExcluedRecognizers];
     [self _clearAndHandleAllMadeConclusionGestureRecognizers];
 }
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
 {
     [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
-        
         return !recognizer.isEnabled;
-    }];
-}
-
-- (void)_sendActionIfNeedForEachGestureRecognizers
-{
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
-        if (![recognizer _isFailed] && [recognizer _shouldSendActions]) {
-            [recognizer _sendActions];
-        }
     }];
 }
 
 - (void)_sendToRecognizersWithTouches:(NSSet *)touches event:(UIEvent *)event
 {
-    while (_effectRecognizersNode.choosedSimultaneouslyGroup) {
-        
-        BOOL allFail = YES;
-        for (UIGestureRecognizer *recognizer in _effectRecognizersNode.choosedSimultaneouslyGroup) {
-            [self _sendTouches:touches event:event toRecognizer:recognizer];
-            if (![recognizer _isFailed]) {
-                allFail = NO;
-            }
-        }
-        
-        if (allFail) {
-            [_effectRecognizersNode giveUpCurrentSimultaneouslyGroup];
-        } else {
-            break;
-        }
-    }
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+        [self _sendTouches:touches event:event toRecognizer:recognizer];
+    }];
 }
 
 - (void)_sendTouches:(NSSet *)touches event:(UIEvent *)event
@@ -202,14 +175,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     }
 }
 
-- (void)_checkAndClearExcluedRecognizers
-{
-    [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
-        
-        return [self _isRecognizerExcluedByOther:recognizer];
-    }];
-}
-
 - (BOOL)_isRecognizerExcluedByOther:(UIGestureRecognizer *)recognizer
 {
     return nil != [_effectRecognizersNode findGestureRecognizer:^BOOL(UIGestureRecognizer *other) {
@@ -219,25 +184,38 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
-    [self _callRecognizersItsSelfAndRequireToFail:recognizer callbackAndCheckNeedHandleRequireThisToFailRecognizers:
-     ^BOOL(UIGestureRecognizer *recognizer, BOOL *requiredWasFailed)
-     {
-         if (![recognizer _isFailed] &&
-             [recognizer _shouldSendActions]) {
-             
-             [recognizer _sendActions];
-         }
-         
-         if ([recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView]) {
-             _cancelsTouchesInView = YES;
-         }
-         
-         if ([recognizer _hasMadeConclusion]) {
-             [recognizer reset];
-             _anyRecognizersMakeConclusion = YES;
-         }
-         return requiredWasFailed;
-    }];
+    [self _sendActionForRecongizerAndItsFailureRequires:recognizer];
+    
+    if ([recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView]) {
+        _cancelsTouchesInView = YES;
+    }
+    
+    if ([recognizer _hasMadeConclusion]) {
+        [recognizer reset];
+        _anyRecognizersMakeConclusion = YES;
+    }
+}
+
+- (void)_sendActionForRecongizerAndItsFailureRequires:(UIGestureRecognizer *)recognizer
+{
+    BOOL (^conditionChecker)(UIGestureRecognizer *) = ^BOOL(UIGestureRecognizer *recognizer) {
+        return [recognizer _isFailed];
+    };
+    
+    void (^handler)(UIGestureRecognizer *) = ^(UIGestureRecognizer *recognizer) {
+        if (![recognizer _isFailed] &&
+            [recognizer _shouldSendActions] &&
+            [_effectRecognizersNode canRecongizerBeHandledSimultaneously:recognizer]) {
+            
+            [recognizer _sendActions];
+            if ([_effectRecognizersNode hasChoosedAnySimultaneouslyGroup]) {
+                [_effectRecognizersNode chooseSimultaneouslyGroupWhoIncludes:recognizer];
+            }
+        }
+    };
+    
+    [_failureRequirementNode recursiveSearchFromRecongizer:recognizer
+                                        recursiveCondition:conditionChecker requires:handler];
 }
 
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -413,7 +391,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     [_effectRecognizersNode removeWithCondition:condition];
     
-    if (_effectRecognizersNode.choosedSimulataneouslyRecognizersCount == 0) {
+    if (_effectRecognizersNode.count == 0) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
     }
 }
@@ -446,43 +424,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     if (self.hasMakeConclusion) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
     }
-}
-
-- (void)_callRecognizersItsSelfAndRequireToFail:(UIGestureRecognizer *)recognizer
-callbackAndCheckNeedHandleRequireThisToFailRecognizers:(CallbackAndCheckerMethod)checker
-{
-    // the next line is a recursion invoking.
-    // but UIGestureRecognizer requireGestureRecognizerToFail relationship may have Ring in them.
-    // Ring will make a death-recursion invoking.
-    // So, I make a exceptSet to exclude duplicated UIGestureRecognizer objects.
-    NSMutableSet *exceptSet = [NSMutableSet set];
-    
-    [self _callRecognizersItsSelfAndRequireToFail:recognizer requiredWasFailed:YES
-                                        exceptSet:exceptSet
-callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
-}
-
-- (void)_callRecognizersItsSelfAndRequireToFail:(UIGestureRecognizer *)recognizer
-                              requiredWasFailed:(BOOL)requiredWasFailed
-                                      exceptSet:(NSMutableSet *)exceptSet
-callbackAndCheckNeedHandleRequireThisToFailRecognizers:(CallbackAndCheckerMethod)checker
-{
-//    if ([exceptSet containsObject:recognizer]) {
-//        return;
-//    }
-//    [exceptSet addObject:recognizer];
-//    
-//    BOOL recognizerWasFailed = [recognizer _isFailed];
-//    BOOL callWhoRequireThisToFail = checker(recognizer, requiredWasFailed);
-//    
-//    if (callWhoRequireThisToFail) {
-//        for (UIGestureRecognizer *calledRecognizer in [recognizer _recognizersWhoRequireThisToFail]) {
-//            [self _callRecognizersItsSelfAndRequireToFail:calledRecognizer
-//                                        requiredWasFailed:recognizerWasFailed
-//                                                exceptSet:exceptSet
-//   callbackAndCheckNeedHandleRequireThisToFailRecognizers:checker];
-//        }
-//    }
 }
 
 @end

@@ -18,4 +18,8 @@
 - (void)eachGestureRecongizer:(UIGestureRecognizer *)gestureRecongizer
                      requires:(void (^)(UIGestureRecognizer *recongizer))eachBlock;
 
+- (void)recursiveSearchFromRecongizer:(UIGestureRecognizer *)root
+                   recursiveCondition:(BOOL (^)(UIGestureRecognizer *))conditionBlock
+                             requires:(void (^)(UIGestureRecognizer *))eachBlock;
+
 @end

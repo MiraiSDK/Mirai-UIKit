@@ -15,13 +15,13 @@
 @interface UIGestureRecognizerSimultaneouslyRelationship : NSObject
 
 @property (nonatomic, readonly) NSUInteger count;
-@property (nonatomic, readonly) NSUInteger choosedSimulataneouslyRecognizersCount;
-@property (nonatomic, readonly) NSSet * choosedSimultaneouslyGroup;
 
 - (instancetype)initWithView:(UIView *)view
      gestureRecongizeProcess:(UIGestureRecognizeProcess *)gestureReconizeProcess;
 
-- (void)giveUpCurrentSimultaneouslyGroup;
+- (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer;
+- (BOOL)hasChoosedAnySimultaneouslyGroup;
+- (BOOL)canRecongizerBeHandledSimultaneously:(UIGestureRecognizer *)recongizer;
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer;
 - (void)removeSimultaneouslyGroup:(NSSet *)group;
