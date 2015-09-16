@@ -143,11 +143,13 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     [self _clearEffectRecognizerWhichBecomeDisabled];
     [self _sendToRecognizersWithTouches:touches event:event];
     [self _clearAndHandleAllMadeConclusionGestureRecognizers];
+    [self _clearHasMadeConclusionRecongizers];
+    [self _tellMultiTouchProcessMadeConclusionIfNeed];
 }
 
 - (void)_clearEffectRecognizerWhichBecomeDisabled
 {
-    [self _removeEffectGestureRecognizersWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
+    [_effectRecognizersNode removeWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
         return !recognizer.isEnabled;
     }];
 }
@@ -157,6 +159,28 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
         [self _sendTouches:touches event:event toRecognizer:recognizer];
     }];
+}
+
+- (void)_clearAndHandleAllMadeConclusionGestureRecognizers
+{
+    for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
+        [self _handleChangedStateGestureRecognizer:recognizer];
+    }
+    [_changedStateRecognizersCache removeAllObjects];
+}
+
+- (void)_clearHasMadeConclusionRecongizers
+{
+    [_effectRecognizersNode removeWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
+        return [recognizer _hasMadeConclusion];
+    }];
+}
+
+- (void)_tellMultiTouchProcessMadeConclusionIfNeed
+{
+    if (self.hasMakeConclusion) {
+        [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
+    }
 }
 
 - (void)_sendTouches:(NSSet *)touches event:(UIEvent *)event
@@ -184,15 +208,18 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)_handleChangedStateGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
-    [self _sendActionForRecongizerAndItsFailureRequires:recognizer];
+    UIGestureRecognizer *requireToFailRecongizer = [recognizer _requireToFailRecognizer];
+    
+    if (!requireToFailRecongizer || [requireToFailRecongizer _isFailed]) {
+        [self _sendActionForRecongizerAndItsFailureRequires:recognizer];
+        if ([recognizer _hasMadeConclusion]) {
+            [self _callResetMethodForRecongizerAndItsFailureRequires:recognizer];
+            _anyRecognizersMakeConclusion = YES;
+        }
+    }
     
     if ([recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView]) {
         _cancelsTouchesInView = YES;
-    }
-    
-    if ([recognizer _hasMadeConclusion]) {
-        [recognizer reset];
-        _anyRecognizersMakeConclusion = YES;
     }
 }
 
@@ -203,11 +230,13 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     };
     
     void (^handler)(UIGestureRecognizer *) = ^(UIGestureRecognizer *recognizer) {
+        
         if (![recognizer _isFailed] &&
             [recognizer _shouldSendActions] &&
             [_effectRecognizersNode canRecongizerBeHandledSimultaneously:recognizer]) {
             
             [recognizer _sendActions];
+            
             if ([_effectRecognizersNode hasChoosedAnySimultaneouslyGroup]) {
                 [_effectRecognizersNode chooseSimultaneouslyGroupWhoIncludes:recognizer];
             }
@@ -216,6 +245,18 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     
     [_failureRequirementNode recursiveSearchFromRecongizer:recognizer
                                         recursiveCondition:conditionChecker requires:handler];
+}
+
+- (void)_callResetMethodForRecongizerAndItsFailureRequires:(UIGestureRecognizer *)recognizer
+{
+    [_failureRequirementNode recursiveSearchFromRecongizer:recognizer
+                                                  requires:^(UIGestureRecognizer * recognizer)
+    {
+        if ([recognizer _hasMadeConclusion]) {
+            [recognizer reset];
+            [_effectRecognizersNode removeGestureRecognizer:recognizer];
+        }
+    }];
 }
 
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -387,42 +428,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     [_trackingTouches removeAllObjects];
 }
 
-- (void)_removeEffectGestureRecognizersWithCondition:(BOOL(^)(UIGestureRecognizer *recognizer))condition
-{
-    [_effectRecognizersNode removeWithCondition:condition];
-    
-    if (_effectRecognizersNode.count == 0) {
-        [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
-    }
-}
-
 - (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer
 {
-    if (![getureRecognizer _requireToFailRecognizer]) {
+    if (_multiTouchProcess.handingTouchEvent) {
+        [_changedStateRecognizersCache addObject:getureRecognizer];
         
-        if (_multiTouchProcess.handingTouchEvent) {
-            [_changedStateRecognizersCache addObject:getureRecognizer];
-            
-        } else {
-            [self _handleChangedStateGestureRecognizer:getureRecognizer];
-            [self _tellMultiTouchProcessMadeConclusionIfNeed];
-        }
-    }
-}
-
-- (void)_clearAndHandleAllMadeConclusionGestureRecognizers
-{
-    for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
-        [self _handleChangedStateGestureRecognizer:recognizer];
-    }
-    [_changedStateRecognizersCache removeAllObjects];
-    [self _tellMultiTouchProcessMadeConclusionIfNeed];
-}
-
-- (void)_tellMultiTouchProcessMadeConclusionIfNeed
-{
-    if (self.hasMakeConclusion) {
-        [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
+    } else {
+        [self _handleChangedStateGestureRecognizer:getureRecognizer];
+        [self _tellMultiTouchProcessMadeConclusionIfNeed];
     }
 }
 

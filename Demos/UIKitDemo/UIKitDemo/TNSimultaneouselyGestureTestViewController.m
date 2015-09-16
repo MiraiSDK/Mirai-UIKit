@@ -60,7 +60,12 @@
 
 - (BOOL)gestureRecognizer:(_TNTestSimultaneouselyGestureRecongizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(_TNTestSimultaneouselyGestureRecongizer *)otherGestureRecognizer
 {
-    return gestureRecognizer.typeCode == otherGestureRecognizer.typeCode;
+    if ([gestureRecognizer respondsToSelector:@selector(typeCode)] &&
+        [otherGestureRecognizer respondsToSelector:@selector(typeCode)]) {
+        
+        return gestureRecognizer.typeCode == otherGestureRecognizer.typeCode;
+    }
+    return NO;
 }
 
 - (void)_onGestureAction:(_TNTestSimultaneouselyGestureRecongizer *)recongizer

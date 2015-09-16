@@ -61,6 +61,15 @@
 }
 
 - (void)recursiveSearchFromRecongizer:(UIGestureRecognizer *)root
+                             requires:(void (^)(UIGestureRecognizer *))eachBlock
+{
+    BOOL (^alwaysYesCondition)(UIGestureRecognizer *) = ^BOOL(UIGestureRecognizer *recongizer) {
+        return YES;
+    };
+    [self recursiveSearchFromRecongizer:root recursiveCondition:alwaysYesCondition requires:eachBlock];
+}
+
+- (void)recursiveSearchFromRecongizer:(UIGestureRecognizer *)root
                    recursiveCondition:(BOOL (^)(UIGestureRecognizer *))conditionBlock
                              requires:(void (^)(UIGestureRecognizer *))eachBlock
 {
