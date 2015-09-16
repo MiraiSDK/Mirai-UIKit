@@ -8,6 +8,7 @@
 
 #import "UIGestureRecognizeProcess.h"
 #import "UIGestureRecognizerSimultaneouslyRelationship.h"
+#import "UIGestureFailureRequirementRelationship.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
@@ -21,7 +22,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     UIMultiTouchProcess *_multiTouchProcess;
     
     UIGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
-    NSMutableSet *_banSimultaneouslyGroups;
+    UIGestureFailureRequirementRelationship *_failureRequirementNode;
     
     NSMutableSet *_trackingTouches;
     NSMutableSet *_changedStateRecognizersCache;
@@ -47,9 +48,10 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         _multiTouchProcess = multiTouchProcess;
         
         _anyRecognizersMakeConclusion = YES;
-        _banSimultaneouslyGroups = [[NSMutableSet alloc] init];
         _trackingTouches = [[NSMutableSet alloc] init];
-        _effectRecognizersNode = [[UIGestureRecognizerSimultaneouslyRelationship alloc] initWithView:view];
+        _effectRecognizersNode = [[UIGestureRecognizerSimultaneouslyRelationship alloc] initWithView:view
+                                                                            gestureRecongizeProcess:self];
+        _failureRequirementNode = [[UIGestureFailureRequirementRelationship alloc] initWithView:view];
         _changedStateRecognizersCache = [[NSMutableSet alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
         
@@ -132,9 +134,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)multiTouchBegin
 {
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
-        [recognizer _bindRecognizeProcess:self];
-    }];
     _lastTimeHasMakeConclusion = self.hasMakeConclusion;
     _anyRecognizersMakeConclusion = NO;
     _cancelsTouchesInView = NO;
@@ -412,13 +411,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)_removeEffectGestureRecognizersWithCondition:(BOOL(^)(UIGestureRecognizer *recognizer))condition
 {
-    [_effectRecognizersNode removeWithCondition:^BOOL(UIGestureRecognizer *recognizer) {
-        if (condition(recognizer)) {
-            [recognizer _unbindRecognizeProcess];
-            return YES;
-        }
-        return NO;
-    }];
+    [_effectRecognizersNode removeWithCondition:condition];
     
     if (_effectRecognizersNode.choosedSimulataneouslyRecognizersCount == 0) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];

@@ -10,6 +10,7 @@
 
 @class UIView;
 @class UIGestureRecognizer;
+@class UIGestureRecognizeProcess;
 
 @interface UIGestureRecognizerSimultaneouslyRelationship : NSObject
 
@@ -17,7 +18,8 @@
 @property (nonatomic, readonly) NSUInteger choosedSimulataneouslyRecognizersCount;
 @property (nonatomic, readonly) NSSet * choosedSimultaneouslyGroup;
 
-- (instancetype)initWithView:(UIView *)view;
+- (instancetype)initWithView:(UIView *)view
+     gestureRecongizeProcess:(UIGestureRecognizeProcess *)gestureReconizeProcess;
 
 - (void)giveUpCurrentSimultaneouslyGroup;
 

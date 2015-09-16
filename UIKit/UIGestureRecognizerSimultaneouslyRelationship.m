@@ -13,6 +13,8 @@
 
 @implementation UIGestureRecognizerSimultaneouslyRelationship
 {
+    UIGestureRecognizeProcess *_gestureReconizeProcess;
+    
     NSSet *_currentChoosedGroup;
     NSMutableSet *_allSimulataneouslyGroups;
     NSMutableDictionary *_recognizerToGroupDictionary;
@@ -20,14 +22,23 @@
 }
 
 - (instancetype)initWithView:(UIView *)view
+     gestureRecongizeProcess:(UIGestureRecognizeProcess *)gestureReconizeProcess
 {
     if (self = [self init]) {
+        _gestureReconizeProcess = gestureReconizeProcess;
         _allSimulataneouslyGroups = [NSMutableSet set];
         _recognizerToGroupDictionary = [NSMutableDictionary dictionary];
         [self _collectGestureRecognizersWithView:view];
         [self _chooseNextSimulatneouslyGroup];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+        [recognizer _unbindRecognizeProcess];
+    }];
 }
 
 #pragma mark - read properties.
@@ -79,6 +90,7 @@
         if (includesRecognizerGroup.count == 0) {
             [_allSimulataneouslyGroups removeObject:includesRecognizerGroup];
         }
+        [recognizer _unbindRecognizeProcess];
     }
     [self _clearCache];
 }
@@ -88,6 +100,7 @@
     for (UIGestureRecognizer *recognizer in group) {
         NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
         [_recognizerToGroupDictionary removeObjectForKey:recognizerKey];
+        [recognizer _unbindRecognizeProcess];
     }
     [_allSimulataneouslyGroups removeObject:group];
     
@@ -107,6 +120,7 @@
                 [recognizerToRemove addObject:recognizer];
                 NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
                 [_recognizerToGroupDictionary removeObjectForKey:recognizerKey];
+                [recognizer _unbindRecognizeProcess];
             }
         }
         [group minusSet:recognizerToRemove];
@@ -175,6 +189,10 @@
 {
     NSArray *recongizers = view.gestureRecognizers;
     
+    for (UIGestureRecognizer *recongizer in recongizers) {
+        [recongizer _bindRecognizeProcess:_gestureReconizeProcess];
+    }
+    
     for (UIGestureRecognizer *r0 in recongizers) {
         for (UIGestureRecognizer *r1 in recongizers) {
             if (r0 != r1) {
@@ -224,7 +242,7 @@
 
 - (void)_standardizeGroup0:(NSMutableSet **)group0 group1:(NSMutableSet **)group1
 {
-    NSUInteger count0 = (*group0).count;
+    NSUInteger count0 = (*group0).count;
     NSUInteger count1 = (*group1).count;
     
     if (count0 < count1) {
