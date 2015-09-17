@@ -32,10 +32,10 @@
     _TNTestSimultaneouselyGestureRecongizer *fail0 = [self _newTestGestureRecongizerWithMark:@"Fail-0"];
     _TNTestSimultaneouselyGestureRecongizer *fail1 = [self _newTestGestureRecongizerWithMark:@"Fail-1"];
     
-    [self.view addGestureRecognizer:rec0];
-    [self.view addGestureRecognizer:rec1];
     [self.view addGestureRecognizer:fail0];
     [self.view addGestureRecognizer:fail1];
+    [self.view addGestureRecognizer:rec0];
+    [self.view addGestureRecognizer:rec1];
 
     [fail0 requireGestureRecognizerToFail:rec0];
     [fail1 requireGestureRecognizerToFail:rec1];
@@ -45,8 +45,8 @@
     fail0.typeCode = 1;
     fail1.typeCode = 1;
     
-    rec0.numberOfTapsRequired = 1;
-    rec1.numberOfTapsRequired = 2;
+    rec0.numberOfTapsRequired = 2;
+    rec1.numberOfTapsRequired = 1;
 }
 
 - (_TNTestSimultaneouselyGestureRecongizer *)_newTestGestureRecongizerWithMark:(NSString *)mark
