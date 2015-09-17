@@ -29,7 +29,7 @@
 
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
-#import "UIGestureRecognizeProcess.h"
+#import "TNGestureRecognizeProcess.h"
 #import "UITouch+Private.h"
 #import "UIAction.h"
 #import "UIApplication.h"
@@ -43,7 +43,7 @@
     BOOL _shouldSendActions;
     BOOL _shouldReset;
     
-    UIGestureRecognizeProcess *_bindingRecognizeProcess;
+    TNGestureRecognizeProcess *_bindingRecognizeProcess;
     UIGestureRecognizer *_requireToFailRecognizer;
 }
 @synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
@@ -73,7 +73,7 @@
     return self;
 }
 
-- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess
+- (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess
 {
     _bindingRecognizeProcess = recognizeProcess;
 }

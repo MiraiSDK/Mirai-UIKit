@@ -11,7 +11,7 @@
 @class UIView;
 @class UIGestureRecognizer;
 
-@interface UIGestureFailureRequirementRelationship : NSObject
+@interface TNGestureFailureRequirementRelationship : NSObject
 
 - (instancetype)initWithView:(UIView *)view;
 

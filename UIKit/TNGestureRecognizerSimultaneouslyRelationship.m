@@ -6,14 +6,14 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIGestureRecognizerSimultaneouslyRelationship.h"
+#import "TNGestureRecognizerSimultaneouslyRelationship.h"
 
 #import "UIView.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 
-@implementation UIGestureRecognizerSimultaneouslyRelationship
+@implementation TNGestureRecognizerSimultaneouslyRelationship
 {
-    UIGestureRecognizeProcess *_gestureReconizeProcess;
+    TNGestureRecognizeProcess *_gestureReconizeProcess;
     
     NSSet *_currentChoosedGroup;
     NSMutableSet *_allSimulataneouslyGroups;
@@ -22,7 +22,7 @@
 }
 
 - (instancetype)initWithView:(UIView *)view
-     gestureRecongizeProcess:(UIGestureRecognizeProcess *)gestureReconizeProcess
+     gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess
 {
     if (self = [self init]) {
         _gestureReconizeProcess = gestureReconizeProcess;

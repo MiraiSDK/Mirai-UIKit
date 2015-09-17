@@ -6,11 +6,11 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIGestureFailureRequirementRelationship.h"
+#import "TNGestureFailureRequirementRelationship.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIView.h"
 
-@implementation UIGestureFailureRequirementRelationship
+@implementation TNGestureFailureRequirementRelationship
 {
     NSMutableDictionary *_recongizerToItsFailureRequiresSet;
 }

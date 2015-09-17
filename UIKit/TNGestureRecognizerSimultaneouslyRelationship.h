@@ -10,14 +10,14 @@
 
 @class UIView;
 @class UIGestureRecognizer;
-@class UIGestureRecognizeProcess;
+@class TNGestureRecognizeProcess;
 
-@interface UIGestureRecognizerSimultaneouslyRelationship : NSObject
+@interface TNGestureRecognizerSimultaneouslyRelationship : NSObject
 
 @property (nonatomic, readonly) NSUInteger count;
 
 - (instancetype)initWithView:(UIView *)view
-     gestureRecongizeProcess:(UIGestureRecognizeProcess *)gestureReconizeProcess;
+     gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess;
 
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer;
 - (BOOL)hasChoosedAnySimultaneouslyGroup;

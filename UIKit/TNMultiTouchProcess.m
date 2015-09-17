@@ -6,13 +6,13 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIMultiTouchProcess.h"
+#import "TNMultiTouchProcess.h"
 #import "UITouch+Private.h"
-#import "UIGestureRecognizeProcess.h"
+#import "TNGestureRecognizeProcess.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 
-@implementation UIMultiTouchProcess
+@implementation TNMultiTouchProcess
 {
     UIWindow *_window;
     
@@ -70,11 +70,11 @@
     }
     NSArray *recognizerProcesses = [_effectRecognizeProcesses allValues];
     
-    for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
+    for (TNGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
         [recognizeProcess recognizeEvent:event touches:touches];
     }
     
-    for (UIGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
+    for (TNGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
         [recognizeProcess sendToAttachedViewIfNeedWithEvent:event touches:touches];
     }
     [self _handleNotTrackedTouches:touches event:event];
@@ -138,7 +138,7 @@
     if (_legacyAnyRecognizeProcesses) {
         
         NSMutableSet *legacyNames = [NSMutableSet set];
-        for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+        for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
             for (UIGestureRecognizer *recognizer in recognizeProcess.gestureRecognizers) {
                 [legacyNames addObject:recognizer.className];
             }
@@ -152,7 +152,7 @@
 
 - (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+    for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
         [recognizeProcess multiTouchBegin];
     }
 }
@@ -172,10 +172,10 @@
         }
         
         NSValue *keyView = [NSValue valueWithNonretainedObject:view];
-        UIGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
+        TNGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
         
         if (!recognizeProcess && generate) {
-            recognizeProcess = [[UIGestureRecognizeProcess alloc] initWithView:view
+            recognizeProcess = [[TNGestureRecognizeProcess alloc] initWithView:view
                                                              multiTouchProcess:self];
             [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
         }
@@ -189,7 +189,7 @@
 
 - (UIView *)_findViewCanCatch:(UIView *)view
 {
-    while (view && ![UIGestureRecognizeProcess canViewCatchTouches:view]) {
+    while (view && ![TNGestureRecognizeProcess canViewCatchTouches:view]) {
         view = view.superview;
     }
     return view;
@@ -242,7 +242,7 @@
 
 - (void)_end
 {
-    for (UIGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+    for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
         [recognizeProcess multiTouchEnd];
     }
     [_trackedTouches removeAllObjects];
@@ -252,7 +252,7 @@
 - (NSSet *)_leftRecognizerNames
 {
     NSMutableSet *leftRecognizerNames = [[NSMutableSet alloc] init];
-    for (UIGestureRecognizeProcess *recognizerProcess in [_effectRecognizeProcesses allValues]) {
+    for (TNGestureRecognizeProcess *recognizerProcess in [_effectRecognizeProcesses allValues]) {
         for (UIGestureRecognizer *recognizer in recognizerProcess.gestureRecognizers) {
             [leftRecognizerNames addObject:recognizer.className];
         }
@@ -260,7 +260,7 @@
     return leftRecognizerNames;
 }
 
-- (void)gestureRecognizeProcessMakeConclusion:(UIGestureRecognizeProcess *)gestureRecognizeProcess
+- (void)gestureRecognizeProcessMakeConclusion:(TNGestureRecognizeProcess *)gestureRecognizeProcess
 {
     if (!_multiTouchNotEnded) {
         
@@ -275,7 +275,7 @@
     
     for (NSValue *key in [_effectRecognizeProcesses allKeys]) {
         
-        UIGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:key];
+        TNGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:key];
         
         if (recognizeProcess.hasMakeConclusion) {
             [hasMakeConclusionViews addObject:key];

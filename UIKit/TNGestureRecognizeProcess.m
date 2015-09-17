@@ -6,9 +6,9 @@
 //  Copyright (c) 2015年 Shanghai Tinynetwork Inc. All rights reserved.
 //
 
-#import "UIGestureRecognizeProcess.h"
-#import "UIGestureRecognizerSimultaneouslyRelationship.h"
-#import "UIGestureFailureRequirementRelationship.h"
+#import "TNGestureRecognizeProcess.h"
+#import "TNGestureRecognizerSimultaneouslyRelationship.h"
+#import "TNGestureFailureRequirementRelationship.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIResponder.h"
@@ -16,13 +16,13 @@
 
 typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* requiredWasFialed);
 
-@implementation UIGestureRecognizeProcess
+@implementation TNGestureRecognizeProcess
 {
     UIView *_view;
-    UIMultiTouchProcess *_multiTouchProcess;
+    TNMultiTouchProcess *_multiTouchProcess;
     
-    UIGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
-    UIGestureFailureRequirementRelationship *_failureRequirementNode;
+    TNGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
+    TNGestureFailureRequirementRelationship *_failureRequirementNode;
     
     NSMutableSet *_trackingTouches;
     NSMutableSet *_changedStateRecognizersCache;
@@ -41,7 +41,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     BOOL _cancelsTouchesInView;
 }
 
-- (instancetype)initWithView:(UIView *)view multiTouchProcess:(UIMultiTouchProcess *)multiTouchProcess
+- (instancetype)initWithView:(UIView *)view multiTouchProcess:(TNMultiTouchProcess *)multiTouchProcess
 {
     if (self = [self init]) {
         _view = view;
@@ -49,9 +49,9 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         
         _anyRecognizersMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
-        _effectRecognizersNode = [[UIGestureRecognizerSimultaneouslyRelationship alloc] initWithView:view
+        _effectRecognizersNode = [[TNGestureRecognizerSimultaneouslyRelationship alloc] initWithView:view
                                                                             gestureRecongizeProcess:self];
-        _failureRequirementNode = [[UIGestureFailureRequirementRelationship alloc] initWithView:view];
+        _failureRequirementNode = [[TNGestureFailureRequirementRelationship alloc] initWithView:view];
         _changedStateRecognizersCache = [[NSMutableSet alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
         

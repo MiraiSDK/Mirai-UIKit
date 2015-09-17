@@ -29,7 +29,7 @@
 
 #import "UIGestureRecognizer.h"
 
-@class UIGestureRecognizeProcess;
+@class TNGestureRecognizeProcess;
 
 @interface UIGestureRecognizer (UIPrivate)
 - (void)_setView:(UIView *)v;
@@ -37,7 +37,7 @@
 
 - (UIGestureRecognizer *)_requireToFailRecognizer;
 
-- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess;
+- (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess;
 - (void)_unbindRecognizeProcess;
 
 - (void)_forceFail;

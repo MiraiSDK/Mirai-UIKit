@@ -8,11 +8,11 @@
 
 #import "UIView.h"
 #import "UITouch.h"
-#import "UIMultiTouchProcess.h"
+#import "TNMultiTouchProcess.h"
 
-@class UIMultiTouchProcess;
+@class TNMultiTouchProcess;
 
-@interface UIGestureRecognizeProcess : NSObject
+@interface TNGestureRecognizeProcess : NSObject
 
 @property (nonatomic, readonly) UIView *view;
 @property (nonatomic, readonly) BOOL hasMakeConclusion;
@@ -20,7 +20,7 @@
 @property (nonatomic, readonly) NSSet *trackingTouches;
 @property (nonatomic, readonly) NSArray *trackingTouchesArray;
 
-- (instancetype)initWithView:(UIView *)view multiTouchProcess:(UIMultiTouchProcess *)multiTouchProcess;
+- (instancetype)initWithView:(UIView *)view multiTouchProcess:(TNMultiTouchProcess *)multiTouchProcess;
 
 - (void)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;
