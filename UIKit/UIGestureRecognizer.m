@@ -39,6 +39,7 @@
 {
     BOOL _excluded;
     NSMutableSet *_excludedTouches;
+    BOOL _foredFailed;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
     
@@ -199,6 +200,9 @@
 
 - (void)setState:(UIGestureRecognizerState)state
 {
+    if (_foredFailed) {
+        return;
+    }
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
 
@@ -250,6 +254,22 @@
         originalState != _state) {
         
         [_bindingRecognizeProcess gestureRecognizerChangedState:self];
+    }
+}
+
+- (void)_forceFail
+{
+    UIGestureRecognizerState originalState = _state;
+    
+    if (!_foredFailed) {
+        _state = UIGestureRecognizerStateFailed;
+        _foredFailed = YES;
+        _shouldSendActions = NO;
+        _shouldReset = (originalState != UIGestureRecognizerStatePossible);
+        
+        if (originalState != UIGestureRecognizerStateFailed) {
+            [_bindingRecognizeProcess gestureRecognizerChangedState:self];
+        }
     }
 }
 
@@ -305,6 +325,7 @@
     _excluded = NO;
     _shouldReset = NO;
     _shouldSendActions = NO;
+    _foredFailed = NO;
     _state = UIGestureRecognizerStatePossible;
     [_excludedTouches removeAllObjects];
 }
@@ -423,6 +444,11 @@
     return _state == UIGestureRecognizerStateCancelled ||
            _state == UIGestureRecognizerStateEnded ||
            _state == UIGestureRecognizerStateFailed;
+}
+
+- (BOOL)_hasFinishedRecognizingProcess
+{
+    return _foredFailed || [self _hasMadeConclusion];
 }
 
 - (BOOL)_isFinishedRecognizing

@@ -159,6 +159,17 @@
     }
 }
 
+- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *recognizer))blockMethod
+{
+    for (NSMutableSet *group in _allSimulataneouslyGroups) {
+        if (group != _currentChoosedGroup) {
+            for (UIGestureRecognizer *recognizer in group) {
+                blockMethod(recognizer);
+            }
+        }
+    }
+}
+
 - (UIGestureRecognizer *)findGestureRecognizer:(BOOL (^)(UIGestureRecognizer *recognizer))finderMethod
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
@@ -222,21 +233,33 @@
             [group0 addObject:r1];
             [self _saveGroup:group0 forRecognizer:r1];
             
-        } else if (group0 != nil && group1 != nil && group0 != group1) {
+        } else if (group0 != nil && group1 != nil) {
             
-            for (UIGestureRecognizer *otherRecongizer in group1) {
-                [group0 addObject:otherRecongizer];
-                [self _saveGroup:group0 forRecognizer:otherRecongizer];
+            if (group0 != group1) {
+                for (UIGestureRecognizer *otherRecongizer in group1) {
+                    [group0 addObject:otherRecongizer];
+                    [self _saveGroup:group0 forRecognizer:otherRecongizer];
+                }
+                [_allSimulataneouslyGroups removeObject:group1];
             }
-            [_allSimulataneouslyGroups removeObject:group1];
+            
+        } else {
+            NSLog(@"ERROR: Invalid Condition!");
         }
     }
 }
 
 - (void)_standardizeGroup0:(NSMutableSet **)group0 group1:(NSMutableSet **)group1
 {
-    NSUInteger count0 = (*group0).count;
-    NSUInteger count1 = (*group1).count;
+    NSUInteger count0 = 0;
+    NSUInteger count1 = 0;
+    
+    if (*group0) {
+        count0 = (*group0).count;
+    }
+    if (*group1) {
+        count1 = (*group1).count;
+    }
     
     if (count0 < count1) {
         NSMutableSet *temp = *group0;

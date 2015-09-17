@@ -40,6 +40,8 @@
 - (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess;
 - (void)_unbindRecognizeProcess;
 
+- (void)_forceFail;
+
 - (BOOL)_shouldAttemptToRecognize;
 - (void)_foundNewTouch:(UITouch *)touch;
 
@@ -53,6 +55,7 @@
 
 - (BOOL)_hasRecognizedGesture;
 - (BOOL)_hasMadeConclusion;
+- (BOOL)_hasFinishedRecognizingProcess;
 
 - (BOOL)_isFinishedRecognizing;
 - (BOOL)_isFailed;
