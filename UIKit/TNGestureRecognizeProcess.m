@@ -142,7 +142,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     [self _clearEffectRecognizerWhichBecomeDisabled];
     [self _sendToRecognizersWithTouches:touches event:event];
-    [self _clearAndHandleAllMadeConclusionGestureRecognizers];
+    [self _clearAndHandleAllMadeConclusionGestureRecognizersWithTouches:touches event:event];
     [self _clearHasMadeConclusionRecongizers];
     [self _tellMultiTouchProcessMadeConclusionIfNeed];
 }
@@ -161,25 +161,70 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     }];
 }
 
-- (void)_clearAndHandleAllMadeConclusionGestureRecognizers
+- (void)_clearAndHandleAllMadeConclusionGestureRecognizersWithTouches:(NSSet *)touches
+                                                                event:(UIEvent *)event
 {
-    for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
+    [self _sendActionsAndForceFailForAllChangedStateRecongizerCache];
+    [self _cancelsTouchesInViewIfNeedWithTouches:touches event:event];
+    [self _handleAllChangedStateRecongizersIfTheyHasMadeConclusion];
+    
+    [_changedStateRecognizersCache removeAllObjects];
+}
+
+- (void)_sendActionsAndForceFailForAllChangedStateRecongizerCache
+{
+    // The code in loop will force fail some recognizers. It would make state of recognizers change.
+    // Then, more and more recognizers will be inserted into _changedStateRecognizersCache.
+    
+    // So, I only iterate recognizers that in the initial _changedStateRecognizersCache.
+    // The recognizers that inserted later are ban because of failure requirement.
+    // It's OK to ignore them.
+    
+    NSArray *allRecognizers = [_changedStateRecognizersCache allObjects];
+    
+    for (UIGestureRecognizer *recognizer in allRecognizers) {
         if ([self _recognizerNotBanBecauseOfFailureRequirement:recognizer]) {
             [self _sendActionsForRecognizerAndItsRequireFailRecognizers:recognizer];
         }
     }
+}
+
+- (void)_cancelsTouchesInViewIfNeedWithTouches:(NSSet *)touches event:(UIEvent *)event
+{
     for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
         if ([self _touchesWouldBeCancelledByRecognizer:recognizer]) {
             _cancelsTouchesInView = YES;
             break;
         }
     }
+    
+    if (_cancelsTouchesInView && _hasCallAttachedViewAnyMethod) {
+        [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
+        _hasCallAttachedViewCancelledMethod = YES;
+        [_delaysBufferedBlocks removeAllObjects];
+    }
+}
+
+- (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
+{
+    for (UITouch *touch in touches) {
+        [touch _setOnlyShowPhaseAsCancelled:YES];
+    }
+    
+    [_view touchesCancelled:touches withEvent:event];
+    
+    for (UITouch *touch in touches) {
+        [touch _setOnlyShowPhaseAsCancelled:NO];
+    }
+}
+
+- (void)_handleAllChangedStateRecongizersIfTheyHasMadeConclusion
+{
     for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
         if ([self _recognizerNotBanBecauseOfFailureRequirement:recognizer]) {
             [self _handleIfHasMadeConclusionForRecognizer:recognizer];
         }
     }
-    [_changedStateRecognizersCache removeAllObjects];
 }
 
 - (void)_clearHasMadeConclusionRecongizers
@@ -305,25 +350,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    if (_cancelsTouchesInView) {
-        if ([self _needCallAttachedViewCancelledMethod]) {
-            [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
-            _hasCallAttachedViewCancelledMethod = YES;
-            [_delaysBufferedBlocks removeAllObjects];
-        }
-    } else if([self _needSendEventToAttachedView]) {
+    if([self _needSendEventToAttachedView]) {
         [self _sendToAttachedViewWithEvent:event touches:touches];
     }
 }
 
 - (BOOL)_needSendEventToAttachedView
 {
-    return _lastTimeHasMakeConclusion && !_hasCallAttachedViewCancelledMethod;
-}
-
-- (BOOL)_needCallAttachedViewCancelledMethod
-{
-    return _hasCallAttachedViewAnyMethod;
+    return !_cancelsTouchesInView && _lastTimeHasMakeConclusion && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_runAndClearDelaysBufferedBlocksIfNeed
@@ -340,19 +374,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     return !_cancelsTouchesInView && self.hasMakeConclusion &&
            _delaysBufferedBlocks.count > 0 && !_hasCallAttachedViewCancelledMethod;
-}
-
-- (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
-{
-    for (UITouch *touch in touches) {
-        [touch _setOnlyShowPhaseAsCancelled:YES];
-    }
-    
-    [_view touchesCancelled:touches withEvent:event];
-    
-    for (UITouch *touch in touches) {
-        [touch _setOnlyShowPhaseAsCancelled:NO];
-    }
 }
 
 - (void)_sendToAttachedViewWithEvent:(UIEvent *)event touches:(NSSet *)touches
