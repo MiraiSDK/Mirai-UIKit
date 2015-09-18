@@ -169,10 +169,15 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         }
     }
     for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
+        if ([self _touchesWouldBeCancelledByRecognizer:recognizer]) {
+            _cancelsTouchesInView = YES;
+            break;
+        }
+    }
+    for (UIGestureRecognizer *recognizer in _changedStateRecognizersCache) {
         if ([self _recognizerNotBanBecauseOfFailureRequirement:recognizer]) {
             [self _handleIfHasMadeConclusionForRecognizer:recognizer];
         }
-        [self _setCancelsTouchesInViewIfNeedAccordingToRecognizer:recognizer];
     }
     [_changedStateRecognizersCache removeAllObjects];
 }
@@ -236,11 +241,9 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     }
 }
 
-- (void)_setCancelsTouchesInViewIfNeedAccordingToRecognizer:(UIGestureRecognizer *)recognizer
+- (BOOL)_touchesWouldBeCancelledByRecognizer:(UIGestureRecognizer *)recognizer
 {
-    if ([recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView]) {
-        _cancelsTouchesInView = YES;
-    }
+    return [recognizer _hasRecognizedGesture] && [recognizer cancelsTouchesInView];
 }
 
 - (void)_forceFailAllRecongizersRequireToFail:(UIGestureRecognizer *)requireToFailRecongizer
@@ -302,17 +305,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    if ([self _needSendEventToAttachedView]) {
-        
-        if (_cancelsTouchesInView) {
-            if ([self _needCallAttachedViewCancelledMethod]) {
-                [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
-                _hasCallAttachedViewCancelledMethod = YES;
-                [_delaysBufferedBlocks removeAllObjects];
-            }
-        } else {
-            [self _sendToAttachedViewWithEvent:event touches:touches];
+    if (_cancelsTouchesInView) {
+        if ([self _needCallAttachedViewCancelledMethod]) {
+            [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
+            _hasCallAttachedViewCancelledMethod = YES;
+            [_delaysBufferedBlocks removeAllObjects];
         }
+    } else if([self _needSendEventToAttachedView]) {
+        [self _sendToAttachedViewWithEvent:event touches:touches];
     }
 }
 
@@ -326,7 +326,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     return _hasCallAttachedViewAnyMethod;
 }
 
-- (void)_runAndClearDelaysBufferedBlocks
+- (void)_runAndClearDelaysBufferedBlocksIfNeed
 {
     if ([self _needToRunDelaysBlockedBlocks]) {
         for (void (^block)(void) in _delaysBufferedBlocks) {
@@ -338,7 +338,8 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (BOOL)_needToRunDelaysBlockedBlocks
 {
-    return _delaysBufferedBlocks.count > 0 && !_hasCallAttachedViewCancelledMethod;
+    return !_cancelsTouchesInView && self.hasMakeConclusion &&
+           _delaysBufferedBlocks.count > 0 && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -461,11 +462,9 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)multiTouchEnd
 {
-    if (!_cancelsTouchesInView) {
-        [self _runAndClearDelaysBufferedBlocks];
-    }
-    _trackingTouchesArrayCache = @[];
+    [self _runAndClearDelaysBufferedBlocksIfNeed];
     
+    _trackingTouchesArrayCache = @[];
     [_trackingTouches removeAllObjects];
 }
 
@@ -480,8 +479,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         [self _sendActionsForRecognizerAndItsRequireFailRecognizers:getureRecognizer];
         [self _handleIfHasMadeConclusionForRecognizer:getureRecognizer];
     }
-    [self _setCancelsTouchesInViewIfNeedAccordingToRecognizer:getureRecognizer];
+    if ([self _touchesWouldBeCancelledByRecognizer:getureRecognizer]) {
+        _cancelsTouchesInView = YES;
+    }
     [self _tellMultiTouchProcessMadeConclusionIfNeed];
+    
+    if (!_multiTouchProcess.handingMultiTouchEvent) {
+        [self _runAndClearDelaysBufferedBlocksIfNeed];
+    }
 }
 
 @end

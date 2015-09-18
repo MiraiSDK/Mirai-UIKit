@@ -16,6 +16,7 @@
 
 @property (nonatomic, readonly) UIWindow *window;
 @property (nonatomic, readonly) BOOL handingTouchEvent;
+@property (nonatomic, readonly) BOOL handingMultiTouchEvent;
 
 - (instancetype)initWithWindow:(UIWindow *)window;
 - (void)sendEvent:(UIEvent *)event;

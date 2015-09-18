@@ -18,12 +18,12 @@
     
     NSInteger _currentPressFingersCount;
     BOOL _legacyAnyRecognizeProcesses;
-    BOOL _multiTouchNotEnded;
     
     NSMutableDictionary *_effectRecognizeProcesses;
     NSMutableSet *_trackedTouches;
 }
 @synthesize handingTouchEvent=_handingTouchEvent;
+@synthesize handingMultiTouchEvent=_handingMultiTouchEvent;
 
 - (instancetype)init
 {
@@ -59,6 +59,7 @@
     
     if (touchBegin) {
         NSLog(@"[begin multi-touch]");
+        _handingMultiTouchEvent = YES;
         [self _initializeMultiTouchContextWhenBegin];
     }
     _handingTouchEvent = YES;
@@ -81,7 +82,7 @@
     
     if (touchEnd) {
         [self _end];
-        _multiTouchNotEnded = NO;
+        _handingMultiTouchEvent = NO;
         NSLog(@"[end multi-touch]");
     }
     _handingTouchEvent = NO;
@@ -132,7 +133,7 @@
 
 - (void)_initializeMultiTouchContextWhenBegin
 {
-    _multiTouchNotEnded = YES;
+    _handingMultiTouchEvent = YES;
     _legacyAnyRecognizeProcesses = _effectRecognizeProcesses.count > 0;
     
     if (_legacyAnyRecognizeProcesses) {
@@ -262,7 +263,7 @@
 
 - (void)gestureRecognizeProcessMakeConclusion:(TNGestureRecognizeProcess *)gestureRecognizeProcess
 {
-    if (!_multiTouchNotEnded) {
+    if (!_handingMultiTouchEvent) {
         
         NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
         [_effectRecognizeProcesses removeObjectForKey:keyView];
