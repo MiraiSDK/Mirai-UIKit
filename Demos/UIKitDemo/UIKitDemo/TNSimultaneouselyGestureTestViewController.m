@@ -78,6 +78,26 @@
     NSLog(@">> ------------------");
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@">> viewcontroller recived %s", __FUNCTION__);
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@">> viewcontroller recived %s", __FUNCTION__);
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@">> viewcontroller recived %s", __FUNCTION__);
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@">> viewcontroller recived %s", __FUNCTION__);
+}
+
 @end
 
 @implementation _TNTestSimultaneouselyGestureRecongizer
