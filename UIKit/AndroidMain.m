@@ -566,6 +566,7 @@ void android_main(struct android_app* state)
             char * argv[] = {buffer};
             [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
             
+            NSLog(@"prepare Objective-C runtime done.");
             // Make sure glue isn't stripped.
             app_dummy();
             
