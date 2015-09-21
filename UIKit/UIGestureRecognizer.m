@@ -206,22 +206,25 @@
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
 
-    typedef struct { UIGestureRecognizerState fromState, toState; BOOL shouldNotify, shouldReset; } StateTransition;
+    typedef struct {
+        UIGestureRecognizerState fromState, toState;
+        BOOL shouldNotify, shouldReset, checkPrevent;
+    } StateTransition;
 
     #define NumberOfStateTransitions 9
     static const StateTransition allowedTransitions[NumberOfStateTransitions] = {
         // discrete gestures
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized,     YES,    YES},
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed,         NO,     YES},
+        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized, YES,    YES,    YES},
+        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed,     NO,     YES,    NO},
 
         // continuous gestures
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan,          YES,    NO },
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged,        YES,    NO },
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled,      YES,    YES},
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded,          YES,    YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateChanged,        YES,    NO },
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled,      YES,    YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded,          YES,    YES}
+        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan,      YES,    NO,     YES},
+        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged,    YES,    NO,     NO},
+        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled,  YES,    YES,    NO},
+        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded,      YES,    YES,    NO},
+        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateChanged,    YES,    NO,     NO},
+        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled,  YES,    YES,    NO},
+        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded,      YES,    YES,    NO}
     };
     
     const StateTransition *transition = NULL;
@@ -236,6 +239,7 @@
     NSAssert2((transition != NULL), @"invalid state transition from %d to %d", _state, state);
     UIGestureRecognizerState originalState = _state;
     
+    
     if ([self _shouldBeginContinuesContinuityRecognizeWithState:state]) {
         
         [self _setExcluded];
@@ -245,9 +249,17 @@
         
     } else if (transition) {
         
-        _state = transition->toState;
-        _shouldSendActions = transition->shouldNotify;
-        _shouldReset = transition->shouldReset;
+        if (transition->checkPrevent && [self _shouldBePrevent]) {
+            _state = UIGestureRecognizerStateFailed;
+            _shouldSendActions = NO;
+            _shouldReset = YES;
+            
+        } else {
+            _state = transition->toState;
+            _shouldSendActions = transition->shouldNotify;
+            _shouldReset = transition->shouldReset;
+        }
+        
     }
     
     if (originalState == UIGestureRecognizerStateChanged ||
@@ -283,6 +295,14 @@
         return NO;
     }
     return ![self _shouldBegan];
+}
+
+- (BOOL)_shouldBePrevent
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+        return ![_delegate gestureRecognizerShouldBegin:self];
+    }
+    return NO;
 }
 
 - (BOOL)_shouldBegan
