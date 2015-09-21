@@ -541,7 +541,8 @@
     
     for (UITouch *touch in touches) {
         
-        if ([_bindingRecognizeProcess.trackingTouches containsObject:touch]) {
+        if ([_bindingRecognizeProcess.trackingTouches containsObject:touch] &&
+            ![_excludedTouches containsObject:touch]) {
             
             switch (touch.phase) {
                 case UITouchPhaseBegan:

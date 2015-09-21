@@ -157,7 +157,8 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 - (void)_sendToRecognizersWithTouches:(NSSet *)touches event:(UIEvent *)event
 {
     [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
-        [self _sendTouches:touches event:event toRecognizer:recognizer];
+        [self _searchNewTouchFrom:touches andTellRecognizer:recognizer];
+        [recognizer _recognizeTouches:touches withEvent:event];
     }];
 }
 
@@ -239,13 +240,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     if (self.hasMakeConclusion) {
         [_multiTouchProcess gestureRecognizeProcessMakeConclusion:self];
     }
-}
-
-- (void)_sendTouches:(NSSet *)touches event:(UIEvent *)event
-        toRecognizer:(UIGestureRecognizer *)recognizer
-{
-    [self _searchNewTouchFrom:touches andTellRecognizer:recognizer];
-    [recognizer _recognizeTouches:touches withEvent:event];
 }
 
 - (void)_searchNewTouchFrom:(NSSet *)touches andTellRecognizer:(UIGestureRecognizer *)recognizer
