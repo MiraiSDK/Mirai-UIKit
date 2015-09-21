@@ -22,7 +22,7 @@
 
 - (instancetype)initWithView:(UIView *)view multiTouchProcess:(TNMultiTouchProcess *)multiTouchProcess;
 
-- (void)trackTouch:(UITouch *)touch;
+- (BOOL)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;
 - (void)sendToAttachedViewIfNeedWithEvent:(UIEvent *)event touches:(NSSet *)touches;
 

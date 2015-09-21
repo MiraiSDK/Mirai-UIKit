@@ -25,6 +25,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     TNGestureFailureRequirementRelationship *_failureRequirementNode;
     
     NSMutableSet *_trackingTouches;
+    NSMutableSet *_ignoredTouches;
     NSMutableSet *_changedStateRecognizersCache;
     NSMutableArray *_delaysBufferedBlocks;
     
@@ -49,6 +50,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         
         _anyRecognizersMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
+        _ignoredTouches = [[NSMutableSet alloc] init];
         _effectRecognizersNode = [[TNGestureRecognizerSimultaneouslyRelationship alloc] initWithView:view
                                                                             gestureRecongizeProcess:self];
         _failureRequirementNode = [[TNGestureFailureRequirementRelationship alloc] initWithView:view];
@@ -125,10 +127,33 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     return oringinalMethod != checkedMethod;
 }
 
-- (void)trackTouch:(UITouch *)touch
+- (BOOL)trackTouch:(UITouch *)touch
 {
-    [_trackingTouches addObject:touch];
-    _trackingTouchesArrayCache = nil;
+    if ([_trackingTouches containsObject:touch]) {
+        return YES;
+    } else if ([_ignoredTouches containsObject:touch]) {
+        return NO;
+    }
+    
+    if ([self _willIgnoreTouch:touch]) {
+        [_ignoredTouches addObject:touch];
+        return NO;
+    } else {
+        [_trackingTouches addObject:touch];
+        _trackingTouchesArrayCache = nil;
+        return YES;
+    }
+}
+
+- (BOOL)_willIgnoreTouch:(UITouch *)touch
+{
+    UIGestureRecognizer *notIngoreRecognizer = [_effectRecognizersNode findGestureRecognizer:
+    ^BOOL(UIGestureRecognizer *recognizer)
+    {
+        return ![recognizer _hasIgnoredTouch:touch];
+    }];
+    
+    return notIngoreRecognizer == nil;
 }
 
 - (void)multiTouchBegin
@@ -491,6 +516,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     
     _trackingTouchesArrayCache = @[];
     [_trackingTouches removeAllObjects];
+    [_ignoredTouches removeAllObjects];
 }
 
 - (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer

@@ -53,6 +53,8 @@
 - (BOOL)_shouldSendActions;
 - (BOOL)_shouldReset;
 
+- (BOOL)_hasIgnoredTouch:(UITouch *)touch;
+
 - (BOOL)_hasRecognizedGesture;
 - (BOOL)_hasMadeConclusion;
 - (BOOL)_hasFinishedRecognizingProcess;

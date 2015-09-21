@@ -39,6 +39,7 @@
 {
     BOOL _excluded;
     NSMutableSet *_excludedTouches;
+    NSMutableSet *_ignoredTouches;
     BOOL _foredFailed;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
@@ -61,6 +62,7 @@
         
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
         _excludedTouches = [[NSMutableSet alloc] initWithCapacity:1];
+        _ignoredTouches = [[NSMutableSet alloc] initWithCapacity:1];
     }
     return self;
 }
@@ -282,6 +284,7 @@
         if (originalState != UIGestureRecognizerStateFailed) {
             [_bindingRecognizeProcess gestureRecognizerChangedState:self];
         }
+        [self _clearTouchesCache];
     }
 }
 
@@ -347,7 +350,13 @@
     _shouldSendActions = NO;
     _foredFailed = NO;
     _state = UIGestureRecognizerStatePossible;
+    [self _clearTouchesCache];
+}
+
+- (void)_clearTouchesCache
+{
     [_excludedTouches removeAllObjects];
+    [_ignoredTouches removeAllObjects];
 }
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
@@ -362,6 +371,12 @@
 
 - (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event
 {
+    [_ignoredTouches addObject:touch];
+}
+
+- (BOOL)_hasIgnoredTouch:(UITouch *)touch
+{
+    return [_ignoredTouches containsObject:touch];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
