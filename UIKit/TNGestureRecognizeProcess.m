@@ -357,7 +357,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (BOOL)_needSendEventToAttachedView
 {
-    return !_cancelsTouchesInView && _lastTimeHasMakeConclusion && !_hasCallAttachedViewCancelledMethod;
+    return !_cancelsTouchesInView && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_runAndClearDelaysBufferedBlocksIfNeed
@@ -406,16 +406,16 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     
     [self _callAttachedViewMethod:@selector(touchesBegan:withEvent:)
                             event:event touches:touchesBeganSet phase:UITouchPhaseBegan
-                           delays:_delaysTouchesBegan];
+                           delays:[self _shouldDelaysBeganTouches]];
     
-    if (!_delaysTouchesBegan) {
+    if (!_delaysTouchesBegan && _lastTimeHasMakeConclusion) {
         [self _callAttachedViewMethod:@selector(touchesMoved:withEvent:)
                                 event:event touches:touchesMovedSet phase:UITouchPhaseMoved delays:NO];
     }
     
     [self _callAttachedViewMethod:@selector(touchesEnded:withEvent:)
                             event:event touches:touchesEndedSet phase:UITouchPhaseEnded
-                           delays:_delaysTouchesBegan || _delaysTouchesEnded];
+                           delays:[self _shouldDelaysEndedTouches]];
     
     [self _callAttachedViewMethod:@selector(touchesCancelled:withEvent:)
                             event:event touches:touchesCancelledSet
@@ -430,6 +430,16 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 - (BOOL)_willHandleAndSendThisTouche:(UITouch *)touch
 {
     return [_trackingTouches containsObject:touch];
+}
+
+- (BOOL)_shouldDelaysBeganTouches
+{
+    return _delaysTouchesBegan || !_lastTimeHasMakeConclusion;
+}
+
+- (BOOL)_shouldDelaysEndedTouches
+{
+    return _delaysTouchesBegan || _delaysTouchesEnded || !_lastTimeHasMakeConclusion;
 }
 
 - (void)_setTouch:(UITouch *)touch intoMutableSet:(NSMutableSet **)set
