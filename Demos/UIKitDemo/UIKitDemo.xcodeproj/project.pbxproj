@@ -139,6 +139,8 @@
 		D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
 		D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
 		D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
+		D2A6662A1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D2A6662B1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */; settings = {ASSET_TAGS = (); }; };
 		D2A90AA31B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A90AA21B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m */; };
 		D2A90AA41B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A90AA21B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m */; };
 		D2A9FB941B1FED8100C88751 /* TNTopFloatTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A9FB931B1FED8100C88751 /* TNTopFloatTestViewController.m */; };
@@ -339,6 +341,8 @@
 		D2A5F49C1AB084CD0011AF7B /* loveheart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loveheart.png; sourceTree = "<group>"; };
 		D2A5F5201AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSegmentedControlTestViewControlViewController.h; sourceTree = "<group>"; };
 		D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSegmentedControlTestViewControlViewController.m; sourceTree = "<group>"; };
+		D2A666281BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNPreventGestureRecognizerTestViewController.h; sourceTree = "<group>"; };
+		D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNPreventGestureRecognizerTestViewController.m; sourceTree = "<group>"; };
 		D2A90AA11B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNLongPressGestureRecognizerTestViewController.h; sourceTree = "<group>"; };
 		D2A90AA21B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNLongPressGestureRecognizerTestViewController.m; sourceTree = "<group>"; };
 		D2A9FB921B1FED8100C88751 /* TNTopFloatTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNTopFloatTestViewController.h; sourceTree = "<group>"; };
@@ -861,6 +865,8 @@
 				D2A438711B9D7F38006D5DC9 /* TNMultiGestureRecognizerTestViewController.m */,
 				D2B390F21BA7B8E1004A87DC /* TNSimultaneouselyGestureTestViewController.h */,
 				D2B390F31BA7B8E1004A87DC /* TNSimultaneouselyGestureTestViewController.m */,
+				D2A666281BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.h */,
+				D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */,
 			);
 			name = UIGestureRecognizer;
 			sourceTree = "<group>";
@@ -1074,6 +1080,7 @@
 				D2CEEE9C1ADBB89D00FDF6C6 /* TNViewWillAppearListenerTestViewController.m in Sources */,
 				D2A438731B9D7F38006D5DC9 /* TNMultiGestureRecognizerTestViewController.m in Sources */,
 				437F25E71A736FA800FBE3E2 /* ViewController.m in Sources */,
+				D2A6662B1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */,
 				D2A90AA41B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m in Sources */,
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 				D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */,
@@ -1124,6 +1131,7 @@
 				4390B8771A8353E10082B0F1 /* TNTextViewTestViewController.m in Sources */,
 				437F25EF1A736FB400FBE3E2 /* AppDelegate.m in Sources */,
 				D2A438721B9D7F38006D5DC9 /* TNMultiGestureRecognizerTestViewController.m in Sources */,
+				D2A6662A1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */,
 				4390B8111A8351CA0082B0F1 /* TNCustomView.m in Sources */,
 				4390B83C1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
 				D269FAD61B3AB4CE00A0AB7A /* TNSearchBarTestViewController.m in Sources */,

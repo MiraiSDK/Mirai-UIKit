@@ -16,6 +16,7 @@
 #import "TNLongPressGestureRecognizerTestViewController.h"
 #import "TNMultiGestureRecognizerTestViewController.h"
 #import "TNSimultaneouselyGestureTestViewController.h"
+#import "TNPreventGestureRecognizerTestViewController.h"
 
 @implementation TNGestureRecognizerTestViewController
 
@@ -35,6 +36,7 @@
              TNRecognizerToFailTestViewController.class,
              TNMultiGestureRecognizerTestViewController.class,
              TNSimultaneouselyGestureTestViewController.class,
+             TNPreventGestureRecognizerTestViewController.class,
              TNTouchShowMessage.class,
              TNTouchConfirmSuperview.class,
              TNGestureEffectTouch.class,
