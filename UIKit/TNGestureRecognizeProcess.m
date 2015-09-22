@@ -147,13 +147,16 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (BOOL)_willIgnoreTouch:(UITouch *)touch
 {
-    UIGestureRecognizer *notIngoreRecognizer = [_effectRecognizersNode findGestureRecognizer:
-    ^BOOL(UIGestureRecognizer *recognizer)
-    {
-        return ![recognizer _hasIgnoredTouch:touch];
-    }];
-    
-    return notIngoreRecognizer == nil;
+    if (_effectRecognizersNode.count > 0) {
+        
+        UIGestureRecognizer *notIngoreRecognizer = [_effectRecognizersNode findGestureRecognizer:
+        ^BOOL(UIGestureRecognizer *recognizer)
+        {
+            return ![recognizer _hasIgnoredTouch:touch];
+        }];
+        return notIngoreRecognizer == nil;
+    }
+    return NO;
 }
 
 - (void)multiTouchBegin
