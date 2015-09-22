@@ -533,7 +533,7 @@
     if (![_excludedTouches containsObject:touch] &&
         [_bindingRecognizeProcess.trackingTouches containsObject:touch]) {
         
-        if ([self _shouldReciveTouch:touch]) {
+        if (![self _shouldReciveTouch:touch]) {
             [_excludedTouches addObject:touch];
         }
     }
