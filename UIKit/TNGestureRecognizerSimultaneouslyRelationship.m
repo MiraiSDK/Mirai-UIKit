@@ -73,6 +73,9 @@
 
 - (void)removeGestureRecognizer:(UIGestureRecognizer *)recognizer
 {
+    NSAssert2(recognizer.state == UIGestureRecognizerStatePossible,
+              @"when remove %@, it's state is %zi", recognizer.className, recognizer.state);
+    
     NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
     NSMutableSet *includesRecognizerGroup = [_recognizerToGroupDictionary objectForKey:recognizerKey];
     
@@ -94,6 +97,9 @@
         NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
         [_recognizerToGroupDictionary removeObjectForKey:recognizerKey];
         [recognizer _unbindRecognizeProcess];
+        
+        NSAssert2(recognizer.state == UIGestureRecognizerStatePossible,
+                  @"when remove %@, it's state is %zi", recognizer.className, recognizer.state);
     }
     [_allSimulataneouslyGroups removeObject:group];
     
@@ -110,6 +116,8 @@
         NSMutableSet *recognizerToRemove = [NSMutableSet set];
         for (UIGestureRecognizer *recognizer in group) {
             if (conditionMethod(recognizer)) {
+                NSAssert2(recognizer.state == UIGestureRecognizerStatePossible,
+                          @"when remove %@, it's state is %zi", recognizer.className, recognizer.state);
                 [recognizerToRemove addObject:recognizer];
                 NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
                 [_recognizerToGroupDictionary removeObjectForKey:recognizerKey];
