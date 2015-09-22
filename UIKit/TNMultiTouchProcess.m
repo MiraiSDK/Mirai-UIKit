@@ -141,7 +141,9 @@
         NSMutableSet *legacyNames = [NSMutableSet set];
         for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
             for (UIGestureRecognizer *recognizer in recognizeProcess.gestureRecognizers) {
-                [legacyNames addObject:recognizer.className];
+                NSString *legacyName = [NSString stringWithFormat:
+                    @"%@[%zi]", recognizer.className, recognizer.state];
+                [legacyNames addObject:legacyName];
             }
         }
         

@@ -34,10 +34,10 @@
     _recognizer.numberOfTapsRequired = 2;
 }
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    return NO;
-}
+//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    return NO;
+//}
 
 - (void)_onRecognizer:(UIGestureRecognizer *)recognizer
 {
