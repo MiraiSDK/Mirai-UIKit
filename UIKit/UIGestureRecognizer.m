@@ -279,7 +279,7 @@
         _state = UIGestureRecognizerStateFailed;
         _foredFailed = YES;
         _shouldSendActions = NO;
-        _shouldReset = (originalState != UIGestureRecognizerStatePossible);
+        _shouldReset = YES;
         
         if (originalState != UIGestureRecognizerStateFailed) {
             [_bindingRecognizeProcess gestureRecognizerChangedState:self];
