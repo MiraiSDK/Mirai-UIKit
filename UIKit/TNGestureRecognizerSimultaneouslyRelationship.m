@@ -270,8 +270,7 @@
 
 - (BOOL)_isRecongizer:(UIGestureRecognizer *)r0 shouldRecongizeSimultaneouslyWithRecongizer:(UIGestureRecognizer *)r1
 {
-    if (!r0.delegate ||
-        [r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecongizeSimultaneouslyWithRecongizer:)]) {
+    if (![r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecongizeSimultaneouslyWithRecongizer:)]) {
         return NO;
     }
     return [r0.delegate gestureRecognizer:r0 shouldRecognizeSimultaneouslyWithGestureRecognizer:r1];
