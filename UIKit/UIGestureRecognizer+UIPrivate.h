@@ -41,6 +41,7 @@
 - (void)_unbindRecognizeProcess;
 
 - (void)_forceFail;
+- (void)_preventByOtherGestureRecognizer;
 
 - (BOOL)_shouldAttemptToRecognize;
 - (void)_foundNewTouch:(UITouch *)touch;

@@ -43,6 +43,7 @@
     BOOL _foredFailed;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
+    BOOL _preventByOtherGestureRecognizer;
     
     TNGestureRecognizeProcess *_bindingRecognizeProcess;
     UIGestureRecognizer *_requireToFailRecognizer;
@@ -83,6 +84,13 @@
 - (void)_unbindRecognizeProcess
 {
     _bindingRecognizeProcess = nil;
+    
+    [self _resetMarkWhenUnbinding];
+}
+
+- (void)_resetMarkWhenUnbinding
+{
+    _preventByOtherGestureRecognizer = NO;
 }
 
 - (void)_setView:(UIView *)v
@@ -284,8 +292,13 @@
         if (originalState != UIGestureRecognizerStateFailed) {
             [_bindingRecognizeProcess gestureRecognizerChangedState:self];
         }
-        [self _clearTouchesCache];
+        [self _resetOtherPropertiesThatMustResetEachTime];
     }
+}
+
+- (void)_preventByOtherGestureRecognizer;
+{
+    _preventByOtherGestureRecognizer = YES;
 }
 
 - (BOOL)_shouldBeginContinuesContinuityRecognizeWithState:(UIGestureRecognizerState)state
@@ -302,7 +315,10 @@
 
 - (BOOL)_shouldBePrevent
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+    if (_preventByOtherGestureRecognizer) {
+        return YES;
+        
+    } else if (_delegate && [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
         return ![_delegate gestureRecognizerShouldBegin:self];
     }
     return NO;
@@ -350,10 +366,10 @@
     _shouldSendActions = NO;
     _foredFailed = NO;
     _state = UIGestureRecognizerStatePossible;
-    [self _clearTouchesCache];
+    [self _resetOtherPropertiesThatMustResetEachTime];
 }
 
-- (void)_clearTouchesCache
+- (void)_resetOtherPropertiesThatMustResetEachTime
 {
     [_excludedTouches removeAllObjects];
     [_ignoredTouches removeAllObjects];
