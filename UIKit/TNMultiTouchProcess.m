@@ -167,27 +167,34 @@
         if (touch.phase != UITouchPhaseBegan) {
             continue;
         }
-        
         UIView *view = [self _findViewCanCatch:touch.view];
         
-        if (!view) {
-            continue;
-        }
-        
-        NSValue *keyView = [NSValue valueWithNonretainedObject:view];
-        TNGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
-        
-        if (!recognizeProcess && generate) {
-            recognizeProcess = [[TNGestureRecognizeProcess alloc] initWithView:view
-                                                             multiTouchProcess:self];
-            [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
-        }
-        
-        if (recognizeProcess) {
-            [recognizeProcess trackTouch:touch];
-            [_trackedTouches addObject:touch];
+        while (view) {
+            
+            NSValue *keyView = [NSValue valueWithNonretainedObject:view];
+            TNGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
+            
+            if (!recognizeProcess && generate) {
+                recognizeProcess = [[TNGestureRecognizeProcess alloc] initWithView:view
+                                                                 multiTouchProcess:self];
+                [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
+            }
+            
+            if (recognizeProcess) {
+                [recognizeProcess trackTouch:touch];
+                [_trackedTouches addObject:touch];
+            }
+            view = [self _findSuperviewCanCatch:view];
         }
     }
+}
+
+- (UIView *)_findSuperviewCanCatch:(UIView *)view
+{
+    if (view.superview) {
+        return [self _findViewCanCatch:view.superview];
+    }
+    return nil;
 }
 
 - (UIView *)_findViewCanCatch:(UIView *)view
