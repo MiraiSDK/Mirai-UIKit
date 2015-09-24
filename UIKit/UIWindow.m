@@ -17,7 +17,7 @@
 #import "UIApplication+UIPrivate.h"
 #import "UIScreenPrivate.h"
 #import "UITopFloatView.h"
-#import "UIMultiTouchProcess.h"
+#import "TNMultiTouchProcess.h"
 
 NSString *const UIWindowDidBecomeVisibleNotification = @"UIWindowDidBecomeVisibleNotification";
 NSString *const UIWindowDidBecomeHiddenNotification = @"UIWindowDidBecomeHiddenNotification";
@@ -40,7 +40,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 @implementation UIWindow
 {
-    UIMultiTouchProcess *_multiTouchProcess;
+    TNMultiTouchProcess *_multiTouchProcess;
     BOOL _landscaped;
 
 }
@@ -52,7 +52,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
         self.screen = [UIScreen mainScreen];
         self.opaque = NO;
         
-        _multiTouchProcess = [[UIMultiTouchProcess alloc] initWithWindow:self];
+        _multiTouchProcess = [[TNMultiTouchProcess alloc] initWithWindow:self];
     }
     return self;
 }

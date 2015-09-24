@@ -8,17 +8,18 @@
 
 #import "UIWindow.h"
 #import "UIEvent.h"
-#import "UIGestureRecognizeProcess.h"
+#import "TNGestureRecognizeProcess.h"
 
-@class UIGestureRecognizeProcess;
+@class TNGestureRecognizeProcess;
 
-@interface UIMultiTouchProcess : NSObject
+@interface TNMultiTouchProcess : NSObject
 
 @property (nonatomic, readonly) UIWindow *window;
 @property (nonatomic, readonly) BOOL handingTouchEvent;
+@property (nonatomic, readonly) BOOL handingMultiTouchEvent;
 
 - (instancetype)initWithWindow:(UIWindow *)window;
 - (void)sendEvent:(UIEvent *)event;
-- (void)gestureRecognizeProcessMakeConclusion:(UIGestureRecognizeProcess *)gestureRecognizeProcess;
+- (void)gestureRecognizeProcessMakeConclusion:(TNGestureRecognizeProcess *)gestureRecognizeProcess;
 
 @end

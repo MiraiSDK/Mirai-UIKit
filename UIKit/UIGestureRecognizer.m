@@ -29,6 +29,7 @@
 
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "TNGestureRecognizeProcess.h"
 #import "UITouch+Private.h"
 #import "UIAction.h"
 #import "UIApplication.h"
@@ -38,10 +39,14 @@
 {
     BOOL _excluded;
     NSMutableSet *_excludedTouches;
+    NSMutableSet *_ignoredTouches;
+    BOOL _foredFailed;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
+    BOOL _preventByOtherGestureRecognizer;
     
-    UIGestureRecognizeProcess *_bindingRecognizeProcess;
+    TNGestureRecognizeProcess *_bindingRecognizeProcess;
+    UIGestureRecognizer *_requireToFailRecognizer;
 }
 @synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
 
@@ -58,6 +63,7 @@
         
         _registeredActions = [[NSMutableArray alloc] initWithCapacity:1];
         _excludedTouches = [[NSMutableSet alloc] initWithCapacity:1];
+        _ignoredTouches = [[NSMutableSet alloc] initWithCapacity:1];
     }
     return self;
 }
@@ -70,7 +76,7 @@
     return self;
 }
 
-- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess
+- (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess
 {
     _bindingRecognizeProcess = recognizeProcess;
 }
@@ -78,6 +84,13 @@
 - (void)_unbindRecognizeProcess
 {
     _bindingRecognizeProcess = nil;
+    
+    [self _resetMarkWhenUnbinding];
+}
+
+- (void)_resetMarkWhenUnbinding
+{
+    _preventByOtherGestureRecognizer = NO;
 }
 
 - (void)_setView:(UIView *)v
@@ -129,6 +142,12 @@
 
 - (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)otherGestureRecognizer
 {
+    _requireToFailRecognizer = otherGestureRecognizer;
+}
+
+- (UIGestureRecognizer *)_requireToFailRecognizer
+{
+    return _requireToFailRecognizer;
 }
 
 - (NSUInteger)numberOfTouches
@@ -191,25 +210,31 @@
 
 - (void)setState:(UIGestureRecognizerState)state
 {
+    if (_foredFailed) {
+        return;
+    }
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
 
-    typedef struct { UIGestureRecognizerState fromState, toState; BOOL shouldNotify, shouldReset; } StateTransition;
+    typedef struct {
+        UIGestureRecognizerState fromState, toState;
+        BOOL shouldNotify, shouldReset, checkPrevent;
+    } StateTransition;
 
     #define NumberOfStateTransitions 9
     static const StateTransition allowedTransitions[NumberOfStateTransitions] = {
         // discrete gestures
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized,     YES,    YES},
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed,         NO,     YES},
+        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized, YES,    YES,    YES},
+        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed,     NO,     YES,    NO},
 
         // continuous gestures
-        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan,          YES,    NO },
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged,        YES,    NO },
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled,      YES,    YES},
-        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded,          YES,    YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateChanged,        YES,    NO },
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled,      YES,    YES},
-        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded,          YES,    YES}
+        {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan,      YES,    NO,     YES},
+        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged,    YES,    NO,     NO},
+        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateCancelled,  YES,    YES,    NO},
+        {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateEnded,      YES,    YES,    NO},
+        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateChanged,    YES,    NO,     NO},
+        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateCancelled,  YES,    YES,    NO},
+        {UIGestureRecognizerStateChanged,		UIGestureRecognizerStateEnded,      YES,    YES,    NO}
     };
     
     const StateTransition *transition = NULL;
@@ -224,6 +249,7 @@
     NSAssert2((transition != NULL), @"invalid state transition from %d to %d", _state, state);
     UIGestureRecognizerState originalState = _state;
     
+    
     if ([self _shouldBeginContinuesContinuityRecognizeWithState:state]) {
         
         [self _setExcluded];
@@ -233,9 +259,17 @@
         
     } else if (transition) {
         
-        _state = transition->toState;
-        _shouldSendActions = transition->shouldNotify;
-        _shouldReset = transition->shouldReset;
+        if (transition->checkPrevent && [self _shouldBePrevent]) {
+            _state = UIGestureRecognizerStateFailed;
+            _shouldSendActions = NO;
+            _shouldReset = YES;
+            
+        } else {
+            _state = transition->toState;
+            _shouldSendActions = transition->shouldNotify;
+            _shouldReset = transition->shouldReset;
+        }
+        
     }
     
     if (originalState == UIGestureRecognizerStateChanged ||
@@ -243,6 +277,28 @@
         
         [_bindingRecognizeProcess gestureRecognizerChangedState:self];
     }
+}
+
+- (void)_forceFail
+{
+    UIGestureRecognizerState originalState = _state;
+    
+    if (!_foredFailed) {
+        _state = UIGestureRecognizerStateFailed;
+        _foredFailed = YES;
+        _shouldSendActions = NO;
+        _shouldReset = YES;
+        
+        if (originalState != UIGestureRecognizerStateFailed) {
+            [_bindingRecognizeProcess gestureRecognizerChangedState:self];
+        }
+        [self _resetOtherPropertiesThatMustResetEachTime];
+    }
+}
+
+- (void)_preventByOtherGestureRecognizer;
+{
+    _preventByOtherGestureRecognizer = YES;
 }
 
 - (BOOL)_shouldBeginContinuesContinuityRecognizeWithState:(UIGestureRecognizerState)state
@@ -255,6 +311,17 @@
         return NO;
     }
     return ![self _shouldBegan];
+}
+
+- (BOOL)_shouldBePrevent
+{
+    if (_preventByOtherGestureRecognizer) {
+        return YES;
+        
+    } else if (_delegate && [_delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+        return ![_delegate gestureRecognizerShouldBegin:self];
+    }
+    return NO;
 }
 
 - (BOOL)_shouldBegan
@@ -297,8 +364,15 @@
     _excluded = NO;
     _shouldReset = NO;
     _shouldSendActions = NO;
+    _foredFailed = NO;
     _state = UIGestureRecognizerStatePossible;
+    [self _resetOtherPropertiesThatMustResetEachTime];
+}
+
+- (void)_resetOtherPropertiesThatMustResetEachTime
+{
     [_excludedTouches removeAllObjects];
+    [_ignoredTouches removeAllObjects];
 }
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
@@ -311,8 +385,24 @@
     return YES;
 }
 
+- (BOOL)shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
+}
+
+- (BOOL)shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
+}
+
 - (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event
 {
+    [_ignoredTouches addObject:touch];
+}
+
+- (BOOL)_hasIgnoredTouch:(UITouch *)touch
+{
+    return [_ignoredTouches containsObject:touch];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -417,6 +507,16 @@
            _state == UIGestureRecognizerStateFailed;
 }
 
+- (BOOL)_hasFinishedRecognizingProcess
+{
+    return _foredFailed || [self _hasMadeConclusion];
+}
+
+- (BOOL)_isFinishedRecognizing
+{
+    return _state == UIGestureRecognizerStateEnded;
+}
+
 - (BOOL)_isFailed
 {
     return self.state == UIGestureRecognizerStateFailed;
@@ -459,7 +559,7 @@
     if (![_excludedTouches containsObject:touch] &&
         [_bindingRecognizeProcess.trackingTouches containsObject:touch]) {
         
-        if ([self _shouldReciveTouch:touch]) {
+        if (![self _shouldReciveTouch:touch]) {
             [_excludedTouches addObject:touch];
         }
     }
@@ -482,7 +582,8 @@
     
     for (UITouch *touch in touches) {
         
-        if ([_bindingRecognizeProcess.trackingTouches containsObject:touch]) {
+        if ([_bindingRecognizeProcess.trackingTouches containsObject:touch] &&
+            ![_excludedTouches containsObject:touch]) {
             
             switch (touch.phase) {
                 case UITouchPhaseBegan:

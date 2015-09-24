@@ -28,14 +28,20 @@
  */
 
 #import "UIGestureRecognizer.h"
-#import "UIGestureRecognizeProcess.h"
+
+@class TNGestureRecognizeProcess;
 
 @interface UIGestureRecognizer (UIPrivate)
 - (void)_setView:(UIView *)v;
 - (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event;
 
-- (void)_bindRecognizeProcess:(UIGestureRecognizeProcess *)recognizeProcess;
+- (UIGestureRecognizer *)_requireToFailRecognizer;
+
+- (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess;
 - (void)_unbindRecognizeProcess;
+
+- (void)_forceFail;
+- (void)_preventByOtherGestureRecognizer;
 
 - (BOOL)_shouldAttemptToRecognize;
 - (void)_foundNewTouch:(UITouch *)touch;
@@ -48,9 +54,13 @@
 - (BOOL)_shouldSendActions;
 - (BOOL)_shouldReset;
 
+- (BOOL)_hasIgnoredTouch:(UITouch *)touch;
+
 - (BOOL)_hasRecognizedGesture;
 - (BOOL)_hasMadeConclusion;
+- (BOOL)_hasFinishedRecognizingProcess;
 
+- (BOOL)_isFinishedRecognizing;
 - (BOOL)_isFailed;
 - (BOOL)_canReceiveTouches;
 - (BOOL)_isActivity;

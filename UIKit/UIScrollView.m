@@ -583,8 +583,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_endDraggingWithDecelerationVelocity:(CGPoint)velocity
 {
-    NSLog(@"-> %s %@", __FUNCTION__, NSStringFromCGPoint(velocity));
-    
     if (_dragging) {
         _dragging = NO;
         
@@ -650,7 +648,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_gestureDidChange:(UIGestureRecognizer *)gesture
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
     // the scrolling gestures are broken into two components due to the somewhat fundamental differences
     // in how they are handled by the system. The UIPanGestureRecognizer will only track scrolling gestures
     // that come from actual touch scroller devices. This does *not* include old fashioned mouse wheels.

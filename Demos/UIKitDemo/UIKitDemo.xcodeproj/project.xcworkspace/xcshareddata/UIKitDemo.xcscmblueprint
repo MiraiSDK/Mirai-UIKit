@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "CC16C6DD1F2AD8EBDF624F5F43C3EB0417B5EFD7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "CC16C6DD1F2AD8EBDF624F5F43C3EB0417B5EFD7" : 0,
+    "DAAE31B7A32B48881EE67AA60C950247E82A7ADE" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "036A2BE6-D3B4-4862-BEC1-22E8D742A132",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "CC16C6DD1F2AD8EBDF624F5F43C3EB0417B5EFD7" : "Mirai-UIKit",
+    "DAAE31B7A32B48881EE67AA60C950247E82A7ADE" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "UIKitDemo",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Demos\/UIKitDemo\/UIKitDemo.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/moskize\/Mirai-UIKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CC16C6DD1F2AD8EBDF624F5F43C3EB0417B5EFD7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/moskize\/MiraiSDK.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DAAE31B7A32B48881EE67AA60C950247E82A7ADE"
+    }
+  ]
+}
