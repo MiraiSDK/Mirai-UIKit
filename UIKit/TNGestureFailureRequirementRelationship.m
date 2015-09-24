@@ -8,6 +8,7 @@
 
 #import "TNGestureFailureRequirementRelationship.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIGestureRecognizerSubclass.h"
 #import "UIView.h"
 
 @implementation TNGestureFailureRequirementRelationship
@@ -19,32 +20,72 @@
 {
     if (self = [self init]) {
         _recongizerToItsFailureRequiresSet = [NSMutableDictionary dictionary];
-        for (UIGestureRecognizer *recongizer in view.gestureRecognizers) {
-            [self _recordAndHandleGestureRecongizer:recongizer];
-        }
+        
+        NSArray *recognizers = view.gestureRecognizers;
+        [self _recordFailureRequirementFromCallingMethodWithRecognizers:recognizers];
+        [self _recordFailureRequirementFromOverrideMethodWithRecognizers:recognizers];
     }
     return self;
 }
 
-- (void)_recordAndHandleGestureRecongizer:(UIGestureRecognizer *)recongizer
+- (void)_recordFailureRequirementFromCallingMethodWithRecognizers:(NSArray *)recognizers
 {
-    UIGestureRecognizer *requireToFailRecongizer = [recongizer _requireToFailRecognizer];
-    
-    if (requireToFailRecongizer) {
-        NSMutableSet *failureRequires = [self _allRecongizersWhoRequireToFail:requireToFailRecongizer];
-        [failureRequires addObject:recongizer];
+    for (UIGestureRecognizer *recongizer in recognizers) {
+        UIGestureRecognizer *requireToFailRecognizer = [recongizer _requireToFailRecognizer];
+        if (requireToFailRecognizer) {
+            [self _recordRecognizer:recongizer requireOtherToFail:requireToFailRecognizer];
+        }
     }
 }
 
-- (NSMutableSet *)_allRecongizersWhoRequireToFail:(UIGestureRecognizer *)requireToFailRecongizer
+- (void)_recordFailureRequirementFromOverrideMethodWithRecognizers:(NSArray *)recognizers
 {
-    NSValue *key = [NSValue valueWithNonretainedObject:requireToFailRecongizer];
-    NSMutableSet *set = [_recongizerToItsFailureRequiresSet objectForKey:key];
-    if (!set) {
-        set = [NSMutableSet set];
-        [_recongizerToItsFailureRequiresSet setObject:set forKey:key];
+    for (UIGestureRecognizer *requireToFailRecognizer in recognizers) {
+        for (UIGestureRecognizer *recongizer in recognizers) {
+            if ([self _recognizer:recongizer requireThisRecognizerToFail:requireToFailRecognizer]) {
+                [self _recordRecognizer:recongizer requireOtherToFail:requireToFailRecognizer];
+            }
+        }
     }
-    return set;
+}
+
+- (BOOL)_recognizer:(UIGestureRecognizer *)recognizer requireThisRecognizerToFail:(UIGestureRecognizer *)requireToFailRecognizer
+{
+    if (recognizer == requireToFailRecognizer) {
+        return NO;
+    }
+    
+    if (![requireToFailRecognizer shouldBeRequiredToFailByGestureRecognizer:recognizer]) {
+        return NO;
+    }
+    
+    if (![recognizer shouldRequireFailureOfGestureRecognizer:requireToFailRecognizer]) {
+        return NO;
+    }
+    
+    if ([requireToFailRecognizer.delegate respondsToSelector:@selector(gestureRecognizer:shouldBeRequiredToFailByGestureRecognizer:)] &&
+        ![requireToFailRecognizer.delegate gestureRecognizer:requireToFailRecognizer shouldBeRequiredToFailByGestureRecognizer:recognizer]) {
+        return NO;
+    }
+    
+    if ([recognizer.delegate respondsToSelector:@selector(shouldRequireFailureOfGestureRecognizer:)] &&
+        ![recognizer shouldRequireFailureOfGestureRecognizer:requireToFailRecognizer]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)_recordRecognizer:(UIGestureRecognizer *)recognizer
+       requireOtherToFail:(UIGestureRecognizer *)requireToFailRecognizer
+{
+    NSValue *key = [NSValue valueWithNonretainedObject:requireToFailRecognizer];
+    NSMutableSet *failureRequires = [_recongizerToItsFailureRequiresSet objectForKey:key];
+    if (!failureRequires) {
+        failureRequires = [NSMutableSet set];
+        [_recongizerToItsFailureRequiresSet setObject:failureRequires forKey:key];
+    }
+    [failureRequires addObject:recognizer];
 }
 
 - (void)eachGestureRecongizer:(UIGestureRecognizer *)gestureRecongizer

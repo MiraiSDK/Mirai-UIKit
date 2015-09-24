@@ -385,6 +385,16 @@
     return YES;
 }
 
+- (BOOL)shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
+}
+
+- (BOOL)shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
+}
+
 - (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent*)event
 {
     [_ignoredTouches addObject:touch];
