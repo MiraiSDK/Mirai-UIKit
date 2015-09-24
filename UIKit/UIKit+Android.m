@@ -267,6 +267,21 @@
 
 @end
 
+@implementation NSString (NSURLUtilities)
+
+- (NSString *)stringByAddingPercentEncodingWithAllowedCharacters:(NSCharacterSet *)allowedCharacters
+{
+    NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
+    return self;
+}
+
+- (NSString *)stringByRemovingPercentEncoding
+{
+    return [self stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
+@end
+
 @implementation NSIndexSet (Android)
 
 - (NSIndexSet *)indexesInRange:(NSRange)range options:(NSEnumerationOptions)opts passingTest:(BOOL (^)(NSUInteger idx, BOOL *stop))predicate

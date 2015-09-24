@@ -48,7 +48,6 @@
 
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 static const NSTimeInterval UIScrollViewQuickAnimationDuration = 0.22;
-static const NSUInteger UIScrollViewScrollAnimationFramesPerSecond = 60;
 
 const float UIScrollViewDecelerationRateNormal = 0.998;
 const float UIScrollViewDecelerationRateFast = 0.99;
@@ -88,7 +87,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 //    UIScrollWheelGestureRecognizer *_scrollWheelGestureRecognizer;
     
     id _scrollAnimation;
-    NSTimer *_scrollTimer;
+    CADisplayLink *_displayLink;
     
     struct {
         unsigned scrollViewDidScroll : 1;
@@ -235,8 +234,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)_cancelScrollAnimation
 {
-    [_scrollTimer invalidate];
-    _scrollTimer = nil;
+    [_displayLink invalidate];
+    [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    _displayLink = nil;
     
     _scrollAnimation = nil;
     
@@ -255,7 +255,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     }
 }
 
-- (void)_updateScrollAnimation
+- (void)_updateScrollAnimation:(CADisplayLink *)displayLink
 {
     if ([_scrollAnimation animate]) {
         [self _cancelScrollAnimation];
@@ -269,8 +269,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     }
     _scrollAnimation = animation;
     
-    if (!_scrollTimer) {
-        _scrollTimer = [NSTimer scheduledTimerWithTimeInterval:1/(NSTimeInterval)UIScrollViewScrollAnimationFramesPerSecond target:self selector:@selector(_updateScrollAnimation) userInfo:nil repeats:YES];
+    if (!_displayLink) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(_updateScrollAnimation:)];
+        [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     }
 }
 
