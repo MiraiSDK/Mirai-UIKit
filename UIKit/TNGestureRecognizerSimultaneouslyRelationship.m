@@ -10,6 +10,7 @@
 
 #import "UIView.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIGestureRecognizerSubclass.h"
 
 @implementation TNGestureRecognizerSimultaneouslyRelationship
 {
@@ -278,10 +279,18 @@
 
 - (BOOL)_isRecongizer:(UIGestureRecognizer *)r0 shouldRecongizeSimultaneouslyWithRecongizer:(UIGestureRecognizer *)r1
 {
-    if (![r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecongizeSimultaneouslyWithRecongizer:)]) {
-        return NO;
+    BOOL shouldSimultaneously = NO;
+    
+    if ([r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecongizeSimultaneouslyWithRecongizer:)]) {
+        shouldSimultaneously = [r0.delegate gestureRecognizer:r0
+           shouldRecognizeSimultaneouslyWithGestureRecognizer:r1];
     }
-    return [r0.delegate gestureRecognizer:r0 shouldRecognizeSimultaneouslyWithGestureRecognizer:r1];
+    
+    if (!shouldSimultaneously && [r1 _hasBeenPreventedByOtherGestureRecognizer]) {
+        shouldSimultaneously = ![r0 canBePreventedByGestureRecognizer:r0] ||
+                               ![r1 canPreventGestureRecognizer:r0];
+    }
+    return shouldSimultaneously;
 }
 
 - (void)_saveGroup:(NSSet *)group forRecognizer:(UIGestureRecognizer *)recognizer
