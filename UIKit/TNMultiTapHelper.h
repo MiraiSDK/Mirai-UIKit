@@ -30,6 +30,6 @@
 - (void)reset;
 
 - (CGPoint)beginLocationWithTouch:(UITouch *)touch;
-- (BOOL)anyTouches:(NSSet *)touches outOfArea:(CGFloat)areaSize;
+- (BOOL)anyTouchesOutOfArea:(CGFloat)areaSize;
 
 @end

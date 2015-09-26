@@ -66,11 +66,20 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         _delaysTouchesEnded = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesEnded"];
         
         [self _preventGestureRecognizersThroughRelationship];
-        
-        NSLog(@"generate UIGestureRecognizeProcess [%@] includes %li gesture recognizers.",
-              _view.className, _effectRecognizersNode.count);
+        NSLog(@"generate UIGestureRecognizeProcess %@", self.description);
     }
     return self;
+}
+
+- (NSString *)description
+{
+    NSMutableArray *descriptions = [NSMutableArray array];
+    
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+        [descriptions addObject:[recognizer _description]];
+    }];
+    return [NSString stringWithFormat:@"[%@] includes %@",
+            _view.className, [descriptions componentsJoinedByString:@" "]];
 }
 
 - (void)dealloc
@@ -97,9 +106,11 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 - (BOOL)_willBePreventByOther:(UIGestureRecognizer *)recognizer
 {
     return nil != [_effectRecognizersNode findGestureRecognizer:
-                            ^BOOL(UIGestureRecognizer *otherRecognizer) {
+        ^BOOL(UIGestureRecognizer *otherRecognizer) {
         
-        if (recognizer != otherRecognizer) {
+        if (recognizer != otherRecognizer &&
+            ![otherRecognizer _hasBeenPreventedByOtherGestureRecognizer]) {
+            
             return [recognizer canBePreventedByGestureRecognizer:otherRecognizer] &&
                    [otherRecognizer canPreventGestureRecognizer:recognizer];
         }

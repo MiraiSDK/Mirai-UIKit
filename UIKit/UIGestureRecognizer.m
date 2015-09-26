@@ -76,6 +76,15 @@
     return self;
 }
 
+- (NSString *)_description
+{
+    NSMutableArray *actions = [NSMutableArray array];
+    for (UIAction *actionRecord in _registeredActions) {
+        [actions addObject:NSStringFromSelector(actionRecord.action)];
+    }
+    return [NSString stringWithFormat:@"%@(%@)", self.className, [actions componentsJoinedByString:@", "]];
+}
+
 - (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess
 {
     _bindingRecognizeProcess = recognizeProcess;
@@ -265,6 +274,8 @@
             _shouldReset = YES;
             
         } else {
+            if (transition->toState == UIGestureRecognizerStateFailed) {
+            }
             _state = transition->toState;
             _shouldSendActions = transition->shouldNotify;
             _shouldReset = transition->shouldReset;
@@ -299,6 +310,11 @@
 - (void)_preventByOtherGestureRecognizer;
 {
     _preventByOtherGestureRecognizer = YES;
+}
+
+- (BOOL)_hasBeenPreventedByOtherGestureRecognizer
+{
+    return _preventByOtherGestureRecognizer;
 }
 
 - (BOOL)_shouldBeginContinuesContinuityRecognizeWithState:(UIGestureRecognizerState)state
@@ -343,8 +359,6 @@
             }
         }
     }
-    
-    NSLog(@"%s -> %@",__PRETTY_FUNCTION__,shouldBegan?@"YES":@"NO");
     return shouldBegan;
 }
 
@@ -479,7 +493,6 @@
 
 - (void)_setExcluded
 {
-    NSLog(@"-[%@ _setExcluded]",self.class);
     _excluded = YES;
 }
 
