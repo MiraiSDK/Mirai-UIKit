@@ -23,7 +23,11 @@
 #import "UIKit+Android.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <QuartzCore/CADisplayLink.h>
 #import <UIKit/UIKit.h>
+@interface CADisplayLink(Private)
++ (void)_endFrame;
+@end
 
 @interface BKRenderingService ()
 @property (nonatomic, strong) NSOperationQueue *renderQueue;
@@ -42,6 +46,7 @@
 
 @property (nonatomic, assign, getter = isCanceled) BOOL canceled;
 @property (nonatomic, strong) EAGLContext *eaglContext;
+@property (nonatomic, strong) NSLock *frameLock;
 @end
 @implementation BKRenderingService
 static BKRenderingService *currentService = nil;
@@ -71,8 +76,10 @@ static BKRenderingService *currentService = nil;
 {
     __weak typeof(self) weakSelf = self;
     [self.renderQueue addOperationWithBlock:^{
+        _frameLock = [[NSLock alloc] init];
         [weakSelf rendering];
         [weakSelf tearDown];
+        _frameLock = nil;
     }];
 }
 #pragma mark - call from queue
@@ -203,6 +210,7 @@ static BKRenderingService *currentService = nil;
 
     while (!self.isCanceled) {
         if (!self.layer) {continue;}
+        [self.frameLock lock];
         EGLint pixelWidth, pixelHeight;
         eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
         eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
@@ -229,6 +237,7 @@ static BKRenderingService *currentService = nil;
             
             eglSwapBuffers(_display, _surface);
         }
+        [self.frameLock unlock];
         
         // call animation stopped callbacks after end a frame
         @autoreleasepool {
@@ -244,6 +253,9 @@ static BKRenderingService *currentService = nil;
             [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallback) withObject:nil waitUntilDone:YES];
         }
         
+
+        // notify main thread on frame end?
+        [CADisplayLink _endFrame];
     }
 
 }
@@ -270,7 +282,11 @@ static BKRenderingService *currentService = nil;
     if (!layer) {
         NSLog(@"[Warning] upload render layer is nil");
     }
+    [self.frameLock lock];
+    //should wait until frame end
     self.layer = layer;
+    [self.frameLock unlock];
+    
 }
 @end
 

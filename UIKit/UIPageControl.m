@@ -65,8 +65,8 @@
     }
 }
 
-#define kDefaultDotWidth 30
-#define kDefaultDotGap 5
+#define kDefaultDotWidth 7
+#define kDefaultDotGap 16
 
 - (void)setNumberOfPages:(NSInteger)numberOfPages
 {
