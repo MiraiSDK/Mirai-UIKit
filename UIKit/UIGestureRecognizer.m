@@ -45,8 +45,8 @@
     BOOL _shouldReset;
     BOOL _preventByOtherGestureRecognizer;
     
-    TNGestureRecognizeProcess *_bindingRecognizeProcess;
-    UIGestureRecognizer *_requireToFailRecognizer;
+    __weak TNGestureRecognizeProcess *_bindingRecognizeProcess;
+    __weak UIGestureRecognizer *_requireToFailRecognizer;
 }
 @synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
 

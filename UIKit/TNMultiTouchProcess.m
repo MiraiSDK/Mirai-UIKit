@@ -14,7 +14,7 @@
 
 @implementation TNMultiTouchProcess
 {
-    UIWindow *_window;
+    __unsafe_unretained UIWindow *_window;
     
     NSInteger _currentPressFingersCount;
     BOOL _legacyAnyRecognizeProcesses;

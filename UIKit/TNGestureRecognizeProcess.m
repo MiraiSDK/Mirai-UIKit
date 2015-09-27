@@ -18,8 +18,8 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 @implementation TNGestureRecognizeProcess
 {
-    UIView *_view;
-    TNMultiTouchProcess *_multiTouchProcess;
+    __weak TNMultiTouchProcess *_multiTouchProcess;
+    __weak UIView *_view;
     
     TNGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
     TNGestureFailureRequirementRelationship *_failureRequirementNode;

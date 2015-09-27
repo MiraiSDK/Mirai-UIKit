@@ -14,7 +14,7 @@
 
 @implementation TNGestureRecognizerSimultaneouslyRelationship
 {
-    TNGestureRecognizeProcess *_gestureReconizeProcess;
+    __unsafe_unretained TNGestureRecognizeProcess *_gestureReconizeProcess;
     
     NSSet *_currentChoosedGroup;
     NSMutableSet *_allSimulataneouslyGroups;
