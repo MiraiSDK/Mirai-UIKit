@@ -586,8 +586,10 @@
     return YES;
 }
 
-- (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event
+- (NSUInteger)_recognizeAndGetHandledTouchesCountWithTouches:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSUInteger handledTouchesCount = 0;
+    
     NSMutableSet *touchesBeginSet = nil;
     NSMutableSet *touchesMovedSet = nil;
     NSMutableSet *touchesEndedSet = nil;
@@ -618,6 +620,7 @@
                 default:
                     break;
             }
+            handledTouchesCount++;
         }
     }
     
@@ -636,6 +639,8 @@
     if (touchesCancelledSet) {
         [self touchesCancelled:touchesCancelledSet withEvent:event];
     }
+    
+    return handledTouchesCount;
 }
 
 - (void)_setTouch:(UITouch *)touch intoMutableSet:(NSMutableSet **)set

@@ -142,14 +142,14 @@
         for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
             for (UIGestureRecognizer *recognizer in recognizeProcess.gestureRecognizers) {
                 NSString *legacyName = [NSString stringWithFormat:
-                    @"%@[%zi]", recognizer.className, recognizer.state];
+                    @"[%@](%zi)", [recognizer _description], recognizer.state];
                 [legacyNames addObject:legacyName];
             }
         }
         
         NSLog(@"legacy any recognize processes. it won't generate any new recognize processes before legacy processes make conclusion.");
         NSLog(@"there are %li recognize processes didn't make conclusion. list : %@",
-              _effectRecognizeProcesses.count, legacyNames);
+              _effectRecognizeProcesses.count, [[legacyNames allObjects] componentsJoinedByString:@", "]);
     }
 }
 
