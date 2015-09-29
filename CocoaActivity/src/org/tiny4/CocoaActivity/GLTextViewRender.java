@@ -8,6 +8,7 @@ import android.view.View;
 import android.text.TextWatcher;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
+import android.view.inputmethod.InputMethodManager;
 
 import android.util.Log;
 
@@ -154,8 +155,50 @@ public class GLTextViewRender extends GLViewRender {
         runOnUiThreadAsync(aRunnable);
         return  syncNode.waitUtilGetResult();
     }
+    
+    
+    public void showKeyBoard() {
+        runOnUiThreadAsync(new Runnable() {
+            
+            @Override
+            public void run() {
+                Log.i("NSLog", ">> showKeyBoard");
+                _view.requestFocus();
+                setSoftKeyBoardVisible(_view.getContext(), true);
+            }
+        });
+    }
+    
+    public void closeKeyBoard() {
+        runOnUiThreadAsync(new Runnable() {
+            
+            @Override
+            public void run() {
+                Log.i("NSLog", ">> closeKeyBoard");
+                setSoftKeyBoardVisible(_view.getContext(), false);
+                _view.clearFocus();
+            }
+        });
+    }
+    
     @Override
     public void onDestory() {
         super.onDestory();
+    }
+    
+    private static boolean _currentSoftKeyBoardVisible;
+    
+    private static void setSoftKeyBoardVisible(Context context, boolean softKeyBoardVisible) {
+        
+        if (_currentSoftKeyBoardVisible != softKeyBoardVisible) {
+            _currentSoftKeyBoardVisible = softKeyBoardVisible;
+            
+            InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (softKeyBoardVisible) {
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+            } else {
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+            }
+        }
     }
 }

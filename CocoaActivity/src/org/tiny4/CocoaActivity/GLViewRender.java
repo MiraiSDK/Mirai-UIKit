@@ -20,6 +20,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import android.util.Log;
+
 /**
  * Created by Yonghui Chen on 10/31/14.
  */
