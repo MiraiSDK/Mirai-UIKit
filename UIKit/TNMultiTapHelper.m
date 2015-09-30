@@ -70,12 +70,19 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     [_touches removeAllObjects];
 }
 
-- (void)beginOneTapWithTouches:(NSSet *)touches
+
+- (void)trackTouches:(NSSet *)touches
 {
-    [_touches addObjectsFromArray:touches.allObjects];
+    for (UITouch *touch in touches) {
+        [_touches addObject:touch];
+    }
+}
+
+- (void)beginOneTap
+{
     [self _restartInvalidTimer];
     
-    for (UITouch *t in touches) {
+    for (UITouch *t in _touches) {
         NSInteger idx = [_touches indexOfObject:t];
         CGPoint initPoint = [t locationInView:nil];
         NSValue *v = [NSValue valueWithCGPoint:initPoint];

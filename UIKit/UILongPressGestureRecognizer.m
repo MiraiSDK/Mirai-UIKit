@@ -100,7 +100,8 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_multiTapHelper beginOneTapWithTouches:touches];
+    [_multiTapHelper trackTouches:touches];
+    [_multiTapHelper beginOneTap];
     
     if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
         [_multiTapHelper cancelTap];

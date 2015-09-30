@@ -25,7 +25,8 @@
 - (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval
                    gestureRecognizer:(UIGestureRecognizer<TNMultiTapHelperDelegate> *)gestureRecognizer;
 
-- (void)beginOneTapWithTouches:(NSSet *)touches;
+- (void)trackTouches:(NSSet *)touches;
+- (void)beginOneTap;
 - (void)releaseFingersWithTouches:(NSSet *)touches;
 - (void)cancelTap;
 - (void)reset;
