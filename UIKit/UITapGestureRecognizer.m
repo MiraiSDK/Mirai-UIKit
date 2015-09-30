@@ -64,16 +64,6 @@
     return self;
 }
 
-- (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
-{
-    _numberOfTapsRequired = numberOfTapsRequired;
-}
-
-- (void)setNumberOfTouchesRequired:(NSUInteger)numberOfTouchesRequired
-{
-    _numberOfTouchesRequired = numberOfTouchesRequired;
-}
-
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
 {
     // this logic is here based on a note in the docs for -canPreventGestureRecognizer:
