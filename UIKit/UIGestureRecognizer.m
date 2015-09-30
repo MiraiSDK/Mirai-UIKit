@@ -45,8 +45,8 @@
     BOOL _shouldReset;
     BOOL _preventByOtherGestureRecognizer;
     
-    TNGestureRecognizeProcess *_bindingRecognizeProcess;
-    UIGestureRecognizer *_requireToFailRecognizer;
+    __weak TNGestureRecognizeProcess *_bindingRecognizeProcess;
+    __weak UIGestureRecognizer *_requireToFailRecognizer;
 }
 @synthesize delegate=_delegate, cancelsTouchesInView=_cancelsTouchesInView;
 
@@ -74,6 +74,15 @@
         [self addTarget:target action:action];
     }
     return self;
+}
+
+- (NSString *)_description
+{
+    NSMutableArray *actions = [NSMutableArray array];
+    for (UIAction *actionRecord in _registeredActions) {
+        [actions addObject:NSStringFromSelector(actionRecord.action)];
+    }
+    return [NSString stringWithFormat:@"%@(%@)", self.className, [actions componentsJoinedByString:@", "]];
 }
 
 - (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess
@@ -265,6 +274,8 @@
             _shouldReset = YES;
             
         } else {
+            if (transition->toState == UIGestureRecognizerStateFailed) {
+            }
             _state = transition->toState;
             _shouldSendActions = transition->shouldNotify;
             _shouldReset = transition->shouldReset;
@@ -299,6 +310,11 @@
 - (void)_preventByOtherGestureRecognizer;
 {
     _preventByOtherGestureRecognizer = YES;
+}
+
+- (BOOL)_hasBeenPreventedByOtherGestureRecognizer
+{
+    return _preventByOtherGestureRecognizer;
 }
 
 - (BOOL)_shouldBeginContinuesContinuityRecognizeWithState:(UIGestureRecognizerState)state
@@ -343,8 +359,6 @@
             }
         }
     }
-    
-    NSLog(@"%s -> %@",__PRETTY_FUNCTION__,shouldBegan?@"YES":@"NO");
     return shouldBegan;
 }
 
@@ -479,7 +493,6 @@
 
 - (void)_setExcluded
 {
-    NSLog(@"-[%@ _setExcluded]",self.class);
     _excluded = YES;
 }
 
@@ -573,8 +586,10 @@
     return YES;
 }
 
-- (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event
+- (NSUInteger)_recognizeAndGetHandledTouchesCountWithTouches:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSUInteger handledTouchesCount = 0;
+    
     NSMutableSet *touchesBeginSet = nil;
     NSMutableSet *touchesMovedSet = nil;
     NSMutableSet *touchesEndedSet = nil;
@@ -605,6 +620,7 @@
                 default:
                     break;
             }
+            handledTouchesCount++;
         }
     }
     
@@ -623,6 +639,8 @@
     if (touchesCancelledSet) {
         [self touchesCancelled:touchesCancelledSet withEvent:event];
     }
+    
+    return handledTouchesCount;
 }
 
 - (void)_setTouch:(UITouch *)touch intoMutableSet:(NSMutableSet **)set

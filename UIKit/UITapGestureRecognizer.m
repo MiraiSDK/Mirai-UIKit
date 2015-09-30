@@ -104,7 +104,7 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([self _anyTouches:touches outOfArea:kTapLimitAreaSize]) {
+    if ([self _anyTouchesOutOfArea:kTapLimitAreaSize]) {
         [self _cancelTap];
     }
 }
@@ -146,9 +146,9 @@
     return [beginPoint CGPointValue];
 }
 
-- (BOOL)_anyTouches:(NSSet *)touches outOfArea:(CGFloat)areaSize
+- (BOOL)_anyTouchesOutOfArea:(CGFloat)areaSize
 {
-    for (UITouch *touch in touches) {
+    for (UITouch *touch in _touches) {
         if ([self _isTouch:touch outOfArea:areaSize]) {
             return YES;
         }

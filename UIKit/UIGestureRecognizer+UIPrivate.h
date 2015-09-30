@@ -33,15 +33,18 @@
 
 @interface UIGestureRecognizer (UIPrivate)
 - (void)_setView:(UIView *)v;
-- (void)_recognizeTouches:(NSSet *)touches withEvent:(UIEvent *)event;
+- (NSUInteger)_recognizeAndGetHandledTouchesCountWithTouches:(NSSet *)touches withEvent:(UIEvent *)event;
 
 - (UIGestureRecognizer *)_requireToFailRecognizer;
+
+- (NSString *)_description;
 
 - (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess;
 - (void)_unbindRecognizeProcess;
 
 - (void)_forceFail;
 - (void)_preventByOtherGestureRecognizer;
+- (BOOL)_hasBeenPreventedByOtherGestureRecognizer;
 
 - (BOOL)_shouldAttemptToRecognize;
 - (void)_foundNewTouch:(UITouch *)touch;

@@ -88,9 +88,9 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     [self _stopInvalidTimer];
 }
 
-- (BOOL)anyTouches:(NSSet *)touches outOfArea:(CGFloat)areaSize
+- (BOOL)anyTouchesOutOfArea:(CGFloat)areaSize
 {
-    for (UITouch *touch in touches) {
+    for (UITouch *touch in _touches) {
         if ([self _isTouch:touch outOfArea:areaSize]) {
             return YES;
         }

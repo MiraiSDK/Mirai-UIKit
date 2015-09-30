@@ -100,8 +100,6 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    
     //    CGFloat newDistance = [self currentTouchDistance];
     if (_touches.count == 2) {
         double newAngle = [self currentTouchAngle];
@@ -121,8 +119,6 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    
     for (UITouch *t in touches) {
         [_touches removeObject:t];
     }
