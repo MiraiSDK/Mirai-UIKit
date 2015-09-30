@@ -39,7 +39,6 @@
 {
     TNMultiTapHelper *_multiTapHelper;
     BOOL _waitForNewTouchBegin;
-    BOOL _hasTimeOut;
 }
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
 @synthesize numberOfTouchesRequired=_numberOfTouchesRequired;
@@ -64,31 +63,31 @@
     _multiTapHelper.timeInterval = minimumPressDuration;
 }
 
-- (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
-{
-    _numberOfTapsRequired = numberOfTapsRequired;
-    _multiTapHelper.numberOfTapsRequired = numberOfTapsRequired;
-}
-
 - (void)setNumberOfTouchesRequired:(NSInteger)numberOfTouchesRequired
 {
     _numberOfTouchesRequired = numberOfTouchesRequired;
     _multiTapHelper.numberOfTouchesRequired = numberOfTouchesRequired + 1;
 }
 
-- (BOOL)willTimeOutLeadToFail
+- (void)onOverTime
 {
-    _hasTimeOut = YES;
-    
-    // fail when no fingers touching screen.
     if (_multiTapHelper.pressedTouchesCount == 0) {
-        return YES;
-    }
-    if (![_multiTapHelper anyTouchesOutOfArea:_allowableMovement] &&
+        // fail when no fingers touching screen.
+        [_multiTapHelper cancelTap];
+        
+    } else if (![_multiTapHelper anyTouchesOutOfArea:_allowableMovement] &&
         _multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
         [self setState:UIGestureRecognizerStateBegan];
     }
-    return NO;
+}
+
+- (void)onCompleteTap
+{
+    if (_multiTapHelper.hasOverTime) {
+        [self setState:UIGestureRecognizerStateEnded];
+    } else {
+        [_multiTapHelper cancelTap];
+    }
 }
 
 - (void)reset
@@ -106,7 +105,6 @@
     if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
         [_multiTapHelper cancelTap];
     }
-    _hasTimeOut = NO;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -120,16 +118,8 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_hasTimeOut) {
-        [self setState:UIGestureRecognizerStateFailed];
-        return;
-    }
     _waitForNewTouchBegin = NO;
-    
-    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
-        _waitForNewTouchBegin = YES;
-        _hasTimeOut = NO;
-    }];
+    [_multiTapHelper releaseFingersWithTouches:touches];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event

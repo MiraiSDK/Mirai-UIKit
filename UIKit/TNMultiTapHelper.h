@@ -10,7 +10,6 @@
 
 @protocol TNMultiTapHelperDelegate <NSObject>
 
-- (BOOL)willTimeOutLeadToFail;
 - (void)onOverTime;
 - (void)onCompleteTap;
 
@@ -21,6 +20,7 @@
 @property (nonatomic, assign) NSTimeInterval timeInterval;
 @property (nonatomic, assign) NSUInteger numberOfTouchesRequired;
 @property (nonatomic, readonly) NSUInteger pressedTouchesCount;
+@property (nonatomic, readonly) BOOL hasOverTime;
 
 - (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval
                    gestureRecognizer:(UIGestureRecognizer<TNMultiTapHelperDelegate> *)gestureRecognizer;

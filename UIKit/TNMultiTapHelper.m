@@ -26,6 +26,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 {
     NSTimeInterval _timeInterval;
     NSUInteger _numTouches;
+    BOOL _hasOverTime;
     
     NSTimer *_invalidTimer;
     UIGestureRecognizer<TNMultiTapHelperDelegate> *_gestureRecognizer;
@@ -56,8 +57,15 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     return _touches.count;
 }
 
+- (BOOL)hasOverTime
+{
+    return _hasOverTime;
+}
+
 - (void)reset
 {
+    _hasOverTime = NO;
+    
     [self _stopInvalidTimer];
     [_touches removeAllObjects];
 }
@@ -100,7 +108,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 - (BOOL)_isTouch:(UITouch *)touch outOfArea:(CGFloat)areaSize
 {
-    CGPoint currentLocation = [_gestureRecognizer locationInView:nil];
+    CGPoint currentLocation = [touch locationInView:nil];
     CGPoint beginPoint = [self beginLocationWithTouch:touch];
     
     if (ABS(currentLocation.x - beginPoint.x) > areaSize ||
@@ -121,27 +129,17 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
         // all touches ended
         if (_numTouches >= self.numberOfTouchesRequired) {
             [_gestureRecognizer onCompleteTap];
-            [self _completeAllTaps];
+            [self _stopInvalidTimer];
         } else {
             [self _failOrEnd];
         }
     }
 }
 
-- (void)_completeAllTaps
-{
-    [_gestureRecognizer setState:UIGestureRecognizerStateRecognized];
-    [self _stopInvalidTimer];
-}
-
 - (void)_onTimeOut:(NSTimer *)timer
 {
+    _hasOverTime = YES;
     [_gestureRecognizer onOverTime];
-    
-    if ([_gestureRecognizer willTimeOutLeadToFail]) {
-        [self _failOrEnd];
-        _invalidTimer = nil;
-    }
 }
 
 - (void)_failOrEnd
