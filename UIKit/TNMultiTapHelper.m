@@ -25,7 +25,6 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 @implementation TNMultiTapHelper
 {
     NSTimeInterval _timeInterval;
-    NSUInteger _numTaps;
     NSUInteger _numTouches;
     
     NSTimer *_invalidTimer;
@@ -59,8 +58,6 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 - (void)reset
 {
-    _numTaps = 0;
-    
     [self _stopInvalidTimer];
     [_touches removeAllObjects];
 }
@@ -115,7 +112,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 }
 
 
-- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(void (^)(void))completeBlock
+- (void)releaseFingersWithTouches:(NSSet *)touches
 {
     [_touches removeObjectsInArray:touches.allObjects];
     _numTouches += touches.count;
@@ -123,23 +120,11 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     if (_touches.count == 0) {
         // all touches ended
         if (_numTouches >= self.numberOfTouchesRequired) {
-            completeBlock();
-            [self _completeOneTap];
+            [_gestureRecognizer onCompleteTap];
+            [self _completeAllTaps];
         } else {
             [self _failOrEnd];
         }
-    }
-}
-
-- (void)_completeOneTap
-{
-    _numTaps++;
-    _numTouches = 0;
-    
-    if (_numTaps >= self.numberOfTapsRequired) {
-        [self _completeAllTaps];
-    } else {
-        [self _restartInvalidTimer];
     }
 }
 
@@ -151,6 +136,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 
 - (void)_onTimeOut:(NSTimer *)timer
 {
+    [_gestureRecognizer onOverTime];
+    
     if ([_gestureRecognizer willTimeOutLeadToFail]) {
         [self _failOrEnd];
         _invalidTimer = nil;

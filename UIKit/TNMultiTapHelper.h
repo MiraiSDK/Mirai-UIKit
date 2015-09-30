@@ -11,13 +11,14 @@
 @protocol TNMultiTapHelperDelegate <NSObject>
 
 - (BOOL)willTimeOutLeadToFail;
+- (void)onOverTime;
+- (void)onCompleteTap;
 
 @end
 
 @interface TNMultiTapHelper : NSObject
 
 @property (nonatomic, assign) NSTimeInterval timeInterval;
-@property (nonatomic, assign) NSUInteger numberOfTapsRequired;
 @property (nonatomic, assign) NSUInteger numberOfTouchesRequired;
 @property (nonatomic, readonly) NSUInteger pressedTouchesCount;
 
@@ -25,7 +26,7 @@
                    gestureRecognizer:(UIGestureRecognizer<TNMultiTapHelperDelegate> *)gestureRecognizer;
 
 - (void)beginOneTapWithTouches:(NSSet *)touches;
-- (void)releaseFingersWithTouches:(NSSet *)touches completeOnTap:(void (^)(void))completeBlock;
+- (void)releaseFingersWithTouches:(NSSet *)touches;
 - (void)cancelTap;
 - (void)reset;
 
