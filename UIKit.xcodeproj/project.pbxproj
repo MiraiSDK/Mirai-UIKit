@@ -282,6 +282,7 @@
 		43ECCF131851CAA80076535C /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF111851CAA80076535C /* UIWindow.m */; };
 		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
 		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
+		D214FC651BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */; settings = {ASSET_TAGS = (); }; };
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
@@ -649,6 +650,7 @@
 		43ECCF111851CAA80076535C /* UIWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIWindow.m; sourceTree = "<group>"; };
 		43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidEventsServer.h; sourceTree = "<group>"; };
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
+		D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+UIPrivate.h"; sourceTree = "<group>"; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
 		D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxy.java; sourceTree = SOURCE_ROOT; };
@@ -1185,6 +1187,7 @@
 				43B819E418E2AA870020624F /* UISwipeGestureRecognizer.h */,
 				43B819E518E2AA870020624F /* UISwipeGestureRecognizer.m */,
 				43B819E618E2AA870020624F /* UITapGestureRecognizer.h */,
+				D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */,
 				43B819E718E2AA870020624F /* UITapGestureRecognizer.m */,
 				43B819F718E2AA960020624F /* UIGestureRecognizer+UIPrivate.h */,
 			);
@@ -1307,6 +1310,7 @@
 				434BC9CA18D58A4300BECD47 /* UIImage+UIPrivate.h in Headers */,
 				43ECCF121851CAA80076535C /* UIWindow.h in Headers */,
 				432FF08718544D3A005486C5 /* UILabel.h in Headers */,
+				D214FC651BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h in Headers */,
 				434CFD011A0CA33A00B6AC9E /* UITabBarItem.h in Headers */,
 				434CFCE61A0C9CDB00B6AC9E /* UIProgressView.h in Headers */,
 				432FF08F18544EE4005486C5 /* NSText.h in Headers */,

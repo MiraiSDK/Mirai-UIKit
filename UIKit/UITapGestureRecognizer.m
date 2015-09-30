@@ -27,7 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UITapGestureRecognizer.h"
+#import "UITapGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch.h"
 #import "UIGeometry.h"
@@ -39,7 +39,7 @@
 @implementation UITapGestureRecognizer
 {
     NSTimeInterval _timeInterval;
-    NSUInteger _numTaps;
+    NSUInteger _currentTapCount;
     NSUInteger _numTouches;
     
     NSTimer *_invalidTimer;
@@ -78,11 +78,21 @@
 - (void)reset
 {
     [super reset];
-    _numTaps = 0;
+    _currentTapCount = 0;
     
     [self _stopInvalidTimer];
     [_touches removeAllObjects];
     _waitForNewTouchBegin = YES;
+}
+
+- (NSUInteger)currentTapCount
+{
+    return _currentTapCount;
+}
+
+- (NSUInteger)currentTouchCount
+{
+    return _touches.count;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -171,10 +181,10 @@
 
 - (void)_completeOneTap
 {
-    _numTaps++;
+    _currentTapCount++;
     _numTouches = 0;
     
-    if (_numTaps >= self.numberOfTapsRequired) {
+    if (_currentTapCount >= self.numberOfTapsRequired) {
         [self _completeAllTaps];
     } else {
         [self _restartInvalidTimer];
@@ -187,7 +197,7 @@
     [self _stopInvalidTimer];
 }
 
-- (void)_onTimeOut:(NSTimer *)timer
+- (void)_onIntervalTimeOut:(NSTimer *)timer
 {
     [self _failOrEnd];
     _invalidTimer = nil;
@@ -197,7 +207,8 @@
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
         [self setState:UIGestureRecognizerStateEnded];
-    } else {
+        
+    } else if (self.state == UIGestureRecognizerStatePossible){
         [self setState:UIGestureRecognizerStateFailed];
     }
 }
@@ -206,7 +217,7 @@
 {
     [self _stopInvalidTimer];
     _invalidTimer = [NSTimer scheduledTimerWithTimeInterval:_timeInterval
-                                                     target:self selector:@selector(_onTimeOut:)
+                                                     target:self selector:@selector(_onIntervalTimeOut:)
                                                    userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
 }
