@@ -18,8 +18,8 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 @implementation TNGestureRecognizeProcess
 {
-    UIView *_view;
-    TNMultiTouchProcess *_multiTouchProcess;
+    __weak TNMultiTouchProcess *_multiTouchProcess;
+    __weak UIView *_view;
     
     TNGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
     TNGestureFailureRequirementRelationship *_failureRequirementNode;
@@ -27,6 +27,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     NSMutableSet *_trackingTouches;
     NSMutableSet *_ignoredTouches;
     NSMutableArray *_delaysBufferedBlocks;
+    NSMutableArray *_neverRecivedAnyTouchRecognizers;
     
     NSMutableSet *_centralizedChangedStateRecognizersBuffer;
     NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
@@ -60,50 +61,44 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         _centralizedChangedStateRecognizersBuffer = [[NSMutableSet alloc] init];
         _preventRecursionChangedStateRecognizersBuffer = [[NSMutableArray alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
+        _neverRecivedAnyTouchRecognizers = [[NSMutableSet alloc] init];
         
         //UIGestureRecognizer's delaysTouchesXXX may be changed, so I cached them when called init method.
         _delaysTouchesBegan = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesBegan"];
         _delaysTouchesEnded = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesEnded"];
         
-        [self _preventGestureRecognizersThroughRelationship];
-        
-        NSLog(@"generate UIGestureRecognizeProcess [%@] includes %li gesture recognizers.",
-              _view.className, _effectRecognizersNode.count);
+        NSLog(@"generate UIGestureRecognizeProcess %@", self.description);
     }
     return self;
 }
 
+- (NSString *)description
+{
+    NSMutableArray *descriptions = [NSMutableArray array];
+    
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+        [descriptions addObject:[recognizer _description]];
+    }];
+    return [NSString stringWithFormat:@"[%@] includes %@",
+            _view.className, [descriptions componentsJoinedByString:@" "]];
+}
+
 - (void)dealloc
 {
-    NSAssert(_effectRecognizersNode.count == 0, @"TNGestureRecongizeProcess should clear all recognizers before it dealloc");
+    // when the window or view dealloc, the gesture recognizer should be cancelled.
+    // but I have never implement cancelled method.
+    
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+        if ([recognizer _shouldReset]) {
+            [recognizer reset];
+        }
+    }];
 }
 
 - (BOOL)_anyGestureRecognizerWillDelaysProperty:(NSString *)property
 {
     return nil != [_effectRecognizersNode findGestureRecognizer:^BOOL(UIGestureRecognizer *recognizer) {
         return [[recognizer valueForKey:property] boolValue];
-    }];
-}
-
-- (void)_preventGestureRecognizersThroughRelationship
-{
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
-        if ([self _willBePreventByOther:recognizer]) {
-            [recognizer _preventByOtherGestureRecognizer];
-        }
-    }];
-}
-
-- (BOOL)_willBePreventByOther:(UIGestureRecognizer *)recognizer
-{
-    return nil != [_effectRecognizersNode findGestureRecognizer:
-                            ^BOOL(UIGestureRecognizer *otherRecognizer) {
-        
-        if (recognizer != otherRecognizer) {
-            return [recognizer canBePreventedByGestureRecognizer:otherRecognizer] &&
-                   [otherRecognizer canPreventGestureRecognizer:recognizer];
-        }
-        return NO;
     }];
 }
 
@@ -197,6 +192,15 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     _lastTimeHasMakeConclusion = self.hasMakeConclusion;
     _anyRecognizersMakeConclusion = NO;
     _cancelsTouchesInView = NO;
+    
+    [self _setAllRecognizersNotRecivedAnyTouches];
+}
+
+- (void)_setAllRecognizersNotRecivedAnyTouches
+{
+    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+        [_neverRecivedAnyTouchRecognizers addObject:recognizer];
+    }];
 }
 
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -224,7 +228,13 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
         [self _searchNewTouchFrom:touches andTellRecognizer:recognizer];
-        [recognizer _recognizeTouches:touches withEvent:event];
+        NSUInteger count = [recognizer _recognizeAndGetHandledTouchesCountWithTouches:touches
+                                                                            withEvent:event];
+        BOOL recognizerRecivedAnyTouches = (count > 0);
+        
+        if (recognizerRecivedAnyTouches) {
+            [_neverRecivedAnyTouchRecognizers removeObject:recognizer];
+        }
     }];
 }
 
@@ -424,6 +434,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     }
 }
 
+- (void)_clearRecognizersIfTheyNeverRecivedTouches
+{
+    for (UIGestureRecognizer *recognizer in _neverRecivedAnyTouchRecognizers) {
+        [_effectRecognizersNode removeGestureRecognizer:recognizer];
+    }
+    [_neverRecivedAnyTouchRecognizers removeAllObjects];
+}
+
 - (BOOL)_needToRunDelaysBlockedBlocks
 {
     return !_cancelsTouchesInView && self.hasMakeConclusion &&
@@ -548,12 +566,11 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 - (void)multiTouchEnd
 {
     [self _runAndClearDelaysBufferedBlocksIfNeed];
+    [self _clearRecognizersIfTheyNeverRecivedTouches];
     
     _trackingTouchesArrayCache = @[];
     [_trackingTouches removeAllObjects];
     [_ignoredTouches removeAllObjects];
-    
-    
 }
 
 - (void)gestureRecognizerChangedState:(UIGestureRecognizer *)getureRecognizer

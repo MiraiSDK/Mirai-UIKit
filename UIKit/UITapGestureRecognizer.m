@@ -103,7 +103,7 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([_multiTapHelper anyTouches:touches outOfArea:kTapLimitAreaSize]) {
+    if ([_multiTapHelper anyTouchesOutOfArea:kTapLimitAreaSize]) {
         [_multiTapHelper cancelTap];
     }
 }

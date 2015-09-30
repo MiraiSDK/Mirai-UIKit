@@ -60,7 +60,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self _makeHidden];	// I don't really like this here, but the real UIKit seems to do something like this on window destruction as it sends a notification and we also need to remove it from the app's list of windows
+    [self _makeHidden];
     
 }
 

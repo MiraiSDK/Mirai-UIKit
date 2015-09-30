@@ -33,8 +33,6 @@
 #import "UIEvent.h"
 #import "TNMultiTapHelper.h"
 
-#define kFingerMovementDistance 10.0
-
 @interface UILongPressGestureRecognizer () <TNMultiTapHelperDelegate> @end
 
 @implementation UILongPressGestureRecognizer
@@ -86,7 +84,8 @@
     if (_multiTapHelper.pressedTouchesCount == 0) {
         return YES;
     }
-    if (_multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
+    if (![_multiTapHelper anyTouchesOutOfArea:_allowableMovement] &&
+        _multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
         [self setState:UIGestureRecognizerStateBegan];
     }
     return NO;
@@ -112,12 +111,9 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.allowableMovement &&
-        [_multiTapHelper anyTouches:touches outOfArea:kFingerMovementDistance]) {
-        [_multiTapHelper cancelTap];
+    if (self.state == UIGestureRecognizerStateBegan ||
+        self.state == UIGestureRecognizerStateChanged) {
         
-    } else if (self.state == UIGestureRecognizerStateBegan ||
-               self.state == UIGestureRecognizerStateChanged) {
         [self setState:UIGestureRecognizerStateChanged];
     }
 }
