@@ -121,6 +121,49 @@
     
 }
 
+#pragma mark - first responder callback
+
+- (BOOL)becomeFirstResponder
+{
+    BOOL isFirstResponder = [self isFirstResponder];
+    BOOL becomeFirstResponderSuccess = [super becomeFirstResponder];
+    
+    if (becomeFirstResponderSuccess && !isFirstResponder) {
+        [self _beginEdit];
+    }
+    return becomeFirstResponderSuccess;
+}
+
+- (BOOL)resignFirstResponder
+{
+    if ([_delegate respondsToSelector:@selector(textFieldShouldEndEditing:)] &&
+        ![_delegate textFieldShouldEndEditing:self]) {
+        return NO;
+    }
+    
+    BOOL resignFirstResponderSuccess = [super resignFirstResponder];
+    if (resignFirstResponderSuccess) {
+        [self _endEdit];
+    }
+    return resignFirstResponderSuccess;
+}
+
+- (void)_beginEdit
+{
+    if ([_delegate respondsToSelector:@selector(textFieldDidBeginEditing:)]) {
+        [_delegate textFieldDidBeginEditing:self];
+    }
+    [_backend showKeyBoard];
+}
+
+- (void)_endEdit
+{
+    if ([_delegate respondsToSelector:@selector(textFieldDidEndEditing:)]) {
+        [_delegate textFieldDidEndEditing:self];
+    }
+    [_backend closeKeyBoard];
+}
+
 #pragma mark - UITextInputTraits
 
 #pragma mark - UIKeyInput
@@ -259,10 +302,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     NSLog(@"%s",__PRETTY_FUNCTION__);
-    if (![self isFirstResponder]) {
-        [self becomeFirstResponder];
-        [_delegate textFieldDidBeginEditing:self];
-    }
+    [self becomeFirstResponder];
     [_backend touchesBegan:touches withEvent:event];
 }
 

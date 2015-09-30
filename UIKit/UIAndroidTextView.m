@@ -443,6 +443,20 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     return YES;
 }
 
+- (void)showKeyBoard
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"showKeyBoard","()V");
+    (*env)->CallVoidMethod(env,_jTextView,mid);
+}
+
+- (void)closeKeyBoard
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"closeKeyBoard","()V");
+    (*env)->CallVoidMethod(env,_jTextView,mid);
+}
+
 #pragma mark - Event forward
 - (void)simulateTouches:(NSSet *)touches event:(UIEvent *)event
 {

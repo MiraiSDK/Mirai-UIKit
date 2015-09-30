@@ -23,6 +23,8 @@
 - (void)scrollRangeToVisible:(NSRange)range;
 - (BOOL)becomeFirstResponder;
 - (BOOL)resignFirstResponder;
+- (void)showKeyBoard;
+- (void)closeKeyBoard;
 
 - (void)setTextWatcherListener:(TNJavaBridgeProxy *)textWatcherListener;
 - (void)setOnFocusChangeListener:(TNJavaBridgeProxy *)focusChangeListener;
