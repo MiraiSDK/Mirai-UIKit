@@ -33,6 +33,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
 @implementation UITouch {
     UITouchPhase _phase;
     _UITouchGesture _gesture;
+    CFAbsoluteTime _receivedTime;
     BOOL _onlyShowPhaseAsCancelled;
     CGPoint _delta;
     CGFloat _rotation;
@@ -68,6 +69,16 @@ static NSArray *GestureRecognizersForView(UIView *view)
 - (CGPoint)screenLocation
 {
     return _location;
+}
+
+- (void)_setReceivedTime:(CFAbsoluteTime)receivedTime
+{
+    _receivedTime = receivedTime;
+}
+
+- (CFAbsoluteTime)_receviedTime
+{
+    return _receivedTime;
 }
 
 - (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled

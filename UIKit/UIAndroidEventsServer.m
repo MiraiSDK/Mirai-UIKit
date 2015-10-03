@@ -9,6 +9,10 @@
 #import "UIAndroidEventsServer.h"
 
 #import "InputEvent.h"
+#import "UITouch+Private.h"
+
+#define kBeInvalidTime 0.8
+#define kTapLimitAreaSize 5
 
 @implementation UIAndroidEventsServer
 {
@@ -17,6 +21,7 @@
     NSRecursiveLock *_eventQueueLock;
     
     NSMutableArray *_eventQueue;
+    NSMutableSet *_touchesBuffer;
     
     BOOL _paused;
 }
@@ -39,6 +44,7 @@ static UIAndroidEventsServer *eventServer;
         _eventQueueLock = [[NSRecursiveLock alloc] init];
         
         _eventQueue = [NSMutableArray array];
+        _touchesBuffer = [NSMutableSet set];
         
     }
     return self;
@@ -123,12 +129,77 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
         action == AMOTION_EVENT_ACTION_CANCEL) {
         
         [event handleInputEvent:inputEvent];
+        [self _clearInvalidTouches];
+        [self _pickOutAndHandleNewTouchFromEvent:event];
     }
 }
 
 - (void)resume
 {
     _paused = NO;
+}
+
+#pragma mark - touch tap count buffer
+
+- (void)_clearInvalidTouches
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    NSMutableSet *invalidTouches = [[NSMutableSet alloc] init];
+    for (UITouch *touch in _touchesBuffer) {
+        if ([self _touchWasInvalid:touch currentTime:currentTime]) {
+            [invalidTouches addObject:touch];
+        }
+    }
+    [_touchesBuffer minusSet:invalidTouches];
+}
+
+- (void)_pickOutAndHandleNewTouchFromEvent:(UIEvent *)event
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    NSMutableSet *beEatenTouches = [NSMutableSet set];
+    NSMutableSet *notBeEatenTouches = [NSMutableSet set];
+    
+    for (UITouch *touch in [event allTouches]) {
+        if (![_touchesBuffer containsObject:touch]) {
+            UITouch *oldTouch = [self _oldTouchThatWillEatThisNewTouch:touch];
+            if (oldTouch) {
+                [oldTouch _setPhase:touch.phase screenLocation:touch.screenLocation
+                           tapCount:touch.tapCount + 1 timestamp:touch.timestamp];
+                [beEatenTouches addObject:touch];
+            } else {
+                [touch _setReceivedTime:currentTime];
+                [notBeEatenTouches addObject:touch];
+            }
+        }
+    }
+    [_touchesBuffer unionSet:notBeEatenTouches];
+    [event _removeTouches:beEatenTouches];
+}
+
+- (UITouch *)_oldTouchThatWillEatThisNewTouch:(UITouch *)newTouch
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    for (UITouch *oldTouch in _touchesBuffer) {
+        if (![self _touchWasInvalid:newTouch currentTime:currentTime] &&
+            [self _touch:newTouch isCloseEnoughToOtherTouch:oldTouch]) {
+            return oldTouch;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)_touchWasInvalid:(UITouch *)touch currentTime:(CFAbsoluteTime)currentTime
+{
+    return kBeInvalidTime < currentTime - [touch _receviedTime];
+}
+
+- (BOOL)_touch:(UITouch *)touch0 isCloseEnoughToOtherTouch:(UITouch *)touch1
+{
+    CGPoint point0 = [touch0 locationInView:nil];
+    CGPoint point1 = [touch1 locationInView:nil];
+    
+    return ABS(point0.x - point1.x) <= kTapLimitAreaSize &&
+           ABS(point0.y - point1.y) <= kTapLimitAreaSize;
 }
 
 #pragma mark - public class access

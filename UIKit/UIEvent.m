@@ -88,6 +88,18 @@
     _timestamp = timestamp;
 }
 
+- (void)_removeTouches:(NSSet *)touches
+{
+    for (NSString *key in _touchesByIdentifier.allKeys) {
+        UITouch *touch = [_touchesByIdentifier objectForKey:key];
+        if ([touches containsObject:touch]) {
+            [_touches removeObject:touch];
+            [_touchesByIdentifier removeObjectForKey:key];
+            break;
+        }
+    }
+}
+
 @end
 
 @implementation UIEvent (Android)
