@@ -99,6 +99,10 @@
 		D2239E3C1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E3A1B048AF700810377 /* TNDisplayModeTestViewController.m */; };
 		D2239E411B04915000810377 /* TNBlockButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E401B04915000810377 /* TNBlockButton.m */; };
 		D2239E421B04915000810377 /* TNBlockButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E401B04915000810377 /* TNBlockButton.m */; };
+		D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D22A0BC31BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D22A0BC61BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D22A0BC71BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; settings = {ASSET_TAGS = (); }; };
 		D243F09B1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
@@ -303,6 +307,10 @@
 		D2239E3A1B048AF700810377 /* TNDisplayModeTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNDisplayModeTestViewController.m; sourceTree = "<group>"; };
 		D2239E3F1B04915000810377 /* TNBlockButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNBlockButton.h; sourceTree = "<group>"; };
 		D2239E401B04915000810377 /* TNBlockButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNBlockButton.m; sourceTree = "<group>"; };
+		D22A0BC01BC00F6A006BAE64 /* TNMultiTouchTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiTouchTestViewController.h; sourceTree = "<group>"; };
+		D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTouchTestViewController.m; sourceTree = "<group>"; };
+		D22A0BC41BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiTouchTapCountTestViewController.h; sourceTree = "<group>"; };
+		D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTouchTapCountTestViewController.m; sourceTree = "<group>"; };
 		D243F0991AC6F10F00CBD2D9 /* TNChangeValueSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangeValueSlider.h; sourceTree = "<group>"; };
 		D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeValueSlider.m; sourceTree = "<group>"; };
 		D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreNavigationTestViewController.h; sourceTree = "<group>"; };
@@ -454,6 +462,7 @@
 				437F25E61A736FA800FBE3E2 /* ViewController.m */,
 				4390B80A1A83515B0082B0F1 /* Basic classes */,
 				4390B80B1A8351920082B0F1 /* View Tests */,
+				D22A0BBD1BC00F26006BAE64 /* Touch Tests */,
 				4390B8441A8353200082B0F1 /* ViewController Tests */,
 				D2A5F4791AB07C5F0011AF7B /* Uitils */,
 				4390B8531A83539E0082B0F1 /* Gesture Tests */,
@@ -729,6 +738,17 @@
 				D22284A61B7B1327003B5996 /* UIScrollViewInertance.m */,
 			);
 			name = UIScrollViewInertance;
+			sourceTree = "<group>";
+		};
+		D22A0BBD1BC00F26006BAE64 /* Touch Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D22A0BC01BC00F6A006BAE64 /* TNMultiTouchTestViewController.h */,
+				D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */,
+				D22A0BC41BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.h */,
+				D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */,
+			);
+			name = "Touch Tests";
 			sourceTree = "<group>";
 		};
 		D269FACD1B3AB42000A0AB7A /* UISearchController */ = {
@@ -1065,6 +1085,7 @@
 				D2A5F4871AB07FA40011AF7B /* TNTestCaseHelperButton.m in Sources */,
 				D2D64D211B3B9FC900AC3AF7 /* TNTargetActionToBlock.m in Sources */,
 				4390B8141A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
+				D22A0BC71BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */,
 				D270F4A01AEE25A40047D100 /* TNPageControlTestViewController.m in Sources */,
 				437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */,
 				4390B8311A8352990082B0F1 /* TNClipsToBoundsTestViewController.m in Sources */,
@@ -1072,6 +1093,7 @@
 				4390B8121A8351CA0082B0F1 /* TNCustomView.m in Sources */,
 				437F25E01A736FA800FBE3E2 /* TNAndroidLauncher.m in Sources */,
 				D221B3341B292CA800C15C63 /* TNPopoverPropertiesTestViewController.m in Sources */,
+				D22A0BC31BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */,
 				D269FAD71B3AB4CE00A0AB7A /* TNSearchBarTestViewController.m in Sources */,
 				4390B8671A8353B50082B0F1 /* TNPinchAndRotationViewController.m in Sources */,
 				4390B8711A8353B50082B0F1 /* TNPanGestureTestViewController.m in Sources */,
@@ -1170,6 +1192,7 @@
 				4390B8131A8351CA0082B0F1 /* TNViewTestViewController.m in Sources */,
 				D2EB64311B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */,
 				D2A5F49A1AB084940011AF7B /* TNSliderTestViewController.m in Sources */,
+				D22A0BC61BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */,
 				D2D64D201B3B9FC900AC3AF7 /* TNTargetActionToBlock.m in Sources */,
 				D2A4386A1B9D412D006D5DC9 /* TNRecognizerToFailTestViewController.m in Sources */,
 				D2239E3B1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */,
@@ -1205,6 +1228,7 @@
 				D2A9FB9B1B1FF3AE00C88751 /* TNPopoverControllerTestViewController.m in Sources */,
 				D2239E301B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */,
 				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
+				D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */,
 				D2BB4E041B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
