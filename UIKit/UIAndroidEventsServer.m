@@ -12,11 +12,13 @@
 #import "UITouch+Private.h"
 
 #define kBeInvalidTime 0.8
+#define kInvalidTimerFireNeedTime 2.4
 #define kTapLimitAreaSize 5
 
 @implementation UIAndroidEventsServer
 {
     struct android_app* app_state;
+    
     UIEvent *_event;
     NSRecursiveLock *_eventQueueLock;
     
@@ -24,6 +26,7 @@
     NSMutableSet *_touchesBuffer;
     
     BOOL _paused;
+    BOOL _anyTimerIsWaitingForFiring;
 }
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event);
@@ -131,6 +134,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
         [event handleInputEvent:inputEvent];
         [self _clearInvalidTouches];
         [self _pickOutAndHandleNewTouchFromEvent:event];
+        [self _waitThenClearInvalidTouches];
     }
 }
 
@@ -191,6 +195,24 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 - (BOOL)_touchWasInvalid:(UITouch *)touch currentTime:(CFAbsoluteTime)currentTime
 {
     return kBeInvalidTime < currentTime - [touch _receviedTime];
+}
+
+- (void)_waitThenClearInvalidTouches
+{
+    if (!_anyTimerIsWaitingForFiring) {
+        [NSTimer scheduledTimerWithTimeInterval:kInvalidTimerFireNeedTime target:self selector:@selector(_fireToClearInvalidTouches:) userInfo:nil repeats:NO];
+        _anyTimerIsWaitingForFiring = YES;
+    }
+}
+
+- (void)_fireToClearInvalidTouches:(NSTimer *)timer
+{
+    [self _clearInvalidTouches];
+    _anyTimerIsWaitingForFiring = NO;
+    
+    if (_touchesBuffer.count > 0) {
+        [self _waitThenClearInvalidTouches];
+    }
 }
 
 - (BOOL)_touch:(UITouch *)touch0 isCloseEnoughToOtherTouch:(UITouch *)touch1
