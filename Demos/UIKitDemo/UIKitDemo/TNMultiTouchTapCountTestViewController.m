@@ -29,9 +29,13 @@
 @end
 
 @implementation _TNMultiTouchTapCountTestGestureRecognizer
+{
+    NSInteger pressedFingersCount;
+}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    pressedFingersCount += touches.count;
     [self _showMethod:@"Began" andTouches:touches];
 }
 
@@ -43,7 +47,10 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self _showMethod:@"Ended" andTouches:touches];
-    self.state = UIGestureRecognizerStateRecognized;
+    pressedFingersCount -= touches.count;
+    if (pressedFingersCount <= 0) {
+        self.state = UIGestureRecognizerStateRecognized;
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
