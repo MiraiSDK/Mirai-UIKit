@@ -133,11 +133,11 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
         action == AMOTION_EVENT_ACTION_POINTER_UP ||
         action == AMOTION_EVENT_ACTION_CANCEL) {
         
+        [event handleInputEvent:inputEvent];
+        
         [self _clearInvalidTouches];
         [self _pickOutAndHandleNewTouchFromEvent:event];
         [self _waitThenClearInvalidTouches];
-        
-        [event handleInputEvent:inputEvent];
     }
 }
 

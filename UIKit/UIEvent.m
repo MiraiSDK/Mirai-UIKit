@@ -90,6 +90,7 @@
 
 - (void)_replaceTouch:(UITouch *)replacedTouch asTouch:(UITouch *)newTouch
 {
+    NSLog(@"replace [%li] as [%li] for UIEvent", replacedTouch.hash, newTouch.hash);
     newTouch.identifier = replacedTouch.identifier;
     
     for (NSString *key in _touchesByIdentifier.allKeys) {

@@ -90,10 +90,14 @@ static NSArray *GestureRecognizersForView(UIView *view)
 - (void)_mergeNewTouchAsNextTap:(UITouch *)newTouch
 {
     _phase = newTouch->_phase;
+    _timestamp = newTouch->_timestamp;
     _gesture = newTouch->_gesture;
-    _previousLocation = _location = newTouch.screenLocation;
+    _receivedTime = newTouch->_receivedTime;
+    _onlyShowPhaseAsCancelled = newTouch->_onlyShowPhaseAsCancelled;
+    _delta = newTouch->_delta;
     _rotation = newTouch->_rotation;
     _magnification = newTouch->_magnification;
+    _previousLocation = _location = newTouch.screenLocation;
     
     _tapCount++;
     [self _setTouchedView:newTouch.view];
