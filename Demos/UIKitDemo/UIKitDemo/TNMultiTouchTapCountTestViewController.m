@@ -43,6 +43,7 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self _showMethod:@"Ended" andTouches:touches];
+    self.state = UIGestureRecognizerStateRecognized;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
