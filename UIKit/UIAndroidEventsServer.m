@@ -9,11 +9,13 @@
 #import "UIAndroidEventsServer.h"
 
 #import "InputEvent.h"
+#import "UIGestureRecognizer.h"
 #import "UITouch+Private.h"
+#import "UIGeometry.h"
 
 #define kBeInvalidTime 0.8
 #define kInvalidTimerFireNeedTime 2.4
-#define kTapLimitAreaSize 5
+#define kTapLimitAreaSize 27
 
 @implementation UIAndroidEventsServer
 {
@@ -165,13 +167,13 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
     
     for (UITouch *touch in [event allTouches]) {
         if (![_touchesBuffer containsObject:touch]) {
+            [touch _setReceivedTime:currentTime];
             UITouch *oldTouch = [self _oldTouchThatWillEatThisNewTouch:touch];
             if (oldTouch) {
-                [oldTouch _setPhase:touch.phase screenLocation:touch.screenLocation
-                           tapCount:touch.tapCount + 1 timestamp:touch.timestamp];
+                [oldTouch _mergeNewTouchAsNextTap:touch];
                 [beEatenTouches addObject:touch];
+                [event _addTouch:oldTouch];
             } else {
-                [touch _setReceivedTime:currentTime];
                 [notBeEatenTouches addObject:touch];
             }
         }
@@ -184,7 +186,9 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     for (UITouch *oldTouch in _touchesBuffer) {
-        if (![self _touchWasInvalid:newTouch currentTime:currentTime] &&
+        if (newTouch != oldTouch &&
+            newTouch.phase == UITouchPhaseBegan &&
+            ![self _touchWasInvalid:newTouch currentTime:currentTime] &&
             [self _touch:newTouch isCloseEnoughToOtherTouch:oldTouch]) {
             return oldTouch;
         }
@@ -217,8 +221,8 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 
 - (BOOL)_touch:(UITouch *)touch0 isCloseEnoughToOtherTouch:(UITouch *)touch1
 {
-    CGPoint point0 = [touch0 locationInView:nil];
-    CGPoint point1 = [touch1 locationInView:nil];
+    CGPoint point0 = touch0.screenLocation;
+    CGPoint point1 = touch1.screenLocation;
     
     return ABS(point0.x - point1.x) <= kTapLimitAreaSize &&
            ABS(point0.y - point1.y) <= kTapLimitAreaSize;

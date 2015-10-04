@@ -48,6 +48,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
     self = [super init];
     if (self) {
         _phase = UITouchPhaseCancelled;
+        _tapCount = 1;
 //        _gesture = _UITouchGestureUnknown;
 
     }
@@ -84,6 +85,19 @@ static NSArray *GestureRecognizersForView(UIView *view)
 - (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled
 {
     _onlyShowPhaseAsCancelled = onlyShowPhaseAsCancelled;
+}
+
+- (void)_mergeNewTouchAsNextTap:(UITouch *)newTouch
+{
+    _phase = newTouch->_phase;
+    _gesture = newTouch->_gesture;
+    _previousLocation = _location = newTouch.screenLocation;
+    _rotation = newTouch->_rotation;
+    _magnification = newTouch->_magnification;
+    _identifier = newTouch->_identifier;
+    
+    _tapCount++;
+    [self _setTouchedView:newTouch.view];
 }
 
 - (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;

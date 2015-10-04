@@ -88,6 +88,12 @@
     _timestamp = timestamp;
 }
 
+- (void)_addTouch:(UITouch *)touch
+{
+    [_touches addObject:touch];
+    [_touchesByIdentifier setObject:touch forKey:@(touch.identifier)];
+}
+
 - (void)_removeTouches:(NSSet *)touches
 {
     for (NSString *key in _touchesByIdentifier.allKeys) {
@@ -203,7 +209,8 @@
     UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
     
     if (phase == UITouchPhaseEnded) {
-        [touch _setPhase:phase screenLocation:windowLocation tapCount:1 timestamp:eventTimestamp];
+        [touch _setPhase:phase screenLocation:windowLocation
+                tapCount:touch.tapCount timestamp:eventTimestamp];
     } else {
         [touch _updatePhase:phase screenLocation:windowLocation timestamp:eventTimestamp];
     }

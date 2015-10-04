@@ -27,6 +27,7 @@ typedef enum {
 
 - (void)_setReceivedTime:(CFAbsoluteTime)receivedTime;
 - (CFAbsoluteTime)_receviedTime;
+- (void)_mergeNewTouchAsNextTap:(UITouch *)newTouch;
 - (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled;
 - (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
 - (void)_updatePhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation timestamp:(NSTimeInterval)timestamp;
