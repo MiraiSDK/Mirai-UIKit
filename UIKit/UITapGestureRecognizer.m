@@ -27,7 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UITapGestureRecognizer.h"
+#import "UITapGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UITouch.h"
 #import "UIGeometry.h"
@@ -36,12 +36,19 @@
 #define kBeInvalidTime 0.8
 #define kTapLimitAreaSize 5
 
-@interface UITapGestureRecognizer() <TNMultiTapHelperDelegate>
-@property (nonatomic, strong) TNMultiTapHelper *multiTapHelper;
-@property (nonatomic, assign) BOOL waitForNewTouchBegin;
-@end
-
 @implementation UITapGestureRecognizer
+{
+    NSTimeInterval _timeInterval;
+    NSUInteger _currentTapCount;
+    NSUInteger _numTouches;
+    
+    NSTimer *_invalidTimer;
+    BOOL _waitForNewTouchBegin;
+    
+    NSMutableArray *_touches;
+    NSMutableDictionary *_beganLocations;
+}
+
 @synthesize numberOfTapsRequired=_numberOfTapsRequired, numberOfTouchesRequired=_numberOfTouchesRequired;
 
 - (instancetype)init
@@ -49,28 +56,12 @@
     if (self = [super init]) {
         _numberOfTapsRequired = 1;
         _numberOfTouchesRequired = 1;
-        _multiTapHelper = [[TNMultiTapHelper alloc] initWithTimeInterval:kBeInvalidTime
-                                                       gestureRecognizer:self];
+        _timeInterval = kBeInvalidTime;
+        _touches = [[NSMutableArray alloc] init];
+        _beganLocations = [[NSMutableDictionary alloc] init];
         _waitForNewTouchBegin = YES;
     }
     return self;
-}
-
-- (BOOL)willTimeOutLeadToFail
-{
-    return YES;
-}
-
-- (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
-{
-    _numberOfTapsRequired = numberOfTapsRequired;
-    _multiTapHelper.numberOfTapsRequired = numberOfTapsRequired;
-}
-
-- (void)setNumberOfTouchesRequired:(NSUInteger)numberOfTouchesRequired
-{
-    _numberOfTouchesRequired = numberOfTouchesRequired;
-    _multiTapHelper.numberOfTouchesRequired = numberOfTouchesRequired;
 }
 
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
@@ -87,24 +78,44 @@
 - (void)reset
 {
     [super reset];
-    [_multiTapHelper reset];
+    _currentTapCount = 0;
     
+    [self _stopInvalidTimer];
+    [_touches removeAllObjects];
     _waitForNewTouchBegin = YES;
+}
+
+- (NSUInteger)currentTapCount
+{
+    return _currentTapCount;
+}
+
+- (NSUInteger)currentTouchCount
+{
+    return _touches.count;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_multiTapHelper beginOneTapWithTouches:touches];
+    [_touches addObjectsFromArray:touches.allObjects];
+    [self _restartInvalidTimer];
     
-    if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
-        [_multiTapHelper cancelTap];
+    for (UITouch *t in touches) {
+        NSInteger idx = [_touches indexOfObject:t];
+        CGPoint initPoint = [t locationInView:nil];
+        NSValue *v = [NSValue valueWithCGPoint:initPoint];
+        _beganLocations[@(idx)] = v;
+    }
+    
+    if (!_waitForNewTouchBegin || _touches.count > self.numberOfTouchesRequired) {
+        [self _cancelTap];
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([_multiTapHelper anyTouchesOutOfArea:kTapLimitAreaSize]) {
-        [_multiTapHelper cancelTap];
+    if ([self _anyTouchesOutOfArea:kTapLimitAreaSize]) {
+        [self _cancelTap];
     }
 }
 
@@ -112,14 +123,111 @@
 {
     _waitForNewTouchBegin = NO;
     
-    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
-        _waitForNewTouchBegin = YES;
-    }];
+    
+    [_touches removeObjectsInArray:touches.allObjects];
+    _numTouches += touches.count;
+    
+    if (_touches.count == 0) {
+        // all touches ended
+        if (_numTouches >= self.numberOfTouchesRequired) {
+            _waitForNewTouchBegin = YES;
+            [self _completeOneTap];
+        } else {
+            [self _failOrEnd];
+        }
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_multiTapHelper cancelTap];
+    [self _cancelTap];
+}
+
+- (void)_cancelTap
+{
+    [self _failOrEnd];
+    [self _stopInvalidTimer];
+}
+
+- (CGPoint)_beginLocationWithTouch:(UITouch *)touch
+{
+    NSInteger idx = [_touches indexOfObject:touch];
+    NSValue *beginPoint = _beganLocations[@(idx)];
+    return [beginPoint CGPointValue];
+}
+
+- (BOOL)_anyTouchesOutOfArea:(CGFloat)areaSize
+{
+    for (UITouch *touch in _touches) {
+        if ([self _isTouch:touch outOfArea:areaSize]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)_isTouch:(UITouch *)touch outOfArea:(CGFloat)areaSize
+{
+    CGPoint currentLocation = [self locationInView:nil];
+    CGPoint beginPoint = [self _beginLocationWithTouch:touch];
+    
+    if (ABS(currentLocation.x - beginPoint.x) > areaSize ||
+        ABS(currentLocation.y - beginPoint.y) > areaSize) {
+        // if move so far, failed
+        return YES;
+    }
+    return NO;
+}
+
+- (void)_completeOneTap
+{
+    _currentTapCount++;
+    _numTouches = 0;
+    
+    if (_currentTapCount >= self.numberOfTapsRequired) {
+        [self _completeAllTaps];
+    } else {
+        [self _restartInvalidTimer];
+    }
+}
+
+- (void)_completeAllTaps
+{
+    [self setState:UIGestureRecognizerStateRecognized];
+    [self _stopInvalidTimer];
+}
+
+- (void)_onIntervalTimeOut:(NSTimer *)timer
+{
+    [self _failOrEnd];
+    _invalidTimer = nil;
+}
+
+- (void)_failOrEnd
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        [self setState:UIGestureRecognizerStateEnded];
+        
+    } else if (self.state == UIGestureRecognizerStatePossible){
+        [self setState:UIGestureRecognizerStateFailed];
+    }
+}
+
+- (void)_restartInvalidTimer
+{
+    [self _stopInvalidTimer];
+    _invalidTimer = [NSTimer scheduledTimerWithTimeInterval:_timeInterval
+                                                     target:self selector:@selector(_onIntervalTimeOut:)
+                                                   userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)_stopInvalidTimer
+{
+    if (_invalidTimer) {
+        [_invalidTimer invalidate];
+        _invalidTimer = nil;
+    }
 }
 
 @end

@@ -28,18 +28,32 @@
  */
 
 #import "UILongPressGestureRecognizer.h"
+#import "UITapGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import "UITouch+Private.h"
 #import "UIEvent.h"
 #import "TNMultiTapHelper.h"
 
+BOOL isGestureRecognizerFailedOrCancelled(UIGestureRecognizer *recognizer) {
+    return recognizer.state == UIGestureRecognizerStateCancelled ||
+           recognizer.state == UIGestureRecognizerStateFailed;
+}
+
 @interface UILongPressGestureRecognizer () <TNMultiTapHelperDelegate> @end
+
+@interface _TNTapRequireGestureRecognizer : UITapGestureRecognizer
+- (instancetype)initWithLongPressGestureRecognizer:(UILongPressGestureRecognizer *)longPressGestureRecognizer;
+- (BOOL)remainLastTap;
+- (void)clear;
+@end
 
 @implementation UILongPressGestureRecognizer
 {
     TNMultiTapHelper *_multiTapHelper;
+    _TNTapRequireGestureRecognizer *_tapRequireGestureRecognizer;
     BOOL _waitForNewTouchBegin;
-    BOOL _hasTimeOut;
+    BOOL _hasRecivedAnyTouches;
 }
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
 @synthesize numberOfTouchesRequired=_numberOfTouchesRequired;
@@ -64,31 +78,33 @@
     _multiTapHelper.timeInterval = minimumPressDuration;
 }
 
-- (void)setNumberOfTapsRequired:(NSUInteger)numberOfTapsRequired
-{
-    _numberOfTapsRequired = numberOfTapsRequired;
-    _multiTapHelper.numberOfTapsRequired = numberOfTapsRequired;
-}
-
 - (void)setNumberOfTouchesRequired:(NSInteger)numberOfTouchesRequired
 {
     _numberOfTouchesRequired = numberOfTouchesRequired;
     _multiTapHelper.numberOfTouchesRequired = numberOfTouchesRequired + 1;
 }
 
-- (BOOL)willTimeOutLeadToFail
+- (void)onOverTime
 {
-    _hasTimeOut = YES;
-    
-    // fail when no fingers touching screen.
-    if (_multiTapHelper.pressedTouchesCount == 0) {
-        return YES;
+    if (![self _hasMadeConclusion]) {
+        if (_multiTapHelper.pressedTouchesCount == 0) {
+            // fail when no fingers touching screen.
+            [_multiTapHelper cancelTap];
+            
+        } else if (![_multiTapHelper anyTouchesOutOfArea:_allowableMovement] &&
+                   _multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
+            [self setState:UIGestureRecognizerStateBegan];
+        }
     }
-    if (![_multiTapHelper anyTouchesOutOfArea:_allowableMovement] &&
-        _multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
-        [self setState:UIGestureRecognizerStateBegan];
+}
+
+- (void)onCompleteTap
+{
+    if (_multiTapHelper.hasOverTime) {
+        [self setState:UIGestureRecognizerStateEnded];
+    } else {
+        [_multiTapHelper cancelTap];
     }
-    return NO;
 }
 
 - (void)reset
@@ -96,45 +112,134 @@
     [super reset];
     [_multiTapHelper reset];
     
+    if (_tapRequireGestureRecognizer) {
+        [_tapRequireGestureRecognizer clear];
+        _tapRequireGestureRecognizer = nil;
+    }
     _waitForNewTouchBegin = YES;
+    _hasRecivedAnyTouches = NO;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_multiTapHelper beginOneTapWithTouches:touches];
-    
-    if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
-        [_multiTapHelper cancelTap];
+    if (!_hasRecivedAnyTouches) {
+        [self _generateTapRequireGestureRecognizerIfNeed];
+        _hasRecivedAnyTouches = YES;
     }
-    _hasTimeOut = NO;
+    
+    if ([self _hasFinishedExtraTap]) {
+        [_multiTapHelper trackTouches:touches];
+        [_multiTapHelper beginOneTap];
+        
+        if (!_waitForNewTouchBegin || _multiTapHelper.pressedTouchesCount > self.numberOfTouchesRequired) {
+            [_multiTapHelper cancelTap];
+        }
+    } else if ([self _tapRequireGestureRecognizerCanRecivedTouches]) {
+        [_tapRequireGestureRecognizer touchesBegan:touches withEvent:event];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.state == UIGestureRecognizerStateBegan ||
-        self.state == UIGestureRecognizerStateChanged) {
-        
-        [self setState:UIGestureRecognizerStateChanged];
+    if ([self _hasFinishedExtraTap]) {
+        if (self.state == UIGestureRecognizerStateBegan ||
+            self.state == UIGestureRecognizerStateChanged) {
+            
+            [self setState:UIGestureRecognizerStateChanged];
+        }
+    } else if ([self _tapRequireGestureRecognizerCanRecivedTouches]) {
+        [_tapRequireGestureRecognizer touchesMoved:touches withEvent:event];
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_hasTimeOut) {
-        [self setState:UIGestureRecognizerStateFailed];
-        return;
-    }
-    _waitForNewTouchBegin = NO;
     
-    [_multiTapHelper releaseFingersWithTouches:touches completeOnTap:^{
-        _waitForNewTouchBegin = YES;
-        _hasTimeOut = NO;
-    }];
+    if ([self _hasFinishedExtraTap]) {
+        _waitForNewTouchBegin = NO;
+        [_multiTapHelper releaseFingersWithTouches:touches];
+        
+    } else if ([self _tapRequireGestureRecognizerCanRecivedTouches]) {
+        [_tapRequireGestureRecognizer touchesEnded:touches withEvent:event];
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_multiTapHelper cancelTap];
+    if ([self _hasFinishedExtraTap]) {
+        [_multiTapHelper cancelTap];
+        
+    } else if ([self _tapRequireGestureRecognizerCanRecivedTouches]) {
+        [_tapRequireGestureRecognizer touchesCancelled:touches withEvent:event];
+    }
+}
+
+- (void)_generateTapRequireGestureRecognizerIfNeed
+{
+    if (_numberOfTapsRequired > 0) {
+        _tapRequireGestureRecognizer = [[_TNTapRequireGestureRecognizer alloc] initWithLongPressGestureRecognizer:self];
+    }
+}
+
+- (BOOL)_hasFinishedExtraTap
+{
+    if (_tapRequireGestureRecognizer &&
+        ![_tapRequireGestureRecognizer _hasMadeConclusion] &&
+        [_tapRequireGestureRecognizer remainLastTap]) {
+        
+        [_tapRequireGestureRecognizer clear];
+        _tapRequireGestureRecognizer = nil;
+    }
+    return !_tapRequireGestureRecognizer;
+}
+
+- (BOOL)_tapRequireGestureRecognizerCanRecivedTouches
+{
+    return _tapRequireGestureRecognizer &&
+           !isGestureRecognizerFailedOrCancelled(_tapRequireGestureRecognizer);
+}
+
+@end
+
+@implementation _TNTapRequireGestureRecognizer
+{
+    __unsafe_unretained UILongPressGestureRecognizer *_longPressGestureRecognizer;
+}
+
+- (instancetype)initWithLongPressGestureRecognizer:(UILongPressGestureRecognizer *)longPressGestureRecognizer
+{
+    if (self = [super init]) {
+        _longPressGestureRecognizer = longPressGestureRecognizer;
+        self.numberOfTapsRequired = longPressGestureRecognizer.numberOfTapsRequired + 1;
+        self.numberOfTouchesRequired = longPressGestureRecognizer.numberOfTouchesRequired;
+    }
+    return self;
+}
+
+- (void)setState:(UIGestureRecognizerState)state
+{
+    // I can't check the state of this gesture recognizer when touchesXXX:withEvent: is called.
+    // Because the state may be changed at NSTimer callback method.
+    // I must make long press gesture recognizer fail no matter when the tap require gesture recognizer is called setState: method.
+    
+    [super setState:state];
+    
+    if (_longPressGestureRecognizer &&
+        ![_longPressGestureRecognizer _hasMadeConclusion] &&
+        isGestureRecognizerFailedOrCancelled(self)) {
+        
+        [_longPressGestureRecognizer setState:self.state];
+    }
+}
+
+- (void)clear
+{
+    _longPressGestureRecognizer = nil;
+}
+
+- (BOOL)remainLastTap
+{
+    return self.currentTapCount >= self.numberOfTouchesRequired - 1;
 }
 
 @end
