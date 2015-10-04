@@ -94,7 +94,6 @@ static NSArray *GestureRecognizersForView(UIView *view)
     _previousLocation = _location = newTouch.screenLocation;
     _rotation = newTouch->_rotation;
     _magnification = newTouch->_magnification;
-    _identifier = newTouch->_identifier;
     
     _tapCount++;
     [self _setTouchedView:newTouch.view];

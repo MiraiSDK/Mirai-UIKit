@@ -88,22 +88,18 @@
     _timestamp = timestamp;
 }
 
-- (void)_addTouch:(UITouch *)touch
+- (void)_replaceTouch:(UITouch *)replacedTouch asTouch:(UITouch *)newTouch
 {
-    [_touches addObject:touch];
-    [_touchesByIdentifier setObject:touch forKey:@(touch.identifier)];
-}
-
-- (void)_removeTouches:(NSSet *)touches
-{
+    newTouch.identifier = replacedTouch.identifier;
+    
     for (NSString *key in _touchesByIdentifier.allKeys) {
         UITouch *touch = [_touchesByIdentifier objectForKey:key];
-        if ([touches containsObject:touch]) {
-            [_touches removeObject:touch];
-            [_touchesByIdentifier removeObjectForKey:key];
-            break;
+        if (touch == replacedTouch) {
+            [_touchesByIdentifier setObject:newTouch forKey:key];
         }
     }
+    [_touches removeObject:replacedTouch];
+    [_touches addObject:newTouch];
 }
 
 @end

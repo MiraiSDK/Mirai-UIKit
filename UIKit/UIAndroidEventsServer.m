@@ -133,10 +133,11 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
         action == AMOTION_EVENT_ACTION_POINTER_UP ||
         action == AMOTION_EVENT_ACTION_CANCEL) {
         
-        [event handleInputEvent:inputEvent];
         [self _clearInvalidTouches];
         [self _pickOutAndHandleNewTouchFromEvent:event];
         [self _waitThenClearInvalidTouches];
+        
+        [event handleInputEvent:inputEvent];
     }
 }
 
@@ -162,7 +163,6 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 - (void)_pickOutAndHandleNewTouchFromEvent:(UIEvent *)event
 {
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    NSMutableSet *beEatenTouches = [NSMutableSet set];
     NSMutableSet *notBeEatenTouches = [NSMutableSet set];
     
     for (UITouch *touch in [event allTouches]) {
@@ -171,15 +171,13 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
             UITouch *oldTouch = [self _oldTouchThatWillEatThisNewTouch:touch];
             if (oldTouch) {
                 [oldTouch _mergeNewTouchAsNextTap:touch];
-                [beEatenTouches addObject:touch];
-                [event _addTouch:oldTouch];
+                [event _replaceTouch:touch asTouch:oldTouch];
             } else {
                 [notBeEatenTouches addObject:touch];
             }
         }
     }
     [_touchesBuffer unionSet:notBeEatenTouches];
-    [event _removeTouches:beEatenTouches];
 }
 
 - (UITouch *)_oldTouchThatWillEatThisNewTouch:(UITouch *)newTouch
