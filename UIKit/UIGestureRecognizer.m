@@ -274,8 +274,6 @@
             _shouldReset = YES;
             
         } else {
-            if (transition->toState == UIGestureRecognizerStateFailed) {
-            }
             _state = transition->toState;
             _shouldSendActions = transition->shouldNotify;
             _shouldReset = transition->shouldReset;
