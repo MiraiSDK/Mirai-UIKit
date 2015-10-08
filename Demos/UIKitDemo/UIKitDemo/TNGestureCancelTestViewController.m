@@ -79,7 +79,9 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    UIGestureRecognizerState originalState = self.state;
     [super touchesCancelled:touches withEvent:event];
+    NSLog(@">> change state from %zi to %zi", originalState, self.state);
     NSLog(@">> %s", __FUNCTION__);
 }
 
