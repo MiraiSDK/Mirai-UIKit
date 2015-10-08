@@ -128,10 +128,15 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
         self.state = UIGestureRecognizerStateEnded;
     }
 }
+
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    if (self.state == UIGestureRecognizerStateBegan ||
+        self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    } else if (self.state == UIGestureRecognizerStatePossible) {
+        self.state = UIGestureRecognizerStateFailed;
+    }
 }
-
 
 @end

@@ -106,7 +106,12 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    if (self.state == UIGestureRecognizerStateBegan ||
+        self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    } else if (self.state == UIGestureRecognizerStatePossible) {
+        self.state = UIGestureRecognizerStateFailed;
+    }
 }
 
 @end

@@ -227,6 +227,16 @@
     }
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan ||
+        self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    } else if (self.state == UIGestureRecognizerStatePossible) {
+        self.state = UIGestureRecognizerStateFailed;
+    }
+}
+
 - (void)_endTouch:(UITouch *)touch screenLocation:(_UIPanGestureRecognizerScreenLocation *)screenLocation
             event:(UIEvent *)event
 {
