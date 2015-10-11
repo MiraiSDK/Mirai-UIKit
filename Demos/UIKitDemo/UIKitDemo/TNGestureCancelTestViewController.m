@@ -46,7 +46,7 @@
 - (void)_reset
 {
     if ([_gestureAreaView gestureRecognizers].count > 0) {
-        UIGestureRecognizer *recognizer = [[_gestureAreaView gestureRecognizers] firstObject];
+        UIGestureRecognizer *recognizer = [[_gestureAreaView gestureRecognizers] objectAtIndex:0];
         [_gestureAreaView removeGestureRecognizer:recognizer];
     }
     
