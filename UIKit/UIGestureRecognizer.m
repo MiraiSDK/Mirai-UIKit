@@ -220,14 +220,10 @@
 
 - (void)setState:(UIGestureRecognizerState)state
 {
+    // It won't do anything if the method is called out of UIGestureRecognizer subclass touchesXXX:withEvent:
     if (_allowedSetState) {
         [self _setStateForce:state];
     }
-}
-
-- (void)_allowedSetState:(BOOL)allowedSetState
-{
-    _allowedSetState = allowedSetState;
 }
 
 - (void)_setStateForce:(UIGestureRecognizerState)state
@@ -635,22 +631,30 @@
         }
     }
     
-    if (touchesBeginSet) {
-        [self touchesBegan:touchesBeginSet withEvent:event];
-    }
     
-    if (touchesMovedSet) {
-        [self touchesMoved:touchesMovedSet withEvent:event];
+    @try {
+        _allowedSetState = YES;
+        
+        if (touchesBeginSet) {
+            [self touchesBegan:touchesBeginSet withEvent:event];
+        }
+        
+        if (touchesMovedSet) {
+            [self touchesMoved:touchesMovedSet withEvent:event];
+        }
+        
+        if (touchesEndedSet) {
+            [self touchesEnded:touchesEndedSet withEvent:event];
+        }
+        
+        if (touchesCancelledSet) {
+            [self touchesCancelled:touchesCancelledSet withEvent:event];
+        }
     }
-    
-    if (touchesEndedSet) {
-        [self touchesEnded:touchesEndedSet withEvent:event];
+    @finally {
+        // reset this property no matter UIGestureRecognizer's subclass code throws Exception.
+        _allowedSetState = NO;
     }
-    
-    if (touchesCancelledSet) {
-        [self touchesCancelled:touchesCancelledSet withEvent:event];
-    }
-    
     return handledTouchesCount;
 }
 
