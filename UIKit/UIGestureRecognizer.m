@@ -40,6 +40,7 @@
     BOOL _excluded;
     NSMutableSet *_excludedTouches;
     NSMutableSet *_ignoredTouches;
+    BOOL _allowedSetState;
     BOOL _foredFailed;
     BOOL _shouldSendActions;
     BOOL _shouldReset;
@@ -219,23 +220,35 @@
 
 - (void)setState:(UIGestureRecognizerState)state
 {
+    if (_allowedSetState) {
+        [self _setStateForce:state];
+    }
+}
+
+- (void)_allowedSetState:(BOOL)allowedSetState
+{
+    _allowedSetState = allowedSetState;
+}
+
+- (void)_setStateForce:(UIGestureRecognizerState)state
+{
     if (_foredFailed) {
         return;
     }
     // the docs didn't say explicitly if these state transitions were verified, but I suspect they are. if anything, a check like this
     // should help debug things. it also helps me better understand the whole thing, so it's not a total waste of time :)
-
+    
     typedef struct {
         UIGestureRecognizerState fromState, toState;
         BOOL shouldNotify, shouldReset, checkPrevent;
     } StateTransition;
-
+    
     #define NumberOfStateTransitions 9
     static const StateTransition allowedTransitions[NumberOfStateTransitions] = {
         // discrete gestures
         {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateRecognized, YES,    YES,    YES},
         {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateFailed,     NO,     YES,    NO},
-
+        
         // continuous gestures
         {UIGestureRecognizerStatePossible,		UIGestureRecognizerStateBegan,      YES,    NO,     YES},
         {UIGestureRecognizerStateBegan,			UIGestureRecognizerStateChanged,    YES,    NO,     NO},
@@ -247,14 +260,14 @@
     };
     
     const StateTransition *transition = NULL;
-
+    
     for (NSUInteger t=0; t<NumberOfStateTransitions; t++) {
         if (allowedTransitions[t].fromState == _state && allowedTransitions[t].toState == state) {
             transition = &allowedTransitions[t];
             break;
         }
     }
-
+    
     NSAssert2((transition != NULL), @"invalid state transition from %d to %d", _state, state);
     UIGestureRecognizerState originalState = _state;
     

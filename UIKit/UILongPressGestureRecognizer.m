@@ -93,7 +93,7 @@ BOOL isGestureRecognizerFailedOrCancelled(UIGestureRecognizer *recognizer) {
             
         } else if (![_multiTapHelper anyTouchesOutOfArea:_allowableMovement] &&
                    _multiTapHelper.pressedTouchesCount >= self.numberOfTouchesRequired) {
-            [self setState:UIGestureRecognizerStateBegan];
+            [self _setStateForce:UIGestureRecognizerStateBegan];
         }
     }
 }
@@ -101,7 +101,7 @@ BOOL isGestureRecognizerFailedOrCancelled(UIGestureRecognizer *recognizer) {
 - (void)onCompleteTap
 {
     if (_multiTapHelper.hasOverTime) {
-        [self setState:UIGestureRecognizerStateEnded];
+        [self _setStateForce:UIGestureRecognizerStateEnded];
     } else {
         [_multiTapHelper cancelTap];
     }
@@ -145,7 +145,7 @@ BOOL isGestureRecognizerFailedOrCancelled(UIGestureRecognizer *recognizer) {
         if (self.state == UIGestureRecognizerStateBegan ||
             self.state == UIGestureRecognizerStateChanged) {
             
-            [self setState:UIGestureRecognizerStateChanged];
+            [self _setStateForce:UIGestureRecognizerStateChanged];
         }
     } else if ([self _tapRequireGestureRecognizerCanRecivedTouches]) {
         [_tapRequireGestureRecognizer touchesMoved:touches withEvent:event];
