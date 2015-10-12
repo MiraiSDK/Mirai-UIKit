@@ -197,8 +197,7 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
             _verticalIsFinished   = BounceComponent(beginTime, &y, confinedOffset.y);
         }
         if (!_horizontalIsFinished) {
-            _horizontalIsFinished = YES;
-//            _horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
+            _horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
         }
         
         finished = (_verticalIsFinished && _horizontalIsFinished && isFinishedWaitingForMomentumScroll);
