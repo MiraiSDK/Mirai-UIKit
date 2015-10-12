@@ -74,6 +74,8 @@
  */
 
 static const CGFloat minimumBounceVelocityBeforeReturning = 100;
+static const CGFloat minimumBounceDistanceBeforeReturning = 5;
+static const CGFloat bounceVelocityFalloff = 0.35;
 static const NSTimeInterval returnAnimationDuration = 0.33;
 static const NSTimeInterval physicsTimeStep = 1/20.;
 
@@ -99,6 +101,10 @@ static CGFloat Resistance(CGFloat velocity) {
     }
 }
 
+static BOOL IsOverTarget(CGFloat velocity, CGFloat currentPosition, CGFloat toPosition) {
+    return (toPosition - currentPosition)*velocity < 0;
+}
+
 static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationComponent *c, CGFloat to)
 {
     if (c->bounced && c->returnTime != 0) {
@@ -107,22 +113,37 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
         return (returnBounceTime == 1);
         
     } else {
-        const CGFloat F = Resistance(c->velocity);
-        c->velocity += F * physicsTimeStep;
-        c->position += c->velocity * physicsTimeStep;
-
-        c->bounced = YES;
-
         if (fabsf(c->velocity) < minimumBounceVelocityBeforeReturning) {
-            c->returnFrom = c->position;
-            c->returnTime = t;
+            if (IsOverTarget(c->velocity, c->position, to) &&
+                fabsf(c->position - to) >= minimumBounceDistanceBeforeReturning) {
+                c->bounced = YES;
+                c->returnFrom = c->position;
+                c->returnTime = t;
+                return NO;
+            } else {
+                c->position = to;
+                return YES;
+            }
+        } else {
+            CGFloat F = Resistance(c->velocity);
+            c->velocity += F * physicsTimeStep;
+            
+            if (IsOverTarget(c->velocity, c->position, to)) {
+                c->velocity *= (1 - bounceVelocityFalloff);
+            }
+            c->position += c->velocity * physicsTimeStep;
+            
+            return NO;
         }
-        return NO;
     }
     return YES;
 }
 
 @implementation UIScrollViewAnimationDeceleration
+{
+    BOOL _horizontalIsFinished;
+    BOOL _verticalIsFinished;
+}
 
 - (id)initWithScrollView:(UIScrollView *)sv velocity:(CGPoint)v;
 {
@@ -168,14 +189,19 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
     const BOOL isFinishedWaitingForMomentumScroll = ((currentTime - lastMomentumTime) > 0.15f);
 
     BOOL finished = NO;
-
+    
     while (!finished && currentTime >= beginTime) {
         CGPoint confinedOffset = [scrollView _confinedContentOffset:CGPointMake(x.position, y.position)];
         
-        const BOOL verticalIsFinished   = BounceComponent(beginTime, &y, confinedOffset.y);
-        const BOOL horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
+        if (!_verticalIsFinished) {
+            _verticalIsFinished   = BounceComponent(beginTime, &y, confinedOffset.y);
+        }
+        if (!_horizontalIsFinished) {
+            _horizontalIsFinished = YES;
+//            _horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
+        }
         
-        finished = (verticalIsFinished && horizontalIsFinished && isFinishedWaitingForMomentumScroll);
+        finished = (_verticalIsFinished && _horizontalIsFinished && isFinishedWaitingForMomentumScroll);
         
         beginTime += physicsTimeStep;
     }
