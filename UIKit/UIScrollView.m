@@ -538,7 +538,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     const CGPoint confinedOffset = [self _confinedContentOffset:_contentOffset];
     velocity = CGPointMake(-velocity.x, -velocity.y);
     
-    if (fabs(velocity.x) + fabs(velocity.y) <= kSlideMinimumVelocity) {
+    if (CGPointEqualToPoint(confinedOffset, _contentOffset) &&
+        fabs(velocity.x) + fabs(velocity.y) <= kSlideMinimumVelocity) {
         return nil;
     }
     
@@ -551,12 +552,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         velocity.y = 0;
     }
     
-    if (!CGPointEqualToPoint(velocity, CGPointZero) || !CGPointEqualToPoint(confinedOffset, _contentOffset)) {
-        return [[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self
-                                                                     velocity:velocity];
-    } else {
-        return nil;
-    }
+    return [[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self velocity:velocity];
 }
 
 - (void)_beginDragging
