@@ -465,7 +465,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 //    [super mouseExitedView:exited enteredView:entered withEvent:event];
 //}
 
-#define kForceNextPageVelocity 1000
+#define kForceNextPageVelocity 380
 - (UIScrollViewAnimation *)_pageSnapAnimationWithVelocity:(CGPoint)velocity
 {
     const CGSize pageSize = self.bounds.size;
@@ -489,8 +489,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
             }
         }
     } else {
-        // if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
-        if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
+        // if currentPagePercentage is less than 35%, then go to the next page (if any), otherwise snap to the current page
+        if (currentPagePercentage.width < 0.65 && (currentPage.width+1) < numberOfWholePages.width) {
             finalContentOffset.x = pageSize.width * (currentPage.width + 1);
         } else {
             finalContentOffset.x = pageSize.width * currentPage.width;
