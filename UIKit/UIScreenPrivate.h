@@ -13,8 +13,12 @@
 @class CALayer;
 @class UIEvent;
 @class UIWindow;
+@class TNScreenHelper;
 
 @interface UIScreen ()
+
+@property (nonatomic, readonly) TNScreenHelper *screenHelper;
+
 - (void)_setScale:(CGFloat)scale;
 - (void)_setPixelBounds:(CGRect)bounds;
 

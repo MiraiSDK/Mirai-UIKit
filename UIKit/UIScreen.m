@@ -14,6 +14,7 @@
 #import "UIGeometry.h"
 #import "UIColor.h"
 #import "UIScreenOrientationListener.h"
+#import "TNScreenHelper.h"
 
 #import "android_native_app_glue.h"
 #import <android/native_activity.h>
@@ -30,6 +31,8 @@ static NSMutableArray *_allScreens;
     CALayer *__pixelLayer;
     CALayer *__windowLayer;
     BOOL _landscaped;
+    
+    TNScreenHelper *_screenHelper;
 }
 
 static UIScreen *_mainScreen = nil;
@@ -61,6 +64,7 @@ static UIScreen *_mainScreen = nil;
         __windowLayer.delegate = self;
 //        __windowLayer.backgroundColor = [UIColor greenColor].CGColor;
         [__pixelLayer addSublayer:__windowLayer];
+        _screenHelper = [[TNScreenHelper alloc] initWithScreen:self];
     }
     return self;
 }
@@ -79,6 +83,10 @@ static UIScreen *_mainScreen = nil;
     _applicationFrame = _bounds;
 }
 
+- (TNScreenHelper *)screenHelper
+{
+    return _screenHelper;
+}
 
 + (NSArray *)screens
 {

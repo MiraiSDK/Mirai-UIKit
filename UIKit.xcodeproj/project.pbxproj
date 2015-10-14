@@ -331,6 +331,8 @@
 		D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */; };
 		D2C2E6381ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
 		D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
+		D2CCF0B41BCE3096005F176F /* TNScreenHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CCF0B21BCE3096005F176F /* TNScreenHelper.h */; settings = {ASSET_TAGS = (); }; };
+		D2CCF0B51BCE3096005F176F /* TNScreenHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CCF0B31BCE3096005F176F /* TNScreenHelper.m */; settings = {ASSET_TAGS = (); }; };
 		D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */; };
 		D2D489491B0B1E1E00D0558F /* UIMenuBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */; };
 		D2D4894A1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */; };
@@ -691,6 +693,8 @@
 		D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreNavigationController.h; sourceTree = "<group>"; };
 		D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreNavigationController.m; sourceTree = "<group>"; };
 		D2CC41A91B62402D0078E0A5 /* UIResponder+UIPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+UIPrivate.h"; sourceTree = "<group>"; };
+		D2CCF0B21BCE3096005F176F /* TNScreenHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNScreenHelper.h; sourceTree = "<group>"; };
+		D2CCF0B31BCE3096005F176F /* TNScreenHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScreenHelper.m; sourceTree = "<group>"; };
 		D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+UIPrivate.h"; sourceTree = "<group>"; };
 		D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMenuBubbleView.h; sourceTree = "<group>"; };
 		D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMenuBubbleView.m; sourceTree = "<group>"; };
@@ -847,6 +851,8 @@
 				432FF05D185338BD005486C5 /* UIScreen.h */,
 				432FF06118534615005486C5 /* UIScreenPrivate.h */,
 				432FF05E185338BD005486C5 /* UIScreen.m */,
+				D2CCF0B21BCE3096005F176F /* TNScreenHelper.h */,
+				D2CCF0B31BCE3096005F176F /* TNScreenHelper.m */,
 				432FF07D1853645D005486C5 /* UIGraphics.h */,
 				432FF07E1853645D005486C5 /* UIGraphics.m */,
 				432FF08918544D7A005486C5 /* UIStringDrawing.h */,
@@ -1415,6 +1421,7 @@
 				D28F68401B427E2A00AFBF84 /* TNJavaBridgeProxy.h in Headers */,
 				43EBAA9018AB85FB005DDD8D /* UIBarButtonItem.h in Headers */,
 				439A73D118E84C6300B1BE40 /* UITableViewSectionLabel.h in Headers */,
+				D2CCF0B41BCE3096005F176F /* TNScreenHelper.h in Headers */,
 				43B819F818E2AA960020624F /* UIGestureRecognizer+UIPrivate.h in Headers */,
 				43EBAA8A18AB831A005DDD8D /* UIBarItem.h in Headers */,
 				436D4AE519F531D300F6F8F9 /* UITextField.h in Headers */,
@@ -1699,6 +1706,7 @@
 				434CFD421A0CB64000B6AC9E /* UIPopoverBackgroundView.m in Sources */,
 				432F737B1A08AC9C009CEC64 /* UIMenuController.m in Sources */,
 				436D4ADA19F52FB300F6F8F9 /* UISlider.m in Sources */,
+				D2CCF0B51BCE3096005F176F /* TNScreenHelper.m in Sources */,
 				43EBAA7118AA5923005DDD8D /* UIBezierPath.m in Sources */,
 				436D4B0B19F54FCB00F6F8F9 /* UISearchController.m in Sources */,
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,

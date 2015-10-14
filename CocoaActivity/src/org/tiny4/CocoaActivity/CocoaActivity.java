@@ -14,11 +14,14 @@ public class CocoaActivity extends NativeActivity
     private static String TAG = "CocoaActivity";
     
     public native int nativeSupportedOrientation(int orientation);
-
+    
+    private native void nativeSupportedDensity(float density);
+    
     private native void nativeOnTrimMemory(int level);
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        nativeSupportedDensity(getResources().getDisplayMetrics().density);
         ScreenOrientationHandler.initInstance(this, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
