@@ -34,6 +34,7 @@
 #import "UIWindow.h"
 #import "UITouch.h"
 #import "UIEvent.h"
+#import "TNScreenHelper.h"
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
 //#import "UIResponderAppKitIntegration.h"
@@ -44,8 +45,8 @@
 //#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kConfinedShrinkRate 0.32
-#define kSlideMinimumVelocity 170
+const static float ConfinedShrinkRate = 0.32;
+const static float SlideMinimumVelocity = 81;
 
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 static const NSTimeInterval UIScrollViewQuickAnimationDuration = 0.22;
@@ -543,7 +544,7 @@ static const float ForceNextPageVelocity = 180;
     velocity = CGPointMake(-velocity.x, -velocity.y);
     
     if (CGPointEqualToPoint(confinedOffset, _contentOffset) &&
-        fabs(velocity.x) + fabs(velocity.y) <= kSlideMinimumVelocity) {
+        fabs(velocity.x) + fabs(velocity.y) <= [TNScreenHelperOfView(self) pointFromInch:SlideMinimumVelocity]) {
         return nil;
     }
     
@@ -633,11 +634,11 @@ static const float ForceNextPageVelocity = 180;
             BOOL shouldVerticalBounce = (fabs(proposedOffset.y - confinedOffset.y) > 0);
             
             if (shouldHorizontalBounce) {
-                proposedOffset.x = originalOffset.x + (kConfinedShrinkRate * delta.x);
+                proposedOffset.x = originalOffset.x + (ConfinedShrinkRate * delta.x);
             }
             
             if (shouldVerticalBounce) {
-                proposedOffset.y = originalOffset.y + (kConfinedShrinkRate * delta.y);
+                proposedOffset.y = originalOffset.y + (ConfinedShrinkRate * delta.y);
             }
             
             [self _setRestrainedContentOffset:proposedOffset];
