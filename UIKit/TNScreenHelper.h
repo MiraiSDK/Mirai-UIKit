@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKitDefines.h>
 
 @class UIScreen;
+@class UIView;
 
 @interface TNScreenHelper : NSObject
+
+UIKIT_EXTERN TNScreenHelper *TNScreenHelperOfView(UIView *view);
 
 @property (nonatomic, readonly) float density;
 

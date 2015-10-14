@@ -7,7 +7,9 @@
 //
 
 #import "TNScreenHelper.h"
-#import "UIScreen.h"
+#import "UIScreenPrivate.h"
+#import "UIView.h"
+#import "UIWindow.h"
 #import "jni.h"
 
 static jfloat _screenDensity;
@@ -27,7 +29,7 @@ static jfloat _screenDensity;
 
 - (float)density
 {
-    return _screenDensity;
+    return _screenDensity/_screen.scale;
 }
 
 - (float)inchFromPoint:(float)point
@@ -41,6 +43,10 @@ static jfloat _screenDensity;
 }
 
 @end
+
+TNScreenHelper *TNScreenHelperOfView(UIView *view) {
+    return view.window.screen.screenHelper;
+}
 
 void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeSupportedDensity(JNIEnv *env, jobject obj, jfloat density) {
     _screenDensity = density;
