@@ -28,6 +28,8 @@
  */
 
 #import "UIScrollViewAnimationDeceleration.h"
+#import "UIScrollView.h"
+#import "TNScreenHelper.h"
 
 /*
  I attempted to emulate 10.7's behavior here as best I could, however my physics-fu is weak.
@@ -73,8 +75,8 @@
  will proceed as expected in those situations.
  */
 
-static const CGFloat minimumBounceVelocityBeforeReturning = 100;
-static const CGFloat minimumBounceDistanceBeforeReturning = 5;
+static const CGFloat minimumBounceVelocityBeforeReturning = 48;
+static const CGFloat minimumBounceDistanceBeforeReturning = 2.4;
 static const CGFloat bounceVelocityFalloff = 0.35;
 static const NSTimeInterval returnAnimationDuration = 0.33;
 static const NSTimeInterval physicsTimeStep = 1/20.;
@@ -105,7 +107,8 @@ static BOOL IsOverTarget(CGFloat velocity, CGFloat currentPosition, CGFloat toPo
     return (toPosition - currentPosition)*velocity < 0;
 }
 
-static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationComponent *c, CGFloat to)
+static BOOL BounceComponent(UIScrollView *scrollView, NSTimeInterval t,
+                            UIScrollViewAnimationDecelerationComponent *c, CGFloat to)
 {
     if (c->bounced && c->returnTime != 0) {
         const NSTimeInterval returnBounceTime = MIN(1, ((t - c->returnTime) / returnAnimationDuration));
@@ -113,9 +116,13 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
         return (returnBounceTime == 1);
         
     } else {
-        if (fabsf(c->velocity) < minimumBounceVelocityBeforeReturning) {
+        TNScreenHelper *screenHelper = TNScreenHelperOfView(scrollView);
+        float pointMinimumBounceVelocityBeforeReturning = [screenHelper pointFromInch:minimumBounceVelocityBeforeReturning];
+        float pointMinimumBounceDistanceBeforeReturning = [screenHelper pointFromInch:minimumBounceDistanceBeforeReturning];
+        
+        if (fabsf(c->velocity) < pointMinimumBounceVelocityBeforeReturning) {
             if (IsOverTarget(c->velocity, c->position, to) &&
-                fabsf(c->position - to) >= minimumBounceDistanceBeforeReturning) {
+                fabsf(c->position - to) >= pointMinimumBounceDistanceBeforeReturning) {
                 c->bounced = YES;
                 c->returnFrom = c->position;
                 c->returnTime = t;
@@ -194,10 +201,10 @@ static BOOL BounceComponent(NSTimeInterval t, UIScrollViewAnimationDecelerationC
         CGPoint confinedOffset = [scrollView _confinedContentOffset:CGPointMake(x.position, y.position)];
         
         if (!_verticalIsFinished) {
-            _verticalIsFinished   = BounceComponent(beginTime, &y, confinedOffset.y);
+            _verticalIsFinished   = BounceComponent(scrollView, beginTime, &y, confinedOffset.y);
         }
         if (!_horizontalIsFinished) {
-            _horizontalIsFinished = BounceComponent(beginTime, &x, confinedOffset.x);
+            _horizontalIsFinished = BounceComponent(scrollView, beginTime, &x, confinedOffset.x);
         }
         
         finished = (_verticalIsFinished && _horizontalIsFinished && isFinishedWaitingForMomentumScroll);
