@@ -40,6 +40,7 @@
 #import "UIScrollViewAnimationScroll.h"
 #import "UIScrollViewAnimationDeceleration.h"
 #import "UIPanGestureRecognizer.h"
+#import "TNScreenHelper.h"
 //#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -465,7 +466,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 //    [super mouseExitedView:exited enteredView:entered withEvent:event];
 //}
 
-#define kForceNextPageVelocity 380
+static const float ForceNextPageVelocity = 180;
+
 - (UIScrollViewAnimation *)_pageSnapAnimationWithVelocity:(CGPoint)velocity
 {
     const CGSize pageSize = self.bounds.size;
@@ -479,9 +481,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     BOOL hasHorNextPage = (currentPage.width+1) < numberOfWholePages.width;
     BOOL hasVetNextPage = (currentPage.height+1) < numberOfWholePages.height;    
     
-    if (fabsf(velocity.x) > kForceNextPageVelocity) {
+    float pointForeNextPageVelocity = [TNScreenHelperOfView(self) pointFromInch:ForceNextPageVelocity];
+    
+    if (fabsf(velocity.x) > pointForeNextPageVelocity) {
         finalContentOffset.x = pageSize.width * currentPage.width;
-        if  (fabsf(velocity.x) > kForceNextPageVelocity) {
+        if  (fabsf(velocity.x) > pointForeNextPageVelocity) {
             if (velocity.x < 0 && hasHorNextPage) {
                 finalContentOffset.x = pageSize.width * (currentPage.width + 1);
             } else {
@@ -498,9 +502,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     }
     
     
-    if (fabsf(velocity.y) > kForceNextPageVelocity) {
+    if (fabsf(velocity.y) > pointForeNextPageVelocity) {
         finalContentOffset.y = pageSize.height * currentPage.height;
-        if (fabsf(velocity.y) > kForceNextPageVelocity) {
+        if (fabsf(velocity.y) > pointForeNextPageVelocity) {
             if (velocity.y < 0 && hasVetNextPage) {
                 finalContentOffset.y = pageSize.height * (currentPage.height + 1);
             } else {
