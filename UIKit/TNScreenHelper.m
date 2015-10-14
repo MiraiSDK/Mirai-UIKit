@@ -45,7 +45,13 @@ static jfloat _screenDensity;
 @end
 
 TNScreenHelper *TNScreenHelperOfView(UIView *view) {
-    return view.window.screen.screenHelper;
+    UIScreen *screen;
+    if (view.window && view.window.screen) {
+        screen = view.window.screen;
+    } else {
+        screen = [UIScreen mainScreen];
+    }
+    return screen.screenHelper;
 }
 
 void Java_org_tiny4_CocoaActivity_CocoaActivity_nativeSupportedDensity(JNIEnv *env, jobject obj, jfloat density) {
