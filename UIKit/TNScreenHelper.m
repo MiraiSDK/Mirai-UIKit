@@ -46,7 +46,7 @@ static jfloat _screenDensity;
 
 TNScreenHelper *TNScreenHelperOfView(UIView *view) {
     UIScreen *screen;
-    if (view.window && view.window.screen) {
+    if (view && view.window && view.window.screen) {
         screen = view.window.screen;
     } else {
         screen = [UIScreen mainScreen];
