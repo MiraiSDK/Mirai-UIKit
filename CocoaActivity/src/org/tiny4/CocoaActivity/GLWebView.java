@@ -28,7 +28,8 @@ public class GLWebView extends WebView {
         WebSettings s = getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
-        //s.setBuiltInZoomControls(true);
+        s.setLoadWithOverviewMode(true);
+        s.setUseWideViewPort(true);
     }
 
     public void setRender(GLViewRender r) {
