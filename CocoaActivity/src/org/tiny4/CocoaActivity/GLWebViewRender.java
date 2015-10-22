@@ -16,6 +16,7 @@ public class GLWebViewRender extends GLViewRender {
     @Override
     protected View onCreateTargetView(Activity activity) {
         GLWebView wb = new GLWebView(activity);
+        wb.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         wb.setRender(this);
         _webview = wb;
         return wb;
