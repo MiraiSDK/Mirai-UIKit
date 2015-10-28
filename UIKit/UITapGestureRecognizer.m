@@ -216,9 +216,8 @@
 - (void)_restartInvalidTimer
 {
     [self _stopInvalidTimer];
-    _invalidTimer = [NSTimer scheduledTimerWithTimeInterval:_timeInterval
-                                                     target:self selector:@selector(_onIntervalTimeOut:)
-                                                   userInfo:nil repeats:NO];
+    _invalidTimer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(_onIntervalTimeOut:)
+                                          userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
 }
 
