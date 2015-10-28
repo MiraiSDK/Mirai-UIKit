@@ -154,10 +154,10 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     if (_gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         _gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         
-        [_gestureRecognizer setState:UIGestureRecognizerStateEnded];
+        [_gestureRecognizer _setStateForce:UIGestureRecognizerStateEnded];
         
     } else if (_gestureRecognizer.state == UIGestureRecognizerStatePossible){
-        [_gestureRecognizer setState:UIGestureRecognizerStateFailed];
+        [_gestureRecognizer _setStateForce:UIGestureRecognizerStateFailed];
     }
 }
 

@@ -17,6 +17,7 @@
 #import "TNMultiGestureRecognizerTestViewController.h"
 #import "TNSimultaneouselyGestureTestViewController.h"
 #import "TNPreventGestureRecognizerTestViewController.h"
+#import "TNGestureCancelTestViewController.h"
 
 @implementation TNGestureRecognizerTestViewController
 
@@ -33,6 +34,7 @@
 + (NSArray *)subTests
 {
     return @[
+             TNGestureCancelTestViewController.class,
              TNRecognizerToFailTestViewController.class,
              TNMultiGestureRecognizerTestViewController.class,
              TNSimultaneouselyGestureTestViewController.class,

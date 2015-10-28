@@ -29,6 +29,7 @@
 
 #import "UITapGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UIGestureRecognizer+UIPrivate.h"
 #import "UITouch.h"
 #import "UIGeometry.h"
 #import "TNMultiTapHelper.h"
@@ -193,7 +194,7 @@
 
 - (void)_completeAllTaps
 {
-    [self setState:UIGestureRecognizerStateRecognized];
+    [self _setStateForce:UIGestureRecognizerStateRecognized];
     [self _stopInvalidTimer];
 }
 
@@ -206,10 +207,10 @@
 - (void)_failOrEnd
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        [self setState:UIGestureRecognizerStateEnded];
+        [self _setStateForce:UIGestureRecognizerStateEnded];
         
     } else if (self.state == UIGestureRecognizerStatePossible){
-        [self setState:UIGestureRecognizerStateFailed];
+        [self _setStateForce:UIGestureRecognizerStateFailed];
     }
 }
 

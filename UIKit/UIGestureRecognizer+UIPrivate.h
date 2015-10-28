@@ -42,6 +42,7 @@
 - (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess;
 - (void)_unbindRecognizeProcess;
 
+- (void)_setStateForce:(UIGestureRecognizerState)state;
 - (void)_forceFail;
 - (void)_preventByOtherGestureRecognizer;
 - (BOOL)_hasBeenPreventedByOtherGestureRecognizer;

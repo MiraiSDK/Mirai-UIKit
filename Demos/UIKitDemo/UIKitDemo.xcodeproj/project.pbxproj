@@ -103,6 +103,10 @@
 		D22A0BC31BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; settings = {ASSET_TAGS = (); }; };
 		D22A0BC61BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; settings = {ASSET_TAGS = (); }; };
 		D22A0BC71BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D233DAFC1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D233DAFD1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D233DB021BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */; settings = {ASSET_TAGS = (); }; };
+		D233DB031BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */; settings = {ASSET_TAGS = (); }; };
 		D243F09B1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
@@ -311,6 +315,10 @@
 		D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTouchTestViewController.m; sourceTree = "<group>"; };
 		D22A0BC41BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiTouchTapCountTestViewController.h; sourceTree = "<group>"; };
 		D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTouchTapCountTestViewController.m; sourceTree = "<group>"; };
+		D233DAFA1BC617CD00AD220E /* TNGestureCancelTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureCancelTestViewController.h; sourceTree = "<group>"; };
+		D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNGestureCancelTestViewController.m; sourceTree = "<group>"; };
+		D233DB001BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNCancelGeneratorGestureRecognizer.h; sourceTree = "<group>"; };
+		D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNCancelGeneratorGestureRecognizer.m; sourceTree = "<group>"; };
 		D243F0991AC6F10F00CBD2D9 /* TNChangeValueSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNChangeValueSlider.h; sourceTree = "<group>"; };
 		D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeValueSlider.m; sourceTree = "<group>"; };
 		D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreNavigationTestViewController.h; sourceTree = "<group>"; };
@@ -887,6 +895,10 @@
 				D2B390F31BA7B8E1004A87DC /* TNSimultaneouselyGestureTestViewController.m */,
 				D2A666281BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.h */,
 				D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */,
+				D233DAFA1BC617CD00AD220E /* TNGestureCancelTestViewController.h */,
+				D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */,
+				D233DB001BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.h */,
+				D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */,
 			);
 			name = UIGestureRecognizer;
 			sourceTree = "<group>";
@@ -1116,6 +1128,7 @@
 				4390B8421A8352FB0082B0F1 /* TNAlertViewTestViewController.m in Sources */,
 				4390B8091A8351470082B0F1 /* TNTestViewController.m in Sources */,
 				4390B8191A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
+				D233DB031BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */,
 				D269FAD31B3AB45300A0AB7A /* TNSearchControllerTestMenu.m in Sources */,
 				D2CEEEA21ADBC43900FDF6C6 /* TNMoreListEditorTestViewController.m in Sources */,
 				D269FADB1B3ABDCB00A0AB7A /* TNViewItemMaker.m in Sources */,
@@ -1130,6 +1143,7 @@
 				D220A8C71B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */,
 				D22284A81B7B1327003B5996 /* UIScrollViewInertance.m in Sources */,
 				437F25D91A736FA800FBE3E2 /* main.m in Sources */,
+				D233DAFD1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */,
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
 				D2A9FB951B1FED8100C88751 /* TNTopFloatTestViewController.m in Sources */,
@@ -1163,6 +1177,7 @@
 				4390B8641A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
 				D2D12EEB1B95A663001EA9AE /* TNPanGestureRecognizerTestViewController.m in Sources */,
 				432D2BFF1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */,
+				D233DB021BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */,
 				D2A5F48B1AB081D30011AF7B /* TNStepperTestViewController.m in Sources */,
 				4390B82C1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				437F25F11A736FB400FBE3E2 /* ViewController.m in Sources */,
@@ -1230,6 +1245,7 @@
 				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 				D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */,
 				D2BB4E041B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
+				D233DAFC1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
