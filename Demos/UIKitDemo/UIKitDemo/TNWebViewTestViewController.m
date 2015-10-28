@@ -45,14 +45,14 @@
     [button1 setTitle:@"LoadURL" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(button1Pressed:) forControlEvents:UIControlEventTouchUpInside];
     [button1 sizeToFit];
-    button1.center = CGPointMake(100, 900);
+    button1.center = CGPointMake(100, 450);
     [self.view addSubview:button1];
     
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
     [button2 setTitle:@"loadString" forState:UIControlStateNormal];
     [button2 addTarget:self action:@selector(button2Pressed:) forControlEvents:UIControlEventTouchUpInside];
     [button2 sizeToFit];
-    button2.center = CGPointMake(300, 900);
+    button2.center = CGPointMake(300, 450);
     [self.view addSubview:button2];
     
 }
