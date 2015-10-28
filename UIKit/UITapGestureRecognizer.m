@@ -33,9 +33,10 @@
 #import "UITouch.h"
 #import "UIGeometry.h"
 #import "TNMultiTapHelper.h"
+#import "TNScreenHelper.h"
 
-#define kBeInvalidTime 0.8
-#define kTapLimitAreaSize 5
+static const NSTimeInterval BeInvalidTime = 0.8;
+static const float TapLimitAreaSize = 2.38;
 
 @implementation UITapGestureRecognizer
 {
@@ -57,7 +58,7 @@
     if (self = [super init]) {
         _numberOfTapsRequired = 1;
         _numberOfTouchesRequired = 1;
-        _timeInterval = kBeInvalidTime;
+        _timeInterval = BeInvalidTime;
         _touches = [[NSMutableArray alloc] init];
         _beganLocations = [[NSMutableDictionary alloc] init];
         _waitForNewTouchBegin = YES;
@@ -115,7 +116,8 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ([self _anyTouchesOutOfArea:kTapLimitAreaSize]) {
+    float pointTapLimitAreaSize = [TNScreenHelperOfView(self.view) pointFromInch:TapLimitAreaSize];
+    if ([self _anyTouchesOutOfArea:pointTapLimitAreaSize]) {
         [self _cancelTap];
     }
 }

@@ -34,17 +34,19 @@
 #import "UIWindow.h"
 #import "UITouch.h"
 #import "UIEvent.h"
+#import "TNScreenHelper.h"
 #import "UIImageView.h"
 #import "UIImage+UIPrivate.h"
 //#import "UIResponderAppKitIntegration.h"
 #import "UIScrollViewAnimationScroll.h"
 #import "UIScrollViewAnimationDeceleration.h"
 #import "UIPanGestureRecognizer.h"
+#import "TNScreenHelper.h"
 //#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kConfinedShrinkRate 0.32
-#define kSlideMinimumVelocity 170
+const static float ConfinedShrinkRate = 0.32;
+const static float SlideMinimumVelocity = 81;
 
 static const NSTimeInterval UIScrollViewAnimationDuration = 0.33;
 static const NSTimeInterval UIScrollViewQuickAnimationDuration = 0.22;
@@ -465,7 +467,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 //    [super mouseExitedView:exited enteredView:entered withEvent:event];
 //}
 
-#define kForceNextPageVelocity 1000
+static const float ForceNextPageVelocity = 180;
+
 - (UIScrollViewAnimation *)_pageSnapAnimationWithVelocity:(CGPoint)velocity
 {
     const CGSize pageSize = self.bounds.size;
@@ -479,9 +482,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     BOOL hasHorNextPage = (currentPage.width+1) < numberOfWholePages.width;
     BOOL hasVetNextPage = (currentPage.height+1) < numberOfWholePages.height;    
     
-    if (fabsf(velocity.x) > kForceNextPageVelocity) {
+    float pointForeNextPageVelocity = [TNScreenHelperOfView(self) pointFromInch:ForceNextPageVelocity];
+    
+    if (fabsf(velocity.x) > pointForeNextPageVelocity) {
         finalContentOffset.x = pageSize.width * currentPage.width;
-        if  (fabsf(velocity.x) > kForceNextPageVelocity) {
+        if  (fabsf(velocity.x) > pointForeNextPageVelocity) {
             if (velocity.x < 0 && hasHorNextPage) {
                 finalContentOffset.x = pageSize.width * (currentPage.width + 1);
             } else {
@@ -489,8 +494,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
             }
         }
     } else {
-        // if currentPagePercentage is less than 50%, then go to the next page (if any), otherwise snap to the current page
-        if (currentPagePercentage.width < 0.5 && (currentPage.width+1) < numberOfWholePages.width) {
+        // if currentPagePercentage is less than 35%, then go to the next page (if any), otherwise snap to the current page
+        if (currentPagePercentage.width < 0.65 && (currentPage.width+1) < numberOfWholePages.width) {
             finalContentOffset.x = pageSize.width * (currentPage.width + 1);
         } else {
             finalContentOffset.x = pageSize.width * currentPage.width;
@@ -498,9 +503,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     }
     
     
-    if (fabsf(velocity.y) > kForceNextPageVelocity) {
+    if (fabsf(velocity.y) > pointForeNextPageVelocity) {
         finalContentOffset.y = pageSize.height * currentPage.height;
-        if (fabsf(velocity.y) > kForceNextPageVelocity) {
+        if (fabsf(velocity.y) > pointForeNextPageVelocity) {
             if (velocity.y < 0 && hasVetNextPage) {
                 finalContentOffset.y = pageSize.height * (currentPage.height + 1);
             } else {
@@ -538,7 +543,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     const CGPoint confinedOffset = [self _confinedContentOffset:_contentOffset];
     velocity = CGPointMake(-velocity.x, -velocity.y);
     
-    if (fabs(velocity.x) + fabs(velocity.y) <= kSlideMinimumVelocity) {
+    if (CGPointEqualToPoint(confinedOffset, _contentOffset) &&
+        fabs(velocity.x) + fabs(velocity.y) <= [TNScreenHelperOfView(self) pointFromInch:SlideMinimumVelocity]) {
         return nil;
     }
     
@@ -551,12 +557,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         velocity.y = 0;
     }
     
-    if (!CGPointEqualToPoint(velocity, CGPointZero) || !CGPointEqualToPoint(confinedOffset, _contentOffset)) {
-        return [[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self
-                                                                     velocity:velocity];
-    } else {
-        return nil;
-    }
+    return [[UIScrollViewAnimationDeceleration alloc] initWithScrollView:self velocity:velocity];
 }
 
 - (void)_beginDragging
@@ -633,11 +634,11 @@ const float UIScrollViewDecelerationRateFast = 0.99;
             BOOL shouldVerticalBounce = (fabs(proposedOffset.y - confinedOffset.y) > 0);
             
             if (shouldHorizontalBounce) {
-                proposedOffset.x = originalOffset.x + (kConfinedShrinkRate * delta.x);
+                proposedOffset.x = originalOffset.x + (ConfinedShrinkRate * delta.x);
             }
             
             if (shouldVerticalBounce) {
-                proposedOffset.y = originalOffset.y + (kConfinedShrinkRate * delta.y);
+                proposedOffset.y = originalOffset.y + (ConfinedShrinkRate * delta.y);
             }
             
             [self _setRestrainedContentOffset:proposedOffset];
