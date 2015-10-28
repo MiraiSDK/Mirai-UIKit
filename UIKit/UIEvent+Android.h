@@ -16,6 +16,7 @@
 
 @interface UIEvent (Private)
 - (id)initWithEventType:(UIEventType)type;
+- (void)_replaceTouch:(UITouch *)replacedTouch asTouch:(UITouch *)newTouch;
 - (void)_setTimestamp:(NSTimeInterval)timestamp;
 - (void)_cleanTouches;
 @end

@@ -9,16 +9,26 @@
 #import "UIAndroidEventsServer.h"
 
 #import "InputEvent.h"
+#import "UIGestureRecognizer.h"
+#import "UITouch+Private.h"
+#import "UIGeometry.h"
+
+#define kBeInvalidTime 0.8
+#define kInvalidTimerFireNeedTime 2.4
+#define kTapLimitAreaSize 27
 
 @implementation UIAndroidEventsServer
 {
     struct android_app* app_state;
+    
     UIEvent *_event;
     NSRecursiveLock *_eventQueueLock;
     
     NSMutableArray *_eventQueue;
+    NSMutableSet *_touchesBuffer;
     
     BOOL _paused;
+    BOOL _anyTimerIsWaitingForFiring;
 }
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event);
@@ -39,6 +49,7 @@ static UIAndroidEventsServer *eventServer;
         _eventQueueLock = [[NSRecursiveLock alloc] init];
         
         _eventQueue = [NSMutableArray array];
+        _touchesBuffer = [NSMutableSet set];
         
     }
     return self;
@@ -123,12 +134,96 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
         action == AMOTION_EVENT_ACTION_CANCEL) {
         
         [event handleInputEvent:inputEvent];
+        
+        [self _clearInvalidTouches];
+        [self _pickOutAndHandleNewTouchFromEvent:event];
+        [self _waitThenClearInvalidTouches];
     }
 }
 
 - (void)resume
 {
     _paused = NO;
+}
+
+#pragma mark - touch tap count buffer
+
+- (void)_clearInvalidTouches
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    NSMutableSet *invalidTouches = [[NSMutableSet alloc] init];
+    for (UITouch *touch in _touchesBuffer) {
+        if ([self _touchWasInvalid:touch currentTime:currentTime]) {
+            [invalidTouches addObject:touch];
+        }
+    }
+    [_touchesBuffer minusSet:invalidTouches];
+}
+
+- (void)_pickOutAndHandleNewTouchFromEvent:(UIEvent *)event
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    NSMutableSet *notBeEatenTouches = [NSMutableSet set];
+    
+    for (UITouch *touch in [event allTouches]) {
+        if (![_touchesBuffer containsObject:touch]) {
+            [touch _setReceivedTime:currentTime];
+            UITouch *oldTouch = [self _oldTouchThatWillEatThisNewTouch:touch];
+            if (oldTouch) {
+                [oldTouch _mergeNewTouchAsNextTap:touch];
+                [event _replaceTouch:touch asTouch:oldTouch];
+            } else {
+                [notBeEatenTouches addObject:touch];
+            }
+        }
+    }
+    [_touchesBuffer unionSet:notBeEatenTouches];
+}
+
+- (UITouch *)_oldTouchThatWillEatThisNewTouch:(UITouch *)newTouch
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    for (UITouch *oldTouch in _touchesBuffer) {
+        if (newTouch != oldTouch &&
+            newTouch.phase == UITouchPhaseBegan &&
+            ![self _touchWasInvalid:newTouch currentTime:currentTime] &&
+            [self _touch:newTouch isCloseEnoughToOtherTouch:oldTouch]) {
+            return oldTouch;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)_touchWasInvalid:(UITouch *)touch currentTime:(CFAbsoluteTime)currentTime
+{
+    return kBeInvalidTime < currentTime - [touch _receviedTime];
+}
+
+- (void)_waitThenClearInvalidTouches
+{
+    if (!_anyTimerIsWaitingForFiring) {
+        [NSTimer scheduledTimerWithTimeInterval:kInvalidTimerFireNeedTime target:self selector:@selector(_fireToClearInvalidTouches:) userInfo:nil repeats:NO];
+        _anyTimerIsWaitingForFiring = YES;
+    }
+}
+
+- (void)_fireToClearInvalidTouches:(NSTimer *)timer
+{
+    [self _clearInvalidTouches];
+    _anyTimerIsWaitingForFiring = NO;
+    
+    if (_touchesBuffer.count > 0) {
+        [self _waitThenClearInvalidTouches];
+    }
+}
+
+- (BOOL)_touch:(UITouch *)touch0 isCloseEnoughToOtherTouch:(UITouch *)touch1
+{
+    CGPoint point0 = touch0.screenLocation;
+    CGPoint point1 = touch1.screenLocation;
+    
+    return ABS(point0.x - point1.x) <= kTapLimitAreaSize &&
+           ABS(point0.y - point1.y) <= kTapLimitAreaSize;
 }
 
 #pragma mark - public class access

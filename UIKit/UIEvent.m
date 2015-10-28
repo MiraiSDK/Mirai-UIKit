@@ -88,6 +88,21 @@
     _timestamp = timestamp;
 }
 
+- (void)_replaceTouch:(UITouch *)replacedTouch asTouch:(UITouch *)newTouch
+{
+    NSLog(@"replace [%li] as [%li] for UIEvent", replacedTouch.hash, newTouch.hash);
+    newTouch.identifier = replacedTouch.identifier;
+    
+    for (NSString *key in _touchesByIdentifier.allKeys) {
+        UITouch *touch = [_touchesByIdentifier objectForKey:key];
+        if (touch == replacedTouch) {
+            [_touchesByIdentifier setObject:newTouch forKey:key];
+        }
+    }
+    [_touches removeObject:replacedTouch];
+    [_touches addObject:newTouch];
+}
+
 @end
 
 @implementation UIEvent (Android)
@@ -191,7 +206,8 @@
     UITouch *touch = [self _touchForIdentifier:pointerIdentifier];
     
     if (phase == UITouchPhaseEnded) {
-        [touch _setPhase:phase screenLocation:windowLocation tapCount:1 timestamp:eventTimestamp];
+        [touch _setPhase:phase screenLocation:windowLocation
+                tapCount:touch.tapCount timestamp:eventTimestamp];
     } else {
         [touch _updatePhase:phase screenLocation:windowLocation timestamp:eventTimestamp];
     }

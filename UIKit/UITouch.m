@@ -33,6 +33,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
 @implementation UITouch {
     UITouchPhase _phase;
     _UITouchGesture _gesture;
+    CFAbsoluteTime _receivedTime;
     BOOL _onlyShowPhaseAsCancelled;
     CGPoint _delta;
     CGFloat _rotation;
@@ -47,6 +48,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
     self = [super init];
     if (self) {
         _phase = UITouchPhaseCancelled;
+        _tapCount = 1;
 //        _gesture = _UITouchGestureUnknown;
 
     }
@@ -70,9 +72,35 @@ static NSArray *GestureRecognizersForView(UIView *view)
     return _location;
 }
 
+- (void)_setReceivedTime:(CFAbsoluteTime)receivedTime
+{
+    _receivedTime = receivedTime;
+}
+
+- (CFAbsoluteTime)_receviedTime
+{
+    return _receivedTime;
+}
+
 - (void)_setOnlyShowPhaseAsCancelled:(BOOL)onlyShowPhaseAsCancelled
 {
     _onlyShowPhaseAsCancelled = onlyShowPhaseAsCancelled;
+}
+
+- (void)_mergeNewTouchAsNextTap:(UITouch *)newTouch
+{
+    _phase = newTouch->_phase;
+    _timestamp = newTouch->_timestamp;
+    _gesture = newTouch->_gesture;
+    _receivedTime = newTouch->_receivedTime;
+    _onlyShowPhaseAsCancelled = newTouch->_onlyShowPhaseAsCancelled;
+    _delta = newTouch->_delta;
+    _rotation = newTouch->_rotation;
+    _magnification = newTouch->_magnification;
+    _previousLocation = _location = newTouch.screenLocation;
+    
+    _tapCount++;
+    [self _setTouchedView:newTouch.view];
 }
 
 - (void)_setPhase:(UITouchPhase)phase screenLocation:(CGPoint)screenLocation tapCount:(NSUInteger)tapCount timestamp:(NSTimeInterval)timestamp;
