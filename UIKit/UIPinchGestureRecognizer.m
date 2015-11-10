@@ -62,7 +62,11 @@
     }
     
     if (_touches.count > 2) {
-        self.state = UIGestureRecognizerStateFailed;
+        if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+            self.state = UIGestureRecognizerStateEnded;
+        } else if (self.state == UIGestureRecognizerStatePossible) {
+            self.state = UIGestureRecognizerStateFailed;
+        }
     } else if (_touches.count == 2) {
         _initialTouchDistance = [self currentTouchDistance];
     }
