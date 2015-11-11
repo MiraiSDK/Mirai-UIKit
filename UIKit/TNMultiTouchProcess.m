@@ -11,6 +11,7 @@
 #import "TNGestureRecognizeProcess.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIApplication.h"
 
 @implementation TNMultiTouchProcess
 {
@@ -18,6 +19,7 @@
     
     NSInteger _currentPressFingersCount;
     BOOL _legacyAnyRecognizeProcesses;
+    BOOL _isIgnoringInteractionEvents;
     
     NSMutableDictionary *_effectRecognizeProcesses;
     NSMutableSet *_trackedTouches;
@@ -60,11 +62,16 @@
     if (touchBegin) {
         NSLog(@"[begin multi-touch]");
         _handingMultiTouchEvent = YES;
+        _isIgnoringInteractionEvents = [[UIApplication sharedApplication] isIgnoringInteractionEvents];
         [self _initializeMultiTouchContextWhenBegin];
     }
     _handingTouchEvent = YES;
     
-    [self _trackTouches:touches generateRecognizeProcessIfNotExist:!_legacyAnyRecognizeProcesses];
+    BOOL generateNewRecognizeProcess = !(_legacyAnyRecognizeProcesses || _isIgnoringInteractionEvents);
+    if (_isIgnoringInteractionEvents) {
+        NSLog(@"ignoring interaction events.");
+    }
+    [self _trackTouches:touches generateRecognizeProcessIfNotExist:generateNewRecognizeProcess];
     
     if (touchBegin) {
         [self _beginWithEvent:event touches:touches];
