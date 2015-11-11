@@ -462,7 +462,7 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
 {
     
     // Because there are some leaks of animations, so, the endIgnoringInteractionEvents will never be called.
-    // Before I find the leaks and fix them, I have to use a timer to reset _numberOfWhoIgnoreInteractionEvents.
+    // Before I find the leaks and fix them, I have to use a timestamp to reset _numberOfWhoIgnoreInteractionEvents.
     // Only this way can make the program run right.
     //
     // [NOTE] Remove this NSTimer when fixed the leaks.

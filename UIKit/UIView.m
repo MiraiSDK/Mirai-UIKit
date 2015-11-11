@@ -1202,10 +1202,6 @@ static BOOL _animationsEnabled = YES;
     delegate.completion = completion;
     delegate.ignoreInteractionEvents = ignoreInteractionEvents;
     
-    if (ignoreInteractionEvents) {
-        NSLog(@"---> begin[%zi]", delegate.hash);
-    }
-    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationCurve:animationCurve];
     [UIView setAnimationDelay:delay];
