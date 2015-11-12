@@ -117,8 +117,6 @@
         NSMutableSet *recognizerToRemove = [NSMutableSet set];
         for (UIGestureRecognizer *recognizer in group) {
             if (conditionMethod(recognizer)) {
-                NSAssert2(recognizer.state == UIGestureRecognizerStatePossible,
-                          @"when remove %@, it's state is %zi", recognizer.className, recognizer.state);
                 [recognizerToRemove addObject:recognizer];
                 NSValue *recognizerKey = [NSValue valueWithNonretainedObject:recognizer];
                 [_recognizerToGroupDictionary removeObjectForKey:recognizerKey];
