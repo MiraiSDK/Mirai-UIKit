@@ -178,50 +178,17 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
 
 - (CGPoint)convertPoint:(CGPoint)toConvert toWindow:(UIWindow *)toWindow
 {
-    NS_UNIMPLEMENTED_LOG;
-    return toConvert;
-//    if (toWindow == self) {
-//        return toConvert;
-//    } else {
-//        // Convert to screen coordinates
-//        toConvert.x += self.frame.origin.x;
-//        toConvert.y += self.frame.origin.y;
-//        
-//        if (toWindow) {
-//            // Now convert the screen coords into the other screen's coordinate space
-//            toConvert = [self.screen convertPoint:toConvert toScreen:toWindow.screen];
-//            
-//            // And now convert it from the new screen's space into the window's space
-//            toConvert.x -= toWindow.frame.origin.x;
-//            toConvert.y -= toWindow.frame.origin.y;
-//        }
-//        
-//        return toConvert;
-//    }
+    if (toWindow && (self.screen == toWindow.screen)) {
+        return [self.layer convertPoint:toConvert toLayer:toWindow.layer];
+    } else {
+        //TODO when windows don't have the same Screen.
+        return toConvert;
+    }
 }
 
 - (CGPoint)convertPoint:(CGPoint)toConvert fromWindow:(UIWindow *)fromWindow
 {
-    NS_UNIMPLEMENTED_LOG;
-    return toConvert;
-//    if (fromWindow == self) {
-//        return toConvert;
-//    } else {
-//        if (fromWindow) {
-//            // Convert to screen coordinates
-//            toConvert.x += fromWindow.frame.origin.x;
-//            toConvert.y += fromWindow.frame.origin.y;
-//            
-//            // Change to this screen.
-//            toConvert = [self.screen convertPoint:toConvert fromScreen:fromWindow.screen];
-//        }
-//        
-//        // Convert to window coordinates
-//        toConvert.x -= self.frame.origin.x;
-//        toConvert.y -= self.frame.origin.y;
-//        
-//        return toConvert;
-//    }
+    return [fromWindow convertPoint:toConvert toView:self];
 }
 
 - (CGRect)convertRect:(CGRect)toConvert fromWindow:(UIWindow *)fromWindow

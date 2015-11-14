@@ -32,6 +32,16 @@
     [self.view addSubview:_scrollView];
     
     [_scrollView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_onTapImage:)]];
+    
+    UIWindow *w0 = [[UIWindow alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
+    UIWindow *w1 = [[UIWindow alloc] initWithFrame:CGRectMake(20, 5, 100, 100)];
+    
+//    [w1 setTransform:CGAffineTransformScale(CGAffineTransformIdentity, 2.0, 3.0)];
+    
+    NSLog(@"%@", NSStringFromCGPoint([w0 convertPoint:CGPointMake(45, 40) fromWindow:w1]));
+    NSLog(@"%@", NSStringFromCGPoint([w0 convertPoint:CGPointMake(45, 40) fromView:w1]));
+    NSLog(@"%@", NSStringFromCGPoint([w0 convertPoint:CGPointMake(45, 40) toWindow:w1]));
+    NSLog(@"%@", NSStringFromCGPoint([w0 convertPoint:CGPointMake(45, 40) toView:w1]));
 }
 
 - (void)_onTapImage:(id)sender
