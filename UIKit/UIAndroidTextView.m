@@ -247,6 +247,24 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     
 }
 
+- (void)setSecureTextEntry:(BOOL)secureTextEntry
+{
+    if (_secureTextEntry == secureTextEntry) {
+        return;
+    }
+    _secureTextEntry = secureTextEntry;
+    
+    if (_jTextView && _jTextViewClass) {
+        JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+        
+        jmethodID mid = (*env)->GetMethodID(env,_jTextViewClass,"setSecureTextEntry","(Z)V");
+        if (mid == NULL) {
+            NSLog(@"can't get method setSecureTextEntry()");
+        }
+        (*env)->CallVoidMethod(env,_jTextView,mid,secureTextEntry? JNI_TRUE: JNI_FALSE);
+    }
+}
+
 - (UIColor *)textColor
 {
     return _textColor;

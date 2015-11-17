@@ -81,6 +81,16 @@
     [_backend setOnFocusChangeListener:focusChangeLisenter];
 }
 
+- (BOOL)isSecureTextEntry
+{
+    return [_backend isSecureTextEntry];
+}
+
+- (void)setSecureTextEntry:(BOOL)secure
+{
+    [_backend setSecureTextEntry:secure];
+}
+
 - (CGRect)borderRectForBounds:(CGRect)bounds
 {
     return CGRectZero;
