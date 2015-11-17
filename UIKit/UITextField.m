@@ -39,11 +39,16 @@
     if (self) {
         UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds];
         [atv setFont:[UIFont systemFontOfSize:12]];
-        [self addSubview:atv];
         _backend = atv;
         [self addSubview:atv];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _backend.frame = self.bounds;
 }
 
 - (void)setText:(NSString *)text
