@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 import android.view.inputmethod.InputMethodManager;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.HideReturnsTransformationMethod;
 
 import android.util.Log;
 
@@ -20,9 +22,10 @@ import org.tiny4.util.*;
 
 public class GLTextViewRender extends GLViewRender {
     private GLTextView _view;
+    private boolean _secure = false;
     
     public GLTextViewRender(Context context, int glTexID, int width, int height) {
-        super(context,glTexID,width,height);
+        super(context, glTexID, width, height);
     }
     
     @Override
@@ -30,6 +33,11 @@ public class GLTextViewRender extends GLViewRender {
         GLTextView v = new GLTextView(activity);
         v.setRender(this);
         _view = v;
+        if (_secure) {
+            v.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        } else {
+            v.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        }
         return v;
     }
     
@@ -39,6 +47,25 @@ public class GLTextViewRender extends GLViewRender {
             @Override
             public void run() {
                 _view.setText(aText);
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
+        
+        runOnUiThreadAndWait(aRunnable);
+    }
+    
+    public void setSecureTextEntry(boolean secure) {
+        _secure = secure;
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (_secure) {
+                    _view.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                } else {
+                    _view.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
                 synchronized (this) {
                     this.notify() ;
                 }

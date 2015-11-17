@@ -27,6 +27,8 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     jobject _jTextView;
     jclass _jTextViewClass;
     JNIEnv *_env;
+    
+    BOOL _singleLine;
 }
 @synthesize textColor = _textColor;
 @synthesize textAlignment = _textAlignment;
@@ -61,10 +63,11 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     [self destory];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype) initWithFrame:(CGRect)frame singleLine:(BOOL)singleLine
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _singleLine = singleLine;
         CAMovieLayer *layer = self.layer;
         __weak typeof(self) weakSelf = self;
         layer.updateCallback = ^(CATransform3D *t) {
@@ -77,6 +80,11 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
         [self createJavaTextView:tex];
     }
     return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    return [self initWithFrame:frame singleLine:NO];
 }
 
 - (void)setTextWatcherListener:(TNJavaBridgeProxy *)textWatcherListener
@@ -144,11 +152,13 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 
 - (void)createJavaTextView:(int)texID
 {
+    NSString *className = _singleLine? @"org.tiny4.CocoaActivity.GLSingleLineTextViewRender":
+                                       @"org.tiny4.CocoaActivity.GLTextViewRender";
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
-    jclass class = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.CocoaActivity.GLTextViewRender"];
+    jclass class = [[TNJavaHelper sharedHelper] findCustomClass:className];
     
     if (class == NULL) {
-        NSLog(@"class not found: %@",@"org.tiny4.CocoaActivity.GLTextViewRender");
+        NSLog(@"class not found: %@", className);
         return;
     }
     

@@ -37,7 +37,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds];
+        UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds singleLine:YES];
         [atv setFont:[UIFont systemFontOfSize:12]];
         _backend = atv;
         [self addSubview:atv];
