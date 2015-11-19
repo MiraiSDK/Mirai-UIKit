@@ -279,7 +279,7 @@
 {
     BOOL shouldSimultaneously = NO;
     
-    if ([r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecongizeSimultaneouslyWithRecongizer:)]) {
+    if ([r0.delegate respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)]) {
         shouldSimultaneously = [r0.delegate gestureRecognizer:r0
            shouldRecognizeSimultaneouslyWithGestureRecognizer:r1];
     }
