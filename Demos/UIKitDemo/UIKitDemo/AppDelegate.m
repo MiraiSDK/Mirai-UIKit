@@ -31,7 +31,64 @@
     [self.window makeKeyAndVisible];
     
     [self checkMainBundle];
+//    [self checkGnustepPathConfig];
     return YES;
+}
+
+- (void)logDirectoriesForDomain:(NSSearchPathDomainMask)domainMask
+{
+    NSLog(@"========");
+    NSLog(@"NSSearchPathForDirectoriesInDomains: %d",domainMask);
+//    
+    NSLog(@"NSApplicationDirectory:%@",NSSearchPathForDirectoriesInDomains(NSApplicationDirectory, domainMask, YES));
+    NSLog(@"NSDemoApplicationDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDemoApplicationDirectory, domainMask, YES));
+    NSLog(@"NSDeveloperApplicationDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDeveloperApplicationDirectory, domainMask, YES));
+    NSLog(@"NSAdminApplicationDirectory:%@",NSSearchPathForDirectoriesInDomains(NSAdminApplicationDirectory, domainMask, YES));
+    NSLog(@"NSLibraryDirectory:%@",NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, domainMask, YES));
+    NSLog(@"NSDeveloperDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDeveloperDirectory, domainMask, YES));
+    NSLog(@"NSUserDirectory:%@",NSSearchPathForDirectoriesInDomains(NSUserDirectory, domainMask, YES));
+    NSLog(@"NSDocumentationDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, domainMask, YES));
+    NSLog(@"NSDocumentDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, domainMask, YES));
+#if __ANDROID__
+    NSLog(@"NSCoreServicesDirectory:%@",NSSearchPathForDirectoriesInDomains(NSCoreServicesDirectory, domainMask, YES));
+#else
+    NSLog(@"NSCoreServiceDirectory:%@",NSSearchPathForDirectoriesInDomains(NSCoreServiceDirectory, domainMask, YES));
+#endif
+    NSLog(@"NSDesktopDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, domainMask, YES));
+    NSLog(@"NSCachesDirectory:%@",NSSearchPathForDirectoriesInDomains(NSCachesDirectory, domainMask, YES));
+    NSLog(@"NSApplicationSupportDirectory:%@",NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, domainMask, YES));
+    NSLog(@"NSDownloadsDirectory:%@",NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, domainMask, YES));
+
+    NSLog(@"NSAllApplicationsDirectory:%@",NSSearchPathForDirectoriesInDomains(NSAllApplicationsDirectory, domainMask, YES));
+    NSLog(@"NSCachesDirectory:%@",NSSearchPathForDirectoriesInDomains(NSCachesDirectory, domainMask, YES));
+    NSLog(@"NSAllLibrariesDirectory:%@",NSSearchPathForDirectoriesInDomains(NSAllLibrariesDirectory, domainMask, YES));
+    NSLog(@"NSApplicationSupportDirectory:%@",NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, domainMask, YES));
+
+#if __ANDROID__
+    NSLog(@"GSLibrariesDirectory:%@",NSSearchPathForDirectoriesInDomains(GSLibrariesDirectory, domainMask, YES));
+    NSLog(@"GSToolsDirectory:%@",NSSearchPathForDirectoriesInDomains(GSToolsDirectory, domainMask, YES));
+    NSLog(@"GSFontsDirectory:%@",NSSearchPathForDirectoriesInDomains(GSFontsDirectory, domainMask, YES));
+    NSLog(@"GSFrameworksDirectory:%@",NSSearchPathForDirectoriesInDomains(GSFrameworksDirectory, domainMask, YES));
+    NSLog(@"GSWebApplicationsDirectory:%@",NSSearchPathForDirectoriesInDomains(GSWebApplicationsDirectory, domainMask, YES));
+    NSLog(@"GSAdminToolsDirectory:%@",NSSearchPathForDirectoriesInDomains(GSAdminToolsDirectory, domainMask, YES));
+#endif
+}
+- (void)checkGnustepPathConfig
+{
+    NSLog(@"NSTemporaryDirectory()%@",NSTemporaryDirectory());
+    NSLog(@"NSHomeDirectory():%@",NSHomeDirectory());
+    NSLog(@"NSUserName():%@",NSUserName());
+    NSLog(@"NSFullUserName():%@",NSFullUserName());
+    NSLog(@"NSHomeDirectoryForUser(%@):%@",NSUserName(),NSHomeDirectoryForUser(NSUserName()));
+    NSLog(@"NSOpenStepRootDirectory():%@",NSOpenStepRootDirectory());
+    [self logDirectoriesForDomain:NSAllDomainsMask];
+    
+    NSLog(@"========");
+    NSLog(@"-[NSFileManager URLsForDirectory:inDomains]: user domain");
+    NSLog(@"NSDocumentDirectory:%@",[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask]);
+    NSLog(@"NSLibraryDirectory:%@",[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask]);
+    NSLog(@"NSCachesDirectory:%@",[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask]);
+
 }
 
 - (void)checkMainBundle
