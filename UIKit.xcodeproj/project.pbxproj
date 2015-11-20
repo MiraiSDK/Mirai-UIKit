@@ -282,7 +282,7 @@
 		43ECCF131851CAA80076535C /* UIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ECCF111851CAA80076535C /* UIWindow.m */; };
 		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
 		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
-		D214FC651BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */; settings = {ASSET_TAGS = (); }; };
+		D214FC651BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */; };
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
@@ -331,8 +331,8 @@
 		D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = D2C2E6351ADB657300B540C9 /* UIMoreNavigationController.h */; };
 		D2C2E6381ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
 		D2C2E6391ADB657300B540C9 /* UIMoreNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2C2E6361ADB657300B540C9 /* UIMoreNavigationController.m */; };
-		D2CCF0B41BCE3096005F176F /* TNScreenHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CCF0B21BCE3096005F176F /* TNScreenHelper.h */; settings = {ASSET_TAGS = (); }; };
-		D2CCF0B51BCE3096005F176F /* TNScreenHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CCF0B31BCE3096005F176F /* TNScreenHelper.m */; settings = {ASSET_TAGS = (); }; };
+		D2CCF0B41BCE3096005F176F /* TNScreenHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CCF0B21BCE3096005F176F /* TNScreenHelper.h */; };
+		D2CCF0B51BCE3096005F176F /* TNScreenHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D2CCF0B31BCE3096005F176F /* TNScreenHelper.m */; };
 		D2CFEF8A1AD4D79700484F78 /* UITabBarItem+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CFEF891AD4D79700484F78 /* UITabBarItem+UIPrivate.h */; };
 		D2D489491B0B1E1E00D0558F /* UIMenuBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = D2D489471B0B1E1E00D0558F /* UIMenuBubbleView.h */; };
 		D2D4894A1B0B1E1E00D0558F /* UIMenuBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D489481B0B1E1E00D0558F /* UIMenuBubbleView.m */; };
@@ -342,6 +342,7 @@
 		D2E098011B189E32002DB2A4 /* UIPositionOnRect.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */; };
 		D2E1DDC51B988DCD0035D139 /* TNMultiTapHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */; };
 		D2E1DDC61B988DCD0035D139 /* TNMultiTapHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */; };
+		D2F655C51BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java in Sources */ = {isa = PBXBuildFile; fileRef = D2F655C41BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java */; };
 		D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */; };
 		D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
 		D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
@@ -702,6 +703,7 @@
 		D2E097FE1B189E32002DB2A4 /* UIPositionOnRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPositionOnRect.m; sourceTree = "<group>"; };
 		D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiTapHelper.h; sourceTree = "<group>"; };
 		D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTapHelper.m; sourceTree = "<group>"; };
+		D2F655C41BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = GLSingleLineTextViewRender.java; sourceTree = "<group>"; };
 		D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainerWindow.h; sourceTree = "<group>"; };
 		D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainerWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -743,6 +745,7 @@
 				433C4A2A1AD0FC20005D06BB /* MovieRender.java */,
 				436CD83A1ADE639D002CBF94 /* GLTextView.java */,
 				436CD83B1ADE639D002CBF94 /* GLTextViewRender.java */,
+				D2F655C41BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java */,
 			);
 			name = CocoaActivity;
 			path = CocoaActivity/src/org/tiny4/CocoaActivity;
@@ -1724,6 +1727,7 @@
 				43CBC1B01A7AA7850060B2AE /* AndroidMain.m in Sources */,
 				43846310188B2BCD006DA1AA /* UIImage.m in Sources */,
 				4384633A188B41D2006DA1AA /* UIRoundedRectButton.m in Sources */,
+				D2F655C51BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java in Sources */,
 				434CFD1E1A0CAC2300B6AC9E /* NSTextContainer.m in Sources */,
 				434CFD521A0CB85800B6AC9E /* UIStoryboard.m in Sources */,
 				434CFD561A0CB8B300B6AC9E /* UIStoryboardSegue.m in Sources */,
