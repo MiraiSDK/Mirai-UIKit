@@ -573,7 +573,7 @@ void android_main(struct android_app* state)
             // Initialize process info
             argc = 1;
             char * argv[] = {buffer,NULL};
-            char * eenv[] = {tmpPath,NULL};
+            char * eenv[] = {tmpEnv,NULL};
             [NSProcessInfo initializeWithArguments:argv count:argc environment:eenv];
             
             // Make sure glue isn't stripped.
