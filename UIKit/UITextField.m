@@ -37,13 +37,18 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds];
+        UIAndroidTextView *atv = [[UIAndroidTextView alloc] initWithFrame:self.bounds singleLine:YES];
         [atv setFont:[UIFont systemFontOfSize:12]];
-        [self addSubview:atv];
         _backend = atv;
         [self addSubview:atv];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _backend.frame = self.bounds;
 }
 
 - (void)setText:(NSString *)text
@@ -74,6 +79,16 @@
 - (void)setOnFocusChangeListener:(TNJavaBridgeProxy *)focusChangeLisenter
 {
     [_backend setOnFocusChangeListener:focusChangeLisenter];
+}
+
+- (BOOL)isSecureTextEntry
+{
+    return [_backend isSecureTextEntry];
+}
+
+- (void)setSecureTextEntry:(BOOL)secure
+{
+    [_backend setSecureTextEntry:secure];
 }
 
 - (CGRect)borderRectForBounds:(CGRect)bounds

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.graphics.Canvas;
 import android.view.Surface;
+import android.util.TypedValue;
 
 import java.lang.String;
 
@@ -27,6 +28,7 @@ public class GLTextView extends EditText {
 //        this.setCursorVisible(false);
 //this.setOverScrollMode(OVER_SCROLL_ALWAYS);
         this.setBackgroundColor(Color.TRANSPARENT);
+        this.setPadding(0, 0, 0, 0);
     }
 
     public void setRender(GLViewRender r) {
