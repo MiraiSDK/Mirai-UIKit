@@ -30,7 +30,11 @@
     UIScrollView *inner = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     inner.backgroundColor = [UIColor blueColor];
     inner.contentSize = CGSizeMake(400, 200);
-    [outer addSubview:inner];
+    
+    UIView *innerContainer = [[UIView alloc] initWithFrame:inner.frame];
+    [innerContainer addSubview:inner];
+    inner.frame = inner.bounds;
+    [outer addSubview:innerContainer];
     
     UIView *red = [[UIView alloc] initWithFrame:CGRectMake(250, 0, 50, 50)];
     red.backgroundColor = [UIColor redColor];

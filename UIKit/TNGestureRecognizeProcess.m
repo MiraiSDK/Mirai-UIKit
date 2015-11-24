@@ -79,8 +79,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
         [descriptions addObject:[recognizer _description]];
     }];
+    NSMutableArray *classChain = [[NSMutableArray alloc] init];
+    UIView *view = _view;
+    while (view) {
+        [classChain addObject:[view className]];
+        view = view.superview;
+    }
     return [NSString stringWithFormat:@"[%@] includes %@",
-            _view.className, [descriptions componentsJoinedByString:@" "]];
+            [classChain componentsJoinedByString:@" << "], [descriptions componentsJoinedByString:@" "]];
 }
 
 - (void)dealloc
