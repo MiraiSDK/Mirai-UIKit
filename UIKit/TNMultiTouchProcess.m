@@ -22,6 +22,7 @@
     BOOL _isIgnoringInteractionEvents;
     
     NSMutableDictionary *_effectRecognizeProcesses;
+    NSMutableArray *_effectRecognizeProcessesList; // To keep sequence, It's IMPORTANCE!.
     NSMutableSet *_trackedTouches;
 }
 @synthesize handingTouchEvent=_handingTouchEvent;
@@ -31,6 +32,7 @@
 {
     if (self = [super init]) {
         _effectRecognizeProcesses = [NSMutableDictionary dictionary];
+        _effectRecognizeProcessesList = [NSMutableArray array];
         _trackedTouches = [NSMutableSet set];
     }
     return self;
@@ -76,7 +78,7 @@
     if (touchBegin) {
         [self _beginWithEvent:event touches:touches];
     }
-    NSArray *recognizerProcesses = [_effectRecognizeProcesses allValues];
+    NSArray *recognizerProcesses = [_effectRecognizeProcessesList copy];
     
     for (TNGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
         [recognizeProcess recognizeEvent:event touches:touches];
@@ -146,7 +148,7 @@
     if (_legacyAnyRecognizeProcesses) {
         
         NSMutableSet *legacyNames = [NSMutableSet set];
-        for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+        for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcessesList copy]) {
             for (UIGestureRecognizer *recognizer in recognizeProcess.gestureRecognizers) {
                 NSString *legacyName = [NSString stringWithFormat:
                     @"[%@](%zi)", [recognizer _description], recognizer.state];
@@ -162,7 +164,7 @@
 
 - (void)_beginWithEvent:(UIEvent *)event touches:(NSSet *)touches
 {
-    for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+    for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcessesList copy]) {
         [recognizeProcess multiTouchBegin];
     }
 }
@@ -185,6 +187,7 @@
                 recognizeProcess = [[TNGestureRecognizeProcess alloc] initWithView:view
                                                                  multiTouchProcess:self];
                 [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
+                [_effectRecognizeProcessesList addObject:recognizeProcess];
             }
             
             if (recognizeProcess) {
@@ -259,7 +262,7 @@
 
 - (void)_end
 {
-    for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcesses allValues]) {
+    for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcessesList copy]) {
         [recognizeProcess multiTouchEnd];
     }
     [_trackedTouches removeAllObjects];
@@ -269,7 +272,7 @@
 - (NSSet *)_leftRecognizerNames
 {
     NSMutableSet *leftRecognizerNames = [[NSMutableSet alloc] init];
-    for (TNGestureRecognizeProcess *recognizerProcess in [_effectRecognizeProcesses allValues]) {
+    for (TNGestureRecognizeProcess *recognizerProcess in [_effectRecognizeProcessesList copy]) {
         for (UIGestureRecognizer *recognizer in recognizerProcess.gestureRecognizers) {
             [leftRecognizerNames addObject:recognizer.className];
         }
@@ -283,12 +286,14 @@
         
         NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
         [_effectRecognizeProcesses removeObjectForKey:keyView];
+        [_effectRecognizeProcessesList removeObject:[_effectRecognizeProcesses objectForKey:keyView]];
     }
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses
 {
     NSMutableArray *hasMakeConclusionViews = [[NSMutableArray alloc]init];
+    NSMutableArray *hasMakeConclusionRecognizeProcess = [[NSMutableArray alloc] init];
     
     for (NSValue *key in [_effectRecognizeProcesses allKeys]) {
         
@@ -296,9 +301,11 @@
         
         if (recognizeProcess.hasMakeConclusion) {
             [hasMakeConclusionViews addObject:key];
+            [hasMakeConclusionRecognizeProcess addObject:recognizeProcess];
         }
     }
     [_effectRecognizeProcesses removeObjectsForKeys:hasMakeConclusionViews];
+    [_effectRecognizeProcessesList removeObjectsInArray:hasMakeConclusionRecognizeProcess];
 }
 
 @end

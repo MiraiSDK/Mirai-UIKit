@@ -288,6 +288,8 @@
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24E1DF01B43E55E009814C3 /* JavaBridgeProxy.java in Sources */ = {isa = PBXBuildFile; fileRef = D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */; };
 		D24E1DF11B43E55E009814C3 /* JavaBridgeProxyFactory.java in Sources */ = {isa = PBXBuildFile; fileRef = D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */; };
+		D2701A3B1C04AB2000F3DB42 /* TNWeakValue.h in Headers */ = {isa = PBXBuildFile; fileRef = D2701A391C04AB2000F3DB42 /* TNWeakValue.h */; };
+		D2701A3C1C04AB2000F3DB42 /* TNWeakValue.m in Sources */ = {isa = PBXBuildFile; fileRef = D2701A3A1C04AB2000F3DB42 /* TNWeakValue.m */; };
 		D286A1641B8AAE5200EBD344 /* TNGestureRecognizeProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = D286A1621B8AAE5200EBD344 /* TNGestureRecognizeProcess.h */; };
 		D286A1651B8AAE5200EBD344 /* TNGestureRecognizeProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D286A1631B8AAE5200EBD344 /* TNGestureRecognizeProcess.m */; };
 		D286A1661B8AAE5200EBD344 /* TNGestureRecognizeProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = D286A1631B8AAE5200EBD344 /* TNGestureRecognizeProcess.m */; };
@@ -658,6 +660,8 @@
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
 		D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxy.java; sourceTree = SOURCE_ROOT; };
 		D24E1DEF1B43E55E009814C3 /* JavaBridgeProxyFactory.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxyFactory.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxyFactory.java; sourceTree = SOURCE_ROOT; };
+		D2701A391C04AB2000F3DB42 /* TNWeakValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNWeakValue.h; sourceTree = "<group>"; };
+		D2701A3A1C04AB2000F3DB42 /* TNWeakValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNWeakValue.m; sourceTree = "<group>"; };
 		D286A1621B8AAE5200EBD344 /* TNGestureRecognizeProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNGestureRecognizeProcess.h; sourceTree = "<group>"; };
 		D286A1631B8AAE5200EBD344 /* TNGestureRecognizeProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNGestureRecognizeProcess.m; sourceTree = "<group>"; };
 		D28E58761B1850E100BAB5D1 /* UITouchMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchMask.h; sourceTree = "<group>"; };
@@ -1002,6 +1006,8 @@
 				D2B043EE1BA01F990063DECF /* TNGestureRecognizerSimultaneouslyRelationship.m */,
 				D2B390F91BA80188004A87DC /* TNGestureFailureRequirementRelationship.h */,
 				D2B390FA1BA80188004A87DC /* TNGestureFailureRequirementRelationship.m */,
+				D2701A391C04AB2000F3DB42 /* TNWeakValue.h */,
+				D2701A3A1C04AB2000F3DB42 /* TNWeakValue.m */,
 			);
 			name = "Private Classes";
 			sourceTree = "<group>";
@@ -1357,6 +1363,7 @@
 				D2B390FB1BA80188004A87DC /* TNGestureFailureRequirementRelationship.h in Headers */,
 				431412D918C0B814001AF732 /* UIViewAnimationGroup.h in Headers */,
 				434CFD591A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.h in Headers */,
+				D2701A3B1C04AB2000F3DB42 /* TNWeakValue.h in Headers */,
 				43846344188C58F9006DA1AA /* UIFont.h in Headers */,
 				43846335188B417F006DA1AA /* UIButton.h in Headers */,
 				434CFD051A0CA40F00B6AC9E /* UITableViewHeaderFooterView.h in Headers */,
@@ -1626,6 +1633,7 @@
 				439A73CE18E84C6300B1BE40 /* UITableViewCellSeparator.m in Sources */,
 				432FF0801853645D005486C5 /* UIGraphics.m in Sources */,
 				D2ADA3691B71EBAD000637EF /* UIScreenOrientationListener.m in Sources */,
+				D2701A3C1C04AB2000F3DB42 /* TNWeakValue.m in Sources */,
 				43846314188B39EE006DA1AA /* UITouch.m in Sources */,
 				433C4A331AD11754005D06BB /* UIAndroidTextView.m in Sources */,
 				436D4AE219F5314700F6F8F9 /* UIAlertView.m in Sources */,

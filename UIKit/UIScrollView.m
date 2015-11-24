@@ -42,6 +42,7 @@
 #import "UIScrollViewAnimationDeceleration.h"
 #import "UIPanGestureRecognizer.h"
 #import "TNScreenHelper.h"
+#import "TNWeakValue.h"
 //#import "UIScrollWheelGestureRecognizer.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -61,6 +62,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     @package
     __unsafe_unretained id _delegate;
 @private
+    NSMutableSet *_banScrollViews;
+    NSInteger _banMeScrollFeatureCount;
     CGPoint _contentOffset;
     CGSize _contentSize;
     UIEdgeInsets _contentInset;
@@ -111,6 +114,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
+        _banScrollViews = [NSMutableSet set];
+        _banMeScrollFeatureCount = 0;
         _contentOffset = CGPointZero;
         _contentSize = CGSizeZero;
         _contentInset = UIEdgeInsetsZero;
@@ -154,6 +159,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)dealloc
 {
+    [self _cancelBanAllSubScrollViews];
     _horizontalScroller.delegate = nil;
     _verticalScroller.delegate = nil;
 }
@@ -574,6 +580,7 @@ static const float ForceNextPageVelocity = 180;
         if (_delegateCan.scrollViewWillBeginDragging) {
             [_delegate scrollViewWillBeginDragging:self];
         }
+        [self _banAllSubScrollViews];
     }
 }
 
@@ -608,6 +615,7 @@ static const float ForceNextPageVelocity = 180;
             _verticalScroller.alwaysVisible = NO;
             [self _confineContent];
         }
+        [self _cancelBanAllSubScrollViews];
     }
 }
 
@@ -682,6 +690,10 @@ static const float ForceNextPageVelocity = 180;
     // page *after* the usual deceleration is done. I can't decide what might be best, but since we
     // don't use paging mode in Twitterrific at the moment, I'm not suffeciently motivated to worry about it. :)
     
+    if ([self _hasBanByOtherScrollView]) {
+        return;
+    }
+    
     if (gesture == _panGestureRecognizer) {
         if (_panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
             [self _beginDragging];
@@ -724,6 +736,45 @@ static const float ForceNextPageVelocity = 180;
             }
         }
     } */
+}
+
+- (void)_banAllSubScrollViews
+{
+    UIView *view = self.superview;
+    while (view) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)view;
+            [scrollView _banScrollFeature];
+            [_banScrollViews addObject:[TNWeakValue valueWithWeakObject:scrollView]];
+        }
+        view = view.superview;
+    }
+}
+
+- (void)_cancelBanAllSubScrollViews
+{
+    for (TNWeakValue *scrollViewValue in _banScrollViews) {
+        UIScrollView *scrollView = [scrollViewValue value];
+        if (scrollView) {
+            [scrollView _cancelBanScrollFeature];
+        }
+    }
+    [_banScrollViews removeAllObjects];
+}
+
+- (void)_banScrollFeature
+{
+    _banMeScrollFeatureCount++;
+}
+
+- (void)_cancelBanScrollFeature
+{
+    _banMeScrollFeatureCount--;
+}
+
+- (BOOL)_hasBanByOtherScrollView
+{
+    return _banMeScrollFeatureCount > 0;
 }
 
 - (void)_UIScrollerDidBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
