@@ -636,6 +636,12 @@ static const float ForceNextPageVelocity = 180;
         
         const CGPoint confinedOffset = [self _confinedContentOffset:proposedOffset];
         
+        if (CGPointEqualToPoint(confinedOffset, originalOffset)) {
+            [self _cancelBanSuperScrollViewFeature];
+        } else {
+            [self _searchAndBanFirstSuperScrollView];
+        }
+        
         if (self.bounces) {
             BOOL shouldHorizontalBounce = (fabs(proposedOffset.x - confinedOffset.x) > 0);
             BOOL shouldVerticalBounce = (fabs(proposedOffset.y - confinedOffset.y) > 0);
@@ -740,15 +746,17 @@ static const float ForceNextPageVelocity = 180;
 
 - (void)_searchAndBanFirstSuperScrollView
 {
-    UIView *view = self.superview;
-    while (view) {
-        if ([view isKindOfClass:[UIScrollView class]]) {
-            UIScrollView *scrollView = (UIScrollView *)view;
-            [scrollView _banScrollFeature];
-            _banScrollView = scrollView;
-            break;
+    if (!_banScrollView) {
+        UIView *view = self.superview;
+        while (view) {
+            if ([view isKindOfClass:[UIScrollView class]]) {
+                UIScrollView *scrollView = (UIScrollView *)view;
+                [scrollView _banScrollFeature];
+                _banScrollView = scrollView;
+                break;
+            }
+            view = view.superview;
         }
-        view = view.superview;
     }
 }
 
