@@ -62,7 +62,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     @package
     __unsafe_unretained id _delegate;
 @private
-    NSMutableSet *_banScrollViews;
+    UIScrollView *_banScrollView;
     NSInteger _banMeScrollFeatureCount;
     CGPoint _contentOffset;
     CGSize _contentSize;
@@ -114,7 +114,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 - (id)initWithFrame:(CGRect)frame
 {
     if ((self=[super initWithFrame:frame])) {
-        _banScrollViews = [NSMutableSet set];
+        _banScrollView = nil;
         _banMeScrollFeatureCount = 0;
         _contentOffset = CGPointZero;
         _contentSize = CGSizeZero;
@@ -159,7 +159,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)dealloc
 {
-    [self _cancelBanAllSubScrollViews];
+    [self _cancelBanSuperScrollViewFeature];
     _horizontalScroller.delegate = nil;
     _verticalScroller.delegate = nil;
 }
@@ -580,7 +580,7 @@ static const float ForceNextPageVelocity = 180;
         if (_delegateCan.scrollViewWillBeginDragging) {
             [_delegate scrollViewWillBeginDragging:self];
         }
-        [self _banAllSubScrollViews];
+        [self _searchAndBanFirstSuperScrollView];
     }
 }
 
@@ -615,7 +615,7 @@ static const float ForceNextPageVelocity = 180;
             _verticalScroller.alwaysVisible = NO;
             [self _confineContent];
         }
-        [self _cancelBanAllSubScrollViews];
+        [self _cancelBanSuperScrollViewFeature];
     }
 }
 
@@ -738,38 +738,38 @@ static const float ForceNextPageVelocity = 180;
     } */
 }
 
-- (void)_banAllSubScrollViews
+- (void)_searchAndBanFirstSuperScrollView
 {
     UIView *view = self.superview;
     while (view) {
         if ([view isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view;
             [scrollView _banScrollFeature];
-            [_banScrollViews addObject:[TNWeakValue valueWithWeakObject:scrollView]];
+            _banScrollView = scrollView;
+            break;
         }
         view = view.superview;
     }
 }
 
-- (void)_cancelBanAllSubScrollViews
+- (void)_cancelBanSuperScrollViewFeature
 {
-    for (TNWeakValue *scrollViewValue in _banScrollViews) {
-        UIScrollView *scrollView = [scrollViewValue value];
-        if (scrollView) {
-            [scrollView _cancelBanScrollFeature];
-        }
+    if (_banScrollView) {
+        [_banScrollView _cancelBanScrollFeature];
+        _banScrollView = nil;
     }
-    [_banScrollViews removeAllObjects];
 }
 
 - (void)_banScrollFeature
 {
     _banMeScrollFeatureCount++;
+    [self _searchAndBanFirstSuperScrollView];
 }
 
 - (void)_cancelBanScrollFeature
 {
     _banMeScrollFeatureCount--;
+    [self _cancelBanScrollFeature];
 }
 
 - (BOOL)_hasBanByOtherScrollView
