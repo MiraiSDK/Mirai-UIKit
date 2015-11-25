@@ -63,8 +63,10 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     __unsafe_unretained id _delegate;
 @private
     UIScrollView *_banScrollView;
-    BOOL _hasBanSuperScrollView;
-    NSInteger _banMeScrollFeatureCount;
+    BOOL _banDragXForAllSuperScrollViews;
+    BOOL _banDragYForAllSuperScrollViews;
+    NSMutableSet *_banMeScrollViews;
+    BOOL _hasBanDragByOthersWhenLastDrag;
     CGPoint _contentOffset;
     CGSize _contentSize;
     UIEdgeInsets _contentInset;
@@ -116,8 +118,10 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 {
     if ((self=[super initWithFrame:frame])) {
         _banScrollView = nil;
-        _hasBanSuperScrollView = NO;
-        _banMeScrollFeatureCount = 0;
+        _banDragXForAllSuperScrollViews = NO;
+        _banDragYForAllSuperScrollViews = NO;
+        _hasBanDragByOthersWhenLastDrag = NO;
+        _banMeScrollViews = [NSMutableSet set];;
         _contentOffset = CGPointZero;
         _contentSize = CGSizeZero;
         _contentInset = UIEdgeInsetsZero;
@@ -161,7 +165,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)dealloc
 {
-    [self _setBanSuperScrollView:NO];
+    [self _cancelBanSuperScrollViewFeature];
     _horizontalScroller.delegate = nil;
     _verticalScroller.delegate = nil;
 }
@@ -571,6 +575,7 @@ static const float ForceNextPageVelocity = 180;
 {
     if (!_dragging) {
         _dragging = YES;
+        _hasBanDragByOthersWhenLastDrag = [self _hasBanByOtherScrollView];
         
         _horizontalScroller.alwaysVisible = YES;
         _verticalScroller.alwaysVisible = YES;
@@ -582,7 +587,7 @@ static const float ForceNextPageVelocity = 180;
         if (_delegateCan.scrollViewWillBeginDragging) {
             [_delegate scrollViewWillBeginDragging:self];
         }
-        [self _setBanSuperScrollView:YES];
+        [self _searchAndBanFirstSuperScrollView];
     }
 }
 
@@ -596,34 +601,49 @@ static const float ForceNextPageVelocity = 180;
     if (_dragging) {
         _dragging = NO;
         
-        UIScrollViewAnimation *decelerationAnimation = _pagingEnabled? [self _pageSnapAnimationWithVelocity:velocity] : [self _decelerationAnimationWithVelocity:velocity];
-        
-        if (_delegateCan.scrollViewDidEndDragging) {
-            [_delegate scrollViewDidEndDragging:self willDecelerate:(decelerationAnimation != nil)];
-        }
-        
-        if (decelerationAnimation) {
-            [self _setScrollAnimation:decelerationAnimation];
+        if (!_hasBanDragByOthersWhenLastDrag) {
+            UIScrollViewAnimation *decelerationAnimation = _pagingEnabled? [self _pageSnapAnimationWithVelocity:velocity] : [self _decelerationAnimationWithVelocity:velocity];
             
-            _horizontalScroller.alwaysVisible = YES;
-            _verticalScroller.alwaysVisible = YES;
-            _decelerating = YES;
-            
-            if (_delegateCan.scrollViewWillBeginDecelerating) {
-                [_delegate scrollViewWillBeginDecelerating:self];
+            if (_delegateCan.scrollViewDidEndDragging) {
+                [_delegate scrollViewDidEndDragging:self willDecelerate:(decelerationAnimation != nil)];
             }
-        } else {
-            _horizontalScroller.alwaysVisible = NO;
-            _verticalScroller.alwaysVisible = NO;
-            [self _confineContent];
+            
+            if (decelerationAnimation) {
+                [self _setScrollAnimation:decelerationAnimation];
+                
+                _horizontalScroller.alwaysVisible = YES;
+                _verticalScroller.alwaysVisible = YES;
+                _decelerating = YES;
+                
+                if (_delegateCan.scrollViewWillBeginDecelerating) {
+                    [_delegate scrollViewWillBeginDecelerating:self];
+                }
+            } else {
+                _horizontalScroller.alwaysVisible = NO;
+                _verticalScroller.alwaysVisible = NO;
+                [self _confineContent];
+            }
         }
-        [self _setBanSuperScrollView:NO];
+        [self _cancelBanSuperScrollViewFeature];
     }
 }
 
 - (void)_dragBy:(CGPoint)delta
 {
-    if (_dragging) {
+    _hasBanDragByOthersWhenLastDrag = [self _hasBanByOtherScrollView];
+    
+    BOOL hasBanDragX = [self _hasBanDragXByOtherScrollView];
+    BOOL hasBanDragY = [self _hasBanDragYByOtherScrollView];
+    
+    if (hasBanDragX) {
+        delta.x = 0.0;
+    }
+    
+    if (hasBanDragY) {
+        delta.y = 0.0;
+    }
+    
+    if (_dragging && !(hasBanDragX && hasBanDragY)) {
         _horizontalScroller.alwaysVisible = YES;
         _verticalScroller.alwaysVisible = YES;
         
@@ -638,11 +658,8 @@ static const float ForceNextPageVelocity = 180;
         
         const CGPoint confinedOffset = [self _confinedContentOffset:proposedOffset];
         
-//        if (CGPointEqualToPoint(confinedOffset, originalOffset)) {
-//            [self _cancelBanSuperScrollViewFeature];
-//        } else {
-//            [self _searchAndBanFirstSuperScrollView];
-//        }
+        [self _setBanDragXForAllSuperScrollViews: confinedOffset.x == proposedOffset.x];
+        [self _setBanDragYForAllSuperScrollViews: confinedOffset.y == proposedOffset.y];
         
         if (self.bounces) {
             BOOL shouldHorizontalBounce = (fabs(proposedOffset.x - confinedOffset.x) > 0);
@@ -698,10 +715,6 @@ static const float ForceNextPageVelocity = 180;
     // page *after* the usual deceleration is done. I can't decide what might be best, but since we
     // don't use paging mode in Twitterrific at the moment, I'm not suffeciently motivated to worry about it. :)
     
-    if ([self _hasBanByOtherScrollView]) {
-        return;
-    }
-    
     if (gesture == _panGestureRecognizer) {
         if (_panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
             [self _beginDragging];
@@ -746,25 +759,26 @@ static const float ForceNextPageVelocity = 180;
     } */
 }
 
-- (void)_setBanSuperScrollView:(BOOL)banSuperScrollView
+- (void)_setBanDragXForAllSuperScrollViews:(BOOL)banSuperScrollView
 {
-    if (_hasBanSuperScrollView != banSuperScrollView) {
-        _hasBanSuperScrollView = banSuperScrollView;
-        if (banSuperScrollView) {
-            [self _searchAndBanFirstSuperScrollView];
-        } else {
-            [self _cancelBanSuperScrollViewFeature];
-        }
-    }
+    _banDragXForAllSuperScrollViews = banSuperScrollView;
+}
+
+- (void)_setBanDragYForAllSuperScrollViews:(BOOL)banSuperScrollView
+{
+    _banDragYForAllSuperScrollViews = banSuperScrollView;
 }
 
 - (void)_searchAndBanFirstSuperScrollView
 {
+    if (_banScrollView) {
+        return;
+    }
     UIView *view = self.superview;
     while (view) {
         if ([view isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view;
-            [scrollView _banScrollFeature];
+            [scrollView _banScrollFeatureBy:self];
             _banScrollView = scrollView;
             break;
         }
@@ -774,25 +788,51 @@ static const float ForceNextPageVelocity = 180;
 
 - (void)_cancelBanSuperScrollViewFeature
 {
-    [_banScrollView _cancelBanScrollFeature];
-    _banScrollView = nil;
+    if (_banScrollView) {
+        [_banScrollView _cancelBanScrollFeatureBy:self];
+        _banScrollView = nil;
+    }
 }
 
-- (void)_banScrollFeature
+- (void)_banScrollFeatureBy:(UIScrollView *)banMeScrollView
 {
-    _banMeScrollFeatureCount++;
-    [self _setBanSuperScrollView:YES];
+    [_banMeScrollViews addObject:banMeScrollView];
 }
 
-- (void)_cancelBanScrollFeature
+- (void)_cancelBanScrollFeatureBy:(UIScrollView *)banMeScrollView
 {
-    _banMeScrollFeatureCount--;
-    [self _setBanSuperScrollView:NO];
+    [_banMeScrollViews removeObject:banMeScrollView];
 }
 
 - (BOOL)_hasBanByOtherScrollView
 {
-    return _banMeScrollFeatureCount > 0;
+    return _banMeScrollViews.count > 0;
+}
+
+- (BOOL)_hasBanDragXByOtherScrollView
+{
+    BOOL ban = NO;
+    for (UIScrollView *banMeScrollView in _banMeScrollViews) {
+        if (banMeScrollView->_banDragXForAllSuperScrollViews ||
+            [banMeScrollView _hasBanDragXByOtherScrollView]) {
+            ban = YES;
+            break;
+        }
+    }
+    return ban;
+}
+
+- (BOOL)_hasBanDragYByOtherScrollView
+{
+    BOOL ban = NO;
+    for (UIScrollView *banMeScrollView in _banMeScrollViews) {
+        if (banMeScrollView->_banDragYForAllSuperScrollViews ||
+            [banMeScrollView _hasBanDragYByOtherScrollView]) {
+            ban = YES;
+            break;
+        }
+    }
+    return ban;
 }
 
 - (void)_UIScrollerDidBeginDragging:(UIScroller *)scroller withEvent:(UIEvent *)event
