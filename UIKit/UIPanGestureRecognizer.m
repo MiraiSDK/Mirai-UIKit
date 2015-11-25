@@ -66,6 +66,17 @@
     return translation;
 }
 
+- (void)setTranslation:(CGPoint)translation inView:(UIView *)view
+{
+    CGPoint startScreenLocation = [view.window convertPoint:CGPointZero fromView:view];
+    CGPoint endScreenLocation = [view.window convertPoint:translation fromView:view];
+    CGPoint screenTranslation = CGPointMake(endScreenLocation.x - startScreenLocation.x,
+                                            endScreenLocation.y - startScreenLocation.y);
+    
+    _firstScreenLocation = CGPointMake(_lastScreenLocation.x - screenTranslation.x,
+                                       _lastScreenLocation.y - screenTranslation.y);
+}
+
 @end
 
 @implementation UIPanGestureRecognizer
@@ -106,7 +117,9 @@
 
 - (void)setTranslation:(CGPoint)translation inView:(UIView *)view
 {
-    //TODO
+    for (_UIPanGestureRecognizerScreenLocation *screenLocation in [self _screenLocations]) {
+        [screenLocation setTranslation:translation inView:view];
+    }
     _velocity = CGPointZero;
 }
 
