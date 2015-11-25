@@ -63,6 +63,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     __unsafe_unretained id _delegate;
 @private
     UIScrollView *_banScrollView;
+    BOOL _hasBanSuperScrollView;
     NSInteger _banMeScrollFeatureCount;
     CGPoint _contentOffset;
     CGSize _contentSize;
@@ -115,6 +116,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 {
     if ((self=[super initWithFrame:frame])) {
         _banScrollView = nil;
+        _hasBanSuperScrollView = NO;
         _banMeScrollFeatureCount = 0;
         _contentOffset = CGPointZero;
         _contentSize = CGSizeZero;
@@ -159,7 +161,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)dealloc
 {
-    [self _cancelBanSuperScrollViewFeature];
+    [self _setBanSuperScrollView:NO];
     _horizontalScroller.delegate = nil;
     _verticalScroller.delegate = nil;
 }
@@ -580,7 +582,7 @@ static const float ForceNextPageVelocity = 180;
         if (_delegateCan.scrollViewWillBeginDragging) {
             [_delegate scrollViewWillBeginDragging:self];
         }
-        [self _searchAndBanFirstSuperScrollView];
+        [self _setBanSuperScrollView:YES];
     }
 }
 
@@ -615,7 +617,7 @@ static const float ForceNextPageVelocity = 180;
             _verticalScroller.alwaysVisible = NO;
             [self _confineContent];
         }
-        [self _cancelBanSuperScrollViewFeature];
+        [self _setBanSuperScrollView:NO];
     }
 }
 
@@ -636,11 +638,11 @@ static const float ForceNextPageVelocity = 180;
         
         const CGPoint confinedOffset = [self _confinedContentOffset:proposedOffset];
         
-        if (CGPointEqualToPoint(confinedOffset, originalOffset)) {
-            [self _cancelBanSuperScrollViewFeature];
-        } else {
-            [self _searchAndBanFirstSuperScrollView];
-        }
+//        if (CGPointEqualToPoint(confinedOffset, originalOffset)) {
+//            [self _cancelBanSuperScrollViewFeature];
+//        } else {
+//            [self _searchAndBanFirstSuperScrollView];
+//        }
         
         if (self.bounces) {
             BOOL shouldHorizontalBounce = (fabs(proposedOffset.x - confinedOffset.x) > 0);
@@ -744,40 +746,48 @@ static const float ForceNextPageVelocity = 180;
     } */
 }
 
+- (void)_setBanSuperScrollView:(BOOL)banSuperScrollView
+{
+    if (_hasBanSuperScrollView != banSuperScrollView) {
+        _hasBanSuperScrollView = banSuperScrollView;
+        if (banSuperScrollView) {
+            [self _searchAndBanFirstSuperScrollView];
+        } else {
+            [self _cancelBanSuperScrollViewFeature];
+        }
+    }
+}
+
 - (void)_searchAndBanFirstSuperScrollView
 {
-    if (!_banScrollView) {
-        UIView *view = self.superview;
-        while (view) {
-            if ([view isKindOfClass:[UIScrollView class]]) {
-                UIScrollView *scrollView = (UIScrollView *)view;
-                [scrollView _banScrollFeature];
-                _banScrollView = scrollView;
-                break;
-            }
-            view = view.superview;
+    UIView *view = self.superview;
+    while (view) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)view;
+            [scrollView _banScrollFeature];
+            _banScrollView = scrollView;
+            break;
         }
+        view = view.superview;
     }
 }
 
 - (void)_cancelBanSuperScrollViewFeature
 {
-    if (_banScrollView) {
-        [_banScrollView _cancelBanScrollFeature];
-        _banScrollView = nil;
-    }
+    [_banScrollView _cancelBanScrollFeature];
+    _banScrollView = nil;
 }
 
 - (void)_banScrollFeature
 {
     _banMeScrollFeatureCount++;
-    [self _searchAndBanFirstSuperScrollView];
+    [self _setBanSuperScrollView:YES];
 }
 
 - (void)_cancelBanScrollFeature
 {
     _banMeScrollFeatureCount--;
-    [self _cancelBanScrollFeature];
+    [self _setBanSuperScrollView:NO];
 }
 
 - (BOOL)_hasBanByOtherScrollView
