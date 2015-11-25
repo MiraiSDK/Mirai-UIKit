@@ -65,8 +65,9 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     UIScrollView *_banScrollView;
     BOOL _banDragXForAllSuperScrollViews;
     BOOL _banDragYForAllSuperScrollViews;
+    BOOL _hasBanDragXByOthersWhenLastDrag;
+    BOOL _hasBanDragYByOthersWhenLastDrag;
     NSMutableSet *_banMeScrollViews;
-    BOOL _hasBanDragByOthersWhenLastDrag;
     CGPoint _contentOffset;
     CGSize _contentSize;
     UIEdgeInsets _contentInset;
@@ -120,7 +121,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _banScrollView = nil;
         _banDragXForAllSuperScrollViews = NO;
         _banDragYForAllSuperScrollViews = NO;
-        _hasBanDragByOthersWhenLastDrag = NO;
+        _hasBanDragXByOthersWhenLastDrag = NO;
+        _hasBanDragYByOthersWhenLastDrag = NO;
         _banMeScrollViews = [NSMutableSet set];;
         _contentOffset = CGPointZero;
         _contentSize = CGSizeZero;
@@ -575,7 +577,14 @@ static const float ForceNextPageVelocity = 180;
 {
     if (!_dragging) {
         _dragging = YES;
-        _hasBanDragByOthersWhenLastDrag = [self _hasBanByOtherScrollView];
+        
+        if ([self _hasBanByOtherScrollView]) {
+            _hasBanDragXByOthersWhenLastDrag = YES;
+            _hasBanDragYByOthersWhenLastDrag = YES;
+        } else {
+            _hasBanDragXByOthersWhenLastDrag = NO;
+            _hasBanDragYByOthersWhenLastDrag = NO;
+        }
         
         _horizontalScroller.alwaysVisible = YES;
         _verticalScroller.alwaysVisible = YES;
@@ -601,7 +610,15 @@ static const float ForceNextPageVelocity = 180;
     if (_dragging) {
         _dragging = NO;
         
-        if (!_hasBanDragByOthersWhenLastDrag) {
+        if (_hasBanDragXByOthersWhenLastDrag) {
+            velocity.x = 0.0;
+        }
+        if (_hasBanDragYByOthersWhenLastDrag) {
+            velocity.y = 0.0;
+        }
+        
+        if (!CGPointEqualToPoint(velocity, CGPointZero)) {
+            
             UIScrollViewAnimation *decelerationAnimation = _pagingEnabled? [self _pageSnapAnimationWithVelocity:velocity] : [self _decelerationAnimationWithVelocity:velocity];
             
             if (_delegateCan.scrollViewDidEndDragging) {
@@ -630,20 +647,18 @@ static const float ForceNextPageVelocity = 180;
 
 - (void)_dragBy:(CGPoint)delta
 {
-    _hasBanDragByOthersWhenLastDrag = [self _hasBanByOtherScrollView];
+    _hasBanDragXByOthersWhenLastDrag = [self _hasBanDragXByOtherScrollView];
+    _hasBanDragYByOthersWhenLastDrag = [self _hasBanDragYByOtherScrollView];
     
-    BOOL hasBanDragX = [self _hasBanDragXByOtherScrollView];
-    BOOL hasBanDragY = [self _hasBanDragYByOtherScrollView];
-    
-    if (hasBanDragX) {
+    if (_hasBanDragXByOthersWhenLastDrag) {
         delta.x = 0.0;
     }
     
-    if (hasBanDragY) {
+    if (_hasBanDragYByOthersWhenLastDrag) {
         delta.y = 0.0;
     }
     
-    if (_dragging && !(hasBanDragX && hasBanDragY)) {
+    if (_dragging && !CGPointEqualToPoint(delta, CGPointZero)) {
         _horizontalScroller.alwaysVisible = YES;
         _verticalScroller.alwaysVisible = YES;
         
