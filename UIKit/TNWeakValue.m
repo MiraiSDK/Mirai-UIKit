@@ -9,18 +9,52 @@
 #import "TNWeakValue.h"
 
 @implementation TNWeakValue
+{
+    NSUInteger _valueHash;
+    void *_valuePointer; // only use to check if equal.
+}
 
 - (instancetype)initWithValue:(id)value
 {
     if (self = [self init]) {
-        _value = value;
+        self.value = value;
     }
     return self;
+}
+
+- (void)setValue:(id)value
+{
+    _value = value;
+    _valueHash = [value hash];
+    _valuePointer = (__bridge void *) value;
 }
 
 + (instancetype)valueWithWeakObject:(id)value
 {
     return [[TNWeakValue alloc] initWithValue:value];
+}
+
+- (NSUInteger)hash
+{
+    return _valueHash;
+}
+
+- (BOOL)isEqual: (id)anObject
+{
+    if ([anObject isKindOfClass:self.class]) {
+        return [self isEqualToWeakValue: (TNWeakValue *)anObject];
+    }
+    return NO;
+}
+
+- (BOOL)isEqualTo:(id)object
+{
+    return [self isEqual:object];
+}
+
+- (BOOL)isEqualToWeakValue:(TNWeakValue *)other
+{
+    return self->_valuePointer == other->_valuePointer;
 }
 
 @end
