@@ -38,7 +38,7 @@
         [_animationsDictionary setObject:animation forKey:key];
         [_viewAnimationGroups addObject:viewAnimationGroup];
     }
-    if ([animations containsObject:animation]) {
+    if (![animations containsObject:animation]) {
         _animationsCount++;
         [animations addObject:animation];
     }
@@ -49,7 +49,6 @@
     NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
     NSMutableSet *animations = [_animationsDictionary objectForKey:key];
     if (animations) {
-        animations = [NSMutableSet set];
         if ([animations containsObject:animation]) {
             [animations removeObject:animation];
             _animationsCount--;
@@ -65,9 +64,8 @@
 {
     for (UIViewAnimationGroup *viewAnimationGroup in _viewAnimationGroups) {
         NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
-        for (CAAnimation *animation in [_animationsDictionary objectForKey: key]) {
-            [viewAnimationGroup animationsViewRemoveFromSuper:animation];
-        }
+        NSArray *removedAnimations = [_animationsDictionary objectForKey: key];
+        [viewAnimationGroup viewRemoveFromSuper:_view withRemovedAnimations:removedAnimations];
     }
     [_animationsDictionary removeAllObjects];
     [_viewAnimationGroups removeAllObjects];

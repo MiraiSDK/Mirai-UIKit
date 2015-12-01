@@ -57,7 +57,7 @@
 + (id)animationGroupWithName:(NSString *)theName context:(void *)theContext;
 
 - (id)actionForView:(UIView *)view forKey:(NSString *)keyPath;
-- (void)animationsViewRemoveFromSuper:(CAAnimation *)animation;
+- (void)viewRemoveFromSuper:(UIView *)view withRemovedAnimations:(NSArray *)animations;
 
 - (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents;
 - (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState;

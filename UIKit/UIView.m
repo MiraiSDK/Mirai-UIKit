@@ -189,6 +189,11 @@ static BOOL _animationsEnabled = YES;
     [_layer removeFromSuperlayer];
 }
 
+- (UIViewBindAnimation *)_viewBindAnimation
+{
+    return _viewBindAnimation;
+}
+
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
     // For notes about why this is done, see displayLayer: above.
@@ -595,6 +600,7 @@ static BOOL _animationsEnabled = YES;
 - (void)removeFromSuperview
 {
     if (_superview) {
+        [self _unbindAllAnimationsNotFinished];
         [[UIApplication sharedApplication] _removeViewFromTouches:self];
         
         UIWindow *oldWindow = self.window;
@@ -618,6 +624,17 @@ static BOOL _animationsEnabled = YES;
         
         if (_needsDidAppearOrDisappear && [self _viewController]) {
             [[self _viewController] viewDidDisappear:NO];
+        }
+    }
+}
+
+- (void)_unbindAllAnimationsNotFinished
+{
+    if (_viewBindAnimation.animationsCount > 0) {
+        [_viewBindAnimation removeAllAnimations];
+        
+        for (UIView *childView in self.subviews) {
+            [childView _unbindAllAnimationsNotFinished];
         }
     }
 }
@@ -1108,7 +1125,7 @@ static BOOL _animationsEnabled = YES;
 
 + (void)_setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
 {
-    [[_animationGroups lastObject] _setIgnoreInteractionEvents:ignoreInteractionEvents];
+    [[_animationGroups lastObject] setIgnoreInteractionEvents:ignoreInteractionEvents];
 }
 
 + (void)setAnimationDelegate:(id)delegate

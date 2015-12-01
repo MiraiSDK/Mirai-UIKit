@@ -30,6 +30,7 @@
 #import "UIViewAnimationGroup.h"
 #import "UIApplication.h"
 #import "UIViewBindAnimation.h"
+#import "UIView+UIPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor.h"
 
@@ -47,6 +48,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 @implementation UIViewAnimationGroup
 {
     NSMutableSet *_bindAnimations;
+    NSUInteger _unfinshedAnimationsCount;
 }
 
 - (id)initWithGroupName:(NSString *)theName context:(void *)theContext
@@ -60,6 +62,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         _animationBeginsFromCurrentState = NO;
         _animationRepeatAutoreverses = NO;
         _animationRepeatCount = 0;
+        _unfinshedAnimationsCount = 0;
         _animationBeginTime = CACurrentMediaTime();
         _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
         _bindAnimations = [[NSMutableSet alloc] init];
@@ -75,7 +78,10 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 - (void)notifyAnimationsDidStopIfNeededUsingStatus:(BOOL)animationsDidFinish
 {
     if (_thisGroupHasCommited && _bindAnimations.count == 0) {
-        if ([_animationDelegate respondsToSelector:_animationDidStopSelector]) {
+        //TODO
+        if (_unfinshedAnimationsCount == 0 &&
+            [_animationDelegate respondsToSelector:_animationDidStopSelector]) {
+            
             NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:_animationDidStopSelector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
             [invocation setSelector:_animationDidStopSelector];
@@ -103,6 +109,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         }
         [_animatingViews removeAllObjects];
+        _unfinshedAnimationsCount = 0;
     }
 }
 
@@ -133,7 +140,22 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
     [_bindAnimations removeObject:theAnimation];
+    for (UIView *view in _animatingViews) {
+        [[view _viewBindAnimation] removeAnimation:theAnimation by:self];
+    }
     [self notifyAnimationsDidStopIfNeededUsingStatus:flag];
+}
+
+- (void)viewRemoveFromSuper:(UIView *)view withRemovedAnimations:(NSArray *)animations
+{
+    NSLog(@"remove from view.");
+    for (CAAnimation *animation in animations) {
+        [_bindAnimations removeObject:animation];
+    }
+    [_animatingViews removeObject:view];
+    
+    _unfinshedAnimationsCount += animations.count;
+    [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
 }
 
 - (CAAnimation *)addAnimation:(CAAnimation *)animation
@@ -162,13 +184,9 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     {
         NSLog(@"[WARNING]animation begins from current state not supported");
     }
+    [[view _viewBindAnimation] addAnimation:animation by:self];
     animation.fromValue = [layer valueForKey:keyPath];
     return [self addAnimation:animation];
-}
-
-- (void)animationsViewRemoveFromSuper:(CAAnimation *)animation
-{
-    
 }
 
 - (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
