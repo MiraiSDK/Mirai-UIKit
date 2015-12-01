@@ -35,7 +35,7 @@
     NSMutableSet *animations = [_animationsDictionary objectForKey:key];
     if (!animations) {
         animations = [NSMutableSet set];
-        [_animationsDictionary setObject:animation forKey:key];
+        [_animationsDictionary setObject:animations forKey:key];
         [_viewAnimationGroups addObject:viewAnimationGroup];
     }
     if (![animations containsObject:animation]) {
