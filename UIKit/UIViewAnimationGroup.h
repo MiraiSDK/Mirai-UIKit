@@ -29,11 +29,13 @@
 
 #import "UIView.h"
 
+@class CAAnimation;
+
 @interface UIViewAnimationGroup : NSObject {
 @private
     NSString *_name;
     void *_context;
-    NSUInteger _waitingAnimations;
+    BOOL _thisGroupHasCommited;
     BOOL _didSendStartMessage;
     BOOL _ignoreInteractionEvents;
     NSTimeInterval _animationDelay;
@@ -55,6 +57,7 @@
 + (id)animationGroupWithName:(NSString *)theName context:(void *)theContext;
 
 - (id)actionForView:(UIView *)view forKey:(NSString *)keyPath;
+- (void)animationsViewRemoveFromSuper:(CAAnimation *)animation;
 
 - (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents;
 - (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState;

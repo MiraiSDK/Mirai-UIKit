@@ -16,6 +16,7 @@
 #import "UIViewLayoutManager.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer.h"
+#import "UIViewBindAnimation.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 
 #import "UIKit+Android.h"
@@ -60,6 +61,7 @@ static BOOL _animationsEnabled = YES;
     BOOL _needsDidAppearOrDisappear;
 
     NSMutableSet *_gestureRecognizers;
+    UIViewBindAnimation *_viewBindAnimation;
     
     struct {
         unsigned int userInteractionDisabled:1;
@@ -151,6 +153,7 @@ static BOOL _animationsEnabled = YES;
 
         _subviews = [NSMutableSet set];
         _gestureRecognizers = [[NSMutableSet alloc] init];
+        _viewBindAnimation = [[UIViewBindAnimation alloc] initWithView:self];
         
         _layer = [[[class layerClass] alloc] init];
         _layer.delegate = self;

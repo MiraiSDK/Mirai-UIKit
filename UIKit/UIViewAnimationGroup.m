@@ -29,6 +29,7 @@
 
 #import "UIViewAnimationGroup.h"
 #import "UIApplication.h"
+#import "UIViewBindAnimation.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor.h"
 
@@ -44,13 +45,16 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 }
 
 @implementation UIViewAnimationGroup
+{
+    NSMutableSet *_bindAnimations;
+}
 
 - (id)initWithGroupName:(NSString *)theName context:(void *)theContext
 {
     if ((self=[super init])) {
         _name = [theName copy];
         _context = theContext;
-        _waitingAnimations = 1;
+        _thisGroupHasCommited = NO;
         _animationDuration = 0.2;
         _animationCurve = UIViewAnimationCurveEaseInOut;
         _animationBeginsFromCurrentState = NO;
@@ -58,6 +62,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         _animationRepeatCount = 0;
         _animationBeginTime = CACurrentMediaTime();
         _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
+        _bindAnimations = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -69,7 +74,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)notifyAnimationsDidStopIfNeededUsingStatus:(BOOL)animationsDidFinish
 {
-    if (_waitingAnimations == 0) {
+    if (_thisGroupHasCommited && _bindAnimations.count == 0) {
         if ([_animationDelegate respondsToSelector:_animationDidStopSelector]) {
             NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:_animationDidStopSelector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
@@ -127,7 +132,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-    _waitingAnimations--;
+    [_bindAnimations removeObject:theAnimation];
     [self notifyAnimationsDidStopIfNeededUsingStatus:flag];
 }
 
@@ -141,7 +146,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     animation.fillMode = kCAFillModeBackwards;
     animation.delegate = self;
     animation.removedOnCompletion = YES;
-    _waitingAnimations++;
+    [_bindAnimations addObject:animation];
     return animation;
 }
 
@@ -159,6 +164,11 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     }
     animation.fromValue = [layer valueForKey:keyPath];
     return [self addAnimation:animation];
+}
+
+- (void)animationsViewRemoveFromSuper:(CAAnimation *)animation
+{
+    
 }
 
 - (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
@@ -236,8 +246,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         
         [_transitionLayer addAnimation:[self addAnimation:trans] forKey:kCATransition];
     }
-    
-    _waitingAnimations--;
+    _thisGroupHasCommited = YES;
     [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
 }
 
