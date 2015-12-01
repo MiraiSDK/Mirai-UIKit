@@ -468,9 +468,8 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
     // [NOTE] Remove this NSTimer when fixed the leaks.
     
     if ([[NSDate date] timeIntervalSince1970] - _lastCallBeginIgnoringInteractionEventsTime > 3.0) {
-        _numberOfWhoIgnoreInteractionEvents = 0;
+//        _numberOfWhoIgnoreInteractionEvents = 0;
     }
-    NSLog(@">> remain %f", [[NSDate date] timeIntervalSince1970] - _lastCallBeginIgnoringInteractionEventsTime);
     return _numberOfWhoIgnoreInteractionEvents > 0;
 }
 

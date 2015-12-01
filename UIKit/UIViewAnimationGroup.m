@@ -51,6 +51,11 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     NSUInteger _unfinshedAnimationsCount;
 }
 
+- (void)dealloc
+{
+    NSAssert(_bindAnimations.count == 0, @"UIViewAnimationGroup should free every animations.");
+}
+
 - (id)initWithGroupName:(NSString *)theName context:(void *)theContext
 {
     if ((self=[super init])) {
@@ -148,7 +153,6 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)viewRemoveFromSuper:(UIView *)view withRemovedAnimations:(NSArray *)animations
 {
-    NSLog(@"remove from view.");
     for (CAAnimation *animation in animations) {
         [_bindAnimations removeObject:animation];
     }
