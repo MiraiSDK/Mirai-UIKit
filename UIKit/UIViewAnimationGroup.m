@@ -28,6 +28,7 @@
  */
 
 #import "UIViewAnimationGroup.h"
+#import "UIApplication.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor.h"
 
@@ -93,6 +94,9 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
             
             [invocation invokeWithTarget:_animationDelegate];
         }
+        if (_ignoreInteractionEvents) {
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        }
         [_animatingViews removeAllObjects];
     }
 }
@@ -155,6 +159,11 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     }
     animation.fromValue = [layer valueForKey:keyPath];
     return [self addAnimation:animation];
+}
+
+- (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
+{
+    _ignoreInteractionEvents = ignoreInteractionEvents;
 }
 
 - (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState

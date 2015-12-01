@@ -35,6 +35,7 @@
     void *_context;
     NSUInteger _waitingAnimations;
     BOOL _didSendStartMessage;
+    BOOL _ignoreInteractionEvents;
     NSTimeInterval _animationDelay;
     NSTimeInterval _animationDuration;
     UIViewAnimationCurve _animationCurve;
@@ -55,6 +56,7 @@
 
 - (id)actionForView:(UIView *)view forKey:(NSString *)keyPath;
 
+- (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents;
 - (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState;
 - (void)setAnimationCurve:(UIViewAnimationCurve)curve;
 - (void)setAnimationDelay:(NSTimeInterval)delay;

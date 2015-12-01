@@ -1103,6 +1103,11 @@ static BOOL _animationsEnabled = YES;
     }
 }
 
++ (void)_setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
+{
+    [[_animationGroups lastObject] _setIgnoreInteractionEvents:ignoreInteractionEvents];
+}
+
 + (void)setAnimationDelegate:(id)delegate
 {
     [[_animationGroups lastObject] setAnimationDelegate:delegate];
@@ -1200,7 +1205,6 @@ static BOOL _animationsEnabled = YES;
     
     UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
     delegate.completion = completion;
-    delegate.ignoreInteractionEvents = ignoreInteractionEvents;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationCurve:animationCurve];
@@ -1211,6 +1215,7 @@ static BOOL _animationsEnabled = YES;
     [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:)];
     [UIView setAnimationRepeatCount:(repeatAnimation? FLT_MAX : 0)];
     [UIView setAnimationRepeatAutoreverses:autoreverseRepeat];
+    [UIView _setIgnoreInteractionEvents:ignoreInteractionEvents];
     
     animations();
     
