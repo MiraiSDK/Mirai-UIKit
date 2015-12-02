@@ -20,6 +20,8 @@
 - (instancetype)initWithView:(UIView *)view;
 - (void)addAnimation:(CAAnimation *)animation by:(UIViewAnimationGroup *)viewAnimationGroup;
 - (void)removeAnimation:(CAAnimation *)animation by:(UIViewAnimationGroup *)viewAnimationGroup;
+- (void)removeAllAnimationsOfViewAnimationGroup:(UIViewAnimationGroup *)viewAnimationGroup;
 - (void)removeAllAnimations;
+- (void)removeAllAnimationsAndNotifViewAnimationGroup;
 
 @end

@@ -68,6 +68,8 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         _animationRepeatAutoreverses = NO;
         _animationRepeatCount = 0;
         _unfinshedAnimationsCount = 0;
+        _ignoreInteractionEvents = NO;
+        _hasIgnoreInteractionEvents = NO;
         _animationBeginTime = CACurrentMediaTime();
         _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
         _bindAnimations = [[NSMutableSet alloc] init];
@@ -121,11 +123,15 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
             
             [invocation invokeWithTarget:_animationDelegate];
         }
-        if (_ignoreInteractionEvents) {
+        
+        if (_hasIgnoreInteractionEvents) {
             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            _hasIgnoreInteractionEvents = NO;
+        }
+        for (UIView *view in _animatingViews) {
+            [[view _viewBindAnimation] removeAllAnimationsOfViewAnimationGroup:self];
         }
         [_animatingViews removeAllObjects];
-        _unfinshedAnimationsCount = 0;
     }
 }
 
@@ -265,6 +271,12 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)commit
 {
+    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
+    if (!_hasIgnoreInteractionEvents && _ignoreInteractionEvents) {
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        _hasIgnoreInteractionEvents = YES;
+    }
+    
     if (_transitionLayer) {
         CATransition *trans = [CATransition animation];
         trans.type = kCATransitionMoveIn;

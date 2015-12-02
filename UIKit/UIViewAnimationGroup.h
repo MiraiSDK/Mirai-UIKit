@@ -38,6 +38,7 @@
     BOOL _thisGroupHasCommited;
     BOOL _didSendStartMessage;
     BOOL _ignoreInteractionEvents;
+    BOOL _hasIgnoreInteractionEvents;
     NSTimeInterval _animationDelay;
     NSTimeInterval _animationDuration;
     UIViewAnimationCurve _animationCurve;

@@ -60,13 +60,29 @@
     }
 }
 
-- (void)removeAllAnimations
+- (void)removeAllAnimationsOfViewAnimationGroup:(UIViewAnimationGroup *)viewAnimationGroup
+{
+    NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
+    NSMutableSet *animations = [_animationsDictionary objectForKey:key];
+    if (animations) {
+        _animationsCount -= animations.count;
+        [_animationsDictionary removeObjectForKey:key];
+        [_viewAnimationGroups removeObject:viewAnimationGroup];
+    }
+}
+
+- (void)removeAllAnimationsAndNotifViewAnimationGroup
 {
     for (UIViewAnimationGroup *viewAnimationGroup in _viewAnimationGroups) {
         NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
         NSArray *removedAnimations = [_animationsDictionary objectForKey: key];
         [viewAnimationGroup viewRemoveFromSuper:_view withRemovedAnimations:removedAnimations];
     }
+    [self removeAllAnimations];
+}
+
+- (void)removeAllAnimations
+{
     [_animationsDictionary removeAllObjects];
     [_viewAnimationGroups removeAllObjects];
     _animationsCount = 0;

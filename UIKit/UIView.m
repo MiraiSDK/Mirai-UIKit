@@ -631,7 +631,7 @@ static BOOL _animationsEnabled = YES;
 - (void)_unbindAllAnimationsNotFinished
 {
     if (_viewBindAnimation.animationsCount > 0) {
-        [_viewBindAnimation removeAllAnimations];
+        [_viewBindAnimation removeAllAnimationsAndNotifViewAnimationGroup];
         
         for (UIView *childView in self.subviews) {
             [childView _unbindAllAnimationsNotFinished];
@@ -1216,11 +1216,6 @@ static BOOL _animationsEnabled = YES;
         animationCurve = UIViewAnimationCurveEaseOut;
     } else {
         animationCurve = UIViewAnimationCurveLinear;
-    }
-    
-    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
-    if (ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     }
     
     UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
