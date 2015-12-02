@@ -28,6 +28,9 @@
  */
 
 #import "UIViewAnimationGroup.h"
+#import "UIApplication.h"
+#import "UIViewBindAnimation.h"
+#import "UIView+UIPrivate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor.h"
 
@@ -43,20 +46,33 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 }
 
 @implementation UIViewAnimationGroup
+{
+    NSMutableSet *_bindAnimations;
+    NSUInteger _unfinshedAnimationsCount;
+}
+
+- (void)dealloc
+{
+    NSAssert(_bindAnimations.count == 0, @"UIViewAnimationGroup should free every animations.");
+}
 
 - (id)initWithGroupName:(NSString *)theName context:(void *)theContext
 {
     if ((self=[super init])) {
         _name = [theName copy];
         _context = theContext;
-        _waitingAnimations = 1;
+        _thisGroupHasCommited = NO;
         _animationDuration = 0.2;
         _animationCurve = UIViewAnimationCurveEaseInOut;
         _animationBeginsFromCurrentState = NO;
         _animationRepeatAutoreverses = NO;
         _animationRepeatCount = 0;
+        _unfinshedAnimationsCount = 0;
+        _ignoreInteractionEvents = NO;
+        _hasIgnoreInteractionEvents = NO;
         _animationBeginTime = CACurrentMediaTime();
         _animatingViews = [[NSMutableSet alloc] initWithCapacity:0];
+        _bindAnimations = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -68,8 +84,22 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)notifyAnimationsDidStopIfNeededUsingStatus:(BOOL)animationsDidFinish
 {
-    if (_waitingAnimations == 0) {
-        if ([_animationDelegate respondsToSelector:_animationDidStopSelector]) {
+    if (_thisGroupHasCommited && _bindAnimations.count == 0) {
+        
+        // FIXME: There are 2 way to fire notifyAnimationsDidStopIfNeededUsingStatus: method.
+        //
+        // 1. animation finished or cancelled.
+        // 2. UIView of animation called removeFromSuper method.
+        //
+        // when the UIView was removed from superview. the animationDidStopSelector should be called.
+        // but it will make many crash, because there are a lot of problems that are not solved.
+        //
+        // now, the animationDidStopSelecotr won't be called when view just remove from superview.
+        // it's will make NextBook work well now, but it's implements is different from iOS.
+        
+        if (_unfinshedAnimationsCount == 0 &&
+            [_animationDelegate respondsToSelector:_animationDidStopSelector]) {
+            
             NSMethodSignature *signature = [_animationDelegate methodSignatureForSelector:_animationDidStopSelector];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
             [invocation setSelector:_animationDidStopSelector];
@@ -92,6 +122,14 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
             }
             
             [invocation invokeWithTarget:_animationDelegate];
+        }
+        
+        if (_hasIgnoreInteractionEvents) {
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            _hasIgnoreInteractionEvents = NO;
+        }
+        for (UIView *view in _animatingViews) {
+            [[view _viewBindAnimation] removeAllAnimationsOfViewAnimationGroup:self];
         }
         [_animatingViews removeAllObjects];
     }
@@ -123,8 +161,22 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-    _waitingAnimations--;
+    [_bindAnimations removeObject:theAnimation];
+    for (UIView *view in _animatingViews) {
+        [[view _viewBindAnimation] removeAnimation:theAnimation by:self];
+    }
     [self notifyAnimationsDidStopIfNeededUsingStatus:flag];
+}
+
+- (void)viewRemoveFromSuper:(UIView *)view withRemovedAnimations:(NSArray *)animations
+{
+    for (CAAnimation *animation in animations) {
+        [_bindAnimations removeObject:animation];
+    }
+    [_animatingViews removeObject:view];
+    
+    _unfinshedAnimationsCount += animations.count;
+    [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
 }
 
 - (CAAnimation *)addAnimation:(CAAnimation *)animation
@@ -137,7 +189,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     animation.fillMode = kCAFillModeBackwards;
     animation.delegate = self;
     animation.removedOnCompletion = YES;
-    _waitingAnimations++;
+    [_bindAnimations addObject:animation];
     return animation;
 }
 
@@ -153,8 +205,14 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     {
         NSLog(@"[WARNING]animation begins from current state not supported");
     }
+    [[view _viewBindAnimation] addAnimation:animation by:self];
     animation.fromValue = [layer valueForKey:keyPath];
     return [self addAnimation:animation];
+}
+
+- (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
+{
+    _ignoreInteractionEvents = ignoreInteractionEvents;
 }
 
 - (void)setAnimationBeginsFromCurrentState:(BOOL)beginFromCurrentState
@@ -213,6 +271,12 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)commit
 {
+    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
+    if (!_hasIgnoreInteractionEvents && _ignoreInteractionEvents) {
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        _hasIgnoreInteractionEvents = YES;
+    }
+    
     if (_transitionLayer) {
         CATransition *trans = [CATransition animation];
         trans.type = kCATransitionMoveIn;
@@ -227,8 +291,7 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
         
         [_transitionLayer addAnimation:[self addAnimation:trans] forKey:kCATransition];
     }
-    
-    _waitingAnimations--;
+    _thisGroupHasCommited = YES;
     [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
 }
 

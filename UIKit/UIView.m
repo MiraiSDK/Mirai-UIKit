@@ -16,6 +16,7 @@
 #import "UIViewLayoutManager.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer.h"
+#import "UIViewBindAnimation.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 
 #import "UIKit+Android.h"
@@ -60,6 +61,7 @@ static BOOL _animationsEnabled = YES;
     BOOL _needsDidAppearOrDisappear;
 
     NSMutableSet *_gestureRecognizers;
+    UIViewBindAnimation *_viewBindAnimation;
     
     struct {
         unsigned int userInteractionDisabled:1;
@@ -151,6 +153,7 @@ static BOOL _animationsEnabled = YES;
 
         _subviews = [NSMutableSet set];
         _gestureRecognizers = [[NSMutableSet alloc] init];
+        _viewBindAnimation = [[UIViewBindAnimation alloc] initWithView:self];
         
         _layer = [[[class layerClass] alloc] init];
         _layer.delegate = self;
@@ -184,6 +187,11 @@ static BOOL _animationsEnabled = YES;
 {
     [[_subviews allObjects] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [_layer removeFromSuperlayer];
+}
+
+- (UIViewBindAnimation *)_viewBindAnimation
+{
+    return _viewBindAnimation;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector
@@ -592,6 +600,7 @@ static BOOL _animationsEnabled = YES;
 - (void)removeFromSuperview
 {
     if (_superview) {
+        [self _unbindAllAnimationsNotFinished];
         [[UIApplication sharedApplication] _removeViewFromTouches:self];
         
         UIWindow *oldWindow = self.window;
@@ -615,6 +624,17 @@ static BOOL _animationsEnabled = YES;
         
         if (_needsDidAppearOrDisappear && [self _viewController]) {
             [[self _viewController] viewDidDisappear:NO];
+        }
+    }
+}
+
+- (void)_unbindAllAnimationsNotFinished
+{
+    if (_viewBindAnimation.animationsCount > 0) {
+        [_viewBindAnimation removeAllAnimationsAndNotifViewAnimationGroup];
+        
+        for (UIView *childView in self.subviews) {
+            [childView _unbindAllAnimationsNotFinished];
         }
     }
 }
@@ -1103,6 +1123,11 @@ static BOOL _animationsEnabled = YES;
     }
 }
 
++ (void)_setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
+{
+    [[_animationGroups lastObject] setIgnoreInteractionEvents:ignoreInteractionEvents];
+}
+
 + (void)setAnimationDelegate:(id)delegate
 {
     [[_animationGroups lastObject] setAnimationDelegate:delegate];
@@ -1193,14 +1218,8 @@ static BOOL _animationsEnabled = YES;
         animationCurve = UIViewAnimationCurveLinear;
     }
     
-    // NOTE: As of iOS 5 this is only supposed to block interaction events for the views being animated, not the whole app.
-    if (ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-    }
-    
     UIViewBlockAnimationDelegate *delegate = [[UIViewBlockAnimationDelegate alloc] init];
     delegate.completion = completion;
-    delegate.ignoreInteractionEvents = ignoreInteractionEvents;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationCurve:animationCurve];
@@ -1211,6 +1230,7 @@ static BOOL _animationsEnabled = YES;
     [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:)];
     [UIView setAnimationRepeatCount:(repeatAnimation? FLT_MAX : 0)];
     [UIView setAnimationRepeatAutoreverses:autoreverseRepeat];
+    [UIView _setIgnoreInteractionEvents:ignoreInteractionEvents];
     
     animations();
     
