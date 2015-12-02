@@ -36,7 +36,6 @@
 @implementation UIApplication {
     BOOL _isRunning;
     NSInteger _numberOfWhoIgnoreInteractionEvents;
-    NSTimeInterval _lastCallBeginIgnoringInteractionEventsTime;
     
     UIEvent *_currentEvent;
     NSMutableSet *_visibleWindows;
@@ -446,7 +445,6 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
 - (void)beginIgnoringInteractionEvents
 {
     _numberOfWhoIgnoreInteractionEvents++;
-    _lastCallBeginIgnoringInteractionEventsTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)endIgnoringInteractionEvents
@@ -460,16 +458,6 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
 
 - (BOOL)isIgnoringInteractionEvents
 {
-    
-    // Because there are some leaks of animations, so, the endIgnoringInteractionEvents will never be called.
-    // Before I find the leaks and fix them, I have to use a timestamp to reset _numberOfWhoIgnoreInteractionEvents.
-    // Only this way can make the program run right.
-    //
-    // [NOTE] Remove this NSTimer when fixed the leaks.
-    
-    if ([[NSDate date] timeIntervalSince1970] - _lastCallBeginIgnoringInteractionEventsTime > 3.0) {
-//        _numberOfWhoIgnoreInteractionEvents = 0;
-    }
     return _numberOfWhoIgnoreInteractionEvents > 0;
 }
 

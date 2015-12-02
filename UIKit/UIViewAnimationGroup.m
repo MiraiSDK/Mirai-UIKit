@@ -83,7 +83,18 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 - (void)notifyAnimationsDidStopIfNeededUsingStatus:(BOOL)animationsDidFinish
 {
     if (_thisGroupHasCommited && _bindAnimations.count == 0) {
-        //TODO
+        
+        // FIXME: There are 2 way to fire notifyAnimationsDidStopIfNeededUsingStatus: method.
+        //
+        // 1. animation finished or cancelled.
+        // 2. UIView of animation called removeFromSuper method.
+        //
+        // when the UIView was removed from superview. the animationDidStopSelector should be called.
+        // but it will make many crash, because there are a lot of problems that are not solved.
+        //
+        // now, the animationDidStopSelecotr won't be called when view just remove from superview.
+        // it's will make NextBook work well now, but it's implements is different from iOS.
+        
         if (_unfinshedAnimationsCount == 0 &&
             [_animationDelegate respondsToSelector:_animationDidStopSelector]) {
             
