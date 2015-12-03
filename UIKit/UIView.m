@@ -187,6 +187,10 @@ static BOOL _animationsEnabled = YES;
 {
     [[_subviews allObjects] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [_layer removeFromSuperlayer];
+    
+    if ([_layer respondsToSelector:@selector(releaseDelegate)]) {
+        [_layer performSelector:@selector(releaseDelegate)];
+    }
 }
 
 - (UIViewBindAnimation *)_viewBindAnimation
