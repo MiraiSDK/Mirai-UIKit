@@ -29,12 +29,15 @@
 
 #import "UIView.h"
 
+@class UIViewBindAnimation;
+
 extern NSString *const UIViewFrameDidChangeNotification;
 extern NSString *const UIViewBoundsDidChangeNotification;
 extern NSString *const UIViewDidMoveToSuperviewNotification;
 extern NSString *const UIViewHiddenDidChangeNotification;
 
 @interface UIView (UIPrivate)
+- (UIViewBindAnimation *)_viewBindAnimation;
 - (void)_removeFromSuperview:(BOOL)notifyViewController;
 - (void)_setViewController:(UIViewController *)theViewController;
 - (UIViewController *)_viewController;
