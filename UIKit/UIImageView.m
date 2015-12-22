@@ -134,52 +134,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 - (void)displayLayer:(CALayer *)theLayer
 {
     [super displayLayer:theLayer];
-    
-    UIImage *displayImage = (_highlighted && _highlightedImage)? _highlightedImage : _image;
-    const CGFloat scale = self.window.screen.scale;
-    const CGRect bounds = self.bounds;
-    
-    if (displayImage && self._hasResizableImage && bounds.size.width > 0 && bounds.size.height > 0) {
-        UIGraphicsBeginImageContextWithOptions(bounds.size, NO, scale);
-        [displayImage drawInRect:bounds];
-        displayImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-    }
-    
-    // adjust the image if required.
-    // this will likely only ever be used UIButton, but it seemed a good place for it.
-    // I wonder how the real UIKit does this...
-    if (displayImage && (_drawMode != _UIImageViewDrawModeNormal)) {
-        CGRect imageBounds;
-        imageBounds.origin = CGPointZero;
-        imageBounds.size = displayImage.size;
-
-        UIGraphicsBeginImageContextWithOptions(imageBounds.size, NO, scale);
-        
-        CGBlendMode blendMode = kCGBlendModeNormal;
-        CGFloat alpha = 1;
-        
-        if (_drawMode == _UIImageViewDrawModeDisabled) {
-            alpha = 0.5;
-        } else if (_drawMode == _UIImageViewDrawModeHighlighted) {
-            [[[UIColor blackColor] colorWithAlphaComponent:0.4] setFill];
-            UIRectFill(imageBounds);
-            blendMode = kCGBlendModeDestinationAtop;
-        }
-        
-        [displayImage drawInRect:imageBounds blendMode:blendMode alpha:alpha];
-        displayImage = UIGraphicsGetImageFromCurrentImageContext();
-
-        UIGraphicsEndImageContext();
-    }
-
-//    UIImageRep *bestRepresentation = [displayImage _bestRepresentationForProposedScale:scale];
-//    theLayer.contents = (__bridge id)bestRepresentation.CGImage;
     theLayer.contents = (__bridge id)(self.image.CGImage);
-//
-//    if ([theLayer respondsToSelector:@selector(setContentsScale:)]) {
-//        [theLayer setContentsScale:bestRepresentation.scale];
-//    }
 }
 
 - (void)_displayIfNeededChangingFromOldSize:(CGSize)oldSize toNewSize:(CGSize)newSize
