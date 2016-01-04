@@ -26,8 +26,14 @@
 #import <QuartzCore/CADisplayLink.h>
 #import <QuartzCore/CARenderer.h>
 #import <UIKit/UIKit.h>
+
 @interface CADisplayLink(Private)
 + (void)_endFrame;
+@end
+
+// HACK: private workaround method
+@interface CAGLTexture : NSObject
++ (void)invalidate;
 @end
 
 @interface BKRenderingService ()
@@ -53,6 +59,8 @@
 @end
 @implementation BKRenderingService
 static BKRenderingService *currentService = nil;
+static BOOL shouldRefreshScreen = YES;
+static BOOL hasInvalidateTextures = NO;
 
 - (instancetype)initWithAndroidApp:(struct android_app *)androidApp
 {
@@ -212,6 +220,16 @@ static BKRenderingService *currentService = nil;
     NSTimeInterval totalTime = 0;
 
     while (!self.isCanceled) {
+        if (!shouldRefreshScreen) {
+            if (!hasInvalidateTextures) {
+                [CAGLTexture invalidate];
+                NSLog(@"invalidate all textures.");
+                hasInvalidateTextures = YES;
+            }
+            continue;
+        }
+        hasInvalidateTextures = NO;
+        
         [self.frameLock lock];
         self.layer = self.nextLayer;
         [self.frameLock unlock];
@@ -299,6 +317,11 @@ void BKRenderingServiceBegin(struct android_app *androidApp)
 {
     NSLog(@"%s",__PRETTY_FUNCTION__);
     [BKRenderingService setupWithAndroidApp:androidApp];
+}
+
+void BKRenderingSetShouldRefreshScreen(BOOL value)
+{
+    shouldRefreshScreen = value;
 }
 
 void BKRenderingServiceRun()
