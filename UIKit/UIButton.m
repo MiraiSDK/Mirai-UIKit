@@ -296,6 +296,10 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
         rect.size.width -= CGRectGetMaxX(rect) - CGRectGetMaxX(contentRect);
     }
     
+    if (CGRectGetMaxY(rect) > CGRectGetMaxY(contentRect)) {
+        rect.size.height -= CGRectGetMaxY(rect) - CGRectGetMaxY(contentRect);
+    }
+    
     switch (self.contentHorizontalAlignment) {
         case UIControlContentHorizontalAlignmentCenter:
             rect.origin.x += floorf((contentRect.size.width/2.f) - (rect.size.width/2.f));
@@ -352,7 +356,9 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
     UIEdgeInsets inset = _imageEdgeInsets;
     inset.right += [self titleRectForContentRect:contentRect].size.width;
     
-    return [self _componentRectForSize:[self _imageSizeForState:state] inContentRect:UIEdgeInsetsInsetRect(contentRect,inset) withState:state];
+    CGSize imageSize = [self _imageSizeForState:state];
+    CGRect r = [self _componentRectForSize:imageSize inContentRect:UIEdgeInsetsInsetRect(contentRect,inset) withState:state];
+    return r;
 }
 
 - (void)layoutSubviews
