@@ -35,7 +35,6 @@
 }
 
 @property (nonatomic, copy) void (^completion)(BOOL finished);
-@property (nonatomic, assign) BOOL ignoreInteractionEvents;
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished;
 

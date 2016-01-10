@@ -283,6 +283,8 @@
 		43FA26F61A122ABD006512EB /* UIAndroidEventsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */; };
 		43FA26F71A122ABD006512EB /* UIAndroidEventsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */; };
 		D214FC651BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */; };
+		D21CA5641C0DDF4C006C4528 /* UIViewBindAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = D21CA5621C0DDF4C006C4528 /* UIViewBindAnimation.h */; };
+		D21CA5651C0DDF4C006C4528 /* UIViewBindAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = D21CA5631C0DDF4C006C4528 /* UIViewBindAnimation.m */; };
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
@@ -656,6 +658,8 @@
 		43FA26F41A122ABD006512EB /* UIAndroidEventsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAndroidEventsServer.h; sourceTree = "<group>"; };
 		43FA26F51A122ABD006512EB /* UIAndroidEventsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAndroidEventsServer.m; sourceTree = "<group>"; };
 		D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+UIPrivate.h"; sourceTree = "<group>"; };
+		D21CA5621C0DDF4C006C4528 /* UIViewBindAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewBindAnimation.h; sourceTree = "<group>"; };
+		D21CA5631C0DDF4C006C4528 /* UIViewBindAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewBindAnimation.m; sourceTree = "<group>"; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
 		D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxy.java; sourceTree = SOURCE_ROOT; };
@@ -1008,6 +1012,8 @@
 				D2B390FA1BA80188004A87DC /* TNGestureFailureRequirementRelationship.m */,
 				D2701A391C04AB2000F3DB42 /* TNWeakValue.h */,
 				D2701A3A1C04AB2000F3DB42 /* TNWeakValue.m */,
+				D21CA5621C0DDF4C006C4528 /* UIViewBindAnimation.h */,
+				D21CA5631C0DDF4C006C4528 /* UIViewBindAnimation.m */,
 			);
 			name = "Private Classes";
 			sourceTree = "<group>";
@@ -1317,6 +1323,7 @@
 				434CFD211A0CACD900B6AC9E /* NSLayoutManager.h in Headers */,
 				436D4AF319F5466800F6F8F9 /* UIDatePicker.h in Headers */,
 				43718EC418518FA800850F08 /* UIKit.h in Headers */,
+				D21CA5641C0DDF4C006C4528 /* UIViewBindAnimation.h in Headers */,
 				434CFD151A0CAA2D00B6AC9E /* UIViewControllerTransitioning.h in Headers */,
 				43B819CF18E27D550020624F /* UIScrollViewAnimation.h in Headers */,
 				43C200B918EBB71A00490D59 /* UITextLayer.h in Headers */,
@@ -1740,6 +1747,7 @@
 				434CFD521A0CB85800B6AC9E /* UIStoryboard.m in Sources */,
 				434CFD561A0CB8B300B6AC9E /* UIStoryboardSegue.m in Sources */,
 				434CFCF21A0C9E7E00B6AC9E /* UIImagePickerController.m in Sources */,
+				D21CA5651C0DDF4C006C4528 /* UIViewBindAnimation.m in Sources */,
 				D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

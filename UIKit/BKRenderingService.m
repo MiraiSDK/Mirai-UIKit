@@ -24,6 +24,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <QuartzCore/CADisplayLink.h>
+#import <QuartzCore/CARenderer.h>
 #import <UIKit/UIKit.h>
 @interface CADisplayLink(Private)
 + (void)_endFrame;
@@ -42,6 +43,8 @@
 @property (nonatomic, assign) EGLSurface surface;
 
 @property (strong) CALayer *layer;
+@property (strong) CALayer *nextLayer;
+
 @property (nonatomic, strong) CARenderer *renderer;
 
 @property (nonatomic, assign, getter = isCanceled) BOOL canceled;
@@ -209,8 +212,11 @@ static BKRenderingService *currentService = nil;
     NSTimeInterval totalTime = 0;
 
     while (!self.isCanceled) {
-        if (!self.layer) {continue;}
         [self.frameLock lock];
+        self.layer = self.nextLayer;
+        [self.frameLock unlock];
+        
+        if (!self.layer) {continue;}
         EGLint pixelWidth, pixelHeight;
         eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
         eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
@@ -237,7 +243,6 @@ static BKRenderingService *currentService = nil;
             
             eglSwapBuffers(_display, _surface);
         }
-        [self.frameLock unlock];
         
         // call animation stopped callbacks after end a frame
         @autoreleasepool {
@@ -284,7 +289,7 @@ static BKRenderingService *currentService = nil;
     }
     [self.frameLock lock];
     //should wait until frame end
-    self.layer = layer;
+    self.nextLayer = layer;
     [self.frameLock unlock];
     
 }
@@ -314,4 +319,8 @@ CGRect BKRenderingServiceGetPixelBounds()
 void BKRenderingServiceUploadRenderLayer(CALayer *layer)
 {
     [currentService uploadRenderLayer:layer];
+}
+
+NSLock *BKLayerDisplayLock() {
+    return [CARenderer layerDisplayLock];
 }

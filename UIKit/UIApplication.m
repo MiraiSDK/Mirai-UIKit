@@ -270,9 +270,13 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
         
         NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+        BOOL hasReleaseLock = NO;
         
         @try {
         do {
+            [BKLayerDisplayLock() lock];
+            hasReleaseLock = NO;
+            
             @autoreleasepool {
                 NSDate *begin = [NSDate date];
                 
@@ -381,12 +385,21 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
                     
                 }
             }
+            [BKLayerDisplayLock() unlock];
+            hasReleaseLock = YES;
+            
         } while (_isRunning);
             
         }
         @catch (NSException *exception) {
             NSLog(@"exception:%@",exception);
             abort();
+        }
+        @finally {
+            if (!hasReleaseLock) {
+                [BKLayerDisplayLock() unlock];
+                hasReleaseLock = YES;
+            }
         }
 
     }
@@ -468,9 +481,8 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
     // [NOTE] Remove this NSTimer when fixed the leaks.
     
     if ([[NSDate date] timeIntervalSince1970] - _lastCallBeginIgnoringInteractionEventsTime > 3.0) {
-        _numberOfWhoIgnoreInteractionEvents = 0;
+//        _numberOfWhoIgnoreInteractionEvents = 0;
     }
-    NSLog(@">> remain %f", [[NSDate date] timeIntervalSince1970] - _lastCallBeginIgnoringInteractionEventsTime);
     return _numberOfWhoIgnoreInteractionEvents > 0;
 }
 

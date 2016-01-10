@@ -37,10 +37,6 @@
     if (_completion) {
         _completion([finished boolValue]);
     }
-    
-    if (_ignoreInteractionEvents) {
-        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-    }	
 }
 
 @end
