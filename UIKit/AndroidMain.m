@@ -542,6 +542,25 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
 
 static bool firstEntry = YES;
 
+void createDirectory(NSSearchPathDirectory directory)
+{
+    NSURL *fileURL = [[[NSFileManager defaultManager] URLsForDirectory:directory inDomains:NSUserDomainMask] lastObject];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fileURL.path isDirectory:NULL]) {
+        [[NSFileManager defaultManager] createDirectoryAtURL:fileURL withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+}
+
+void createDirectories()
+{
+    createDirectory(NSDocumentDirectory);
+    createDirectory(NSCachesDirectory);
+    createDirectory(NSLibraryDirectory);
+    createDirectory(NSApplicationDirectory);
+    createDirectory(NSDesktopDirectory);
+    createDirectory(NSApplicationSupportDirectory);
+    createDirectory(NSDownloadsDirectory);
+}
+
 void android_main(struct android_app* state)
 {
     @autoreleasepool {
@@ -555,18 +574,27 @@ void android_main(struct android_app* state)
         
         NSString *appPath;
         if (firstEntry) {
-            
-            
             char buffer[1024];
             constructExecutablePath(buffer, state);
             appPath = [NSString stringWithUTF8String:buffer];
             
+            const char *p = state->activity->internalDataPath;
+            NSString *idp = [NSString stringWithCString:p encoding:NSUTF8StringEncoding];
+            NSString *without_files = [idp stringByDeletingLastPathComponent];
+            GSSetHomeDirectory([without_files UTF8String]);
+            
+            char tmpPath[strlen(p)+5];
+            sprintf(tmpPath, "%s/tmp",p);
+            
+            char tmpEnv[strlen(p)+10];
+            sprintf(tmpEnv, "TMP=%s/tmp",p);
+            
             // Initialize process info
             argc = 1;
-            char * argv[] = {buffer};
-            [NSProcessInfo initializeWithArguments:argv count:argc environment:NULL];
+            char * argv[] = {buffer,NULL};
+            char * eenv[] = {tmpEnv,NULL};
+            [NSProcessInfo initializeWithArguments:argv count:argc environment:eenv];
             
-            NSLog(@"prepare Objective-C runtime done.");
             // Make sure glue isn't stripped.
             app_dummy();
             
@@ -583,12 +611,14 @@ void android_main(struct android_app* state)
             NSString *bundlePath = [appPath stringByDeletingLastPathComponent];
             _prepareAsset(bundlePath,env);
             
-            //create Documentes folder
-            NSString *documentsPath = [[bundlePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Documents"];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
-                NSLog(@"create documents path:%@",documentsPath);
-                [[NSFileManager defaultManager] createDirectoryAtPath:documentsPath attributes:nil];
+            //create TMP folder
+            if (![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithUTF8String:tmpPath] isDirectory:NULL]) {
+                [[NSFileManager defaultManager] createDirectoryAtPath:[NSString stringWithUTF8String:tmpPath] attributes:nil];
             }
+            
+            //create subfolders(documents,cache,library...)
+            createDirectories();
+            
         }
 
         
