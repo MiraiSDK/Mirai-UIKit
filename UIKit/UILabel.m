@@ -161,9 +161,11 @@
 
     // TODO: alignment, linebreakMode
     CTTextAlignment textAlign = NSTextAlignmentToCTTextAlignment(self.textAlignment);
+    CTLineBreakMode lineBreakMode = (CTLineBreakMode)self.lineBreakMode;
     
     CTParagraphStyleSetting settings[] = {
         { kCTParagraphStyleSpecifierAlignment,sizeof(CTTextAlignment), &textAlign },
+        { kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode), &lineBreakMode},  
     };
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, 1);
     attributes[(NSString *)kCTParagraphStyleAttributeName] = (__bridge id)(paragraphStyle);
@@ -202,11 +204,22 @@
                 maxSize.height = bounds.size.height;
             }
         }
+        if (maxSize.height > bounds.size.height) {
+            maxSize.height = bounds.size.height;
+        }
         
         NSAttributedString *as = [[NSAttributedString alloc] initWithString:_text attributes:[self _attributes]];
         CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
         
         drawRect.size = boundingRect.size;
+        
+        //
+        // FIXME: Workaround text out of bounds bug,
+        // to support truncating, we needs manual create CTFrame,
+        // get CTLines, and create truncated version using CTLineCreateTruncatedLine
+        if (drawRect.size.height > bounds.size.height) {
+            drawRect.size.height = bounds.size.height;
+        }
         
         // now vertically center it
         drawRect.origin.y = roundf((bounds.size.height - drawRect.size.height) / 2.f);
