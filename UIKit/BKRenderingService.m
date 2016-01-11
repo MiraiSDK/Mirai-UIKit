@@ -273,7 +273,8 @@ static BOOL hasInvalidateTextures = NO;
             });
             
             CALayer *modelLayer = [_renderer.layer modelLayer];
-            [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallback) withObject:nil waitUntilDone:YES];
+            [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallbackInMainThread)
+                                         withObject:nil waitUntilDone:YES];
         }
         
 
