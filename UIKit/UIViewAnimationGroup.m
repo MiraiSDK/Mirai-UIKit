@@ -174,13 +174,15 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)viewRemoveFromSuper:(UIView *)view withRemovedAnimations:(NSArray *)animations
 {
-    for (CAAnimation *animation in animations) {
-        [_bindAnimations removeObject:animation];
+    if ([_animatingViews containsObject:view]) {
+        for (CAAnimation *animation in animations) {
+            [_bindAnimations removeObject:animation];
+        }
+        [_animatingViews removeObject:view];
+        
+        _unfinshedAnimationsCount += animations.count;
+        [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
     }
-    [_animatingViews removeObject:view];
-    
-    _unfinshedAnimationsCount += animations.count;
-    [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
 }
 
 - (CAAnimation *)addAnimation:(CAAnimation *)animation
