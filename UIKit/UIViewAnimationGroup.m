@@ -161,22 +161,28 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-    [_bindAnimations removeObject:theAnimation];
-    for (UIView *view in _animatingViews) {
-        [[view _viewBindAnimation] removeAnimation:theAnimation by:self];
+    // this method may be called many times. because compelete callback is nesting.
+    // after the first call for each animation objects, this method would do nothing.
+    if ([_bindAnimations containsObject:theAnimation]) {
+        [_bindAnimations removeObject:theAnimation];
+        for (UIView *view in _animatingViews) {
+            [[view _viewBindAnimation] removeAnimation:theAnimation by:self];
+        }
+        [self notifyAnimationsDidStopIfNeededUsingStatus:flag];
     }
-    [self notifyAnimationsDidStopIfNeededUsingStatus:flag];
 }
 
 - (void)viewRemoveFromSuper:(UIView *)view withRemovedAnimations:(NSArray *)animations
 {
-    for (CAAnimation *animation in animations) {
-        [_bindAnimations removeObject:animation];
+    if ([_animatingViews containsObject:view]) {
+        for (CAAnimation *animation in animations) {
+            [_bindAnimations removeObject:animation];
+        }
+        [_animatingViews removeObject:view];
+        
+        _unfinshedAnimationsCount += animations.count;
+        [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
     }
-    [_animatingViews removeObject:view];
-    
-    _unfinshedAnimationsCount += animations.count;
-    [self notifyAnimationsDidStopIfNeededUsingStatus:YES];
 }
 
 - (CAAnimation *)addAnimation:(CAAnimation *)animation

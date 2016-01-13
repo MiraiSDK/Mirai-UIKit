@@ -37,10 +37,6 @@
 @implementation TNAndroidLauncher
 @end
 
-@interface CAGLTexture : NSObject
-+ (void)invalidate;
-@end
-
 #pragma mark -
 /**
  * Shared state for our app.
@@ -446,6 +442,10 @@ static void engine_term_display(struct engine* engine) {
     BKRenderingServiceEnd();
 }
 
+static void engine_set_should_refresh_screen(shouldRefreshScreen) {
+    BKRenderingSetShouldRefreshScreen(shouldRefreshScreen);
+}
+
 #pragma mark Events
 
 void handle_app_command(struct android_app* app, int32_t cmd) {
@@ -507,10 +507,12 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
             break;
         case APP_CMD_START:
             NSLog(@"CMD: START");
+            engine_set_should_refresh_screen(YES);
 
             break;
         case APP_CMD_RESUME:
             NSLog(@"CMD: RESUME");
+            engine_set_should_refresh_screen(NO);
 
             break;
         case APP_CMD_SAVE_STATE:
@@ -522,12 +524,6 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
             break;
         case APP_CMD_STOP:
             NSLog(@"CMD: APP STOP");
-            if ([CAGLTexture instancesRespondToSelector:@selector(invalidate)]) {
-                [CAGLTexture invalidate];
-            }
-            
-            [[UIApplication sharedApplication] performSelectorOnMainThread:@selector(_appDidEnterBackground) withObject:nil waitUntilDone:YES];
-
             break;
         case APP_CMD_DESTROY:
             NSLog(@"CMD: DESTORY");

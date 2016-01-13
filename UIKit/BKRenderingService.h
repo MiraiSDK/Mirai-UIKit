@@ -17,6 +17,7 @@ struct android_app;
 
 void BKRenderingServiceBegin(struct android_app *androidApp);
 void BKRenderingServiceRun();
+void BKRenderingSetShouldRefreshScreen(BOOL value);
 void BKRenderingServiceEnd();
 CGRect BKRenderingServiceGetPixelBounds();
 void BKRenderingServiceUploadRenderLayer(CALayer *layer);
