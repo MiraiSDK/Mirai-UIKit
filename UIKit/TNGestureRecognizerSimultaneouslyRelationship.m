@@ -33,9 +33,11 @@
 
 - (void)dealloc
 {
-    [self eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
-        [recognizer _unbindRecognizeProcess];
-    }];
+    for (NSMutableSet *group in _allSimulataneouslyGroups) {
+        for (UIGestureRecognizer *recognizer in group) {
+            [recognizer _unbindRecognizeProcess];
+        }
+    }
 }
 
 #pragma mark - read properties.
@@ -154,7 +156,9 @@
     return [_recognizerToGroupDictionary objectForKey:[NSValue valueWithNonretainedObject:recognizer]];
 }
 
-- (void)eachGestureRecognizer:(void (^)(UIGestureRecognizer *recognizer))blockMethod
+
+- (void)eachGestureRecognizerFrom:(TNGestureRecognizeProcess *)process
+                             loop:(void (^)(UIGestureRecognizer *))blockMethod
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
         for (UIGestureRecognizer *recognizer in group) {
@@ -163,7 +167,8 @@
     }
 }
 
-- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *recognizer))blockMethod
+- (void)eachGestureRecognizerThatNotChoosedFrom:(TNGestureRecognizeProcess *)process
+                                           loop:(void (^)(UIGestureRecognizer *))blockMethod
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
         if (group != _currentChoosedGroup) {

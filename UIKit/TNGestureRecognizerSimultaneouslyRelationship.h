@@ -30,8 +30,9 @@
 - (NSArray *)allGestureRecognizers;
 - (NSSet *)simultaneouslyGroupIncludes:(UIGestureRecognizer *)recognizer;
 
-- (void)eachGestureRecognizer:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
-- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (void)eachGestureRecognizerFrom:(TNGestureRecognizeProcess *)process
+                             loop:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (void)eachGestureRecognizerThatNotChoosedFrom:(TNGestureRecognizeProcess *)process loop:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
 - (UIGestureRecognizer *)findGestureRecognizer:(BOOL (^)(UIGestureRecognizer *recognizer))finderMethod;
 
 @end

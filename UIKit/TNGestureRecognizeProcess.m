@@ -79,7 +79,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     NSMutableArray *descriptions = [NSMutableArray array];
     
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+    [_effectRecognizersNode eachGestureRecognizerFrom:self loop:^(UIGestureRecognizer *recognizer) {
         [descriptions addObject:[recognizer _description]];
     }];
     NSMutableArray *classChain = [[NSMutableArray alloc] init];
@@ -97,7 +97,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     // when the window or view dealloc, the gesture recognizer should be cancelled.
     // but I have never implement cancelled method.
     
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+    [_effectRecognizersNode eachGestureRecognizerFrom:self loop:^(UIGestureRecognizer *recognizer) {
         if ([recognizer _shouldReset]) {
             [recognizer reset];
         }
@@ -207,7 +207,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)_setAllRecognizersNotRecivedAnyTouches
 {
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+    [_effectRecognizersNode eachGestureRecognizerFrom:self loop:^(UIGestureRecognizer *recognizer) {
         [_neverRecivedAnyTouchRecognizers addObject:recognizer];
     }];
 }
@@ -235,7 +235,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 
 - (void)_sendToRecognizersWithTouches:(NSSet *)touches event:(UIEvent *)event
 {
-    [_effectRecognizersNode eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
+    [_effectRecognizersNode eachGestureRecognizerFrom:self loop:^(UIGestureRecognizer *recognizer) {
         [self _searchNewTouchFrom:touches andTellRecognizer:recognizer];
         NSUInteger count = [recognizer _recognizeAndGetHandledTouchesCountWithTouches:touches
                                                                             withEvent:event];
@@ -403,7 +403,8 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     if (![_effectRecognizersNode hasChoosedAnySimultaneouslyGroup]) {
         [_effectRecognizersNode chooseSimultaneouslyGroupWhoIncludes:recognizer];
-        [_effectRecognizersNode eachGestureRecognizerThatNotChoosed:^(UIGestureRecognizer *recognizer) {
+        [_effectRecognizersNode eachGestureRecognizerThatNotChoosedFrom:self
+                                                                   loop:^(UIGestureRecognizer *recognizer) {
             [recognizer _forceFail];
         }];
     }
