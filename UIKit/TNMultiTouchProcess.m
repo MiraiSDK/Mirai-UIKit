@@ -11,6 +11,7 @@
 #import "TNGestureRecognizeProcess.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "TNGestureRecognizerSimultaneouslyRelationship.h"
 #import "UIApplication.h"
 
 @implementation TNMultiTouchProcess
@@ -20,6 +21,8 @@
     NSInteger _currentPressFingersCount;
     BOOL _legacyAnyRecognizeProcesses;
     BOOL _isIgnoringInteractionEvents;
+    
+    TNGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
     
     NSMutableDictionary *_effectRecognizeProcesses;
     NSMutableArray *_effectRecognizeProcessesList; // To keep sequence, It's IMPORTANCE!.
@@ -192,6 +195,11 @@
         
         view = [self _findSuperviewCanCatch:view];
     }
+    _effectRecognizersNode = [[TNGestureRecognizerSimultaneouslyRelationship alloc] initWithGestureRecognizeProcessArray:_effectRecognizeProcessesList];
+    
+    for (TNGestureRecognizeProcess * recognizeProcess in _effectRecognizeProcessesList) {
+        [recognizeProcess bindGestureRecognizerSimultaneouslyRelationship:_effectRecognizersNode];
+    }
 }
 
 - (NSMutableArray *)_viewsFromTouches:(NSSet *)touches
@@ -340,6 +348,7 @@
     }
     [_effectViews removeAllObjects];
     [_trackedTouches removeAllObjects];
+    _effectRecognizersNode = nil;
     [self _clearHasMakeConclusionReconizeProcesses];
 }
 
