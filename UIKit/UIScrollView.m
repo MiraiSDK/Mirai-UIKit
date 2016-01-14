@@ -58,6 +58,22 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
+@interface _UIScrollViewGestureRecognizer : UIPanGestureRecognizer @end
+
+@implementation _UIScrollViewGestureRecognizer
+
+- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
+{
+    return [preventedGestureRecognizer isKindOfClass:[_UIScrollViewGestureRecognizer class]];
+}
+
+- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
+{
+    return [preventingGestureRecognizer isKindOfClass:[_UIScrollViewGestureRecognizer class]];
+}
+
+@end
+
 @implementation UIScrollView {
     @package
     __unsafe_unretained id _delegate;
@@ -142,7 +158,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _bounces = YES;
         _decelerationRate = UIScrollViewDecelerationRateNormal;
         
-        _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
+        _panGestureRecognizer = [[_UIScrollViewGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
         [self addGestureRecognizer:_panGestureRecognizer];
         
 //        _scrollWheelGestureRecognizer = [[UIScrollWheelGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureDidChange:)];
