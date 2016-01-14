@@ -55,7 +55,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         _anyRecognizersMakeConclusion = YES;
         _trackingTouches = [[NSMutableSet alloc] init];
         _ignoredTouches = [[NSMutableSet alloc] init];
-        _effectRecognizersNode = [[TNGestureRecognizerSimultaneouslyRelationship alloc] initWithGestureRecognizers:view.gestureRecognizers gestureRecongizeProcess:self];
+        _effectRecognizersNode = [[TNGestureRecognizerSimultaneouslyRelationship alloc] initWithGestureRecognizeProcessArray:@[self]];
         _failureRequirementNode = [[TNGestureFailureRequirementRelationship alloc] initWithView:view];
         _centralizedChangedStateRecognizersBuffer = [[NSMutableSet alloc] init];
         _preventRecursionChangedStateRecognizersBuffer = [[NSMutableArray alloc] init];

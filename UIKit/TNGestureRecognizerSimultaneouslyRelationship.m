@@ -11,6 +11,7 @@
 #import "UIView.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "TNGestureRecognizeProcess.h"
 
 @implementation TNGestureRecognizerSimultaneouslyRelationship
 {
@@ -20,13 +21,12 @@
     NSArray *_allGestureRecognizersCache;
 }
 
-- (instancetype)initWithGestureRecognizers:(NSArray *)gestureRecognizers
-                   gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess
+- (instancetype)initWithGestureRecognizeProcessArray:(NSArray *)gestureRecognizeProcessArray
 {
     if (self = [self init]) {
         _allSimulataneouslyGroups = [NSMutableSet set];
         _recognizerToGroupDictionary = [NSMutableDictionary dictionary];
-        [self _collectGestureRecognizers:gestureRecognizers gestureReconizeProcess:gestureReconizeProcess];
+        [self _collectGestureRecognizeProcesses:gestureRecognizeProcessArray];
     }
     return self;
 }
@@ -193,11 +193,14 @@
 
 #pragma mark collect gesture recognizers
 
-- (void)_collectGestureRecognizers:(NSArray *)recongizers
-            gestureReconizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess
+- (void)_collectGestureRecognizeProcesses:(NSArray *)gestureRecognizeProcessArray
 {
-    for (UIGestureRecognizer *recongizer in recongizers) {
-        [recongizer _bindRecognizeProcess:gestureReconizeProcess];
+    NSMutableArray *recongizers = [NSMutableArray array];
+    for (TNGestureRecognizeProcess *gestureRecognizeProcess in gestureRecognizeProcessArray) {
+        for (UIGestureRecognizer *recongizer in gestureRecognizeProcess.view.gestureRecognizers) {
+            [recongizer _bindRecognizeProcess:gestureRecognizeProcess];
+            [recongizers addObject:recongizer];
+        }
     }
     
     for (UIGestureRecognizer *r0 in recongizers) {
