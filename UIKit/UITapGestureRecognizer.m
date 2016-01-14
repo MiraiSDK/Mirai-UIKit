@@ -221,7 +221,7 @@ static const float TapLimitAreaSize = 2.38;
     [self _stopInvalidTimer];
     _invalidTimer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(_onIntervalTimeOut:)
                                           userInfo:nil repeats:NO];
-    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)_stopInvalidTimer

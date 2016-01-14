@@ -164,9 +164,9 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 - (void)_restartInvalidTimer
 {
     [self _stopInvalidTimer];
-    _invalidTimer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(_onTimeOut:)
+    _invalidTimer = [NSTimer timerWithTimeInterval:_timeInterval target:self selector:@selector(_onTimeOut:)
                                           userInfo:nil repeats:NO];
-    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)_stopInvalidTimer

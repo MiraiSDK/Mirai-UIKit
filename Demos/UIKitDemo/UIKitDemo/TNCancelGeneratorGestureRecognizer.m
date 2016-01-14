@@ -82,7 +82,7 @@
     _cancelFireTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval
                                                         target:self selector:@selector(_onCancelFire:)
                                                       userInfo:nil repeats:NO];
-    [[NSRunLoop currentRunLoop] addTimer:_cancelFireTimer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop currentRunLoop] addTimer:_cancelFireTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)_stopInvalidTimer
