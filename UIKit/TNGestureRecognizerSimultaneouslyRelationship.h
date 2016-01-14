@@ -16,8 +16,8 @@
 
 @property (nonatomic, readonly) NSUInteger count;
 
-- (instancetype)initWithView:(UIView *)view
-     gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess;
+- (instancetype)initWithGestureRecognizers:(NSArray *)gestureRecognizers
+                   gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess;
 
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer;
 - (BOOL)hasChoosedAnySimultaneouslyGroup;
