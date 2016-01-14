@@ -11,6 +11,7 @@
 #import "TNClipsToBoundsTestViewController.h"
 #import "TNScrollViewNestingTestViewController.h"
 #import "TNScrollViewContentInsetTestViewController.h"
+#import "TNScrollViewNestingGestureRecognizerTestViewController.h"
 
 @interface TNScrollTestViewController ()
 
@@ -37,6 +38,7 @@
              [TNClipsToBoundsTestViewController class],
              [TNScrollViewNestingTestViewController class],
              [TNScrollViewContentInsetTestViewController class],
+             [TNScrollViewNestingGestureRecognizerTestViewController class],
              ];
 }
 

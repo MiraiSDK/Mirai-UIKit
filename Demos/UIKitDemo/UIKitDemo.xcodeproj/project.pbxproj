@@ -85,12 +85,12 @@
 		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
 		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
-		D20761961BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D20761971BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D207619A1BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761991BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D207619B1BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761991BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D207619D1BDE1FFC00FA5B48 /* umaru.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D207619C1BDE1FFC00FA5B48 /* umaru.jpg */; settings = {ASSET_TAGS = (); }; };
-		D207619E1BDE1FFC00FA5B48 /* umaru.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D207619C1BDE1FFC00FA5B48 /* umaru.jpg */; settings = {ASSET_TAGS = (); }; };
+		D20761961BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; };
+		D20761971BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; };
+		D207619A1BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761991BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m */; };
+		D207619B1BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761991BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m */; };
+		D207619D1BDE1FFC00FA5B48 /* umaru.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D207619C1BDE1FFC00FA5B48 /* umaru.jpg */; };
+		D207619E1BDE1FFC00FA5B48 /* umaru.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D207619C1BDE1FFC00FA5B48 /* umaru.jpg */; };
 		D210A8DE1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
 		D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210A8DD1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m */; };
 		D220A8C61B943883001B906F /* TNTapGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D220A8C51B943883001B906F /* TNTapGestureRecognizerTestViewController.m */; };
@@ -105,14 +105,14 @@
 		D2239E3C1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E3A1B048AF700810377 /* TNDisplayModeTestViewController.m */; };
 		D2239E411B04915000810377 /* TNBlockButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E401B04915000810377 /* TNBlockButton.m */; };
 		D2239E421B04915000810377 /* TNBlockButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D2239E401B04915000810377 /* TNBlockButton.m */; };
-		D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D22A0BC31BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D22A0BC61BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D22A0BC71BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D233DAFC1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D233DAFD1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D233DB021BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */; settings = {ASSET_TAGS = (); }; };
-		D233DB031BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */; settings = {ASSET_TAGS = (); }; };
+		D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; };
+		D22A0BC31BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC11BC00F6A006BAE64 /* TNMultiTouchTestViewController.m */; };
+		D22A0BC61BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; };
+		D22A0BC71BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */; };
+		D233DAFC1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */; };
+		D233DAFD1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DAFB1BC617CD00AD220E /* TNGestureCancelTestViewController.m */; };
+		D233DB021BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */; };
+		D233DB031BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D233DB011BC6199F00AD220E /* TNCancelGeneratorGestureRecognizer.m */; };
 		D243F09B1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
@@ -153,8 +153,8 @@
 		D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F49C1AB084CD0011AF7B /* loveheart.png */; };
 		D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
 		D2A5F5231AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F5211AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m */; };
-		D2A6662A1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */; settings = {ASSET_TAGS = (); }; };
-		D2A6662B1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */; settings = {ASSET_TAGS = (); }; };
+		D2A6662A1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */; };
+		D2A6662B1BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A666291BB00E54001E1BB9 /* TNPreventGestureRecognizerTestViewController.m */; };
 		D2A90AA31B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A90AA21B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m */; };
 		D2A90AA41B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A90AA21B999CC1006E153C /* TNLongPressGestureRecognizerTestViewController.m */; };
 		D2A9FB941B1FED8100C88751 /* TNTopFloatTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A9FB931B1FED8100C88751 /* TNTopFloatTestViewController.m */; };
@@ -201,6 +201,8 @@
 		D2EB64321B09FA2400C28DA8 /* TNMenuTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64301B09FA2400C28DA8 /* TNMenuTestViewController.m */; };
 		D2EB64351B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */; };
 		D2EB64361B09FA4900C28DA8 /* TNMenuPositionTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */; };
+		D2F9916D1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F9916C1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m */; };
+		D2F9916E1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F9916C1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -417,6 +419,8 @@
 		D2EB64301B09FA2400C28DA8 /* TNMenuTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMenuTestViewController.m; sourceTree = "<group>"; };
 		D2EB64331B09FA4900C28DA8 /* TNMenuPositionTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMenuPositionTestViewController.h; sourceTree = "<group>"; };
 		D2EB64341B09FA4900C28DA8 /* TNMenuPositionTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMenuPositionTestViewController.m; sourceTree = "<group>"; };
+		D2F9916B1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNScrollViewNestingGestureRecognizerTestViewController.h; sourceTree = "<group>"; };
+		D2F9916C1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScrollViewNestingGestureRecognizerTestViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -623,6 +627,8 @@
 				4390B82B1A8352990082B0F1 /* TNScrollViewPagingTestViewController.m */,
 				432D2BFD1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.h */,
 				432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */,
+				D2F9916B1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.h */,
+				D2F9916C1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m */,
 			);
 			name = UIScrollView;
 			sourceTree = "<group>";
@@ -1117,6 +1123,7 @@
 				438FAEAC1AFB8D550069983F /* TNTextFieldTestViewController.m in Sources */,
 				D2BD53BE1B11C78B0009D138 /* TNMenuNotificationTestViewController.m in Sources */,
 				D2239E3C1B048AF700810377 /* TNDisplayModeTestViewController.m in Sources */,
+				D2F9916E1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m in Sources */,
 				4390B8651A8353B50082B0F1 /* TNGestureRecognizerViewController.m in Sources */,
 				D2C401861B8481F40055BF2E /* TNTouchConfirmSuperview.m in Sources */,
 				4390B83D1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
@@ -1199,6 +1206,7 @@
 				4390B8111A8351CA0082B0F1 /* TNCustomView.m in Sources */,
 				4390B83C1A8352E30082B0F1 /* TNWebViewTestViewController.m in Sources */,
 				D269FAD61B3AB4CE00A0AB7A /* TNSearchBarTestViewController.m in Sources */,
+				D2F9916D1C4787370002A568 /* TNScrollViewNestingGestureRecognizerTestViewController.m in Sources */,
 				4390B8061A8351470082B0F1 /* TNTestCase.m in Sources */,
 				D2A5F5221AB086480011AF7B /* TNSegmentedControlTestViewControlViewController.m in Sources */,
 				D269FAD21B3AB45300A0AB7A /* TNSearchControllerTestMenu.m in Sources */,

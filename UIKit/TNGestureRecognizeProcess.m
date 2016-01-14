@@ -27,7 +27,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     NSMutableSet *_trackingTouches;
     NSMutableSet *_ignoredTouches;
     NSMutableArray *_delaysBufferedBlocks;
-    NSMutableArray *_neverRecivedAnyTouchRecognizers;
+    NSMutableSet *_neverRecivedAnyTouchRecognizers;
     
     NSMutableSet *_centralizedChangedStateRecognizersBuffer;
     NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
