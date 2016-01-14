@@ -235,7 +235,7 @@
         [self _translateTouches:touches withEvent:event];
         self.state = UIGestureRecognizerStateEnded;
         
-    } else {
+    } else if (self.state == UIGestureRecognizerStatePossible) {
         self.state = UIGestureRecognizerStateFailed;
     }
 }
