@@ -240,13 +240,7 @@
         }
     }
     
-    for (UIGestureRecognizer *r0 in recongizers) {
-        for (UIGestureRecognizer *r1 in recongizers) {
-            if (r0 != r1) {
-                [self _findRecongizer0:r0 recongizer1:r1];
-            }
-        }
-    }
+    [self _searchAndGenerateGroupsFrom: recongizers];
     
     for (UIGestureRecognizer *recongizer in recongizers) {
         if (![self simultaneouslyGroupIncludes:recongizer]) {
@@ -257,6 +251,43 @@
     }
 }
 
+- (void)_searchAndGenerateGroupsFrom:(NSArray *)recognizers
+{
+    NSMutableArray *recognizersPool = [[NSMutableArray alloc] initWithArray:recognizers];
+    while (recognizersPool.count > 0) {
+        NSSet *group = [self _splitGroupFromPool:recognizersPool];
+        [_allSimulataneouslyGroups addObject:group];
+    }
+}
+
+- (NSSet *)_splitGroupFromPool:(NSMutableArray *)recognizersPool
+{
+    NSMutableSet *group = [[NSMutableSet alloc] init];
+    [group addObject:[recognizersPool objectAtIndex:0]];
+    
+    for (UIGestureRecognizer *checkedRecognizer in recognizersPool) {
+        if (![self _anyCanNotSimultaneouslyWith:checkedRecognizer inGroup:group]) {
+            [group addObject:checkedRecognizer];
+        }
+    }
+    for (UIGestureRecognizer *recognizer in group) {
+        [recognizersPool removeObject:recognizer];
+        [self _saveGroup:group forRecognizer:recognizer];
+    }
+    return group;
+}
+
+- (BOOL)_anyCanNotSimultaneouslyWith:(UIGestureRecognizer *)recognizer inGroup:(NSSet *)group
+{
+    for (UIGestureRecognizer *recognizerInGroup in group) {
+        if (![self _isRecongizer:recognizer shouldRecongizeSimultaneouslyWithRecongizer:recognizerInGroup]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+// I can't make sure this method is right, so I replace it with _searchAndGenerateGroupsFrom:
 - (void)_findRecongizer0:(UIGestureRecognizer *)r0 recongizer1:(UIGestureRecognizer *)r1
 {
     if ([self _isRecongizer:r0 shouldRecongizeSimultaneouslyWithRecongizer:r1]) {
