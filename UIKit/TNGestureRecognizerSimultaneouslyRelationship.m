@@ -40,6 +40,23 @@
     }
 }
 
+- (NSString *)description
+{
+    NSMutableArray *groupsInfo = [NSMutableArray array];
+    for (NSSet *group in _allSimulataneouslyGroups) {
+        NSMutableArray *groupInfo = [NSMutableArray array];
+        for (UIGestureRecognizer *recognizer in group) {
+            [groupInfo addObject:[recognizer _description]];
+        }
+        NSString *strGroup = [groupInfo componentsJoinedByString:@", "];
+        if (_currentChoosedGroup == group) {
+            strGroup = [NSString stringWithFormat:@"[*]%@", strGroup];
+        }
+        [groupsInfo addObject:[NSString stringWithFormat:@"{ %@ }", strGroup]];
+    }
+    return [groupsInfo componentsJoinedByString:@", "];
+}
+
 #pragma mark - read properties.
 
 - (NSUInteger)count
@@ -162,13 +179,28 @@
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
         for (UIGestureRecognizer *recognizer in group) {
-            blockMethod(recognizer);
+            if ([recognizer _bindedRecognizeProcess] == process) {
+                blockMethod(recognizer);
+            }
         }
     }
 }
 
 - (void)eachGestureRecognizerThatNotChoosedFrom:(TNGestureRecognizeProcess *)process
                                            loop:(void (^)(UIGestureRecognizer *))blockMethod
+{
+    for (NSMutableSet *group in _allSimulataneouslyGroups) {
+        if (group != _currentChoosedGroup) {
+            for (UIGestureRecognizer *recognizer in group) {
+                if ([recognizer _bindedRecognizeProcess] == process) {
+                    blockMethod(recognizer);
+                }
+            }
+        }
+    }
+}
+
+- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *))blockMethod
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
         if (group != _currentChoosedGroup) {
@@ -289,7 +321,7 @@
     }
     
     if (!shouldSimultaneously && [r1 _hasBeenPreventedByOtherGestureRecognizer]) {
-        shouldSimultaneously = ![r0 canBePreventedByGestureRecognizer:r0] ||
+        shouldSimultaneously = ![r0 canBePreventedByGestureRecognizer:r0] &&
                                ![r1 canPreventGestureRecognizer:r0];
     }
     return shouldSimultaneously;

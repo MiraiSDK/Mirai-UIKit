@@ -77,13 +77,19 @@
     return self;
 }
 
+- (TNGestureRecognizeProcess *)_bindedRecognizeProcess
+{
+    return _bindingRecognizeProcess;
+}
+
 - (NSString *)_description
 {
     NSMutableArray *actions = [NSMutableArray array];
     for (UIAction *actionRecord in _registeredActions) {
         [actions addObject:NSStringFromSelector(actionRecord.action)];
     }
-    return [NSString stringWithFormat:@"%@(%@)", self.className, [actions componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"%@(%@)[%zi]",
+            self.className, [actions componentsJoinedByString:@", "], [self hash]];
 }
 
 - (void)_bindRecognizeProcess:(TNGestureRecognizeProcess *)recognizeProcess

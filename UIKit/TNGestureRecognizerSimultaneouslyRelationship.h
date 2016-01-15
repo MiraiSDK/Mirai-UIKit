@@ -18,6 +18,8 @@
 
 - (instancetype)initWithGestureRecognizeProcessArray:(NSArray *)gestureRecognizeProcessArray;
 
+- (NSString *)description;
+
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer;
 - (BOOL)hasChoosedAnySimultaneouslyGroup;
 - (BOOL)canRecongizerBeHandledSimultaneously:(UIGestureRecognizer *)recongizer;
@@ -33,6 +35,7 @@
 - (void)eachGestureRecognizerFrom:(TNGestureRecognizeProcess *)process
                              loop:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
 - (void)eachGestureRecognizerThatNotChoosedFrom:(TNGestureRecognizeProcess *)process loop:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *))blockMethod;
 - (UIGestureRecognizer *)findGestureRecognizer:(BOOL (^)(UIGestureRecognizer *recognizer))finderMethod;
 
 @end

@@ -30,8 +30,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     NSMutableSet *_neverRecivedAnyTouchRecognizers;
     
     NSMutableSet *_centralizedChangedStateRecognizersBuffer;
-    NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
-    BOOL _callingGestureRecognizerChangedStateMethod;
     
     NSArray *_trackingTouchesArrayCache;
     
@@ -45,6 +43,14 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     
     BOOL _cancelsTouchesInView;
 }
+static BOOL _callingGestureRecognizerChangedStateMethod;
+static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
+
++ (void)initialize
+{
+    _callingGestureRecognizerChangedStateMethod = NO;
+    _preventRecursionChangedStateRecognizersBuffer = [NSMutableArray array];
+}
 
 - (instancetype)initWithView:(UIView *)view multiTouchProcess:(TNMultiTouchProcess *)multiTouchProcess
 {
@@ -57,15 +63,12 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         _ignoredTouches = [[NSMutableSet alloc] init];
         _failureRequirementNode = [[TNGestureFailureRequirementRelationship alloc] initWithView:view];
         _centralizedChangedStateRecognizersBuffer = [[NSMutableSet alloc] init];
-        _preventRecursionChangedStateRecognizersBuffer = [[NSMutableArray alloc] init];
         _delaysBufferedBlocks = [[NSMutableArray alloc] init];
         _neverRecivedAnyTouchRecognizers = [[NSMutableSet alloc] init];
         
         //UIGestureRecognizer's delaysTouchesXXX may be changed, so I cached them when called init method.
         _delaysTouchesBegan = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesBegan"];
         _delaysTouchesEnded = [self _anyGestureRecognizerWillDelaysProperty:@"delaysTouchesEnded"];
-        
-        NSLog(@"generate UIGestureRecognizeProcess %@", self.description);
     }
     return self;
 }
@@ -403,8 +406,7 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
 {
     if (![_effectRecognizersNode hasChoosedAnySimultaneouslyGroup]) {
         [_effectRecognizersNode chooseSimultaneouslyGroupWhoIncludes:recognizer];
-        [_effectRecognizersNode eachGestureRecognizerThatNotChoosedFrom:self
-                                                                   loop:^(UIGestureRecognizer *recognizer) {
+        [_effectRecognizersNode eachGestureRecognizerThatNotChoosed:^(UIGestureRecognizer *recognizer) {
             [recognizer _forceFail];
         }];
     }
@@ -599,13 +601,17 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
         
     } else {
         _callingGestureRecognizerChangedStateMethod = YES;
-        [self _handleGestureRecognizerChangedState:getureRecognizer];
-        
-        for (UIGestureRecognizer *eachRecognizer in _preventRecursionChangedStateRecognizersBuffer) {
-            [self _handleGestureRecognizerChangedState:eachRecognizer];
+        @try {
+            [self _handleGestureRecognizerChangedState:getureRecognizer];
+            
+            for (UIGestureRecognizer *eachRecognizer in _preventRecursionChangedStateRecognizersBuffer) {
+                [self _handleGestureRecognizerChangedState:eachRecognizer];
+            }
+            [_preventRecursionChangedStateRecognizersBuffer removeAllObjects];
         }
-        [_preventRecursionChangedStateRecognizersBuffer removeAllObjects];
-        _callingGestureRecognizerChangedStateMethod = NO;
+        @finally {
+            _callingGestureRecognizerChangedStateMethod = NO;
+        }
     }
 }
 
