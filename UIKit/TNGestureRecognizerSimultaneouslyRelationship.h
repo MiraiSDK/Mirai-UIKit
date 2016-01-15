@@ -19,6 +19,7 @@
 - (instancetype)initWithGestureRecognizeProcessArray:(NSArray *)gestureRecognizeProcessArray;
 
 - (NSString *)description;
+- (NSUInteger)countOfGestureRecongizeProcess:(TNGestureRecognizeProcess *)process;
 
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer;
 - (BOOL)hasChoosedAnySimultaneouslyGroup;

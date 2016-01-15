@@ -35,6 +35,8 @@
 #import "TNMultiTapHelper.h"
 #import "TNScreenHelper.h"
 
+#import "UILongPressGestureRecognizer.h"
+
 static const NSTimeInterval BeInvalidTime = 0.8;
 static const float TapLimitAreaSize = 2.38;
 
@@ -66,16 +68,30 @@ static const float TapLimitAreaSize = 2.38;
     return self;
 }
 
+//- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
+//{
+//    // this logic is here based on a note in the docs for -canPreventGestureRecognizer:
+//    // it may not be correct :)
+//    if ([preventedGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+//        return (((UITapGestureRecognizer *)preventedGestureRecognizer).numberOfTapsRequired <= self.numberOfTapsRequired);
+//    } else {
+//        return [super canPreventGestureRecognizer:preventedGestureRecognizer];
+//    }
+//}
+
 - (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
 {
-    // this logic is here based on a note in the docs for -canPreventGestureRecognizer:
-    // it may not be correct :)
-    if ([preventedGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
-        return (((UITapGestureRecognizer *)preventedGestureRecognizer).numberOfTapsRequired <= self.numberOfTapsRequired);
-    } else {
-        return [super canPreventGestureRecognizer:preventedGestureRecognizer];
-    }
+    return [preventedGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] ||
+    [preventedGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]];
 }
+
+- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
+{
+    return [preventingGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] ||
+    [preventingGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]];
+}
+
+
 
 - (void)reset
 {
@@ -219,7 +235,8 @@ static const float TapLimitAreaSize = 2.38;
 - (void)_restartInvalidTimer
 {
     [self _stopInvalidTimer];
-    _invalidTimer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(_onIntervalTimeOut:)
+    _invalidTimer = [NSTimer timerWithTimeInterval:_timeInterval
+                                            target:self selector:@selector(_onIntervalTimeOut:)
                                           userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:_invalidTimer forMode:NSDefaultRunLoopMode];
 }

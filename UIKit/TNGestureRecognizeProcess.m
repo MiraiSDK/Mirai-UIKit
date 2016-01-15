@@ -121,7 +121,8 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (BOOL)hasMakeConclusion
 {
-    return _anyRecognizersMakeConclusion || _effectRecognizersNode.count == 0;
+    return _anyRecognizersMakeConclusion ||
+          [_effectRecognizersNode countOfGestureRecongizeProcess:self] == 0;
 }
 
 - (NSSet *)trackingTouches
@@ -187,7 +188,7 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (BOOL)_willIgnoreTouch:(UITouch *)touch
 {
-    if (_effectRecognizersNode.count > 0) {
+    if ([_effectRecognizersNode countOfGestureRecongizeProcess:self] > 0) {
         
         UIGestureRecognizer *notIngoreRecognizer = [_effectRecognizersNode findGestureRecognizer:
         ^BOOL(UIGestureRecognizer *recognizer)
@@ -387,7 +388,9 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
     
     void (^handler)(UIGestureRecognizer *) = ^(UIGestureRecognizer *recognizer) {
         if ([self _willSendActionsForRecognizer:recognizer]) {
-            [self _chooseSimultaneouslyGroupAndForceFailOthersIfNeedWithRecognizer:recognizer];
+            if ([recognizer _hasRecognizedGesture]) {
+                [self _chooseSimultaneouslyGroupAndForceFailOthersIfNeedWithRecognizer:recognizer];
+            }
             [recognizer _sendActions];
         }
     };

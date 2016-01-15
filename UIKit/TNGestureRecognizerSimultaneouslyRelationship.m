@@ -64,6 +64,15 @@
     return _recognizerToGroupDictionary.count;
 }
 
+- (NSUInteger)countOfGestureRecongizeProcess:(TNGestureRecognizeProcess *)process
+{
+    __block NSUInteger count = 0;
+    [self eachGestureRecognizerFrom:process loop:^(UIGestureRecognizer *recognizer) {
+        count++;
+    }];
+    return count;
+}
+
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer
 {
     _currentChoosedGroup = [self simultaneouslyGroupIncludes:recongizer];
