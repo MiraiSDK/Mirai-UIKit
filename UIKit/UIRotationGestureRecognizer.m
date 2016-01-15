@@ -123,9 +123,12 @@ double CGPointAngle(CGPoint p1,CGPoint p2)
         [_touches removeObject:t];
     }
     
-    if (_touches.count != 2 &&
-        (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged)) {
-        self.state = UIGestureRecognizerStateEnded;
+    if (_touches.count != 2) {
+        if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+            self.state = UIGestureRecognizerStateEnded;
+        } else if (self.state == UIGestureRecognizerStatePossible) {
+            self.state = UIGestureRecognizerStateFailed;
+        }
     }
 }
 
