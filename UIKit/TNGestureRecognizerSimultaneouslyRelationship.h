@@ -16,8 +16,10 @@
 
 @property (nonatomic, readonly) NSUInteger count;
 
-- (instancetype)initWithView:(UIView *)view
-     gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess;
+- (instancetype)initWithGestureRecognizeProcessArray:(NSArray *)gestureRecognizeProcessArray;
+
+- (NSString *)description;
+- (NSUInteger)countOfGestureRecongizeProcess:(TNGestureRecognizeProcess *)process;
 
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer;
 - (BOOL)hasChoosedAnySimultaneouslyGroup;
@@ -31,8 +33,10 @@
 - (NSArray *)allGestureRecognizers;
 - (NSSet *)simultaneouslyGroupIncludes:(UIGestureRecognizer *)recognizer;
 
-- (void)eachGestureRecognizer:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
-- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (void)eachGestureRecognizerFrom:(TNGestureRecognizeProcess *)process
+                             loop:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (void)eachGestureRecognizerThatNotChoosedFrom:(TNGestureRecognizeProcess *)process loop:(void (^)(UIGestureRecognizer *recognizer))blockMethod;
+- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *))blockMethod;
 - (UIGestureRecognizer *)findGestureRecognizer:(BOOL (^)(UIGestureRecognizer *recognizer))finderMethod;
 
 @end

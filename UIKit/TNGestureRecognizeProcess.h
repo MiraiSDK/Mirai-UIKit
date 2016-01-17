@@ -11,6 +11,7 @@
 #import "TNMultiTouchProcess.h"
 
 @class TNMultiTouchProcess;
+@class TNGestureRecognizerSimultaneouslyRelationship;
 
 @interface TNGestureRecognizeProcess : NSObject
 
@@ -21,6 +22,8 @@
 @property (nonatomic, readonly) NSArray *trackingTouchesArray;
 
 - (instancetype)initWithView:(UIView *)view multiTouchProcess:(TNMultiTouchProcess *)multiTouchProcess;
+
+- (void)bindGestureRecognizerSimultaneouslyRelationship:(TNGestureRecognizerSimultaneouslyRelationship *)gestureRecognizerSimultaneouslyRelationship;
 
 - (BOOL)trackTouch:(UITouch *)touch;
 - (void)recognizeEvent:(UIEvent *)event touches:(NSSet *)touches;

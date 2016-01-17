@@ -232,6 +232,18 @@ BOOL isGestureRecognizerFailedOrCancelled(UIGestureRecognizer *recognizer) {
     }
 }
 
+- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
+{
+    return [preventedGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] ||
+           [preventedGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]];
+}
+
+- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
+{
+    return [preventingGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] ||
+           [preventingGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]];
+}
+
 - (void)clear
 {
     _longPressGestureRecognizer = nil;

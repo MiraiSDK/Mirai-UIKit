@@ -11,6 +11,7 @@
 #import "TNGestureRecognizeProcess.h"
 #import "UIGestureRecognizerSubclass.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "TNGestureRecognizerSimultaneouslyRelationship.h"
 #import "UIApplication.h"
 
 @implementation TNMultiTouchProcess
@@ -21,8 +22,11 @@
     BOOL _legacyAnyRecognizeProcesses;
     BOOL _isIgnoringInteractionEvents;
     
+    TNGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
+    
     NSMutableDictionary *_effectRecognizeProcesses;
     NSMutableArray *_effectRecognizeProcessesList; // To keep sequence, It's IMPORTANCE!.
+    NSMutableSet *_effectViews;
     NSMutableSet *_trackedTouches;
 }
 @synthesize handingTouchEvent=_handingTouchEvent;
@@ -34,6 +38,7 @@
         _effectRecognizeProcesses = [NSMutableDictionary dictionary];
         _effectRecognizeProcessesList = [NSMutableArray array];
         _trackedTouches = [NSMutableSet set];
+        _effectViews = [NSMutableSet set];
     }
     return self;
 }
@@ -66,14 +71,18 @@
         _handingMultiTouchEvent = YES;
         _isIgnoringInteractionEvents = [[UIApplication sharedApplication] isIgnoringInteractionEvents];
         [self _initializeMultiTouchContextWhenBegin];
+        
+        BOOL generateNewRecognizeProcess = !(_legacyAnyRecognizeProcesses || _isIgnoringInteractionEvents);
+        if (generateNewRecognizeProcess) {
+            [self _generateRecognizeProcessesWithTouches:touches];
+        }
     }
     _handingTouchEvent = YES;
     
-    BOOL generateNewRecognizeProcess = !(_legacyAnyRecognizeProcesses || _isIgnoringInteractionEvents);
     if (_isIgnoringInteractionEvents) {
         NSLog(@"ignoring interaction events.");
     }
-    [self _trackTouches:touches generateRecognizeProcessIfNotExist:generateNewRecognizeProcess];
+    [self _trackTouches:touches];
     
     if (touchBegin) {
         [self _beginWithEvent:event touches:touches];
@@ -169,34 +178,106 @@
     }
 }
 
-- (void)_trackTouches:(NSSet *)touches generateRecognizeProcessIfNotExist:(BOOL)generate
+- (void)_generateRecognizeProcessesWithTouches:(NSSet *)touches
 {
+    NSMutableArray *views = [self _viewsFromTouches:touches];
+    UIView *view = [self _firstSpecialViewInArray:views];
+    
+    view = [self _findViewCanCatch:view];
+    
+    while (view) {
+        NSValue *keyView = [NSValue valueWithNonretainedObject:view];
+        TNGestureRecognizeProcess * recognizeProcess = [[TNGestureRecognizeProcess alloc] initWithView:view
+                                                         multiTouchProcess:self];
+        [_effectViews addObject:view];
+        [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
+        [_effectRecognizeProcessesList addObject:recognizeProcess];
+        
+        view = [self _findSuperviewCanCatch:view];
+    }
+    _effectRecognizersNode = [[TNGestureRecognizerSimultaneouslyRelationship alloc] initWithGestureRecognizeProcessArray:_effectRecognizeProcessesList];
+    
+    for (TNGestureRecognizeProcess * recognizeProcess in _effectRecognizeProcessesList) {
+        [recognizeProcess bindGestureRecognizerSimultaneouslyRelationship:_effectRecognizersNode];
+    }
+}
+
+- (NSMutableArray *)_viewsFromTouches:(NSSet *)touches
+{
+    NSMutableArray *views = [NSMutableArray array];
     for (UITouch *touch in touches) {
-        
-        if (touch.phase != UITouchPhaseBegan) {
-            continue;
-        }
-        UIView *view = [self _findViewCanCatch:touch.view];
-        
-        while (view) {
-            
-            NSValue *keyView = [NSValue valueWithNonretainedObject:view];
-            TNGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
-            
-            if (!recognizeProcess && generate) {
-                recognizeProcess = [[TNGestureRecognizeProcess alloc] initWithView:view
-                                                                 multiTouchProcess:self];
-                [_effectRecognizeProcesses setObject:recognizeProcess forKey:keyView];
-                [_effectRecognizeProcessesList addObject:recognizeProcess];
-            }
-            
-            if (recognizeProcess) {
-                [recognizeProcess trackTouch:touch];
-                [_trackedTouches addObject:touch];
-            }
-            view = [self _findSuperviewCanCatch:view];
+        if (touch.phase == UITouchPhaseBegan) {
+            [views addObject:touch.view];
         }
     }
+    return views;
+}
+
+- (UIView *)_firstSpecialViewInArray:(NSMutableArray *)views
+{
+    NSMutableArray *toRemoveViews = [NSMutableArray array];
+    for (UIView *view in views) {
+        if ([self _isView:view superViewFrom:views]) {
+            [toRemoveViews addObject:view];
+        }
+    }
+    [views removeObjectsInArray:toRemoveViews];
+    if (views.count == 0) {
+        return nil;
+    }
+    return [views objectAtIndex:0];
+}
+
+- (BOOL)_isView:(UIView *)checkedView superViewFrom:(NSArray *)views
+{
+    for (UIView *view in views) {
+        if ([self _isView:checkedView superViewOf:view]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)_isView:(UIView *)checkedView superViewOf:(UIView *)view
+{
+    if (checkedView == view) {
+        return NO;
+    }
+    while (view) {
+        if (checkedView == view) {
+            return YES;
+        }
+        view = view.superview;
+    }
+    return NO;
+}
+
+- (void)_trackTouches:(NSSet *)touches
+{
+    for (UITouch *touch in touches) {
+        if (touch.phase == UITouchPhaseBegan) {
+            UIView *view = [self _findSuperViewInEffectViewsOf:touch.view];
+            
+            if (view) {
+                [_trackedTouches addObject:touch];
+            }
+            while (view) {
+                NSValue *keyView = [NSValue valueWithNonretainedObject:view];
+                TNGestureRecognizeProcess *recognizeProcess = [_effectRecognizeProcesses objectForKey:keyView];
+                [recognizeProcess trackTouch:touch];
+                
+                view = [self _findSuperViewInEffectViewsOf:view.superview];
+            }
+        }
+    }
+}
+
+- (UIView *)_findSuperViewInEffectViewsOf:(UIView *)view
+{
+    while (view && ![_effectViews containsObject:view]) {
+        view = view.superview;
+    }
+    return view;
 }
 
 - (UIView *)_findSuperviewCanCatch:(UIView *)view
@@ -265,7 +346,9 @@
     for (TNGestureRecognizeProcess *recognizeProcess in [_effectRecognizeProcessesList copy]) {
         [recognizeProcess multiTouchEnd];
     }
+    [_effectViews removeAllObjects];
     [_trackedTouches removeAllObjects];
+    _effectRecognizersNode = nil;
     [self _clearHasMakeConclusionReconizeProcesses];
 }
 

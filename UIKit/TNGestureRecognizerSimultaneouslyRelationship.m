@@ -11,34 +11,50 @@
 #import "UIView.h"
 #import "UIGestureRecognizer+UIPrivate.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "TNGestureRecognizeProcess.h"
 
 @implementation TNGestureRecognizerSimultaneouslyRelationship
 {
-    __unsafe_unretained TNGestureRecognizeProcess *_gestureReconizeProcess;
-    
     NSSet *_currentChoosedGroup;
     NSMutableSet *_allSimulataneouslyGroups;
     NSMutableDictionary *_recognizerToGroupDictionary;
     NSArray *_allGestureRecognizersCache;
 }
 
-- (instancetype)initWithView:(UIView *)view
-     gestureRecongizeProcess:(TNGestureRecognizeProcess *)gestureReconizeProcess
+- (instancetype)initWithGestureRecognizeProcessArray:(NSArray *)gestureRecognizeProcessArray
 {
     if (self = [self init]) {
-        _gestureReconizeProcess = gestureReconizeProcess;
         _allSimulataneouslyGroups = [NSMutableSet set];
         _recognizerToGroupDictionary = [NSMutableDictionary dictionary];
-        [self _collectGestureRecognizersWithView:view];
+        [self _collectGestureRecognizeProcesses:gestureRecognizeProcessArray];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self eachGestureRecognizer:^(UIGestureRecognizer *recognizer) {
-        [recognizer _unbindRecognizeProcess];
-    }];
+    for (NSMutableSet *group in _allSimulataneouslyGroups) {
+        for (UIGestureRecognizer *recognizer in group) {
+            [recognizer _unbindRecognizeProcess];
+        }
+    }
+}
+
+- (NSString *)description
+{
+    NSMutableArray *groupsInfo = [NSMutableArray array];
+    for (NSSet *group in _allSimulataneouslyGroups) {
+        NSMutableArray *groupInfo = [NSMutableArray array];
+        for (UIGestureRecognizer *recognizer in group) {
+            [groupInfo addObject:[recognizer _description]];
+        }
+        NSString *strGroup = [groupInfo componentsJoinedByString:@", "];
+        if (_currentChoosedGroup == group) {
+            strGroup = [NSString stringWithFormat:@"[*]%@", strGroup];
+        }
+        [groupsInfo addObject:[NSString stringWithFormat:@"{ %@ }", strGroup]];
+    }
+    return [groupsInfo componentsJoinedByString:@", "];
 }
 
 #pragma mark - read properties.
@@ -46,6 +62,15 @@
 - (NSUInteger)count
 {
     return _recognizerToGroupDictionary.count;
+}
+
+- (NSUInteger)countOfGestureRecongizeProcess:(TNGestureRecognizeProcess *)process
+{
+    __block NSUInteger count = 0;
+    [self eachGestureRecognizerFrom:process loop:^(UIGestureRecognizer *recognizer) {
+        count++;
+    }];
+    return count;
 }
 
 - (void)chooseSimultaneouslyGroupWhoIncludes:(UIGestureRecognizer *)recongizer
@@ -157,16 +182,34 @@
     return [_recognizerToGroupDictionary objectForKey:[NSValue valueWithNonretainedObject:recognizer]];
 }
 
-- (void)eachGestureRecognizer:(void (^)(UIGestureRecognizer *recognizer))blockMethod
+
+- (void)eachGestureRecognizerFrom:(TNGestureRecognizeProcess *)process
+                             loop:(void (^)(UIGestureRecognizer *))blockMethod
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
         for (UIGestureRecognizer *recognizer in group) {
-            blockMethod(recognizer);
+            if ([recognizer _bindedRecognizeProcess] == process) {
+                blockMethod(recognizer);
+            }
         }
     }
 }
 
-- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *recognizer))blockMethod
+- (void)eachGestureRecognizerThatNotChoosedFrom:(TNGestureRecognizeProcess *)process
+                                           loop:(void (^)(UIGestureRecognizer *))blockMethod
+{
+    for (NSMutableSet *group in _allSimulataneouslyGroups) {
+        if (group != _currentChoosedGroup) {
+            for (UIGestureRecognizer *recognizer in group) {
+                if ([recognizer _bindedRecognizeProcess] == process) {
+                    blockMethod(recognizer);
+                }
+            }
+        }
+    }
+}
+
+- (void)eachGestureRecognizerThatNotChoosed:(void (^)(UIGestureRecognizer *))blockMethod
 {
     for (NSMutableSet *group in _allSimulataneouslyGroups) {
         if (group != _currentChoosedGroup) {
@@ -196,21 +239,17 @@
 
 #pragma mark collect gesture recognizers
 
-- (void)_collectGestureRecognizersWithView:(UIView *)view
+- (void)_collectGestureRecognizeProcesses:(NSArray *)gestureRecognizeProcessArray
 {
-    NSArray *recongizers = view.gestureRecognizers;
-    
-    for (UIGestureRecognizer *recongizer in recongizers) {
-        [recongizer _bindRecognizeProcess:_gestureReconizeProcess];
-    }
-    
-    for (UIGestureRecognizer *r0 in recongizers) {
-        for (UIGestureRecognizer *r1 in recongizers) {
-            if (r0 != r1) {
-                [self _findRecongizer0:r0 recongizer1:r1];
-            }
+    NSMutableArray *recongizers = [NSMutableArray array];
+    for (TNGestureRecognizeProcess *gestureRecognizeProcess in gestureRecognizeProcessArray) {
+        for (UIGestureRecognizer *recongizer in gestureRecognizeProcess.view.gestureRecognizers) {
+            [recongizer _bindRecognizeProcess:gestureRecognizeProcess];
+            [recongizers addObject:recongizer];
         }
     }
+    
+    [self _searchAndGenerateGroupsFrom: recongizers];
     
     for (UIGestureRecognizer *recongizer in recongizers) {
         if (![self simultaneouslyGroupIncludes:recongizer]) {
@@ -221,6 +260,43 @@
     }
 }
 
+- (void)_searchAndGenerateGroupsFrom:(NSArray *)recognizers
+{
+    NSMutableArray *recognizersPool = [[NSMutableArray alloc] initWithArray:recognizers];
+    while (recognizersPool.count > 0) {
+        NSSet *group = [self _splitGroupFromPool:recognizersPool];
+        [_allSimulataneouslyGroups addObject:group];
+    }
+}
+
+- (NSSet *)_splitGroupFromPool:(NSMutableArray *)recognizersPool
+{
+    NSMutableSet *group = [[NSMutableSet alloc] init];
+    [group addObject:[recognizersPool objectAtIndex:0]];
+    
+    for (UIGestureRecognizer *checkedRecognizer in recognizersPool) {
+        if (![self _anyCanNotSimultaneouslyWith:checkedRecognizer inGroup:group]) {
+            [group addObject:checkedRecognizer];
+        }
+    }
+    for (UIGestureRecognizer *recognizer in group) {
+        [recognizersPool removeObject:recognizer];
+        [self _saveGroup:group forRecognizer:recognizer];
+    }
+    return group;
+}
+
+- (BOOL)_anyCanNotSimultaneouslyWith:(UIGestureRecognizer *)recognizer inGroup:(NSSet *)group
+{
+    for (UIGestureRecognizer *recognizerInGroup in group) {
+        if (![self _isRecongizer:recognizer shouldRecongizeSimultaneouslyWithRecongizer:recognizerInGroup]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+// I can't make sure this method is right, so I replace it with _searchAndGenerateGroupsFrom:
 - (void)_findRecongizer0:(UIGestureRecognizer *)r0 recongizer1:(UIGestureRecognizer *)r1
 {
     if ([self _isRecongizer:r0 shouldRecongizeSimultaneouslyWithRecongizer:r1]) {
@@ -285,7 +361,7 @@
     }
     
     if (!shouldSimultaneously && [r1 _hasBeenPreventedByOtherGestureRecognizer]) {
-        shouldSimultaneously = ![r0 canBePreventedByGestureRecognizer:r0] ||
+        shouldSimultaneously = ![r0 canBePreventedByGestureRecognizer:r0] &&
                                ![r1 canPreventGestureRecognizer:r0];
     }
     return shouldSimultaneously;
