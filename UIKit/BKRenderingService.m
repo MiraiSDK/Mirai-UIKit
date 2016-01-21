@@ -230,9 +230,14 @@ static BOOL hasInvalidateTextures = NO;
         }
         hasInvalidateTextures = NO;
         
-        [self.frameLock lock];
-        self.layer = self.nextLayer;
-        [self.frameLock unlock];
+        @try {
+            [self.frameLock lock];
+            self.layer = self.nextLayer;
+            self.nextLayer = nil;
+        }
+        @finally {
+            [self.frameLock unlock];
+        }
         
         if (!self.layer) {continue;}
         EGLint pixelWidth, pixelHeight;
@@ -242,6 +247,7 @@ static BOOL hasInvalidateTextures = NO;
         @autoreleasepool {
 //            NSDate * begin = [NSDate date];
             _renderer.layer = self.layer;
+            self.layer = nil;
             _renderer.bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
             [_renderer addUpdateRect:_renderer.layer.bounds];
             [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];

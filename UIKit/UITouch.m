@@ -31,6 +31,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
 @end
 
 @implementation UITouch {
+    __weak UIWindow *_window;
     UITouchPhase _phase;
     _UITouchGesture _gesture;
     CFAbsoluteTime _receivedTime;

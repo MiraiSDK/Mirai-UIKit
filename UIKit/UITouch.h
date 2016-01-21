@@ -29,7 +29,7 @@ typedef NS_ENUM(NSInteger, UITouchPhase) {
 @property(nonatomic,readonly) UITouchPhase        phase;
 @property(nonatomic,readonly) NSUInteger          tapCount;   // touch down within a certain point within a certain amount of time
 
-@property(nonatomic,readonly,retain) UIWindow    *window;
+@property(nonatomic,readonly) UIWindow    *window;
 @property(nonatomic,readonly,retain) UIView      *view;
 @property(nonatomic,readonly,copy)   NSArray     *gestureRecognizers;// NS_AVAILABLE_IOS(3_2);
 
