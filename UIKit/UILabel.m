@@ -17,6 +17,9 @@
 #import "UIInterface.h"
 
 @implementation UILabel
+{
+    NSString *_drawText;
+}
 @synthesize font = _font;
 @synthesize textColor = _textColor;
 
@@ -176,7 +179,7 @@
 
 - (void)drawTextInRect:(CGRect)rect
 {
-    [_text drawInRect:rect withAttributes:[self _attributes]];
+    [_drawText drawInRect:rect withAttributes:[self _attributes]];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -208,8 +211,32 @@
             maxSize.height = bounds.size.height;
         }
         
-        NSAttributedString *as = [[NSAttributedString alloc] initWithString:_text attributes:[self _attributes]];
+        _drawText = _text;
+        NSDictionary *attributes = [self _attributes];
+        NSAttributedString *as = [[NSAttributedString alloc] initWithString:_drawText
+                                                                 attributes:attributes];
         CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
+        
+        if (![self isSize:maxSize containSize:boundingRect.size]) {
+            
+            maxSize.height = MAX(maxSize.height, boundingRect.size.height);
+            
+            NSUInteger subTextToIndex = 0;
+            NSString *testDrawText = _drawText;
+            NSAttributedString *testAs = as;
+            CGRect testBoundingRect = boundingRect;
+            do {
+                _drawText = testDrawText;
+                as = testAs;
+                boundingRect = testBoundingRect;
+                testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
+                testAs = [[NSAttributedString alloc] initWithString:testDrawText attributes:attributes];
+                testBoundingRect = [testAs boundingRectWithSize:maxSize options:0 context:nil];
+                subTextToIndex++;
+                
+            } while ([self isSize:maxSize containSize:testBoundingRect.size] &&
+                     subTextToIndex <= _text.length - 1);
+        }
         
         drawRect.size = boundingRect.size;
         
@@ -247,6 +274,11 @@
         
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
     }
+}
+
+- (BOOL)isSize:(CGSize)containerSize containSize:(CGSize)size
+{
+    return containerSize.width >= size.width && containerSize.height >= size.height;
 }
 
 - (void)setFrame:(CGRect)newFrame
