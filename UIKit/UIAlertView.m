@@ -11,7 +11,6 @@
 #import "UIScreen.h"
 #import "UIButton.h"
 #import "UILabel.h"
-#import <QuartzCore/QuartzCore.h>
 
 @interface UIAlertView ()
 @property (nonatomic, strong) UIWindow *alertWindow;
@@ -170,9 +169,6 @@ static NSMutableArray *_store = nil;
             [self.delegate alertView:self willDismissWithButtonIndex:buttonIndex];
         }
         [UIView animateWithDuration:0.3 animations:^{
-            // workaround: it seems window layer retained by render layer, without this
-            // window cannot dealloc
-            [self.alertWindow.layer removeFromSuperlayer];
             self.alertWindow = nil;
             [[self class] removeAlertView:self];
         } completion:^(BOOL finished) {
@@ -185,7 +181,6 @@ static NSMutableArray *_store = nil;
         if (self.delegate && [self.delegate respondsToSelector:@selector(alertView:willDismissWithButtonIndex:)]) {
             [self.delegate alertView:self willDismissWithButtonIndex:buttonIndex];
         }
-        [self.alertWindow.layer removeFromSuperlayer];
         self.alertWindow = nil;
         [[self class] removeAlertView:self];
         if (self.delegate && [self.delegate respondsToSelector:@selector(alertView:didDismissWithButtonIndex:)]) {
