@@ -253,6 +253,7 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
             [[UIApplication sharedApplication] _windowDidBecomeVisible:self];
             [[NSNotificationCenter defaultCenter] postNotificationName:UIWindowDidBecomeVisibleNotification object:self];
         }
+        [self _setLandscaped:[[UIScreen mainScreen] _isLandscaped]];
     }
 }
 
