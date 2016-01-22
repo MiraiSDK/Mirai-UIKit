@@ -9,6 +9,7 @@
 #import <UIKit/UIScreen.h>
 #include <android/native_window.h>
 #import "android_native_app_glue.h"
+#import "UIApplication.h"
 
 @class CALayer;
 @class UIEvent;
@@ -25,7 +26,7 @@
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent;
 - (CALayer *)_pixelLayer;
 - (CALayer *)_windowLayer;
-- (void)_setLandscaped:(BOOL)landscaped;
+- (void)_setOrientation:(UIInterfaceOrientationMask)orientation;
 - (BOOL)_isLandscaped;
 
 typedef NS_ENUM(NSInteger, UIScreenFitMode) {

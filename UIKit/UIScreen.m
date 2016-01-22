@@ -100,7 +100,7 @@ static UIScreen *_mainScreen = nil;
 
 - (CGRect)bounds
 {
-    return _bounds;
+    return [self _toOrientedRect:_bounds];
 }
 
 - (CGRect)applicationFrame
@@ -165,18 +165,50 @@ static UIScreen *_mainScreen = nil;
     return _landscaped;
 }
 
-- (void)_setLandscaped:(BOOL)landscaped
+- (void)_setOrientation:(UIInterfaceOrientationMask)orientation
 {
-    if (_landscaped != landscaped) {
-        _landscaped = landscaped;
-        
-        [self _setScreenBounds:_bounds scale:0.0 fitMode:UIScreenFitModeScaleAspectFit];
-        
+    CGFloat radians;
+    BOOL isLandscape;
+    
+    switch (orientation) {
+        case UIInterfaceOrientationMaskPortrait:
+            radians = 0;
+            isLandscape = NO;
+            break;
+            
+        case UIInterfaceOrientationMaskLandscapeRight:
+            radians = 0.5*M_PI;
+            isLandscape = YES;
+            break;
+            
+        case UIInterfaceOrientationMaskPortraitUpsideDown:
+            radians = M_PI;
+            isLandscape = NO;
+            break;
+            
+        case UIInterfaceOrientationMaskLandscapeLeft:
+            radians = 1.5*M_PI;
+            isLandscape = YES;
+            break;
+            
+        default:
+            return;
+    }
+    if (_landscaped != isLandscape) {
+        _landscaped = isLandscape;
         NSArray *windows =  [UIApplication sharedApplication].windows;
         for (UIWindow *window in windows) {
-            [window _setLandscaped:landscaped];
+            [window _setLandscaped:isLandscape];
         }
     }
+    
+    CGPoint rotationCenter = CGPointMake(__windowLayer.position.x + __windowLayer.bounds.size.width/2,
+                                         __windowLayer.position.y + __windowLayer.bounds.size.height/2);
+    CATransform3D transform = CATransform3DMakeScale(_scale, _scale, 1);
+    
+    transform = CATransform3DRotate(transform, radians, 0, 0, 1);
+    __windowLayer.transform = transform;
+    __windowLayer.bounds = [self _toOrientedRect:__windowLayer.bounds];
 }
 
 #pragma mark - scale support
@@ -196,12 +228,11 @@ static UIScreen *_mainScreen = nil;
     NSLog(@"set screen bounds:%@ scale:%.2f",NSStringFromCGRect(bounds),scale);
     
     _scale = scale;
-    [self _setPixelBounds:[self _toOrientedRect:_pixelBounds]];
-    CGRect orientedBounds = [self _toOrientedRect:bounds];
+    [self _setPixelBounds:_pixelBounds];
     
-    _bounds = orientedBounds;
-    _applicationFrame = orientedBounds;
-    __windowLayer.bounds = orientedBounds;
+    _bounds = bounds;
+    _applicationFrame = bounds;
+    __windowLayer.bounds = bounds;
     __windowLayer.position = CGPointMake(_pixelBounds.size.width/2, _pixelBounds.size.height/2);
     __windowLayer.transform = CATransform3DMakeScale(scale, scale, 1);
 }

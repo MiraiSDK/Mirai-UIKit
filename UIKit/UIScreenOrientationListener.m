@@ -62,8 +62,8 @@ static UIInterfaceOrientationMask _supportedInterfaceOrientations = UIInterfaceO
 + (void)_changeOrientationTo:(UIInterfaceOrientationMask)orientation
 {
     if (_currentOrientationMask != orientation) {
-        NSLog(@"change to %zi", orientation);
         _currentOrientationMask = orientation;
+        [[UIScreen mainScreen] _setOrientation:orientation];
     }
 }
 
