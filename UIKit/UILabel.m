@@ -46,6 +46,7 @@
 {
     if (_text != newText) {
         _text = [newText copy];
+        _drawText = _text;
         [self setNeedsDisplay];
     }
 }
@@ -216,10 +217,9 @@
         NSAttributedString *as = [[NSAttributedString alloc] initWithString:_drawText
                                                                  attributes:attributes];
         CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
+        maxSize.height = MAX(maxSize.height, boundingRect.size.height);
         
         if (![self isSize:maxSize containSize:boundingRect.size]) {
-            
-            maxSize.height = MAX(maxSize.height, boundingRect.size.height);
             
             NSUInteger subTextToIndex = 0;
             NSString *testDrawText = _drawText;
