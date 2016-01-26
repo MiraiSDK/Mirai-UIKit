@@ -23,6 +23,7 @@ static jint toOrientationInfo(UIInterfaceOrientationMask orientationMask);
 
 @implementation UIScreenOrientationListener
 
+static UIInterfaceOrientationMask _willBeOrientationMask = UIInterfaceOrientationMaskPortrait;
 static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientationMaskPortrait;
 static UIInterfaceOrientationMask _supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
 
@@ -39,11 +40,20 @@ static UIInterfaceOrientationMask _supportedInterfaceOrientations = UIInterfaceO
     [self _changeOrientationTo:orientation];
 }
 
++ (void)mainScreenHasInitMode
+{
+    [self setCurrentOrientationMask:_willBeOrientationMask];
+}
+
 + (void)setCurrentOrientationMask:(NSUInteger)wantedOrientation
 {
-    if (wantedOrientation & _supportedInterfaceOrientations) {
+    _willBeOrientationMask = wantedOrientation;
+    
+    if ([UIScreen mainScreen].hasInitMode &&
+        (wantedOrientation & _supportedInterfaceOrientations)) {
         [self _changeOrientationTo:wantedOrientation];
     }
+    
 }
 
 + (UIInterfaceOrientationMask)_orientationWithWantedOrientation:(UIInterfaceOrientationMask)wantedOrientation withSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations

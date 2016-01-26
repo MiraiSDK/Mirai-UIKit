@@ -11,6 +11,7 @@
 @interface UIScreenOrientationListener : NSObject
 
 + (BOOL)isLandscaped;
++ (void)mainScreenHasInitMode;
 + (void)updateAndroidOrientation:(NSUInteger)supportedInterfaceOrientations;
 + (void)setSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations;
 

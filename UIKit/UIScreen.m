@@ -31,6 +31,7 @@ static NSMutableArray *_allScreens;
     CALayer *__pixelLayer;
     CALayer *__windowLayer;
     BOOL _landscaped;
+    BOOL _hasInitMode;
     
     TNScreenHelper *_screenHelper;
 }
@@ -299,6 +300,16 @@ static UIScreen *_mainScreen = nil;
     }
     
     [self _setScreenBounds:rect scale:scale fitMode:fitMode];
+    
+    if (!_hasInitMode) {
+        _hasInitMode = YES;
+        [UIScreenOrientationListener mainScreenHasInitMode];
+    }
+}
+
+- (BOOL)hasInitMode
+{
+    return _hasInitMode;
 }
 
 @end

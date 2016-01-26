@@ -19,6 +19,7 @@
 @interface UIScreen ()
 
 @property (nonatomic, readonly) TNScreenHelper *screenHelper;
+@property (nonatomic, readonly) BOOL hasInitMode;
 
 - (void)_setScale:(CGFloat)scale;
 - (void)_setPixelBounds:(CGRect)bounds;

@@ -46,7 +46,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
     private ScreenOrientationHandler(Activity mainActivity, int rate) {
         super(mainActivity, rate);
         _mainActivity = mainActivity;
-        _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         determineNaturalOrientation();
 
