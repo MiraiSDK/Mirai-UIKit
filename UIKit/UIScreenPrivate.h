@@ -9,6 +9,7 @@
 #import <UIKit/UIScreen.h>
 #include <android/native_window.h>
 #import "android_native_app_glue.h"
+#import "UIApplication.h"
 
 @class CALayer;
 @class UIEvent;
@@ -18,6 +19,7 @@
 @interface UIScreen ()
 
 @property (nonatomic, readonly) TNScreenHelper *screenHelper;
+@property (nonatomic, readonly) BOOL hasInitMode;
 
 - (void)_setScale:(CGFloat)scale;
 - (void)_setPixelBounds:(CGRect)bounds;
@@ -25,7 +27,7 @@
 - (UIView *)_hitTest:(CGPoint)clickPoint event:(UIEvent *)theEvent;
 - (CALayer *)_pixelLayer;
 - (CALayer *)_windowLayer;
-- (void)_setLandscaped:(BOOL)landscaped;
+- (void)_setOrientation:(UIInterfaceOrientationMask)orientation;
 - (BOOL)_isLandscaped;
 
 typedef NS_ENUM(NSInteger, UIScreenFitMode) {
