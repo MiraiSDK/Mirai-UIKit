@@ -359,14 +359,16 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
                     //  commitIfNeeds
                     [CATransaction commit];
                     NSTimeInterval commitUsage = -[commit timeIntervalSinceNow];
-
-                    NSDate *copyRender = [NSDate date];
-                    //      copy renderTree
-                    CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
-                    NSTimeInterval copyUsage = -[copyRender timeIntervalSinceNow];
-
-                    //      send to server
-                    BKRenderingServiceUploadRenderLayer(renderTree);
+                    
+                    if (BKRenderingServiceNeedNewRenderLayer()) {
+                        NSDate *copyRender = [NSDate date];
+                        //      copy renderTree
+                        CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
+                        NSTimeInterval copyUsage = -[copyRender timeIntervalSinceNow];
+                        
+                        //      send to server
+                        BKRenderingServiceUploadRenderLayer(renderTree);
+                    }
                     
 
                     //

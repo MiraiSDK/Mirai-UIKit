@@ -346,6 +346,11 @@ CGRect BKRenderingServiceGetPixelBounds()
     return currentService.pixelBounds;
 }
 
+BOOL BKRenderingServiceNeedNewRenderLayer()
+{
+    return currentService.nextLayer == nil;
+}
+
 void BKRenderingServiceUploadRenderLayer(CALayer *layer)
 {
     [currentService uploadRenderLayer:layer];
