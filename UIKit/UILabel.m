@@ -201,12 +201,6 @@
         CGSize maxSize = bounds.size;
         if (_numberOfLines > 0) {
             maxSize.height = _font.lineHeight * _numberOfLines;
-
-            // FIXME: _font.lineHeight umplemented. maxHeight maybe 0.
-            // Remove below after it implemented.
-            if (maxSize.height == 0) {
-                maxSize.height = bounds.size.height;
-            }
         }
         if (maxSize.height > bounds.size.height) {
             maxSize.height = bounds.size.height;
