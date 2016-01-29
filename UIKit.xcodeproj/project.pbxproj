@@ -347,6 +347,9 @@
 		D2E1DDC51B988DCD0035D139 /* TNMultiTapHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */; };
 		D2E1DDC61B988DCD0035D139 /* TNMultiTapHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */; };
 		D2F655C51BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java in Sources */ = {isa = PBXBuildFile; fileRef = D2F655C41BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java */; };
+		D2F664371C59F92B00F143D1 /* FontMetricsProxy.java in Sources */ = {isa = PBXBuildFile; fileRef = D2F664361C59F92B00F143D1 /* FontMetricsProxy.java */; };
+		D2F6643A1C59FDAA00F143D1 /* TNFontMetricsGetter.h in Headers */ = {isa = PBXBuildFile; fileRef = D2F664381C59FDAA00F143D1 /* TNFontMetricsGetter.h */; };
+		D2F6643B1C59FDAA00F143D1 /* TNFontMetricsGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F664391C59FDAA00F143D1 /* TNFontMetricsGetter.m */; };
 		D2FB5CF11B2BC896001F346A /* UITopFloatViewContainerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */; };
 		D2FB5CF21B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
 		D2FB5CF31B2BC896001F346A /* UITopFloatViewContainerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */; };
@@ -712,6 +715,9 @@
 		D2E1DDC31B988DCD0035D139 /* TNMultiTapHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMultiTapHelper.h; sourceTree = "<group>"; };
 		D2E1DDC41B988DCD0035D139 /* TNMultiTapHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMultiTapHelper.m; sourceTree = "<group>"; };
 		D2F655C41BFB4D3C00BD2176 /* GLSingleLineTextViewRender.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = GLSingleLineTextViewRender.java; sourceTree = "<group>"; };
+		D2F664361C59F92B00F143D1 /* FontMetricsProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = FontMetricsProxy.java; path = CocoaActivity/src/org/tiny4/CoreTextHelper/FontMetricsProxy.java; sourceTree = SOURCE_ROOT; };
+		D2F664381C59FDAA00F143D1 /* TNFontMetricsGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNFontMetricsGetter.h; sourceTree = "<group>"; };
+		D2F664391C59FDAA00F143D1 /* TNFontMetricsGetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNFontMetricsGetter.m; sourceTree = "<group>"; };
 		D2FB5CEF1B2BC896001F346A /* UITopFloatViewContainerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITopFloatViewContainerWindow.h; sourceTree = "<group>"; };
 		D2FB5CF01B2BC896001F346A /* UITopFloatViewContainerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITopFloatViewContainerWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -885,6 +891,7 @@
 		43718E7318517B7B00850F08 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D2F664351C59F8B700F143D1 /* CoreTextHelper */,
 				D23348CA1B42515B00A687B7 /* JavaBrigeTools */,
 				433C4A251AD0FC20005D06BB /* CocoaActivity */,
 				4336782018F1476D00F1D556 /* UIKit+Android.h */,
@@ -1309,6 +1316,16 @@
 			name = UITopView;
 			sourceTree = "<group>";
 		};
+		D2F664351C59F8B700F143D1 /* CoreTextHelper */ = {
+			isa = PBXGroup;
+			children = (
+				D2F664361C59F92B00F143D1 /* FontMetricsProxy.java */,
+				D2F664381C59FDAA00F143D1 /* TNFontMetricsGetter.h */,
+				D2F664391C59FDAA00F143D1 /* TNFontMetricsGetter.m */,
+			);
+			name = CoreTextHelper;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1418,6 +1435,7 @@
 				439A73BF18E84C4E00B1BE40 /* UITableView.h in Headers */,
 				43B819E818E2AA870020624F /* UIGestureRecognizer.h in Headers */,
 				D2C2E6371ADB657300B540C9 /* UIMoreNavigationController.h in Headers */,
+				D2F6643A1C59FDAA00F143D1 /* TNFontMetricsGetter.h in Headers */,
 				434CFCEB1A0C9DA100B6AC9E /* UIScreenMode.h in Headers */,
 				D28E587D1B1851F800BAB5D1 /* UITopFloatView.h in Headers */,
 				436D4AFC19F548FA00F6F8F9 /* UIPickerView.h in Headers */,
@@ -1652,6 +1670,7 @@
 				43846345188C58F9006DA1AA /* UIFont.m in Sources */,
 				43846318188B3B74006DA1AA /* UIEvent.m in Sources */,
 				D2E1DDC61B988DCD0035D139 /* TNMultiTapHelper.m in Sources */,
+				D2F6643B1C59FDAA00F143D1 /* TNFontMetricsGetter.m in Sources */,
 				432FF08818544D3A005486C5 /* UILabel.m in Sources */,
 				43846303188B1ED9006DA1AA /* UIColor.m in Sources */,
 				43EBAA9118AB85FB005DDD8D /* UIBarButtonItem.m in Sources */,
@@ -1729,6 +1748,7 @@
 				436D4B0B19F54FCB00F6F8F9 /* UISearchController.m in Sources */,
 				43846336188B417F006DA1AA /* UIButton.m in Sources */,
 				4384630C188B2751006DA1AA /* UIGeometry.m in Sources */,
+				D2F664371C59F92B00F143D1 /* FontMetricsProxy.java in Sources */,
 				434CFD5A1A0CB8CF00B6AC9E /* UIStoryboardPopoverSegue.m in Sources */,
 				4336782318F1476D00F1D556 /* UIKit+Android.m in Sources */,
 				43C200A518EBB58300490D59 /* UIWebView.m in Sources */,
