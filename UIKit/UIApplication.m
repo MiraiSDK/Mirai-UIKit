@@ -315,7 +315,7 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
                 NSUInteger supportedInterfaceOrientations = [self supportedInterfaceOrientations];
                 if (prevSupportedInterfaceOrientation != supportedInterfaceOrientations) {
                     //supportedInterfaceOrientations changed, check if need to change screen orientation.
-                    [UIScreenOrientationListener setSupportedInterfaceOrientations:supportedInterfaceOrientations];
+                    [UIScreenOrientationListener updateAndroidOrientation:supportedInterfaceOrientations];
                     prevSupportedInterfaceOrientation = supportedInterfaceOrientations;
                 }
             

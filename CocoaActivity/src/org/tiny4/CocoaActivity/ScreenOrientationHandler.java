@@ -34,8 +34,12 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         _instance = null;
     }
 
-    private native void nativeChangeOrientationTo(int orientationInfo);
+    private native void nativeInitOrientation(int orientationInfo);
     
+    private native boolean nativeAllowOrientationChangeTo(int orientationInfo);
+
+    private native void nativeChangeOrientationTo(int orientationInfo);
+
     public static ScreenOrientationHandler instance() {
         if (_instance == null) {
             throw new RuntimeException("ScreenOrintation's instance not init.");
@@ -43,16 +47,25 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         return _instance;
     }
 
+    public static void setScreenOrientationInfo(final int orientationInfo) {
+        final ScreenOrientationHandler instance = instance();
+        instance._mainActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                instance.changeOrientationInfoTo(orientationInfo);
+            }
+        });
+    }
+    
     private ScreenOrientationHandler(Activity mainActivity, int rate) {
         super(mainActivity, rate);
         _mainActivity = mainActivity;
-        _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         determineNaturalOrientation();
 
         int rotation = _mainActivity.getWindowManager().getDefaultDisplay().getRotation();
         int orientationInfo = normalizeScreenRotation(rotation);
-        nativeChangeOrientationTo(orientationInfo);
+        nativeInitOrientation(orientationInfo);
     }
 
     private void determineNaturalOrientation() {
@@ -96,7 +109,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
             return;
         }
         int orientationInfo = normalizeOrientationInfo(orientation);
-        nativeChangeOrientationTo(orientationInfo);
+        tryToChangeOrientationTo(orientationInfo);
     }
     
     private void synchronizeToCurrentScreenRotation() {
@@ -104,7 +117,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         _lastGetOrientationInfo = -1;
         int rotation = _mainActivity.getWindowManager().getDefaultDisplay().getRotation();
         int orientationInfo = normalizeScreenRotation(rotation);
-        nativeChangeOrientationTo(orientationInfo);
+        tryToChangeOrientationTo(orientationInfo);
     }
     
     private int normalizeOrientationInfo(int orientation) {
@@ -162,5 +175,27 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         }
         Log.e(TAG,"Unknow screen rotaion:"+rotation);
         return -1;
+    }
+    
+    private void tryToChangeOrientationTo(int orientationInfo) {
+        
+        if (_lastGetOrientationInfo != orientationInfo) {
+            
+            if (nativeAllowOrientationChangeTo(orientationInfo)) {
+                changeOrientationInfoTo(orientationInfo);
+            }
+            _lastGetOrientationInfo = orientationInfo;
+        }
+    }
+    
+    private void changeOrientationInfoTo(int orientationInfo) {
+        
+        if (_currentOrientationInfo != orientationInfo) {
+            _currentOrientationInfo = orientationInfo;
+            
+            _mainActivity.setRequestedOrientation(orientationInfo);
+            _mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+            nativeChangeOrientationTo(orientationInfo);
+        }
     }
 }
