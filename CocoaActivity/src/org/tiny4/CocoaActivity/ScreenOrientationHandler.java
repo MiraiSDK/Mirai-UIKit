@@ -116,6 +116,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         _lastGetOrientationInfo = -1;
         int rotation = _mainActivity.getWindowManager().getDefaultDisplay().getRotation();
         int orientationInfo = normalizeScreenRotation(rotation);
+        _currentOrientationInfo = orientationInfo;
         nativeResumeScreenWithNewGravityOrientation(orientationInfo);
     }
     
@@ -172,7 +173,6 @@ public class ScreenOrientationHandler extends OrientationEventListener {
                     return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             }
         }
-        Log.e(TAG,"Unknow screen rotaion:"+rotation);
         return -1;
     }
     

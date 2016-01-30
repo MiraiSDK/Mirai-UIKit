@@ -52,6 +52,7 @@ static NSUInteger _supportedInterfaceOrientations = UIInterfaceOrientationMaskAl
 {
     UIInterfaceOrientationMask orientation = [orientationNumber unsignedIntegerValue];
     _currentOrientationMask = orientation;
+    _wantedCurrentOrientationMask = orientation;
     
     BOOL isLandsacpe = [UIScreenOrientationListener isLandscaped];
     
@@ -166,6 +167,7 @@ void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeInitOrientation
                                                         JNIEnv *env, jobject obj, jint orrientationInfo)
 {
     _currentOrientationMask = toOrientationMask(orrientationInfo);
+    _wantedCurrentOrientationMask = _currentOrientationMask;
 }
 
 void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeNotifyCurrentGravityOrientation(
