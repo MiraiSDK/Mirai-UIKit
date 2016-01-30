@@ -10,7 +10,7 @@
 
 @interface UIScreenOrientationListener : NSObject
 
-+ (void)updateAndroidOrientation:(NSUInteger)supportedInterfaceOrientations;
++ (void)updateSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations;
 + (BOOL)isLandscaped;
 
 @end

@@ -24,6 +24,8 @@ static jint toOrientationInfo(UIInterfaceOrientationMask orientationMask);
 @implementation UIScreenOrientationListener
 
 static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientationMaskPortrait;
+static UIInterfaceOrientationMask _wantedCurrentOrientationMask = UIInterfaceOrientationMaskPortrait;
+static NSUInteger _supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
 
 + (BOOL)isLandscaped
 {
@@ -56,19 +58,34 @@ static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientati
     [[UIScreen mainScreen] _setLandscaped:isLandsacpe];
 }
 
-+ (void)updateAndroidOrientation:(NSUInteger)supportedInterfaceOrientations
++ (void)updateSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations
 {
-    if (_currentOrientationMask & supportedInterfaceOrientations) {
-        return;
+    if (_supportedInterfaceOrientations != supportedInterfaceOrientations) {
+        _supportedInterfaceOrientations = supportedInterfaceOrientations;
+        _wantedCurrentOrientationMask = _currentOrientationMask;
+        [self _syncCurrentOrientation];
     }
-    // current orientation is not supported. we have to change screen orientation.
-    UIInterfaceOrientationMask mask = nextOrientationMaskOf(_currentOrientationMask);
-    
-    while (mask != _currentOrientationMask && (mask & supportedInterfaceOrientations)) {
-        [self _changeOrientationMaskTo:mask];
-        return;
+}
+
++ (void)updateAndroidCurrentOrientations:(UIInterfaceOrientationMask)orientation
+{
+    if (_wantedCurrentOrientationMask != orientation) {
+        _wantedCurrentOrientationMask = orientation;
+        [self _syncCurrentOrientation];
     }
-    // not supported any orientation, keep current orientation.
+}
+
++ (void)_syncCurrentOrientation
+{
+    static const NSUInteger stateCount = 4;
+    UIInterfaceOrientationMask toMask = _wantedCurrentOrientationMask;
+    for (NSUInteger i=0; i<stateCount; ++i) {
+        if (toMask & _supportedInterfaceOrientations) {
+            [self _changeOrientationMaskTo:toMask];
+            return;
+        }
+        toMask = nextOrientationMaskOf(toMask);
+    }
 }
 
 + (void)_changeOrientationMaskTo:(UIInterfaceOrientationMask)orientationMask
@@ -77,7 +94,7 @@ static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientati
     
     jclass handlerClass = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.CocoaActivity.ScreenOrientationHandler"];
     jmethodID setOrientationMethodID = (*env)->GetStaticMethodID(
-                                        env, handlerClass, "setScreenOrientationInfo", "(I)V");
+                                                                 env, handlerClass, "setScreenOrientationInfo", "(I)V");
     
     jint orientationInfo = toOrientationInfo(orientationMask);
     (*env)->CallStaticVoidMethod(env, handlerClass, setOrientationMethodID, orientationInfo);
@@ -151,16 +168,20 @@ void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeInitOrientation
     _currentOrientationMask = toOrientationMask(orrientationInfo);
 }
 
-jboolean Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeAllowOrientationChangeTo(
+void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeNotifyCurrentGravityOrientation(
                                                         JNIEnv *env, jobject obj, jint orrientationInfo)
 {
     UIInterfaceOrientationMask orientation = toOrientationMask(orrientationInfo);
-    
-    UIScreenOrientationListener *listener = [[UIScreenOrientationListener alloc] init];
-    [listener performSelectorOnMainThread:@selector(applicationAllowOrientationChangeTo:)
-                               withObject:@(orientation) waitUntilDone:YES];
-    
-    return listener.allowed? JNI_TRUE: JNI_FALSE;
+    if (orientation & _supportedInterfaceOrientations) {
+        [UIScreenOrientationListener updateAndroidCurrentOrientations:orientation];
+    }
+}
+
+void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeResumeScreenWithNewGravityOrientation(
+                                                        JNIEnv *env, jobject obj, jint orrientationInfo)
+{
+    UIInterfaceOrientationMask orientation = toOrientationMask(orrientationInfo);
+    [UIScreenOrientationListener updateAndroidCurrentOrientations:orientation];
 }
 
 void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeChangeOrientationTo(

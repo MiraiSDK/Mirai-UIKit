@@ -35,9 +35,8 @@ public class ScreenOrientationHandler extends OrientationEventListener {
     }
 
     private native void nativeInitOrientation(int orientationInfo);
-    
-    private native boolean nativeAllowOrientationChangeTo(int orientationInfo);
-
+    private native void nativeNotifyCurrentGravityOrientation(int orientationInfo);
+    private native void nativeResumeScreenWithNewGravityOrientation(int orientationInfo);
     private native void nativeChangeOrientationTo(int orientationInfo);
 
     public static ScreenOrientationHandler instance() {
@@ -109,7 +108,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
             return;
         }
         int orientationInfo = normalizeOrientationInfo(orientation);
-        tryToChangeOrientationTo(orientationInfo);
+        nativeNotifyCurrentGravityOrientation(orientationInfo);
     }
     
     private void synchronizeToCurrentScreenRotation() {
@@ -117,7 +116,7 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         _lastGetOrientationInfo = -1;
         int rotation = _mainActivity.getWindowManager().getDefaultDisplay().getRotation();
         int orientationInfo = normalizeScreenRotation(rotation);
-        tryToChangeOrientationTo(orientationInfo);
+        nativeResumeScreenWithNewGravityOrientation(orientationInfo);
     }
     
     private int normalizeOrientationInfo(int orientation) {
@@ -175,17 +174,6 @@ public class ScreenOrientationHandler extends OrientationEventListener {
         }
         Log.e(TAG,"Unknow screen rotaion:"+rotation);
         return -1;
-    }
-    
-    private void tryToChangeOrientationTo(int orientationInfo) {
-        
-        if (_lastGetOrientationInfo != orientationInfo) {
-            
-            if (nativeAllowOrientationChangeTo(orientationInfo)) {
-                changeOrientationInfoTo(orientationInfo);
-            }
-            _lastGetOrientationInfo = orientationInfo;
-        }
     }
     
     private void changeOrientationInfoTo(int orientationInfo) {
