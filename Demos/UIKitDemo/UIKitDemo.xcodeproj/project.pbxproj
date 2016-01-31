@@ -9,6 +9,28 @@
 /* Begin PBXBuildFile section */
 		432D2BFF1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */; };
 		432D2C001AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */; };
+		4368E7B31C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AB1C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png */; };
+		4368E7B41C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AB1C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png */; };
+		4368E7B51C5CFAFE00798AC1 /* alice 8Bit Grayscale.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AC1C5CFAFE00798AC1 /* alice 8Bit Grayscale.png */; };
+		4368E7B61C5CFAFE00798AC1 /* alice 8Bit Grayscale.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AC1C5CFAFE00798AC1 /* alice 8Bit Grayscale.png */; };
+		4368E7B71C5CFAFE00798AC1 /* alice 8Bit Indexed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AD1C5CFAFE00798AC1 /* alice 8Bit Indexed.png */; };
+		4368E7B81C5CFAFE00798AC1 /* alice 8Bit Indexed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AD1C5CFAFE00798AC1 /* alice 8Bit Indexed.png */; };
+		4368E7B91C5CFAFE00798AC1 /* alice 8Bit RGB.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AE1C5CFAFE00798AC1 /* alice 8Bit RGB.png */; };
+		4368E7BA1C5CFAFE00798AC1 /* alice 8Bit RGB.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AE1C5CFAFE00798AC1 /* alice 8Bit RGB.png */; };
+		4368E7BB1C5CFAFE00798AC1 /* alice 8Bit RGBA.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AF1C5CFAFE00798AC1 /* alice 8Bit RGBA.png */; };
+		4368E7BC1C5CFAFE00798AC1 /* alice 8Bit RGBA.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7AF1C5CFAFE00798AC1 /* alice 8Bit RGBA.png */; };
+		4368E7BD1C5CFAFE00798AC1 /* alice 16Bit Grayscale.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7B01C5CFAFE00798AC1 /* alice 16Bit Grayscale.png */; };
+		4368E7BE1C5CFAFE00798AC1 /* alice 16Bit Grayscale.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7B01C5CFAFE00798AC1 /* alice 16Bit Grayscale.png */; };
+		4368E7BF1C5CFAFE00798AC1 /* alice 16Bit RGB.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7B11C5CFAFE00798AC1 /* alice 16Bit RGB.png */; };
+		4368E7C01C5CFAFE00798AC1 /* alice 16Bit RGB.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7B11C5CFAFE00798AC1 /* alice 16Bit RGB.png */; };
+		4368E7C11C5CFAFE00798AC1 /* alice 16Bit RGBA.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7B21C5CFAFE00798AC1 /* alice 16Bit RGBA.png */; };
+		4368E7C21C5CFAFE00798AC1 /* alice 16Bit RGBA.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7B21C5CFAFE00798AC1 /* alice 16Bit RGBA.png */; };
+		4368E7C71C5DDCC100798AC1 /* rgbatest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7C61C5DDCC100798AC1 /* rgbatest.png */; };
+		4368E7C81C5DDCC100798AC1 /* rgbatest.png in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7C61C5DDCC100798AC1 /* rgbatest.png */; };
+		4368E7CB1C5DDEB900798AC1 /* rgbtest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7C91C5DDEB900798AC1 /* rgbtest.jpg */; };
+		4368E7CC1C5DDEB900798AC1 /* rgbtest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7C91C5DDEB900798AC1 /* rgbtest.jpg */; };
+		4368E7CD1C5DDEB900798AC1 /* rgbatest.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7CA1C5DDEB900798AC1 /* rgbatest.tiff */; };
+		4368E7CE1C5DDEB900798AC1 /* rgbatest.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4368E7CA1C5DDEB900798AC1 /* rgbatest.tiff */; };
 		437F25D41A736FA800FBE3E2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437F25D31A736FA800FBE3E2 /* UIKit.framework */; };
 		437F25D91A736FA800FBE3E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25D81A736FA800FBE3E2 /* main.m */; };
 		437F25DC1A736FA800FBE3E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 437F25DB1A736FA800FBE3E2 /* AppDelegate.m */; };
@@ -227,6 +249,17 @@
 		432D2BFE1AE4DEAD004CC2DD /* TNScrollViewContentInsetTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNScrollViewContentInsetTestViewController.m; sourceTree = "<group>"; };
 		436060D61AC9231000303792 /* Android-arm.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-arm.xcconfig"; sourceTree = "<group>"; };
 		436060D71AC9231000303792 /* Android-x86.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Android-x86.xcconfig"; sourceTree = "<group>"; };
+		4368E7AB1C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 8Bit Color Indexed.png"; sourceTree = "<group>"; };
+		4368E7AC1C5CFAFE00798AC1 /* alice 8Bit Grayscale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 8Bit Grayscale.png"; sourceTree = "<group>"; };
+		4368E7AD1C5CFAFE00798AC1 /* alice 8Bit Indexed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 8Bit Indexed.png"; sourceTree = "<group>"; };
+		4368E7AE1C5CFAFE00798AC1 /* alice 8Bit RGB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 8Bit RGB.png"; sourceTree = "<group>"; };
+		4368E7AF1C5CFAFE00798AC1 /* alice 8Bit RGBA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 8Bit RGBA.png"; sourceTree = "<group>"; };
+		4368E7B01C5CFAFE00798AC1 /* alice 16Bit Grayscale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 16Bit Grayscale.png"; sourceTree = "<group>"; };
+		4368E7B11C5CFAFE00798AC1 /* alice 16Bit RGB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 16Bit RGB.png"; sourceTree = "<group>"; };
+		4368E7B21C5CFAFE00798AC1 /* alice 16Bit RGBA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alice 16Bit RGBA.png"; sourceTree = "<group>"; };
+		4368E7C61C5DDCC100798AC1 /* rgbatest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rgbatest.png; sourceTree = "<group>"; };
+		4368E7C91C5DDEB900798AC1 /* rgbtest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = rgbtest.jpg; sourceTree = "<group>"; };
+		4368E7CA1C5DDEB900798AC1 /* rgbatest.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = rgbatest.tiff; sourceTree = "<group>"; };
 		437F25D01A736FA800FBE3E2 /* UIKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437F25D31A736FA800FBE3E2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		437F25D71A736FA800FBE3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -725,6 +758,17 @@
 		4390B8801A835D460082B0F1 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				4368E7C91C5DDEB900798AC1 /* rgbtest.jpg */,
+				4368E7CA1C5DDEB900798AC1 /* rgbatest.tiff */,
+				4368E7C61C5DDCC100798AC1 /* rgbatest.png */,
+				4368E7AB1C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png */,
+				4368E7AC1C5CFAFE00798AC1 /* alice 8Bit Grayscale.png */,
+				4368E7AD1C5CFAFE00798AC1 /* alice 8Bit Indexed.png */,
+				4368E7AE1C5CFAFE00798AC1 /* alice 8Bit RGB.png */,
+				4368E7AF1C5CFAFE00798AC1 /* alice 8Bit RGBA.png */,
+				4368E7B01C5CFAFE00798AC1 /* alice 16Bit Grayscale.png */,
+				4368E7B11C5CFAFE00798AC1 /* alice 16Bit RGB.png */,
+				4368E7B21C5CFAFE00798AC1 /* alice 16Bit RGBA.png */,
 				D207619C1BDE1FFC00FA5B48 /* umaru.jpg */,
 				D2726A7A1ABE95500010F435 /* tabicon0.png */,
 				D2A5F49C1AB084CD0011AF7B /* loveheart.png */,
@@ -1053,14 +1097,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4368E7CE1C5DDEB900798AC1 /* rgbatest.tiff in Resources */,
 				D2A5F49E1AB084CD0011AF7B /* loveheart.png in Resources */,
 				4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */,
+				4368E7B81C5CFAFE00798AC1 /* alice 8Bit Indexed.png in Resources */,
+				4368E7BC1C5CFAFE00798AC1 /* alice 8Bit RGBA.png in Resources */,
+				4368E7B41C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png in Resources */,
 				D207619E1BDE1FFC00FA5B48 /* umaru.jpg in Resources */,
 				437F25DE1A736FA800FBE3E2 /* TNAndroidLauncher.h in Resources */,
+				4368E7CC1C5DDEB900798AC1 /* rgbtest.jpg in Resources */,
 				4390B8841A835D540082B0F1 /* 34912115.jpg in Resources */,
+				4368E7C01C5CFAFE00798AC1 /* alice 16Bit RGB.png in Resources */,
+				4368E7B61C5CFAFE00798AC1 /* alice 8Bit Grayscale.png in Resources */,
+				4368E7C21C5CFAFE00798AC1 /* alice 16Bit RGBA.png in Resources */,
 				4390B8861A835D540082B0F1 /* kiniromosaic001.jpg in Resources */,
+				4368E7BE1C5CFAFE00798AC1 /* alice 16Bit Grayscale.png in Resources */,
 				D2726A7C1ABE95500010F435 /* tabicon0.png in Resources */,
 				4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */,
+				4368E7C81C5DDCC100798AC1 /* rgbatest.png in Resources */,
+				4368E7BA1C5CFAFE00798AC1 /* alice 8Bit RGB.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,14 +1123,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4368E7CD1C5DDEB900798AC1 /* rgbatest.tiff in Resources */,
 				D2A5F49D1AB084CD0011AF7B /* loveheart.png in Resources */,
 				4390B88D1A85EDA10082B0F1 /* Icon.png in Resources */,
+				4368E7B71C5CFAFE00798AC1 /* alice 8Bit Indexed.png in Resources */,
+				4368E7BB1C5CFAFE00798AC1 /* alice 8Bit RGBA.png in Resources */,
+				4368E7B31C5CFAFE00798AC1 /* alice 8Bit Color Indexed.png in Resources */,
 				D207619D1BDE1FFC00FA5B48 /* umaru.jpg in Resources */,
 				437F25F61A736FB400FBE3E2 /* TNAndroidLauncher.h in Resources */,
+				4368E7CB1C5DDEB900798AC1 /* rgbtest.jpg in Resources */,
 				4390B8831A835D540082B0F1 /* 34912115.jpg in Resources */,
+				4368E7BF1C5CFAFE00798AC1 /* alice 16Bit RGB.png in Resources */,
+				4368E7B51C5CFAFE00798AC1 /* alice 8Bit Grayscale.png in Resources */,
+				4368E7C11C5CFAFE00798AC1 /* alice 16Bit RGBA.png in Resources */,
 				4390B8851A835D540082B0F1 /* kiniromosaic001.jpg in Resources */,
+				4368E7BD1C5CFAFE00798AC1 /* alice 16Bit Grayscale.png in Resources */,
 				D2726A7B1ABE95500010F435 /* tabicon0.png in Resources */,
 				4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */,
+				4368E7C71C5DDCC100798AC1 /* rgbatest.png in Resources */,
+				4368E7B91C5CFAFE00798AC1 /* alice 8Bit RGB.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

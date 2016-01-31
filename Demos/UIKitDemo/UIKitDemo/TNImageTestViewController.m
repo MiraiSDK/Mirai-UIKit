@@ -29,11 +29,9 @@
 {
     if (!_images) {
         _images = @[
-                    @[@"testImage",@"png"],
-                    @[@"testImage",@"jpg"],
-                    @[@"testImage",@"tiff"],
+                    @[@"rgbtest",@"jpg"],
+                    @[@"rgbatest",@"tiff"],
                     @[@"rgbatest",@"png"],
-                    @[@"38162749",@"jpg"],
                     //@[@"Gray 8Bit",@"png"],
                     @[@"alice 8Bit Color Indexed",@"png"],
                     @[@"alice 8Bit Indexed",@"png"],
