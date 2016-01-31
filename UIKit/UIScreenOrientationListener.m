@@ -23,9 +23,9 @@ static jint toOrientationInfo(UIInterfaceOrientationMask orientationMask);
 
 @implementation UIScreenOrientationListener
 
-static UIInterfaceOrientationMask _willBeOrientationMask = UIInterfaceOrientationMaskPortrait;
 static UIInterfaceOrientationMask _currentOrientationMask = UIInterfaceOrientationMaskPortrait;
-static UIInterfaceOrientationMask _supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
+static UIInterfaceOrientationMask _wantedCurrentOrientationMask = UIInterfaceOrientationMaskPortrait;
+static NSUInteger _supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
 
 + (BOOL)isLandscaped
 {
@@ -33,48 +33,72 @@ static UIInterfaceOrientationMask _supportedInterfaceOrientations = UIInterfaceO
            _currentOrientationMask == UIInterfaceOrientationMaskLandscapeRight;
 }
 
-+ (void)setSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations
+- (void)applicationAllowOrientationChangeTo:(NSNumber *)orientationNumber
 {
-    _supportedInterfaceOrientations = supportedInterfaceOrientations;
-    UIInterfaceOrientationMask orientation = [self _orientationWithWantedOrientation:_currentOrientationMask withSupportedInterfaceOrientations:supportedInterfaceOrientations];
-    [self _changeOrientationTo:orientation];
-}
-
-+ (void)mainScreenHasInitMode
-{
-    [self setCurrentOrientationMask:_willBeOrientationMask];
-}
-
-+ (void)setCurrentOrientationMask:(NSUInteger)wantedOrientation
-{
-    _willBeOrientationMask = wantedOrientation;
+    UIInterfaceOrientationMask orientation = [orientationNumber unsignedIntegerValue];
     
-    if ([UIScreen mainScreen].hasInitMode &&
-        (wantedOrientation & _supportedInterfaceOrientations)) {
-        [self _changeOrientationTo:wantedOrientation];
-    }
+    // when _app of UIApplication is nil, it will lead to a deadlock.
+    // I don't know why. Maybe the application is not ready.
     
+    if ([UIApplication _isSharedInstanceReady]) {
+        UIApplication *application = [UIApplication sharedApplication];
+        UIInterfaceOrientationMask mask = [application supportedInterfaceOrientations];
+        
+        _allowed = (orientation & mask);
+    }
 }
 
-+ (UIInterfaceOrientationMask)_orientationWithWantedOrientation:(UIInterfaceOrientationMask)wantedOrientation withSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations
+- (void)applicationChangeOrientationTo:(NSNumber *)orientationNumber
 {
-    if (wantedOrientation & supportedInterfaceOrientations) {
-        return wantedOrientation;
-    }
-    UIInterfaceOrientationMask orientation = nextOrientationMaskOf(wantedOrientation);
+    UIInterfaceOrientationMask orientation = [orientationNumber unsignedIntegerValue];
+    _currentOrientationMask = orientation;
+    _wantedCurrentOrientationMask = orientation;
     
-    while (orientation != wantedOrientation && !(orientation & supportedInterfaceOrientations)) {
-        orientation = nextOrientationMaskOf(wantedOrientation);
-    }
-    return orientation;
+    BOOL isLandsacpe = [UIScreenOrientationListener isLandscaped];
+    
+    [[UIScreen mainScreen] _setLandscaped:isLandsacpe];
 }
 
-+ (void)_changeOrientationTo:(UIInterfaceOrientationMask)orientation
++ (void)updateSupportedInterfaceOrientations:(NSUInteger)supportedInterfaceOrientations
 {
-    if (_currentOrientationMask != orientation) {
-        _currentOrientationMask = orientation;
-        [[UIScreen mainScreen] _setOrientation:orientation];
+    if (_supportedInterfaceOrientations != supportedInterfaceOrientations) {
+        _supportedInterfaceOrientations = supportedInterfaceOrientations;
+        _wantedCurrentOrientationMask = _currentOrientationMask;
+        [self _syncCurrentOrientation];
     }
+}
+
++ (void)updateAndroidCurrentOrientations:(UIInterfaceOrientationMask)orientation
+{
+    if (_wantedCurrentOrientationMask != orientation) {
+        _wantedCurrentOrientationMask = orientation;
+        [self _syncCurrentOrientation];
+    }
+}
+
++ (void)_syncCurrentOrientation
+{
+    static const NSUInteger stateCount = 4;
+    UIInterfaceOrientationMask toMask = _wantedCurrentOrientationMask;
+    for (NSUInteger i=0; i<stateCount; ++i) {
+        if (toMask & _supportedInterfaceOrientations) {
+            [self _changeOrientationMaskTo:toMask];
+            return;
+        }
+        toMask = nextOrientationMaskOf(toMask);
+    }
+}
+
++ (void)_changeOrientationMaskTo:(UIInterfaceOrientationMask)orientationMask
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    
+    jclass handlerClass = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.CocoaActivity.ScreenOrientationHandler"];
+    jmethodID setOrientationMethodID = (*env)->GetStaticMethodID(
+                                                                 env, handlerClass, "setScreenOrientationInfo", "(I)V");
+    
+    jint orientationInfo = toOrientationInfo(orientationMask);
+    (*env)->CallStaticVoidMethod(env, handlerClass, setOrientationMethodID, orientationInfo);
 }
 
 @end
@@ -139,8 +163,35 @@ static jint toOrientationInfo(UIInterfaceOrientationMask orientationMask) {
     }
 }
 
+void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeInitOrientation(
+                                                        JNIEnv *env, jobject obj, jint orrientationInfo)
+{
+    _currentOrientationMask = toOrientationMask(orrientationInfo);
+    _wantedCurrentOrientationMask = _currentOrientationMask;
+}
+
+void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeNotifyCurrentGravityOrientation(
+                                                        JNIEnv *env, jobject obj, jint orrientationInfo)
+{
+    UIInterfaceOrientationMask orientation = toOrientationMask(orrientationInfo);
+    if (orientation & _supportedInterfaceOrientations) {
+        [UIScreenOrientationListener updateAndroidCurrentOrientations:orientation];
+    }
+}
+
+void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeResumeScreenWithNewGravityOrientation(
+                                                        JNIEnv *env, jobject obj, jint orrientationInfo)
+{
+    UIInterfaceOrientationMask orientation = toOrientationMask(orrientationInfo);
+    [UIScreenOrientationListener updateAndroidCurrentOrientations:orientation];
+}
+
 void Java_org_tiny4_CocoaActivity_ScreenOrientationHandler_nativeChangeOrientationTo(
                                                         JNIEnv *env, jobject obj, jint orrientationInfo)
 {
-    [UIScreenOrientationListener setCurrentOrientationMask:toOrientationMask(orrientationInfo)];
+    UIInterfaceOrientationMask orientation = toOrientationMask(orrientationInfo);
+    
+    UIScreenOrientationListener *listener = [[UIScreenOrientationListener alloc] init];
+    [listener performSelectorOnMainThread:@selector(applicationChangeOrientationTo:)
+                               withObject:@(orientation) waitUntilDone:NO];
 }
