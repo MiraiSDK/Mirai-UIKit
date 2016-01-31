@@ -44,8 +44,8 @@ static NSString *UIButtonContentTypeBackgroundImage = @"UIButtonContentTypeBackg
 static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 
 // TODO: screen scale
-#define kButtonSizeMinWidth 60 //30
-#define kButtonSizeMinHeight 60 //30
+#define kButtonSizeMinWidth 0
+#define kButtonSizeMinHeight 0
 
 @implementation UIButton
 @synthesize buttonType=_buttonType, titleLabel=_titleLabel, reversesTitleShadowWhenHighlighted=_reversesTitleShadowWhenHighlighted;
