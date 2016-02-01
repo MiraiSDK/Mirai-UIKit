@@ -70,8 +70,7 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 }
 
 //static NSString *kPlatformDefaultFontName = @"Robot";
-//static NSString *kPlatformDefaultFontName = @"Helvetica Neue";
-static NSString *kPlatformDefaultFontName = @"Droid Sans Fallback";
+static NSString *kPlatformDefaultFontName = @"Helvetica Neue";
 
 + (UIFont *)systemFontOfSize:(CGFloat)fontSize
 {

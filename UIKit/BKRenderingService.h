@@ -20,5 +20,6 @@ void BKRenderingServiceRun();
 void BKRenderingSetShouldRefreshScreen(BOOL value);
 void BKRenderingServiceEnd();
 CGRect BKRenderingServiceGetPixelBounds();
+BOOL BKRenderingServiceNeedNewRenderLayer();
 void BKRenderingServiceUploadRenderLayer(CALayer *layer);
 NSLock *BKLayerDisplayLock();
