@@ -29,6 +29,8 @@
 
 #import "UIWindow.h"
 
+@class TNMultiTouchProcess;
+
 @interface UIWindow (UIPrivate)
 - (UIResponder *)_firstResponder;
 - (void)_setFirstResponder:(UIResponder *)newFirstResponder;
@@ -36,4 +38,5 @@
 - (void)_makeVisible;
 - (void)_setLandscaped:(BOOL)landscaped;
 - (UIInterfaceOrientation)_currentOrientation;
+- (TNMultiTouchProcess *)_multiTouchProcess;
 @end
