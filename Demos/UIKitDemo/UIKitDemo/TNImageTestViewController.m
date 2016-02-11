@@ -37,6 +37,7 @@
                     @[@"alice 8Bit Indexed",@"png"],
                     @[@"alice 8Bit Grayscale",@"png"],
                     @[@"alice 8Bit RGB",@"png"],
+                    @[@"alice 8Bit RGB",@"jpg"],
                     @[@"alice 8Bit RGBA",@"png"],
                     //@[@"Gray 16Bit",@"png"],
                     @[@"alice 16Bit Grayscale",@"png"],
