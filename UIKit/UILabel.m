@@ -211,7 +211,6 @@
         NSAttributedString *as = [[NSAttributedString alloc] initWithString:_drawText
                                                                  attributes:attributes];
         CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
-        maxSize.height = MAX(maxSize.height, boundingRect.size.height);
         
         if (![self isSize:maxSize containSize:boundingRect.size]) {
             
