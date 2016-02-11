@@ -200,7 +200,7 @@
         // find out the actual size of the text given the size of our bounds
         CGSize maxSize = bounds.size;
         if (_numberOfLines > 0) {
-            maxSize.height = _font.lineHeight * _numberOfLines;
+            maxSize.height = self.font.lineHeight * _numberOfLines;
         }
         if (maxSize.height > bounds.size.height) {
             maxSize.height = bounds.size.height;
