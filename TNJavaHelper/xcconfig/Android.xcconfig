@@ -12,6 +12,7 @@ SDK_LIB_PATH=$(SDK_ROOT)/usr/lib
 DEPLOYMENT_LOCATION = YES
 DSTROOT = /
 INSTALL_PATH =$(SDK_ROOT)/System/Library/Frameworks/
+DEBUG_INFORMATION_FORMAT = dwarf
 
 OTHER_LDFLAGS= -shared $(inherited) -Wl,-z,defs -lgnustl_shared -ldispatch -lobjc
 OTHER_CFLAGS= $(inherited) -DANDROID=1 -fblocks
