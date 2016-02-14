@@ -21,5 +21,6 @@
 - (instancetype)initWithWindow:(UIWindow *)window;
 - (void)sendEvent:(UIEvent *)event;
 - (void)gestureRecognizeProcessMakeConclusion:(TNGestureRecognizeProcess *)gestureRecognizeProcess;
+- (void)unbindViewAndItsGestureRecognizeProcess:(UIView *)view;
 
 @end

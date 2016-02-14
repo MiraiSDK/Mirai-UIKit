@@ -12,12 +12,14 @@
 #import "UIColor.h"
 #import "UIGeometry.h"
 #import "UIWindow.h"
+#import "UIWindow+UIPrivate.h"
 #import "UIViewController.h"
 #import "UIViewLayoutManager.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer.h"
 #import "UIViewBindAnimation.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "TNMultiTouchProcess.h"
 
 #import "UIKit+Android.h"
 
@@ -658,6 +660,9 @@ static BOOL _animationsEnabled = YES;
             _readyToBecomeFirstResponder = NO;
         }
 //        [self _setAppearanceNeedsUpdate];
+        if (fromWindow) {
+            [[fromWindow _multiTouchProcess] unbindViewAndItsGestureRecognizeProcess:self];
+        }
         [self willMoveToWindow:toWindow];
         
         for (UIView *subview in self.subviews) {

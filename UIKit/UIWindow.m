@@ -84,6 +84,11 @@ NSString *const UIKeyboardDidChangeFrameNotification = @"UIKeyboardDidChangeFram
     return [UIApplication sharedApplication];
 }
 
+- (TNMultiTouchProcess *)_multiTouchProcess
+{
+    return _multiTouchProcess;
+}
+
 - (void)setRootViewController:(UIViewController *)rootViewController
 {
     if (rootViewController != _rootViewController) {

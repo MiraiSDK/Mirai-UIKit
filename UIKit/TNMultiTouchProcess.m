@@ -366,17 +366,25 @@
 - (void)gestureRecognizeProcessMakeConclusion:(TNGestureRecognizeProcess *)gestureRecognizeProcess
 {
     if (!_handingMultiTouchEvent) {
-        
-        NSValue *keyView = [NSValue valueWithNonretainedObject:gestureRecognizeProcess.view];
-        [_effectRecognizeProcesses removeObjectForKey:keyView];
-        [_effectRecognizeProcessesList removeObject:[_effectRecognizeProcesses objectForKey:keyView]];
+        [self unbindViewAndItsGestureRecognizeProcess:gestureRecognizeProcess.view];
     }
+}
+
+- (void)unbindViewAndItsGestureRecognizeProcess:(UIView *)view
+{
+    NSValue *keyView = [NSValue valueWithNonretainedObject:view];
+    [_effectRecognizeProcesses removeObjectForKey:keyView];
+    [_effectRecognizeProcessesList removeObject:[_effectRecognizeProcesses objectForKey:keyView]];
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses
 {
     NSMutableArray *hasMakeConclusionViews = [[NSMutableArray alloc]init];
     NSMutableArray *hasMakeConclusionRecognizeProcess = [[NSMutableArray alloc] init];
+    
+    for (NSValue *key in [_effectRecognizeProcesses allKeys]) {
+        id value = [key nonretainedObjectValue];
+    }
     
     for (NSValue *key in [_effectRecognizeProcesses allKeys]) {
         
