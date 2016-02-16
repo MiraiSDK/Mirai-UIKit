@@ -11,8 +11,9 @@
 #define kArrowWidth 5
 #define kArrowHeight 26
 
-#define kMinimumMenuItemButtonWidth 100
+#define kMinimumMenuItemButtonWidth 70
 #define kMaximumMenuItemButtonWidth 500
+#define kMenuItemDefaultWidth 70
 #define kMenuItemButtonHeight 40
 
 #define kCenterOnBorderScale 0.5
