@@ -64,7 +64,7 @@
     CGFloat length = MIN(rect.size.width, rect.size.height);
     CGFloat radius = length/5;
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    UIColor *fillColor = self.isHighlighted ? [UIColor blueColor] : [UIColor whiteColor];
+    UIColor *fillColor = self.isHighlighted ? [UIColor blueColor] : [UIColor clearColor];
     
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
     
