@@ -12,10 +12,15 @@
 #import "UIGestureRecognizer.h"
 #import "UITouch+Private.h"
 #import "UIGeometry.h"
+#include <unistd.h>
 
 #define kBeInvalidTime 0.8
 #define kInvalidTimerFireNeedTime 2.4
 #define kTapLimitAreaSize 27
+
+@interface UIAndroidEventsServer () <RunLoopEvents>
+
+@end
 
 @implementation UIAndroidEventsServer
 {
@@ -29,11 +34,23 @@
     
     BOOL _paused;
     BOOL _anyTimerIsWaitingForFiring;
+    
+    int _msgread;
+    int _msgwrite;
 }
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event);
 static UIAndroidEventsServer *eventServer;
 
+- (void)dealloc
+{
+    if (_msgread) {
+        close(_msgread);
+        close(_msgwrite);
+        _msgread = 0;
+        _msgread = 0;
+    }
+}
 
 - (instancetype)initWithAndroidApp:(struct android_app *)app
 {
@@ -55,6 +72,9 @@ static UIAndroidEventsServer *eventServer;
     return self;
 }
 
+// TODO:
+// We should drop this event thread
+// use NSRunloop instead of ALooper
 - (void)run
 {
     @autoreleasepool {
@@ -77,7 +97,9 @@ static UIAndroidEventsServer *eventServer;
             }
             
             if (hasInput) {
-                [self performSelectorOnMainThread:@selector(eventAlive) withObject:nil waitUntilDone:YES];
+                int8_t cmd = 0;
+                write(_msgwrite, &cmd, sizeof(cmd));
+
                 hasInput = NO;
             }
             
@@ -91,9 +113,6 @@ static UIAndroidEventsServer *eventServer;
         
     }
 }
-
-
-- (void)eventAlive{}
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
@@ -143,7 +162,38 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 
 - (void)resume
 {
+    [self installPipe];
     _paused = NO;
+}
+
+- (void)installPipe
+{
+    if (_msgread) {
+        return;
+    }
+    
+    int msgpipe[2];
+    if (pipe(msgpipe)) {
+        NSLog(@"could not create pipe: %s", strerror(errno));
+        return;
+    }
+    _msgread = msgpipe[0];
+    _msgwrite = msgpipe[1];
+    
+    NSRunLoop *rl = [NSRunLoop currentRunLoop];
+    [rl addEvent:(void *)(uintptr_t)_msgread
+            type:ET_RDESC
+         watcher:self
+         forMode:NSDefaultRunLoopMode];
+}
+
+- (void) receivedEvent: (void*)data
+                  type: (RunLoopEventType)type
+                 extra: (void*)extra
+               forMode: (NSString*)mode
+{
+    int8_t cmd;
+    read(_msgread, &cmd, sizeof(cmd));
 }
 
 #pragma mark - touch tap count buffer
