@@ -8,7 +8,7 @@
 
 #import "TNWebViewTestViewController.h"
 
-@interface TNWebViewTestViewController ()
+@interface TNWebViewTestViewController () <UIWebViewDelegate>
 
 @end
 
@@ -39,6 +39,8 @@
     [self.view addSubview:web];
     _webView = web;
     
+    web.delegate = self;
+    
     [web loadHTMLString:@"<html><head></head> <body> Hello World <a href=\"https://play.google.com/store/apps/details?id=com.dynadream.uFall\">Download uFall</a><p>Line 1</p><p>Line 2</p><p>Line3</p></body> </html>" baseURL:nil];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -67,6 +69,28 @@
 {
     [_webView loadHTMLString:@"<html><head></head> <body> Hello World <a href=\"https://play.google.com/store/apps/details?id=com.dynadream.uFall\">Download uFall</a><p>Line 1</p><p>Line 2</p><p>Line3</p></body> </html>" baseURL:nil];
 
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+ navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSLog(@"%s %@ %zi", __FUNCTION__, request, navigationType);
+    return YES;
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error
+{
+    NSLog(@"%s %@", __FUNCTION__, error);
 }
 
 @end
