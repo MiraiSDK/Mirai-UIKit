@@ -285,6 +285,7 @@
 		D214FC651BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */; };
 		D21CA5641C0DDF4C006C4528 /* UIViewBindAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = D21CA5621C0DDF4C006C4528 /* UIViewBindAnimation.h */; };
 		D21CA5651C0DDF4C006C4528 /* UIViewBindAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = D21CA5631C0DDF4C006C4528 /* UIViewBindAnimation.m */; };
+		D22AD7441C75AF0800127D4F /* GLWebViewListener.java in Sources */ = {isa = PBXBuildFile; fileRef = D22AD7431C75AF0800127D4F /* GLWebViewListener.java */; };
 		D24BB0481AD7BDF8006BD749 /* UIMoreListController.h in Headers */ = {isa = PBXBuildFile; fileRef = D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */; };
 		D24BB0491AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
 		D24BB04A1AD7BDF8006BD749 /* UIMoreListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */; };
@@ -663,6 +664,7 @@
 		D214FC641BBC5309006F61CF /* UITapGestureRecognizer+UIPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+UIPrivate.h"; sourceTree = "<group>"; };
 		D21CA5621C0DDF4C006C4528 /* UIViewBindAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewBindAnimation.h; sourceTree = "<group>"; };
 		D21CA5631C0DDF4C006C4528 /* UIViewBindAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewBindAnimation.m; sourceTree = "<group>"; };
+		D22AD7431C75AF0800127D4F /* GLWebViewListener.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = GLWebViewListener.java; sourceTree = "<group>"; };
 		D24BB0461AD7BDF8006BD749 /* UIMoreListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMoreListController.h; sourceTree = "<group>"; };
 		D24BB0471AD7BDF8006BD749 /* UIMoreListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMoreListController.m; sourceTree = "<group>"; };
 		D24E1DEE1B43E55E009814C3 /* JavaBridgeProxy.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; name = JavaBridgeProxy.java; path = CocoaActivity/src/org/tiny4/JavaBridgeTools/JavaBridgeProxy.java; sourceTree = SOURCE_ROOT; };
@@ -755,6 +757,7 @@
 				D2A5B40E1B73120E0046C265 /* ScreenOrientationHandler.java */,
 				433C4A271AD0FC20005D06BB /* GLViewRender.java */,
 				433C4A281AD0FC20005D06BB /* GLWebView.java */,
+				D22AD7431C75AF0800127D4F /* GLWebViewListener.java */,
 				433C4A291AD0FC20005D06BB /* GLWebViewRender.java */,
 				433C4A2A1AD0FC20005D06BB /* MovieRender.java */,
 				436CD83A1ADE639D002CBF94 /* GLTextView.java */,
@@ -1678,6 +1681,7 @@
 				434CFCEC1A0C9DA100B6AC9E /* UIScreenMode.m in Sources */,
 				43EBAA8B18AB831A005DDD8D /* UIBarItem.m in Sources */,
 				43E3429518F6947E00463092 /* NSAttributedString.m in Sources */,
+				D22AD7441C75AF0800127D4F /* GLWebViewListener.java in Sources */,
 				43B819F018E2AA870020624F /* UIPinchGestureRecognizer.m in Sources */,
 				D286A1651B8AAE5200EBD344 /* TNGestureRecognizeProcess.m in Sources */,
 				436D4ADE19F52FDB00F6F8F9 /* UIStepper.m in Sources */,

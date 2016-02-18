@@ -3,12 +3,26 @@
 
 #import "UIWebView.h"
 #import "UIAndroidWebView.h"
+#import "TNJavaBridgeDefinition.h"
+#import "TNJavaBridgeProxy.h"
+#import "TNJavaBridgeCallbackContext.h"
 
 @implementation UIWebView
 {
     UIAndroidWebView *_backend;
+    TNJavaBridgeProxy *_listenerBridgeProxy;
 }
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+
+static TNJavaBridgeDefinition *_webViewListenerDefinition;
+
++ (void)initialize
+{
+    NSString *webViewListenerClass = @"org.tiny4.CocoaActivity.GLWebViewListener";
+    NSArray *webViewListenerSignatures = @[@"onPageFinished(android.webkit.WebView,java.lang.String)",
+                                           @"onPageStarted(android.webkit.WebView,java.lang.String)",];
+    _webViewListenerDefinition = [[TNJavaBridgeDefinition alloc] initWithProxiedClassName:webViewListenerClass withMethodSignatures:webViewListenerSignatures];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -20,6 +34,7 @@
         
         _backend = [[UIAndroidWebView alloc] initWithFrame:self.bounds];
         [self addSubview:_backend];
+        [self _generateListenerBridgeProxy];
         
     }
     return self;
@@ -101,6 +116,26 @@
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
     return nil;
+}
+
+#pragma mark - handle lisenter events
+
+- (void)_generateListenerBridgeProxy
+{
+    _listenerBridgeProxy = [[TNJavaBridgeProxy alloc] initWithDefinition:_webViewListenerDefinition];
+    [_listenerBridgeProxy methodIndex:0 target:self action:@selector(_handlePageFinished:)];
+    [_listenerBridgeProxy methodIndex:1 target:self action:@selector(_handlePageStarted:)];
+    [_backend setListenerBridgeProxy:_listenerBridgeProxy];
+}
+
+- (void)_handlePageStarted:(TNJavaBridgeCallbackContext *)context
+{
+    [_delegate webViewDidStartLoad:self];
+}
+
+- (void)_handlePageFinished:(TNJavaBridgeCallbackContext *)context
+{
+    [_delegate webViewDidFinishLoad:self];
 }
 
 #pragma mark -

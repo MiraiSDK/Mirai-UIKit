@@ -12,7 +12,7 @@ public class GLWebViewRender extends GLViewRender {
     public GLWebViewRender(Context context, int glTexID, int width, int height) {
         super(context,glTexID,width,height);
     }
-
+    
     @Override
     protected View onCreateTargetView(Activity activity) {
         GLWebView wb = new GLWebView(activity);
@@ -74,4 +74,19 @@ public class GLWebViewRender extends GLViewRender {
         runOnUiThreadAndWait(aRunnable);
     }
 
+    public void setWebViewListener(final GLWebViewListener webViewListener) {
+        
+        Runnable aRunnable = new Runnable() {
+            @Override
+            public void run() {
+                _webview.setWebViewListener(webViewListener);
+                
+                synchronized (this) {
+                    this.notify() ;
+                }
+            }
+        };
+        
+        runOnUiThreadAndWait(aRunnable);
+    }
 }

@@ -31,6 +31,10 @@ typedef NS_OPTIONS(NSUInteger, NSStringEnumerationOptions) {
 //- (void)enumerateLinesUsingBlock:(void (^)(NSString *line, BOOL *stop))block;
 @end
 
+@interface NSFileManager (Android)
+- (NSArray *)URLsForDirectory:(NSSearchPathDirectory)directory inDomains:(NSSearchPathDomainMask)domainMask;
+@end
+
 typedef NS_OPTIONS(NSUInteger, NSAttributedStringEnumerationOptions) {
     NSAttributedStringEnumerationReverse = (1UL << 1),
     NSAttributedStringEnumerationLongestEffectiveRangeNotRequired = (1UL << 20)
