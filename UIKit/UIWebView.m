@@ -19,8 +19,10 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 + (void)initialize
 {
     NSString *webViewListenerClass = @"org.tiny4.CocoaActivity.GLWebViewListener";
-    NSArray *webViewListenerSignatures = @[@"onPageFinished(android.webkit.WebView,java.lang.String)",
-                                           @"onPageStarted(android.webkit.WebView,java.lang.String)",];
+    NSArray *webViewListenerSignatures = @[
+                                    @"onShouldOverrideUrlLoading(android.webkit.WebView,java.lang.String)",
+                                    @"onPageStarted(android.webkit.WebView,java.lang.String)",
+                                    @"onPageFinished(android.webkit.WebView,java.lang.String)",];
     _webViewListenerDefinition = [[TNJavaBridgeDefinition alloc] initWithProxiedClassName:webViewListenerClass withMethodSignatures:webViewListenerSignatures];
 }
 
@@ -123,9 +125,19 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 - (void)_generateListenerBridgeProxy
 {
     _listenerBridgeProxy = [[TNJavaBridgeProxy alloc] initWithDefinition:_webViewListenerDefinition];
-    [_listenerBridgeProxy methodIndex:0 target:self action:@selector(_handlePageFinished:)];
+    [_listenerBridgeProxy methodIndex:0 target:self action:@selector(_handleshouldOverrideUrlLoading:)];
     [_listenerBridgeProxy methodIndex:1 target:self action:@selector(_handlePageStarted:)];
+    [_listenerBridgeProxy methodIndex:2 target:self action:@selector(_handlePageFinished:)];
     [_backend setListenerBridgeProxy:_listenerBridgeProxy];
+}
+
+- (void)_handleshouldOverrideUrlLoading:(TNJavaBridgeCallbackContext *)context
+{
+    BOOL shouldOverrideUrlLoading = NO;
+    if ([_delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        shouldOverrideUrlLoading = ![_delegate webView:self shouldStartLoadWithRequest:nil navigationType:0];
+    }
+    [_backend setShouldOverrideUrlLoadingValue:shouldOverrideUrlLoading];
 }
 
 - (void)_handlePageStarted:(TNJavaBridgeCallbackContext *)context

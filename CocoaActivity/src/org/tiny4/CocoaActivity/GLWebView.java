@@ -20,6 +20,9 @@ public class GLWebView extends WebView {
     private GLViewRender mRender;
     private GLWebViewListener webViewListener;
     
+    private final Object bridgeLock = new Object();
+    private Boolean shouldOverrideUrlLoadingValue = null;
+    
     public  GLWebView(Context context) {
         super(context);
 
@@ -29,15 +32,22 @@ public class GLWebView extends WebView {
             @Override public void onPageFinished(WebView view, String url) {
                 if (webViewListener != null) {
                     webViewListener.onPageFinished(view, url);
-                    Log.i("NSLog", "[WebView Test] call on page finished");
                 }
             }
             
             @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 if (webViewListener != null) {
                     webViewListener.onPageStarted(view, url);
-                    Log.i("NSLog", "[WebView Test] call on page started");
                 }
+            }
+            
+            @Override public boolean shouldOverrideUrlLoading (WebView view, String url) {
+                boolean resultValue = true;
+                if (webViewListener != null) {
+                    webViewListener.onShouldOverrideUrlLoading(view, url);
+                    resultValue = getShouldOverrideUrlLoadingValue();
+                }
+                return resultValue;
             }
         
         });
@@ -58,6 +68,19 @@ public class GLWebView extends WebView {
     
     public void setWebViewListener(GLWebViewListener webViewListener) {
         this.webViewListener = webViewListener;
+    }
+    
+    private boolean getShouldOverrideUrlLoadingValue() {
+        if (shouldOverrideUrlLoadingValue == null) {
+            return false;
+        }
+        boolean resultValue = shouldOverrideUrlLoadingValue;
+        shouldOverrideUrlLoadingValue = null;
+        return resultValue;
+    }
+    
+    public void setShouldOverrideUrlLoadingValue(boolean value) {
+        shouldOverrideUrlLoadingValue = value;
     }
     
     @Override protected  void onDraw (Canvas canvas) {

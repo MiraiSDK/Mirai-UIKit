@@ -12,6 +12,7 @@
 #import <GLES2/gl2.h>
 
 #import "UIEvent+Android.h"
+#import "TNJavaBridgeProxy+UIJniObj.h"
 
 typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
 
@@ -162,6 +163,29 @@ typedef BOOL(^EAGLTextureUpdateCallback)(CATransform3D *t);
     [super setBounds:bounds];
     
     [self setJavaWebViewSize:bounds.size];
+}
+
+- (void)setListenerBridgeProxy:(TNJavaBridgeProxy *)bridgeProxy
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jWebViewClass,
+                                        "setWebViewListener",
+                                        "(Lorg/tiny4/CocoaActivity/GLWebViewListener;)V");
+    if (mid == NULL) {
+        NSLog(@"can't get method setWebViewListener(Lorg/tiny4/CocoaActivity/GLWebViewListener;)V");
+    }
+    (*env)->CallVoidMethod(env, _jWebView, mid, bridgeProxy.jProxiedInstance);
+}
+
+- (void)setShouldOverrideUrlLoadingValue:(BOOL)shouldOverrideUrlLoading
+{
+    JNIEnv *env = [[TNJavaHelper sharedHelper] env];
+    jmethodID mid = (*env)->GetMethodID(env,_jWebViewClass,
+                                        "setShouldOverrideUrlLoadingValue", "(Z)V");
+    if (mid == NULL) {
+        NSLog(@"can't get method setShouldOverrideUrlLoadingValue(Z)V");
+    }
+    (*env)->CallVoidMethod(env, _jWebView, mid, shouldOverrideUrlLoading? JNI_TRUE: JNI_FALSE);
 }
 
 - (void)loadRequest:(NSURLRequest *)request

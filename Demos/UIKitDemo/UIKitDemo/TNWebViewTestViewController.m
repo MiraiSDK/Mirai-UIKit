@@ -61,7 +61,7 @@
 
 - (void)button1Pressed:(id)sender
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://yizaoyiwan.com"]];
     [_webView loadRequest:request];
 }
 
@@ -71,10 +71,15 @@
 
 }
 
+static NSUInteger count = 0;
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType
 {
     NSLog(@"%s %@ %zi", __FUNCTION__, request, navigationType);
+    BOOL rs = count++ < 3;
+    NSLog(@"result %i", rs);
+    return rs;
     return YES;
 }
 

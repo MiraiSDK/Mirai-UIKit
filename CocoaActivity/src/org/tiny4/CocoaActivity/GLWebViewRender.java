@@ -89,4 +89,10 @@ public class GLWebViewRender extends GLViewRender {
         
         runOnUiThreadAndWait(aRunnable);
     }
+    
+    public void setShouldOverrideUrlLoadingValue(boolean value) {
+        // when this method is called, the Android UI thread is block.
+        // I need to call method right now.
+        _webview.setShouldOverrideUrlLoadingValue(value);
+    }
 }

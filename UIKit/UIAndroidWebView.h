@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class TNJavaBridgeProxy;
 
 @interface UIAndroidWebView : UIView
+- (void)setListenerBridgeProxy:(TNJavaBridgeProxy *)bridgeProxy;
+- (void)setShouldOverrideUrlLoadingValue:(BOOL)shouldOverrideUrlLoading;
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
 - (void)loadRequest:(NSURLRequest *)request;
 - (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(NSURL *)baseURL;
