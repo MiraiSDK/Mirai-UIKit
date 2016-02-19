@@ -61,7 +61,7 @@
 
 - (void)button1Pressed:(id)sender
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://yizaoyiwan.com/hahah.html"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.165.1.1/404.html"]];
     [_webView loadRequest:request];
 }
 

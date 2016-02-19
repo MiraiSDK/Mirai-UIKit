@@ -1,6 +1,8 @@
 /*
  */
 
+#import <Foundation/NSURLError.h>
+
 #import "UIWebView.h"
 #import "UIAndroidWebView.h"
 #import "TNJavaBridgeDefinition.h"
@@ -137,7 +139,10 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 {
     BOOL shouldOverrideUrlLoading = NO;
     if ([_delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
-        shouldOverrideUrlLoading = ![_delegate webView:self shouldStartLoadWithRequest:nil navigationType:0];
+        NSString *url = [context stringParameterAt:1];
+        NSURLRequest *urlRequest = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+        shouldOverrideUrlLoading = ![_delegate webView:self shouldStartLoadWithRequest:urlRequest
+                                        navigationType:UIWebViewNavigationTypeOther];
     }
     [_backend setShouldOverrideUrlLoadingValue:shouldOverrideUrlLoading];
 }
@@ -154,7 +159,32 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 
 - (void)_handleReceivedError:(TNJavaBridgeCallbackContext *)context
 {
-    [_delegate webView:self didFailLoadWithError:nil];
+    if (_delegate) {
+        int androidErrorCode = [context integerParameterAt:1];
+        NSInteger iOSErrorCode = [self _androidErrorCodeToIOS:androidErrorCode];
+        
+        NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:androidErrorCode userInfo:@{}];
+        [_delegate webView:self didFailLoadWithError:error];
+    }
+}
+
+- (NSInteger)_androidErrorCodeToIOS:(int)androidErrorCode
+{
+    // TODO: translate all Android error code to iOS error code.
+    // to see: iOS error code list https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/index.html#//apple_ref/doc/constant_group/URL_Loading_System_Error_Codes
+    // to see: Android error code list:http://developer.android.com/intl/zh-tw/reference/android/webkit/WebViewClient.html#onReceivedError(android.webkit.WebView,%20int,%20java.lang.String,%20java.lang.String)
+    
+    switch (androidErrorCode) {
+        case -12: //ERROR_BAD_URL
+            return NSURLErrorBadURL;
+            
+        case -8: //ERROR_TIMEOUT
+            return NSURLErrorTimedOut;
+            
+        case -2: //ERROR_HOST_LOOKUP
+            return NSURLErrorCannotFindHost;
+    }
+    return NSURLErrorUnknown;
 }
 
 #pragma mark -
