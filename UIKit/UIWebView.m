@@ -129,6 +129,7 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
     [_listenerBridgeProxy methodIndex:0 target:self action:@selector(_handleshouldOverrideUrlLoading:)];
     [_listenerBridgeProxy methodIndex:1 target:self action:@selector(_handlePageStarted:)];
     [_listenerBridgeProxy methodIndex:2 target:self action:@selector(_handlePageFinished:)];
+    [_listenerBridgeProxy methodIndex:3 target:self action:@selector(_handleReceivedError:)];
     [_backend setListenerBridgeProxy:_listenerBridgeProxy];
 }
 
