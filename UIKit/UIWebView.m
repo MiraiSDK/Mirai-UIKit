@@ -20,9 +20,10 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 {
     NSString *webViewListenerClass = @"org.tiny4.CocoaActivity.GLWebViewListener";
     NSArray *webViewListenerSignatures = @[
-                                    @"onShouldOverrideUrlLoading(android.webkit.WebView,java.lang.String)",
-                                    @"onPageStarted(android.webkit.WebView,java.lang.String)",
-                                    @"onPageFinished(android.webkit.WebView,java.lang.String)",];
+                            @"onShouldOverrideUrlLoading(android.webkit.WebView,java.lang.String)",
+                            @"onPageStarted(android.webkit.WebView,java.lang.String)",
+                            @"onPageFinished(android.webkit.WebView,java.lang.String)",
+                            @"onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String)",];
     _webViewListenerDefinition = [[TNJavaBridgeDefinition alloc] initWithProxiedClassName:webViewListenerClass withMethodSignatures:webViewListenerSignatures];
 }
 
@@ -148,6 +149,11 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 - (void)_handlePageFinished:(TNJavaBridgeCallbackContext *)context
 {
     [_delegate webViewDidFinishLoad:self];
+}
+
+- (void)_handleReceivedError:(TNJavaBridgeCallbackContext *)context
+{
+    [_delegate webView:self didFailLoadWithError:nil];
 }
 
 #pragma mark -

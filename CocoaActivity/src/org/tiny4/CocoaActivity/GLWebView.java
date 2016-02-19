@@ -49,6 +49,12 @@ public class GLWebView extends WebView {
                 }
                 return resultValue;
             }
+            
+            @Override public void onReceivedError (WebView view, int errorCode, String description, String failingUrl) {
+                if (webViewListener != null) {
+                    webViewListener.onReceivedError(view, errorCode, description, failingUrl);
+                }
+            }
         
         });
 
