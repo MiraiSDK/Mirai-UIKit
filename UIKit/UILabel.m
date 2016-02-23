@@ -213,7 +213,8 @@
         CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
         
         if (![self _isSize:maxSize containSize:boundingRect.size]) {
-            boundingRect = [self _cliptBoundingRectToWithMaxSize:maxSize attributes:attributes boundingRect:boundingRect as:as];
+            boundingRect = [self _clipBoundingRectToWithMaxSize:maxSize attributes:attributes boundingRect:boundingRect];
+            as = [[NSAttributedString alloc] initWithString:_drawText attributes:attributes];
         }
         
         drawRect.size = boundingRect.size;
@@ -260,24 +261,31 @@
 }
 
 
-- (CGRect)_cliptBoundingRectToWithMaxSize:(CGSize)maxSize attributes:(NSDictionary *)attributes
-                             boundingRect:(CGRect)boundingRect as:(NSAttributedString *)as
+- (CGRect)_clipBoundingRectToWithMaxSize:(CGSize)maxSize attributes:(NSDictionary *)attributes
+                             boundingRect:(CGRect)boundingRect
 {
     NSUInteger subTextToIndex = 0;
-    NSString *testDrawText = _drawText;
-    NSAttributedString *testAs = as;
-    CGRect testBoundingRect = boundingRect;
+    CGRect lastBoundingRect = CGRectNull;
+    NSString *lastMatchText = nil;
+    
+    CGRect testBoudingRect = CGRectNull;
+    NSString *testDrawText = nil;
+    
     do {
-        _drawText = testDrawText;
-        as = testAs;
-        boundingRect = testBoundingRect;
-        testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
-        testAs = [[NSAttributedString alloc] initWithString:testDrawText attributes:attributes];
-        testBoundingRect = [testAs boundingRectWithSize:maxSize options:0 context:nil];
-        subTextToIndex++;
+        lastMatchText = testDrawText;
+        lastBoundingRect = testBoudingRect;
         
-    } while ([self _isSize:maxSize containSize:testBoundingRect.size] &&
-             subTextToIndex <= _text.length - 1);
+        testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
+        NSAttributedString *testAs = [[NSAttributedString alloc] initWithString:testDrawText attributes:attributes];
+        testBoudingRect = [testAs boundingRectWithSize:maxSize options:0 context:nil];
+        subTextToIndex++;
+    } while ([self _isSize:maxSize containSize:testBoudingRect.size] && subTextToIndex <= _text.length - 1);
+    
+    if (!lastMatchText) {
+        lastMatchText = _text;
+        lastBoundingRect = boundingRect;
+    }
+    _drawText = lastMatchText;
     
     return boundingRect;
 }
