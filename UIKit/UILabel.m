@@ -284,33 +284,35 @@
     if (!lastMatchText) {
         // When the maxSize.height can't contain just onely one line height, I need to suppose there is singleline.
         
-        
-        
         CGSize unlimitSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
+        CGRect totalTextBoundingRect = [self _boudingRectWithText:_text attributes:attributes size:unlimitSize];
         
-        subTextToIndex = 0;
-        lastBoundingRect = CGRectNull;
-        testBoudingRect = CGRectNull;
-        testDrawText = nil;
-        
-        do {
-            lastMatchText = testDrawText;
-            lastBoundingRect = testBoudingRect;
-            testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
-            testBoudingRect = [self _boudingRectWithText:testDrawText attributes:attributes size:unlimitSize];
-            subTextToIndex++;
+        if (totalTextBoundingRect.size.width > maxSize.width) {
+            subTextToIndex = 0;
+            lastBoundingRect = CGRectNull;
+            testBoudingRect = CGRectNull;
+            testDrawText = nil;
             
-        } while (maxSize.width >= testBoudingRect.size.width && subTextToIndex <= _text.length - 1);
-        
-        if (!lastMatchText) {
-            // The maxSize can't contain any words.
-            lastMatchText = @"...";
-            lastBoundingRect = boundingRect;
+            do {
+                lastMatchText = testDrawText;
+                lastBoundingRect = testBoudingRect;
+                testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
+                testBoudingRect = [self _boudingRectWithText:testDrawText attributes:attributes size:unlimitSize];
+                subTextToIndex++;
+                
+            } while (maxSize.width >= testBoudingRect.size.width && subTextToIndex <= _text.length - 1);
+            
+            if (!lastMatchText) {
+                // The maxSize can't contain any words.
+                lastMatchText = @"...";
+                lastBoundingRect = boundingRect;
+            }
+        } else {
+            lastMatchText = _text;
+            lastBoundingRect = totalTextBoundingRect;
         }
     }
     _drawText = lastMatchText;
-    NSLog(@"maxSize %f, %f lastBoundingRect %f, %f", maxSize.width, maxSize.height, lastBoundingRect.size.width, lastBoundingRect.size.height);
-    NSLog(@"lastMatchText %@", lastMatchText);
     
     return lastBoundingRect;
 }
