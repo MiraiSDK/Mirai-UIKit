@@ -271,7 +271,6 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
         NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
         BOOL hasReleaseLock = NO;
-        NSDate *distantFuture = [NSDate distantFuture];
         
         @try {
         do {
@@ -281,9 +280,16 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
             @autoreleasepool {
                 NSDate *begin = [NSDate date];
                 
-                
-                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:distantFuture];
+                //TODO: should use distantFuture to reduce cpu usage
+                // but use distantFuture has a bug:
+                //      runMode:beforeDate: will wait until first input source processed or beforeDate is reached. timer is not considered an input source
+                //      and performSelector:withObject:afterDelay: is a timer
+                //      so if we do any ui change in a timer or performSelector, that will not at screen until runloop return
+//                NSDate *untilDate = [NSDate distantFuture];
+                NSDate *untilDate = [NSDate date];
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
 
+                
 //                UIEvent *event = [self nextEventBeforeDate:untilDate inMode:NSDefaultRunLoopMode];
                 
                 // send event
