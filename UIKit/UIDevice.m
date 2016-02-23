@@ -23,6 +23,7 @@ static UIDevice *theDevice;
 {
     self = [super init];
     if (self) {
+        _systemVersion = @"9.0";
     }
     return self;
 }
