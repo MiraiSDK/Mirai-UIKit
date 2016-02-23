@@ -472,14 +472,14 @@ static NSMutableArray *_viewControllerInstances;
 - (void)addChildViewController:(UIViewController *)childController
 {
     [[self m_ChildViewControllers] addObject:childController];
-    childController->_parentViewController = self;
+    [childController _setParentViewController:self];
     [childController willMoveToParentViewController:self];
 }
 
 - (void)removeFromParentViewController
 {
     [[self.parentViewController m_ChildViewControllers] removeObject:self];
-    self->_parentViewController = nil;
+    [self _setParentViewController:nil];
     [self didMoveToParentViewController:nil];
 }
 
