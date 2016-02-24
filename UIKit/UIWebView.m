@@ -1,14 +1,33 @@
 /*
  */
 
+#import <Foundation/NSURLError.h>
+
 #import "UIWebView.h"
 #import "UIAndroidWebView.h"
+#import "TNJavaBridgeDefinition.h"
+#import "TNJavaBridgeProxy.h"
+#import "TNJavaBridgeCallbackContext.h"
 
 @implementation UIWebView
 {
     UIAndroidWebView *_backend;
+    TNJavaBridgeProxy *_listenerBridgeProxy;
 }
 @synthesize request=_request, delegate=_delegate, dataDetectorTypes=_dataDetectorTypes, scalesPageToFit=_scalesPageToFit;
+
+static TNJavaBridgeDefinition *_webViewListenerDefinition;
+
++ (void)initialize
+{
+    NSString *webViewListenerClass = @"org.tiny4.CocoaActivity.GLWebViewListener";
+    NSArray *webViewListenerSignatures = @[
+                            @"onShouldOverrideUrlLoading(android.webkit.WebView,java.lang.String)",
+                            @"onPageStarted(android.webkit.WebView,java.lang.String)",
+                            @"onPageFinished(android.webkit.WebView,java.lang.String)",
+                            @"onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String)",];
+    _webViewListenerDefinition = [[TNJavaBridgeDefinition alloc] initWithProxiedClassName:webViewListenerClass withMethodSignatures:webViewListenerSignatures];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -20,6 +39,7 @@
         
         _backend = [[UIAndroidWebView alloc] initWithFrame:self.bounds];
         [self addSubview:_backend];
+        [self _generateListenerBridgeProxy];
         
     }
     return self;
@@ -101,6 +121,70 @@
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
     return nil;
+}
+
+#pragma mark - handle lisenter events
+
+- (void)_generateListenerBridgeProxy
+{
+    _listenerBridgeProxy = [[TNJavaBridgeProxy alloc] initWithDefinition:_webViewListenerDefinition];
+    [_listenerBridgeProxy methodIndex:0 target:self action:@selector(_handleshouldOverrideUrlLoading:)];
+    [_listenerBridgeProxy methodIndex:1 target:self action:@selector(_handlePageStarted:)];
+    [_listenerBridgeProxy methodIndex:2 target:self action:@selector(_handlePageFinished:)];
+    [_listenerBridgeProxy methodIndex:3 target:self action:@selector(_handleReceivedError:)];
+    [_backend setListenerBridgeProxy:_listenerBridgeProxy];
+}
+
+- (void)_handleshouldOverrideUrlLoading:(TNJavaBridgeCallbackContext *)context
+{
+    BOOL shouldOverrideUrlLoading = NO;
+    if ([_delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
+        NSString *url = [context stringParameterAt:1];
+        NSURLRequest *urlRequest = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+        shouldOverrideUrlLoading = ![_delegate webView:self shouldStartLoadWithRequest:urlRequest
+                                        navigationType:UIWebViewNavigationTypeOther];
+    }
+    [_backend setShouldOverrideUrlLoadingValue:shouldOverrideUrlLoading];
+}
+
+- (void)_handlePageStarted:(TNJavaBridgeCallbackContext *)context
+{
+    [_delegate webViewDidStartLoad:self];
+}
+
+- (void)_handlePageFinished:(TNJavaBridgeCallbackContext *)context
+{
+    [_delegate webViewDidFinishLoad:self];
+}
+
+- (void)_handleReceivedError:(TNJavaBridgeCallbackContext *)context
+{
+    if (_delegate) {
+        int androidErrorCode = [context integerParameterAt:1];
+        NSInteger iOSErrorCode = [self _androidErrorCodeToIOS:androidErrorCode];
+        
+        NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:androidErrorCode userInfo:@{}];
+        [_delegate webView:self didFailLoadWithError:error];
+    }
+}
+
+- (NSInteger)_androidErrorCodeToIOS:(int)androidErrorCode
+{
+    // TODO: translate all Android error code to iOS error code.
+    // to see: iOS error code list https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/index.html#//apple_ref/doc/constant_group/URL_Loading_System_Error_Codes
+    // to see: Android error code list:http://developer.android.com/intl/zh-tw/reference/android/webkit/WebViewClient.html#onReceivedError(android.webkit.WebView,%20int,%20java.lang.String,%20java.lang.String)
+    
+    switch (androidErrorCode) {
+        case -12: //ERROR_BAD_URL
+            return NSURLErrorBadURL;
+            
+        case -8: //ERROR_TIMEOUT
+            return NSURLErrorTimedOut;
+            
+        case -2: //ERROR_HOST_LOOKUP
+            return NSURLErrorCannotFindHost;
+    }
+    return NSURLErrorUnknown;
 }
 
 #pragma mark -
