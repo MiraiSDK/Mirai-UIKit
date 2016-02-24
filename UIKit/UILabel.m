@@ -212,7 +212,7 @@
                                                                  attributes:attributes];
         CGRect boundingRect = [as boundingRectWithSize:maxSize options:0 context:nil];
         
-        if (![self _isSize:maxSize containSize:boundingRect.size]) {
+        if (![self _canTextShowTotally:_drawText attributes:attributes limitSize:maxSize]) {
             boundingRect = [self _clipBoundingRectToWithMaxSize:maxSize attributes:attributes boundingRect:boundingRect];
             as = [[NSAttributedString alloc] initWithString:_drawText attributes:attributes];
         }
@@ -255,66 +255,69 @@
     }
 }
 
-- (BOOL)_isSize:(CGSize)containerSize containSize:(CGSize)size
+- (BOOL)_canTextShowTotally:(NSString *)text attributes:(NSDictionary *)attributes
+                 limitSize:(CGSize)limitSize
 {
-    return containerSize.width >= size.width && containerSize.height >= size.height;
+    CGSize unlimitSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
+    CGRect boundingRect = [self _boudingRectWithText:text attributes:attributes size:limitSize];
+    
+    if (boundingRect.size.width <= limitSize.width && boundingRect.size.height <= limitSize.height) {
+        return YES;
+    } else {
+        boundingRect = [self _boudingRectWithText:text attributes:attributes size:unlimitSize];
+        return boundingRect.size.width <= limitSize.width;
+    }
 }
 
-
 - (CGRect)_clipBoundingRectToWithMaxSize:(CGSize)maxSize attributes:(NSDictionary *)attributes
-                             boundingRect:(CGRect)boundingRect
+                            boundingRect:(CGRect)originalBoundingRect
 {
-    NSUInteger subTextToIndex = 0;
-    CGRect lastBoundingRect = CGRectNull;
-    NSString *lastMatchText = nil;
+    CGSize unlimitHeightSize = CGSizeMake(maxSize.width, CGFLOAT_MAX);
+    CGSize unlimitSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
     
-    CGRect testBoudingRect = CGRectNull;
-    NSString *testDrawText = nil;
+    CGRect resultBoundingRect = CGRectNull;
     
-    do {
-        lastMatchText = testDrawText;
-        lastBoundingRect = testBoudingRect;
-        
-        testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
-        testBoudingRect = [self _boudingRectWithText:testDrawText attributes:attributes size:maxSize];
-        subTextToIndex++;
-        
-    } while ([self _isSize:maxSize containSize:testBoudingRect.size] && subTextToIndex <= _text.length - 1);
+    BOOL isFillingFirstLine = YES;
+    BOOL didClipText = NO;
     
-    if (!lastMatchText) {
-        // When the maxSize.height can't contain just onely one line height, I need to suppose there is singleline.
+    for (NSUInteger subTextToIndex = 0; subTextToIndex < _text.length; subTextToIndex++) {
         
-        CGSize unlimitSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
-        CGRect totalTextBoundingRect = [self _boudingRectWithText:_text attributes:attributes size:unlimitSize];
+        NSString *testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
+        CGRect testBoudingRect;
         
-        if (totalTextBoundingRect.size.width > maxSize.width) {
-            subTextToIndex = 0;
-            lastBoundingRect = CGRectNull;
-            testBoudingRect = CGRectNull;
-            testDrawText = nil;
-            
-            do {
-                lastMatchText = testDrawText;
-                lastBoundingRect = testBoudingRect;
-                testDrawText = [[_text substringToIndex:subTextToIndex] stringByAppendingString:@"..."];
-                testBoudingRect = [self _boudingRectWithText:testDrawText attributes:attributes size:unlimitSize];
-                subTextToIndex++;
-                
-            } while (maxSize.width >= testBoudingRect.size.width && subTextToIndex <= _text.length - 1);
-            
-            if (!lastMatchText) {
-                // The maxSize can't contain any words.
-                lastMatchText = @"...";
-                lastBoundingRect = boundingRect;
+        BOOL didOverstep = NO;
+        
+        if (isFillingFirstLine) {
+            testBoudingRect = [self _boudingRectWithText:testDrawText
+                                              attributes:attributes size:unlimitSize];
+            if (testBoudingRect.size.width > maxSize.width) {
+                isFillingFirstLine = NO;
             }
-        } else {
-            lastMatchText = _text;
-            lastBoundingRect = totalTextBoundingRect;
         }
+        
+        if (!isFillingFirstLine) {
+            testBoudingRect = [self _boudingRectWithText:testDrawText
+                                              attributes:attributes size:unlimitHeightSize];
+            if (testBoudingRect.size.height > maxSize.height) {
+                didOverstep = YES;
+            }
+        }
+        
+        if (didOverstep) {
+            didClipText = YES;
+            break;
+        }
+        _drawText = testDrawText;
+        resultBoundingRect = testBoudingRect;
     }
-    _drawText = lastMatchText;
     
-    return lastBoundingRect;
+    if (!didClipText || CGRectIsNull(resultBoundingRect)) {
+        //maxSize can contain total text. or the text is empty.
+        _drawText = _text;
+        resultBoundingRect = originalBoundingRect;
+        
+    }
+    return resultBoundingRect;
 }
 
 - (CGRect)_boudingRectWithText:(NSString *)text attributes:(NSDictionary *)attributes size:(CGSize)size
