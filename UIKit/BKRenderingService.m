@@ -220,6 +220,8 @@ static BOOL hasInvalidateTextures = NO;
     NSTimeInterval totalTime = 0;
 
     while (!self.isCanceled) {
+        @autoreleasepool {
+        
         if (!shouldRefreshScreen) {
             if (!hasInvalidateTextures) {
                 [CAGLTexture invalidate];
@@ -285,9 +287,10 @@ static BOOL hasInvalidateTextures = NO;
             }
         }
         
-
+        
         // notify main thread on frame end?
         [CADisplayLink _endFrame];
+        }
     }
 
 }
