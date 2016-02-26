@@ -97,6 +97,9 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (void)dealloc
 {
+    NSAssert1(_delaysBufferedBlocks.count == 0,
+              @"There are some delays blocks not run. %@", [self description]);
+    
     // when the window or view dealloc, the gesture recognizer should be cancelled.
     // but I have never implement cancelled method.
     
@@ -545,12 +548,16 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
     if (touches) {
         [self _printLogForTouchPhase:phase];
         
+        __weak UIView *weakView = _view;
+        
         for (UITouch *touch in touches) {
             NSSet *wrapTouch = [[NSSet alloc] initWithObjects:touch, nil];
             
             if (delays) {
                 [_delaysBufferedBlocks addObject:^{
-                    [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
+                    if (weakView) {
+                        [weakView performSelector:callbackMethod withObject:wrapTouch withObject:event];
+                    }
                 }];
             } else {
                 [_view performSelector:callbackMethod withObject:wrapTouch withObject:event];
