@@ -497,11 +497,19 @@ static NSMutableArray *_viewControllerInstances;
 {
     //FIXME: options?
     UIView *superView = fromViewController.view.superview;
+    
+    // FIXME: workaround here
+    //  should use UIView transition to trigger view appear/disappear message
     [UIView animateWithDuration:duration animations:^{
+        [fromViewController viewWillDisappear:YES];
+        [toViewController viewWillAppear:YES];
+        
         [fromViewController.view removeFromSuperview];
         [superView addSubview:toViewController.view];
         toViewController.view.frame = fromViewController.view.frame;
     } completion:^(BOOL finished) {
+        [toViewController viewDidAppear:YES];
+        [fromViewController viewDidDisappear:YES];
         if (completion) {
             completion(finished);
         }
