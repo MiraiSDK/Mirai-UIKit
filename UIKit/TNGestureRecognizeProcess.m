@@ -452,6 +452,7 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 - (void)_clearRecognizersIfTheyNeverRecivedTouches
 {
     for (UIGestureRecognizer *recognizer in _neverRecivedAnyTouchRecognizers) {
+        [recognizer reset];
         [_effectRecognizersNode removeGestureRecognizer:recognizer];
     }
     [_neverRecivedAnyTouchRecognizers removeAllObjects];
