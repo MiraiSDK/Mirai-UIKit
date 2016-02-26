@@ -374,7 +374,10 @@
 {
     NSValue *keyView = [NSValue valueWithNonretainedObject:view];
     [_effectRecognizeProcesses removeObjectForKey:keyView];
-    [_effectRecognizeProcessesList removeObject:[_effectRecognizeProcesses objectForKey:keyView]];
+    id obj = [_effectRecognizeProcesses objectForKey:keyView];
+    if (obj) {
+        [_effectRecognizeProcessesList removeObject:obj];
+    }
 }
 
 - (void)_clearHasMakeConclusionReconizeProcesses
