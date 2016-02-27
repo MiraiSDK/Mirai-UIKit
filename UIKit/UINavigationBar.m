@@ -44,13 +44,13 @@
 - (UINavigationBar *)_navigationBar;
 @end
 
-static const UIEdgeInsets kButtonEdgeInsets = {0,0,0,0};
+static const UIEdgeInsets kButtonEdgeInsets = {20,0,0,0};
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
-static const CGFloat kMaxButtonHeight = 96;//24;
+static const CGFloat kMaxButtonHeight = 44;
 static const CGFloat kDefaultButtonsGap = 8;
-static const CGFloat kDefaultBackButtonsFontSize = 22; //11
-static const CGFloat kDefaultTitleFontSize = 28; //14
+static const CGFloat kDefaultBackButtonsFontSize = 20;
+static const CGFloat kDefaultTitleFontSize = 17;
 
 static const NSTimeInterval kAnimationDuration = 0.33;
 
@@ -295,7 +295,7 @@ typedef enum {
             titleLabel.text = topItem.title;
             titleLabel.textAlignment = UITextAlignmentCenter;
             titleLabel.backgroundColor = [UIColor clearColor];
-            titleLabel.textColor = [UIColor _systemTextColor];
+            titleLabel.textColor = [UIColor blackColor];
             titleLabel.font = [UIFont boldSystemFontOfSize:kDefaultTitleFontSize];
             _centerView = titleLabel;
         }

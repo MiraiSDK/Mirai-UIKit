@@ -12,7 +12,7 @@
 #import "UIScrollView.h"
 
 static const NSTimeInterval kAnimationDuration = 0.33;
-static const CGFloat NavBarHeight = 112;//28;
+static const CGFloat NavBarHeight = 64; // 44 height + 20 status bar
 static const CGFloat ToolbarHeight = 28;
 
 typedef enum {
