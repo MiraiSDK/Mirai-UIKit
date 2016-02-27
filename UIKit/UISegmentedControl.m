@@ -13,8 +13,8 @@
 #import "math.h"
 
 #define DefaultBorderWidth 1
-#define DefaultTintColor [UIColor blueColor]
-#define DefaultBackgroundColor [UIColor whiteColor]
+#define DefaultTintColor [UIColor colorWithRed:0 green:0.478431 blue:1 alpha:1]
+#define DefaultBackgroundColor [UIColor clearColor]
 
 typedef enum{
     SegmentedTypeTitle,
@@ -129,8 +129,7 @@ typedef enum{
 {
     UIButton *segmentedButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [segmentedButton setTitle:title forState:UIControlStateNormal];
-    //Bug: call setBorderWidth will crash. I didn't find a way to fix it.
-//    [segmentedButton.layer setBorderWidth:DefaultBorderWidth];
+    [segmentedButton.layer setBorderWidth:DefaultBorderWidth];
     [self _setSegment:segmentedButton isSelected:NO];
     [segmentedButton addTarget:self action:@selector(_onReleaseSegment:)
               forControlEvents:UIControlEventTouchUpInside];
@@ -274,10 +273,10 @@ typedef enum{
 - (void)_setSegment:(UIButton *)segmentedButton isSelected:(BOOL)selected
 {
     UIColor *backgroundColor = (selected? self.tintColor: DefaultBackgroundColor);
-    UIColor *titleColor = (selected? DefaultBackgroundColor: self.tintColor);
+    UIColor *titleColor = (selected? [UIColor whiteColor]: self.tintColor);
     
     segmentedButton.backgroundColor = backgroundColor;
-    [segmentedButton.layer setBorderColor:titleColor.CGColor];
+    [segmentedButton.layer setBorderColor:self.tintColor.CGColor];
     [segmentedButton setTitleColor:titleColor forState:UIControlStateNormal];
     [segmentedButton setTitleColor:titleColor forState:UIControlStateHighlighted];
 }
