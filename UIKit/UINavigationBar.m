@@ -44,7 +44,7 @@
 - (UINavigationBar *)_navigationBar;
 @end
 
-static const UIEdgeInsets kButtonEdgeInsets = {20,0,0,0};
+static const UIEdgeInsets kButtonEdgeInsets = {10,0,0,0}; //FIXME: top inset should be 20 once status window is implmented
 static const CGFloat kMinButtonWidth = 30;
 static const CGFloat kMaxButtonWidth = 200;
 static const CGFloat kMaxButtonHeight = 44;
