@@ -14,6 +14,7 @@
 
 @interface TNMultiTouchProcess : NSObject
 
+@property (nonatomic) BOOL cancelsTouchesInView;
 @property (nonatomic, readonly) UIWindow *window;
 @property (nonatomic, readonly) BOOL handingTouchEvent;
 @property (nonatomic, readonly) BOOL handingMultiTouchEvent;

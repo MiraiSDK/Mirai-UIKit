@@ -40,8 +40,6 @@ typedef BOOL (^CallbackAndCheckerMethod)(UIGestureRecognizer *recognizer, BOOL* 
     BOOL _anyRecognizersMakeConclusion;
     BOOL _hasCallAttachedViewCancelledMethod;
     BOOL _hasCallAttachedViewAnyMethod;
-    
-    BOOL _cancelsTouchesInView;
 }
 static BOOL _callingGestureRecognizerChangedStateMethod;
 static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
@@ -207,7 +205,6 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 {
     _lastTimeHasMakeConclusion = self.hasMakeConclusion;
     _anyRecognizersMakeConclusion = NO;
-    _cancelsTouchesInView = NO;
     
     [self _setAllRecognizersNotRecivedAnyTouches];
 }
@@ -284,10 +281,10 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (void)_cancelsTouchesInViewIfNeedWithTouches:(NSSet *)touches event:(UIEvent *)event
 {
-    if (!_cancelsTouchesInView) {
+    if (!_multiTouchProcess.cancelsTouchesInView) {
         for (UIGestureRecognizer *recognizer in _centralizedChangedStateRecognizersBuffer) {
             if ([self _touchesWouldBeCancelledByRecognizer:recognizer]) {
-                _cancelsTouchesInView = YES;
+                _multiTouchProcess.cancelsTouchesInView = YES;
                 break;
             }
         }
@@ -301,7 +298,9 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (BOOL)_needSendCanceledEventToAttachedView
 {
-    return _cancelsTouchesInView && _hasCallAttachedViewAnyMethod && !_hasCallAttachedViewCancelledMethod;
+    return _multiTouchProcess.cancelsTouchesInView &&
+           _hasCallAttachedViewAnyMethod &&
+           !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -446,7 +445,7 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (BOOL)_needSendEventToAttachedView
 {
-    return !_cancelsTouchesInView && !_hasCallAttachedViewCancelledMethod;
+    return !_multiTouchProcess.cancelsTouchesInView && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_runAndClearDelaysBufferedBlocksIfNeed
@@ -470,8 +469,10 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
 
 - (BOOL)_needToRunDelaysBlockedBlocks
 {
-    return !_cancelsTouchesInView && self.hasMakeConclusion &&
-           _delaysBufferedBlocks.count > 0 && !_hasCallAttachedViewCancelledMethod;
+    return !_multiTouchProcess.cancelsTouchesInView &&
+           self.hasMakeConclusion &&
+           _delaysBufferedBlocks.count > 0 &&
+           !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_sendToAttachedViewWithEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -640,7 +641,7 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
         [self _handleIfHasMadeConclusionForRecognizer:getureRecognizer];
     }
     if ([self _touchesWouldBeCancelledByRecognizer:getureRecognizer]) {
-        _cancelsTouchesInView = YES;
+        _multiTouchProcess.cancelsTouchesInView = YES;
     }
     [self _tellMultiTouchProcessMadeConclusionIfNeed];
     
