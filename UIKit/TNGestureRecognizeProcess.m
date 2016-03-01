@@ -293,11 +293,15 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
         }
     }
     
-    if (_cancelsTouchesInView && _hasCallAttachedViewAnyMethod) {
+    if ([self _needSendCanceledEventToAttachedView]) {
         [self _sendToAttachedViewWithCancelledEvent:event touches:touches];
-        _hasCallAttachedViewCancelledMethod = YES;
         [_delaysBufferedBlocks removeAllObjects];
     }
+}
+
+- (BOOL)_needSendCanceledEventToAttachedView
+{
+    return _cancelsTouchesInView && _hasCallAttachedViewAnyMethod && !_hasCallAttachedViewCancelledMethod;
 }
 
 - (void)_sendToAttachedViewWithCancelledEvent:(UIEvent *)event touches:(NSSet *)touches
@@ -310,6 +314,9 @@ static NSMutableArray *_preventRecursionChangedStateRecognizersBuffer;
     
     for (UITouch *touch in touches) {
         [touch _setOnlyShowPhaseAsCancelled:NO];
+    }
+    if (touches.count > 0) {
+        _hasCallAttachedViewCancelledMethod = YES;
     }
 }
 
