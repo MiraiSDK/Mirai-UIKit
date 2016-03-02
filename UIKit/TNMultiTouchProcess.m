@@ -86,6 +86,7 @@
     
     if (touchBegin) {
         [self _beginWithEvent:event touches:touches];
+        _cancelsTouchesInView = NO;
     }
     NSArray *recognizerProcesses = [_effectRecognizeProcessesList copy];
     

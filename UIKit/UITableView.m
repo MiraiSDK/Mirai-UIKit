@@ -715,9 +715,13 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     if (!_highlightedRow) {
         UITouch *touch = [touches anyObject];
         const CGPoint location = [touch locationInView:self];
-
-        _highlightedRow = [self indexPathForRowAtPoint:location];
-        [self cellForRowAtIndexPath:_highlightedRow].highlighted = YES;
+        NSIndexPath *touchRow = [self indexPathForRowAtPoint:location];
+        UITableViewCell *touchCell = [self cellForRowAtIndexPath:touchRow];
+        
+        if (![touchCell _isBelongsToBasicViews:touch.view]) {
+            _highlightedRow = touchRow;
+            touchCell.highlighted = YES;
+        }
     }
 }
 
@@ -773,6 +777,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSLog(@"[FIGEER778] %s", __FUNCTION__);
     if (_highlightedRow) {
         [self cellForRowAtIndexPath:_highlightedRow].highlighted = NO;
         _highlightedRow = nil;

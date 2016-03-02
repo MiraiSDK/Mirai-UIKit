@@ -126,6 +126,26 @@ extern CGFloat _UITableViewDefaultRowHeight;
 //    }
 }
 
+- (BOOL)_isBelongsToBasicViews:(UIView *)view
+{
+    while (view && view != self) {
+        if ([self _isBasicView:view]) {
+            return YES;
+        }
+        view = view.superview;
+    }
+    return NO;
+}
+
+- (BOOL)_isBasicView:(UIView *)view
+{
+    return view != _seperatorView &&
+           view != _accessoryView &&
+           view != _contentView &&
+           view != _backgroundView &&
+           view != _selectedBackgroundView;
+}
+
 - (UIView *)contentView
 {
     if (!_contentView) {
