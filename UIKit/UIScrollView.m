@@ -242,8 +242,8 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     _horizontalScroller.contentSize = _contentSize.width;
     _horizontalScroller.contentOffset = _contentOffset.x;
     
-    _verticalScroller.hidden = !self._canScrollVertical;
-    _horizontalScroller.hidden = !self._canScrollHorizontal;
+    _verticalScroller.hidden =  !(_showsVerticalScrollIndicator && self._canScrollVertical);
+    _horizontalScroller.hidden = ! (_showsHorizontalScrollIndicator && self._canScrollHorizontal);
 }
 
 - (void)setScrollEnabled:(BOOL)enabled
