@@ -274,10 +274,11 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
         
         @try {
         do {
-            [BKLayerDisplayLock() lock];
-            hasReleaseLock = NO;
             
             @autoreleasepool {
+                [BKLayerDisplayLock() lock];
+                hasReleaseLock = NO;
+                
                 NSDate *begin = [NSDate date];
                 
                 //TODO: should use distantFuture to reduce cpu usage
@@ -380,9 +381,10 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
                     //NSLog(@"runloop:%fs, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
                     
                 }
+                
+                [BKLayerDisplayLock() unlock];
+                hasReleaseLock = YES;
             }
-            [BKLayerDisplayLock() unlock];
-            hasReleaseLock = YES;
             
         } while (_isRunning);
             
