@@ -375,7 +375,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     UIBezierPath *copy = [[[self class] allocWithZone:zone] init];
-    copy->_path = CGPathCreateMutable();
+    copy->_path = CGPathCreateMutableCopy(_path);
     return copy;
 }
 
