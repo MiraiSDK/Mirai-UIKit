@@ -60,6 +60,20 @@
     if (_path) CGPathRelease(_path);
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self) {
+        NSLog(@"[Warning]%s not implemented",__PRETTY_FUNCTION__);
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    NSLog(@"[Warning]%s not implemented",__PRETTY_FUNCTION__);
+}
+
 + (UIBezierPath *)bezierPathWithCGPath:(CGPathRef)CGPath
 {
     NSAssert(CGPath != NULL, @"CGPath must not be NULL");
