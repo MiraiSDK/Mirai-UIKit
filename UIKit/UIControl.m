@@ -58,6 +58,7 @@
         self.enabled = YES;
         self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self addGestureRecognizer:_controlGestureRecognizer];
     }
     return self;
 }
@@ -154,7 +155,7 @@
 {
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     for (UITouch *touch in touches) {
         [self _setBeginLocation:[touch locationInView:self.window] forTouch:touch];
@@ -176,7 +177,7 @@
     }
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
     const BOOL wasTouchInside = _touchInside;
@@ -200,7 +201,7 @@
     }
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
     _touchInside = [self pointInside:[touch locationInView:self] withEvent:event];
@@ -218,7 +219,7 @@
     [_touchBeginLocationContainer removeAllObjects];
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     self.highlighted = NO;
 
@@ -308,14 +309,56 @@
 
 @implementation _UIControlGestureRecognizer
 {
+    NSUInteger _touchedCount;
     __unsafe_unretained UIControl *_control;
 }
+
 -(instancetype)initWIthControl:(UIControl *)control
 {
     if (self = [super init]) {
         _control = control;
+        self.cancelsTouchesInView = NO;
     }
     return self;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    _touchedCount += [self _countOfTouches:touches withPhase:UITouchPhaseBegan];
+    [_control _touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_control _touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    _touchedCount -= [self _countOfTouches:touches withPhase:UITouchPhaseEnded];
+    [_control _touchesEnded:touches withEvent:event];
+    
+    if (_touchedCount == 0) {
+        self.state = UIGestureRecognizerStateFailed;
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_control _touchesCancelled:touches withEvent:event];
+    self.state = UIGestureRecognizerStateCancelled;
+    _touchedCount = 0;
+}
+
+- (NSUInteger)_countOfTouches:(NSSet *)touches withPhase:(UITouchPhase)phase
+{
+    NSUInteger count = 0;
+    for (UITouch *touch in touches) {
+        if (touch.phase == phase) {
+            count ++;
+        }
+    }
+    return count;
 }
 
 @end
