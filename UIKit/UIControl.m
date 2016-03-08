@@ -34,9 +34,17 @@
 #import "UIControlAction.h"
 #import "UIGeometry.h"
 
+#import "UIGestureRecognizer.h"
+#import "UIGestureRecognizerSubclass.h"
+
+@interface _UIControlGestureRecognizer : UIGestureRecognizer
+- (instancetype)initWIthControl:(UIControl *)control;
+@end
+
 @implementation UIControl
 {
     NSMutableDictionary *_touchBeginLocationContainer;
+    _UIControlGestureRecognizer *_controlGestureRecognizer;
 }
 @synthesize tracking=_tracking, touchInside=_touchInside, selected=_selected, enabled=_enabled, highlighted=_highlighted;
 @synthesize contentHorizontalAlignment=_contentHorizontalAlignment, contentVerticalAlignment=_contentVerticalAlignment;
@@ -46,6 +54,7 @@
     if ((self=[super initWithFrame:frame])) {
         _registeredActions = [[NSMutableArray alloc] init];
         _touchBeginLocationContainer = [[NSMutableDictionary alloc] init];
+        _controlGestureRecognizer = [[_UIControlGestureRecognizer alloc] initWIthControl:self];
         self.enabled = YES;
         self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -293,6 +302,20 @@
     if (_selected)		state |= UIControlStateSelected;
 
     return state;
+}
+
+@end
+
+@implementation _UIControlGestureRecognizer
+{
+    __unsafe_unretained UIControl *_control;
+}
+-(instancetype)initWIthControl:(UIControl *)control
+{
+    if (self = [super init]) {
+        _control = control;
+    }
+    return self;
 }
 
 @end
