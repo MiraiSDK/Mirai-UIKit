@@ -57,6 +57,9 @@ static UIScreen *_mainScreen = nil;
         //  __windowLayer is been used to simulate iOS screen
         _landscaped = [UIScreenOrientationListener isLandscaped];
         __pixelLayer = [CALayer layer];
+        if ([__pixelLayer respondsToSelector:@selector(_convertToRootLayer)]) {
+            [__pixelLayer performSelector:@selector(_convertToRootLayer)];
+        }
         __pixelLayer.masksToBounds = YES;
 //        __pixelLayer.backgroundColor =[UIColor redColor].CGColor;
         
