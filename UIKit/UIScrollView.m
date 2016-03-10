@@ -76,7 +76,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 @implementation UIScrollView {
     @package
-    __unsafe_unretained id _delegate;
+    __weak id _delegate;
 @private
     UIScrollView *_banScrollView;
     BOOL _banDragXForAllSuperScrollViews;

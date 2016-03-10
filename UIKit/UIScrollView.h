@@ -35,7 +35,7 @@ UIKIT_EXTERN const CGFloat UIScrollViewDecelerationRateFast;
 @property(nonatomic)         CGPoint                      contentOffset;
 @property(nonatomic)         CGSize                       contentSize;
 @property(nonatomic)         UIEdgeInsets                 contentInset;
-@property(nonatomic,assign) id<UIScrollViewDelegate>      delegate;
+@property(nonatomic,weak) id<UIScrollViewDelegate>      delegate;
 @property(nonatomic,getter=isDirectionalLockEnabled) BOOL directionalLockEnabled;
 @property(nonatomic)         BOOL                         bounces;
 @property(nonatomic)         BOOL                         alwaysBounceVertical;
