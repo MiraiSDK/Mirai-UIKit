@@ -223,10 +223,6 @@ static BKRenderingService *currentService = nil;
 
 - (void)rendering
 {
-    // rendering
-    
-    long long frameCount = 0;
-    NSTimeInterval totalTime = 0;
     NSRunLoop *runloop = [NSRunLoop currentRunLoop];
     NSDate *distantFuture = [NSDate distantFuture];
     _nextFrameTime = INFINITY;
@@ -244,9 +240,7 @@ static BKRenderingService *currentService = nil;
             eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
             eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
             @autoreleasepool {
-                //            NSDate * begin = [NSDate date];
                 _renderer.layer = self.layer;
-                //            self.layer = nil;
                 _renderer.bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
                 [_renderer addUpdateRect:_renderer.layer.bounds];
                 [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
@@ -254,17 +248,6 @@ static BKRenderingService *currentService = nil;
                 [_renderer endFrame];
                 
                 _nextFrameTime = [_renderer nextFrameTime];
-                
-                //            NSTimeInterval usage = -[begin timeIntervalSinceNow];
-                //            frameCount ++;
-                //            totalTime += usage;
-                //
-                //            if (frameCount >= 60) {
-                //                NSLog(@"FSP:%.2f",frameCount / totalTime);
-                //
-                //                frameCount = 0;
-                //                totalTime = 0;
-                //            }
                 
                 eglSwapBuffers(_display, _surface);
             }
@@ -291,7 +274,6 @@ static BKRenderingService *currentService = nil;
             
             // notify main thread on frame end?
             [CADisplayLink _endFrame];
-            NSLog(@"end endering");
             NSLog(@"nextFrameTime: %.8f",_nextFrameTime);
         }
     }
@@ -331,7 +313,6 @@ NS_ENUM(uint8_t, RenderingEvent) {
     self.nextLayer = layer;
     [self.frameLock unlock];
     
-    NSLog(@"notify layer uploaded");
     uint8_t msg = RenderingEventLayerUpdate;
     write(_msgwrite, &msg, sizeof(msg));
 }
