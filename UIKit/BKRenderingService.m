@@ -66,8 +66,6 @@
 @end
 @implementation BKRenderingService
 static BKRenderingService *currentService = nil;
-static BOOL shouldRefreshScreen = YES;
-static BOOL hasInvalidateTextures = NO;
 
 - (instancetype)initWithAndroidApp:(struct android_app *)androidApp
 {
@@ -241,16 +239,6 @@ static BOOL hasInvalidateTextures = NO;
             }
             
             [runloop runMode:NSDefaultRunLoopMode beforeDate:limitDate];
-        
-            if (!shouldRefreshScreen) {
-                if (!hasInvalidateTextures) {
-                    [CAGLTexture invalidate];
-                    NSLog(@"invalidate all textures.");
-                    hasInvalidateTextures = YES;
-                }
-                continue;
-            }
-            hasInvalidateTextures = NO;
             
             EGLint pixelWidth, pixelHeight;
             eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
@@ -327,6 +315,11 @@ static BOOL hasInvalidateTextures = NO;
 
 #pragma mark - layer updated
 
+NS_ENUM(uint8_t, RenderingEvent) {
+    RenderingEventLayerUpdate,
+    RenderingEventLayerRefresh,
+};
+
 // Calling from Main thread
 - (void)uploadRenderLayer:(CALayer *)layer
 {
@@ -339,7 +332,7 @@ static BOOL hasInvalidateTextures = NO;
     [self.frameLock unlock];
     
     NSLog(@"notify layer uploaded");
-    uint8_t msg = 1;
+    uint8_t msg = RenderingEventLayerUpdate;
     write(_msgwrite, &msg, sizeof(msg));
 }
 
@@ -358,6 +351,11 @@ static BOOL hasInvalidateTextures = NO;
     }
     @finally {
         [self.frameLock unlock];
+    }
+    
+    if (cmd == RenderingEventLayerRefresh) {
+        [CAGLTexture invalidate];
+        NSLog(@"invalidate all textures.");
     }
 }
 
@@ -390,6 +388,14 @@ static BOOL hasInvalidateTextures = NO;
     _msgread = 0;
     _msgwrite = 0;
 }
+
+- (void)notifyRefreshScreen:(BOOL)value
+{
+    if (value) {
+        uint8_t msg = RenderingEventLayerRefresh;
+        write(_msgwrite, &msg, sizeof(msg));
+    }
+}
 @end
 
 void BKRenderingServiceBegin(struct android_app *androidApp)
@@ -400,7 +406,7 @@ void BKRenderingServiceBegin(struct android_app *androidApp)
 
 void BKRenderingSetShouldRefreshScreen(BOOL value)
 {
-    shouldRefreshScreen = value;
+    [currentService notifyRefreshScreen:value];
 }
 
 void BKRenderingServiceRun()
