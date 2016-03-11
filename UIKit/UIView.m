@@ -402,7 +402,7 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setTransform:(CGAffineTransform)aTransform
 {
-    NSLog(@"### setTransform : %@", NSStringFromCGAffineTransform(aTransform));
+//    NSLog(@"### setTransform : %@", NSStringFromCGAffineTransform(aTransform));
     _layer.affineTransform = aTransform;
 }
 
@@ -1269,11 +1269,11 @@ static BOOL _animationsEnabled = YES;
 {
     NS_UNIMPLEMENTED_LOG;
     //FIXME: Needs Imp
-    NSLog(@"call async");
+//    NSLog(@"call async");
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        NSLog(@"in transition async");
+//        NSLog(@"in transition async");
         if (completion) {
-            NSLog(@"call completion");
+//            NSLog(@"call completion");
             completion(YES);
         }
     }];
@@ -1285,11 +1285,11 @@ static BOOL _animationsEnabled = YES;
 {
     NS_UNIMPLEMENTED_LOG;
     //FIXME: Needs Imp
-    NSLog(@"call async");
+//    NSLog(@"call async");
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        NSLog(@"in transition async");
+//        NSLog(@"in transition async");
         if (completion) {
-            NSLog(@"call completion");
+//            NSLog(@"call completion");
             completion(YES);
         }
     }];

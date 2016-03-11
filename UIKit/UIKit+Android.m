@@ -14,7 +14,7 @@
 
 - (void)enumerateSubstringsInRange:(NSRange)range options:(NSStringEnumerationOptions)opts usingBlock:(void (^)(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop))block
 {
-    NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
+//    NSLog(@"%s UNIMPLEMENTED",__PRETTY_FUNCTION__);
     
     BOOL isReverse = opts & NSStringEnumerationReverse;
     BOOL isLocalized = opts & NSStringEnumerationLocalized;
@@ -28,7 +28,7 @@
     } else if (by == NSStringEnumerationByLines) {
         
     } else {
-        NSLog(@"unimplemented options:%d",opts);
+        NSLog(@"%s unimplemented options:%d",__PRETTY_FUNCTION__, opts);
     }
     BOOL shouldStop = NO;
     @autoreleasepool {

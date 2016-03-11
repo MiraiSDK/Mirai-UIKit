@@ -174,7 +174,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         
         self.clipsToBounds = YES;
         
-        NSLog(@"scrollview sublayers:%@", self.layer.sublayers);
+//        NSLog(@"scrollview sublayers:%@", self.layer.sublayers);
     }
     return self;
 }
