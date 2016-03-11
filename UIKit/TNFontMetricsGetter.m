@@ -24,6 +24,8 @@ static jmethodID _topMethodID;
 {
     JNIEnv *env = [[TNJavaHelper sharedHelper] env];
     _proxyClass = [[TNJavaHelper sharedHelper] findCustomClass:@"org.tiny4.CoreTextHelper.FontMetricsProxy"];
+    _proxyClass = (*env)->NewGlobalRef(env,_proxyClass);
+    
     _proxyConstructor = (*env)->GetMethodID(env, _proxyClass, "<init>", "(Ljava/lang/String;FZZ)V");
     
     _ascentMethodID = (*env)->GetMethodID(env, _proxyClass, "ascent", "()F");
