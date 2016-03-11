@@ -13,5 +13,6 @@
 
 @interface UIViewController (Private)
 + (void)_performMemoryWarning;
+- (void)_setParentViewController:(UIViewController *)parentController;
 @end
 #endif
