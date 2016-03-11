@@ -22,4 +22,4 @@ void BKRenderingServiceEnd();
 CGRect BKRenderingServiceGetPixelBounds();
 BOOL BKRenderingServiceNeedNewRenderLayer();
 void BKRenderingServiceUploadRenderLayer(CALayer *layer);
-NSLock *BKLayerDisplayLock();
+NSRecursiveLock *BKLayerDisplayLock();

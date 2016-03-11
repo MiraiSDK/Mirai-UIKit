@@ -361,6 +361,6 @@ void BKRenderingServiceUploadRenderLayer(CALayer *layer)
     [currentService uploadRenderLayer:layer];
 }
 
-NSLock *BKLayerDisplayLock() {
+NSRecursiveLock *BKLayerDisplayLock() {
     return [CARenderer layerDisplayLock];
 }
