@@ -283,6 +283,23 @@ static BKRenderingService *currentService = nil;
     }
 }
 
+- (void)frameAvailable
+{
+    int8_t cmd = RenderingEventLayerFrameAvailable;
+    write(_msgwrite, &cmd, sizeof(cmd));
+}
+
+void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnFrameAvailable(JNIEnv *env, jobject obj, jobject texture)
+{
+    [currentService frameAvailable];
+}
+
+void Java_org_tiny4_CocoaActivity_MovieRender_nativeOnFrameAvailable(JNIEnv *env, jobject obj, jobject texture)
+{
+    [currentService frameAvailable];
+}
+
+
 + (void)setupWithAndroidApp:(struct android_app *)androidApp
 {
     if (currentService) {
@@ -304,6 +321,7 @@ static BKRenderingService *currentService = nil;
 NS_ENUM(uint8_t, RenderingEvent) {
     RenderingEventLayerUpdate,
     RenderingEventLayerRefresh,
+    RenderingEventLayerFrameAvailable,
 };
 
 // Calling from Main thread
