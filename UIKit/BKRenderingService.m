@@ -198,6 +198,10 @@ static BKRenderingService *currentService = nil;
     _layer = nil;
     _renderer = nil;
     [EAGLContext setCurrentContext:nil];
+    
+    [CAGLTexture invalidate];
+    NSLog(@"invalidate all textures.");
+
 }
 
 - (void)tearDownEGL
