@@ -109,6 +109,8 @@
 		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
 		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
+		43EC7BE61C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */; };
+		43EC7BE71C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */; };
 		D20761961BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; };
 		D20761971BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; };
 		D207619A1BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761991BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m */; };
@@ -341,6 +343,8 @@
 		4390B88B1A85EDA10082B0F1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		4390B88C1A85EDA10082B0F1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
+		43EC7BE41C96B8C7000E1DA1 /* TNBezierPathTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNBezierPathTestViewController.h; sourceTree = "<group>"; };
+		43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNBezierPathTestViewController.m; sourceTree = "<group>"; };
 		D20761941BDE168300FA5B48 /* TNNextBookIssueTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNNextBookIssueTestViewController.h; sourceTree = "<group>"; };
 		D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNNextBookIssueTestViewController.m; sourceTree = "<group>"; };
 		D20761981BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNInteractiveImageWidgetTestViewController.h; sourceTree = "<group>"; };
@@ -584,6 +588,7 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
+				43EC7BE11C96B88E000E1DA1 /* UIBezierPath */,
 				D2C401781B846E1C0055BF2E /* UIGestureRecognizer */,
 				D22284AB1B7B132E003B5996 /* UIScrollViewInertance */,
 				D2A9FB981B1FF35300C88751 /* UIPopoverController */,
@@ -787,6 +792,15 @@
 			children = (
 			);
 			name = UIImageView;
+			sourceTree = "<group>";
+		};
+		43EC7BE11C96B88E000E1DA1 /* UIBezierPath */ = {
+			isa = PBXGroup;
+			children = (
+				43EC7BE41C96B8C7000E1DA1 /* TNBezierPathTestViewController.h */,
+				43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */,
+			);
+			name = UIBezierPath;
 			sourceTree = "<group>";
 		};
 		D20761911BDE163D00FA5B48 /* NextBook Issue Tests */ = {
@@ -1225,6 +1239,7 @@
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 				D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */,
 				D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */,
+				43EC7BE71C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */,
 				D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */,
 				D2C401821B846F7E0055BF2E /* TNTouchShowMessage.m in Sources */,
 				D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
@@ -1353,6 +1368,7 @@
 				D2A9FB9B1B1FF3AE00C88751 /* TNPopoverControllerTestViewController.m in Sources */,
 				D2239E301B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */,
 				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
+				43EC7BE61C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */,
 				D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */,
 				D2BB4E041B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
 				D233DAFC1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */,
