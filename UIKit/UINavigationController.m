@@ -10,6 +10,7 @@
 #import "UINavigationBar.h"
 #import "UIToolbar.h"
 #import "UIScrollView.h"
+#import "UIViewController+Private.h"
 
 static const NSTimeInterval kAnimationDuration = 0.33;
 static const CGFloat NavBarHeight = 64; // 44 height + 20 status bar
@@ -324,8 +325,7 @@ typedef enum {
     [_navigationBar pushNavigationItem:viewController.navigationItem animated:animated];
     
     // take ownership responsibility
-//    [viewController _setParentViewController:self];
-    viewController->_parentViewController = self;
+    [viewController _setParentViewController:self];
     
 	// if animated and on screen, begin part of the transition immediately, specifically, get the new view
     // on screen asap and tell the new controller it's about to be made visible in an animated fashion
@@ -373,8 +373,7 @@ typedef enum {
     _navigationBar.delegate = self;
     
     // give up ownership of the view controller
-//    [formerTopViewController _setParentViewController:nil];
-    formerTopViewController->_parentViewController = nil;
+    [formerTopViewController _setParentViewController:nil];
     
 	// if animated, begin part of the transition immediately, specifically, get the new top view on screen asap
 	// and tell the old visible controller it's about to be disappeared in an animated fashion

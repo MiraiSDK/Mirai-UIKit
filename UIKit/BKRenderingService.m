@@ -10,6 +10,8 @@
 #import "UIScreenPrivate.h"
 
 #import <OpenGLES/EAGL.h>
+#include <unistd.h>
+
 
 //#import <OpenGLES/EAGL+Private.h>
 @interface EAGLContext()
@@ -36,7 +38,7 @@
 + (void)invalidate;
 @end
 
-@interface BKRenderingService ()
+@interface BKRenderingService () <RunLoopEvents>
 @property (nonatomic, strong) NSOperationQueue *renderQueue;
 @property (nonatomic, assign) struct android_app *app;
 
@@ -55,12 +57,15 @@
 
 @property (nonatomic, assign, getter = isCanceled) BOOL canceled;
 @property (nonatomic, strong) EAGLContext *eaglContext;
-@property (nonatomic, strong) NSLock *frameLock;
+@property (nonatomic, strong) NSRecursiveLock *frameLock;
+@property (nonatomic, strong) NSPort *port;
+
+@property (nonatomic, assign) int msgread;
+@property (nonatomic, assign) int msgwrite;
+@property (nonatomic, assign) CFTimeInterval nextFrameTime;
 @end
 @implementation BKRenderingService
 static BKRenderingService *currentService = nil;
-static BOOL shouldRefreshScreen = YES;
-static BOOL hasInvalidateTextures = NO;
 
 - (instancetype)initWithAndroidApp:(struct android_app *)androidApp
 {
@@ -68,6 +73,7 @@ static BOOL hasInvalidateTextures = NO;
     if (self) {
         _app = androidApp;
         _renderQueue = [[NSOperationQueue alloc] init];
+        _port = [NSMessagePort port];
         [self start];
     }
     return self;
@@ -87,12 +93,15 @@ static BOOL hasInvalidateTextures = NO;
 {
     __weak typeof(self) weakSelf = self;
     [self.renderQueue addOperationWithBlock:^{
-        _frameLock = [[NSLock alloc] init];
+        _frameLock = [[NSRecursiveLock alloc] init];
+        [self installPipe];
         [weakSelf rendering];
         [weakSelf tearDown];
+        [self removePipe];
         _frameLock = nil;
     }];
 }
+
 #pragma mark - call from queue
 - (void)setup
 {
@@ -189,6 +198,10 @@ static BOOL hasInvalidateTextures = NO;
     _layer = nil;
     _renderer = nil;
     [EAGLContext setCurrentContext:nil];
+    
+    [CAGLTexture invalidate];
+    NSLog(@"invalidate all textures.");
+
 }
 
 - (void)tearDownEGL
@@ -214,85 +227,76 @@ static BOOL hasInvalidateTextures = NO;
 
 - (void)rendering
 {
-    // rendering
+    NSRunLoop *runloop = [NSRunLoop currentRunLoop];
+    NSDate *distantFuture = [NSDate distantFuture];
+    _nextFrameTime = INFINITY;
     
-    long long frameCount = 0;
-    NSTimeInterval totalTime = 0;
-
     while (!self.isCanceled) {
         @autoreleasepool {
-        
-        if (!shouldRefreshScreen) {
-            if (!hasInvalidateTextures) {
-                [CAGLTexture invalidate];
-                NSLog(@"invalidate all textures.");
-                hasInvalidateTextures = YES;
+            NSDate *limitDate = distantFuture;
+            if (!isinf(_nextFrameTime)) {
+                limitDate = [NSDate dateWithTimeIntervalSince1970:_nextFrameTime];
             }
-            continue;
-        }
-        hasInvalidateTextures = NO;
-        
-        @try {
-            [self.frameLock lock];
-            self.layer = self.nextLayer;
-            self.nextLayer = nil;
-        }
-        @finally {
-            [self.frameLock unlock];
-        }
-        
-        if (!self.layer) {continue;}
-        EGLint pixelWidth, pixelHeight;
-        eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
-        eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
-        
-        @autoreleasepool {
-//            NSDate * begin = [NSDate date];
-            _renderer.layer = self.layer;
-            self.layer = nil;
-            _renderer.bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
-            [_renderer addUpdateRect:_renderer.layer.bounds];
-            [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-            [_renderer render];
-            [_renderer endFrame];
             
-//            NSTimeInterval usage = -[begin timeIntervalSinceNow];
-//            frameCount ++;
-//            totalTime += usage;
-//            
-//            if (frameCount >= 60) {
-//                NSLog(@"FSP:%.2f",frameCount / totalTime);
-//                
-//                frameCount = 0;
-//                totalTime = 0;
-//            }
+            [runloop runMode:NSDefaultRunLoopMode beforeDate:limitDate];
             
-            eglSwapBuffers(_display, _surface);
-        }
-        
-        // call animation stopped callbacks after end a frame
-        @autoreleasepool {
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                if (![CALayer instancesRespondToSelector:@selector(callAnimationsFinishedCallback)]) {
-                    NSLog(@"[ERROR] QuartzCore version too old. please upgrade QuartzCore");
-                    abort();
+            EGLint pixelWidth, pixelHeight;
+            eglQuerySurface(_display, _surface, EGL_WIDTH, &pixelWidth);
+            eglQuerySurface(_display, _surface, EGL_HEIGHT, &pixelHeight);
+            @autoreleasepool {
+                _renderer.layer = self.layer;
+                _renderer.bounds = CGRectMake(0, 0, pixelWidth, pixelHeight);
+                [_renderer addUpdateRect:_renderer.layer.bounds];
+                [_renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
+                [_renderer render];
+                [_renderer endFrame];
+                
+                _nextFrameTime = [_renderer nextFrameTime];
+                
+                eglSwapBuffers(_display, _surface);
+            }
+            
+            // call animation stopped callbacks after end a frame
+            @autoreleasepool {
+                static dispatch_once_t onceToken;
+                dispatch_once(&onceToken, ^{
+                    if (![CALayer instancesRespondToSelector:@selector(callAnimationsFinishedCallback)]) {
+                        NSLog(@"[ERROR] QuartzCore version too old. please upgrade QuartzCore");
+                        abort();
+                    }
+                });
+                
+                CALayer *modelLayer = [_renderer.layer modelLayer];
+                if ([modelLayer _hasFinishedAnimation]) {
+                    NSLog(@"animation finished..");
+                    [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallbackInMainThread)
+                                                 withObject:nil waitUntilDone:YES];
+                    
                 }
-            });
-            
-            CALayer *modelLayer = [_renderer.layer modelLayer];
-            if ([modelLayer _hasFinishedAnimation]) {
-                [modelLayer performSelectorOnMainThread:@selector(callAnimationsFinishedCallbackInMainThread)
-                                             withObject:nil waitUntilDone:YES];
             }
-        }
-        
-        
-        // notify main thread on frame end?
-        [CADisplayLink _endFrame];
+            
+            
+            // notify main thread on frame end?
+            [CADisplayLink _endFrame];
+            NSLog(@"nextFrameTime: %.8f",_nextFrameTime);
         }
     }
+}
 
+- (void)frameAvailable
+{
+    int8_t cmd = RenderingEventLayerFrameAvailable;
+    write(_msgwrite, &cmd, sizeof(cmd));
+}
+
+void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnFrameAvailable(JNIEnv *env, jobject obj, jobject texture)
+{
+    [currentService frameAvailable];
+}
+
+void Java_org_tiny4_CocoaActivity_MovieRender_nativeOnFrameAvailable(JNIEnv *env, jobject obj, jobject texture)
+{
+    [currentService frameAvailable];
 }
 
 
@@ -312,6 +316,15 @@ static BOOL hasInvalidateTextures = NO;
     currentService = nil;
 }
 
+#pragma mark - layer updated
+
+NS_ENUM(uint8_t, RenderingEvent) {
+    RenderingEventLayerUpdate,
+    RenderingEventLayerRefresh,
+    RenderingEventLayerFrameAvailable,
+};
+
+// Calling from Main thread
 - (void)uploadRenderLayer:(CALayer *)layer
 {
     if (!layer) {
@@ -322,6 +335,69 @@ static BOOL hasInvalidateTextures = NO;
     self.nextLayer = layer;
     [self.frameLock unlock];
     
+    uint8_t msg = RenderingEventLayerUpdate;
+    write(_msgwrite, &msg, sizeof(msg));
+}
+
+// Calling from Rendering thread
+-(void)receivedEvent:(void *)data type:(RunLoopEventType)type extra:(void *)extra forMode:(NSString *)mode
+{
+    int8_t cmd;
+    read(_msgread, &cmd, sizeof(cmd));
+    
+    @try {
+        [self.frameLock lock];
+        if (self.nextLayer) {
+            self.layer = self.nextLayer;
+            self.nextLayer = nil;
+        }
+    }
+    @finally {
+        [self.frameLock unlock];
+    }
+    
+    if (cmd == RenderingEventLayerRefresh) {
+        [CAGLTexture invalidate];
+        NSLog(@"invalidate all textures.");
+    }
+}
+
+- (void)installPipe
+{
+    if (_msgread) {
+        return;
+    }
+    
+    int msgpipe[2];
+    if (pipe(msgpipe)) {
+        NSLog(@"could not create pipe: %s", strerror(errno));
+        [NSException raise:@"Pipe Error" format:@"could not create pipe: %s", strerror(errno)];
+        return;
+    }
+    _msgread = msgpipe[0];
+    _msgwrite = msgpipe[1];
+    
+    NSRunLoop *rl = [NSRunLoop currentRunLoop];
+    [rl addEvent:(void *)(uintptr_t)_msgread
+            type:ET_RDESC
+         watcher:self
+         forMode:NSDefaultRunLoopMode];
+}
+
+- (void)removePipe
+{
+    close(_msgread);
+    close(_msgwrite);
+    _msgread = 0;
+    _msgwrite = 0;
+}
+
+- (void)notifyRefreshScreen:(BOOL)value
+{
+    if (value) {
+        uint8_t msg = RenderingEventLayerRefresh;
+        write(_msgwrite, &msg, sizeof(msg));
+    }
 }
 @end
 
@@ -333,7 +409,7 @@ void BKRenderingServiceBegin(struct android_app *androidApp)
 
 void BKRenderingSetShouldRefreshScreen(BOOL value)
 {
-    shouldRefreshScreen = value;
+    [currentService notifyRefreshScreen:value];
 }
 
 void BKRenderingServiceRun()
