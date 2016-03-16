@@ -256,6 +256,21 @@ static NSMutableArray *_viewControllerInstances;
     return result;
 }
 
+- (UIViewController *)_nearstPresentingViewController
+{
+    UIViewController *nearstPresenting = _presentingViewController;
+    
+    UIViewController *parent = self.parentViewController;
+    while (!nearstPresenting) {
+        UIViewController *presenting = parent->_presentingViewController;
+        if (presenting) {
+            nearstPresenting = presenting;
+        }
+    }
+    
+    return nearstPresenting;
+}
+
 - (BOOL)isBeingPresented
 {
     return _isBeingPresented;
@@ -326,6 +341,13 @@ static NSMutableArray *_viewControllerInstances;
 
 - (void)dismissViewControllerAnimated: (BOOL)animated completion: (void (^)(void))completion
 {
+    UIViewController *ed = _presentedViewController;
+    UIViewController *ing = _presentingViewController;
+    if (!_presentedViewController) {
+        [self._nearstPresentingViewController dismissViewControllerAnimated:animated completion:completion];
+        return;
+    }
+    
     _isBeingDismissed = YES;
     
     UIWindow *window = _presentedViewController.view.window;
