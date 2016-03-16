@@ -149,22 +149,26 @@ static TNJavaBridgeDefinition *_webViewListenerDefinition;
 
 - (void)_handlePageStarted:(TNJavaBridgeCallbackContext *)context
 {
-    [_delegate webViewDidStartLoad:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
+        [self.delegate webViewDidStartLoad:self];
+    }
 }
 
 - (void)_handlePageFinished:(TNJavaBridgeCallbackContext *)context
 {
-    [_delegate webViewDidFinishLoad:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
+        [self.delegate webViewDidFinishLoad:self];
+    }
 }
 
 - (void)_handleReceivedError:(TNJavaBridgeCallbackContext *)context
 {
-    if (_delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
         int androidErrorCode = [context integerParameterAt:1];
         NSInteger iOSErrorCode = [self _androidErrorCodeToIOS:androidErrorCode];
         
         NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:androidErrorCode userInfo:@{}];
-        [_delegate webView:self didFailLoadWithError:error];
+        [self.delegate webView:self didFailLoadWithError:error];
     }
 }
 
