@@ -247,13 +247,14 @@
 
 - (void)_setBeginLocation:(CGPoint)beginLoction forTouch:(UITouch *)touch
 {
-    NSValue *key = [NSValue valueWithNonretainedObject:touch];
-    [_touchBeginLocationContainer setObject:[NSValue valueWithCGPoint:beginLoction]  forKey:key];
+    NSString *key = [NSString stringWithFormat:@"%p",touch];
+    NSValue *value = [NSValue valueWithCGPoint:beginLoction];
+    [_touchBeginLocationContainer setObject:value  forKey:key];
 }
 
 - (CGPoint)_beginLocationForTouch:(UITouch *)touch
 {
-    NSValue *key = [NSValue valueWithNonretainedObject:touch];
+    NSString *key = [NSString stringWithFormat:@"%p",touch];
     NSValue *value = [_touchBeginLocationContainer objectForKey:key];
     
     if (value) {
