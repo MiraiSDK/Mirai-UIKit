@@ -504,6 +504,7 @@ void handle_app_command(struct android_app* app, int32_t cmd) {
         } break;
         case APP_CMD_LOW_MEMORY:
             NSLog(@"CMD: LOW_MEMORY");
+            [[UIApplication sharedApplication] performSelectorOnMainThread:@selector(_performMemoryWarning) withObject:nil waitUntilDone:YES];
             break;
         case APP_CMD_START:
             NSLog(@"CMD: START");
