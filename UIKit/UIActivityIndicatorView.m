@@ -197,7 +197,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = @(M_PI * 2.0 /* full rotation*/ * 1 * animationDuration);
+    rotationAnimation.toValue = @(M_PI * 2.0 /* full rotation*/ * 0.8 * animationDuration);
     rotationAnimation.duration = animationDuration;
     rotationAnimation.cumulative = YES;
     rotationAnimation.repeatCount = HUGE_VALF;
