@@ -180,7 +180,19 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     const NSInteger numberOfFrames = 12;
     const CFTimeInterval animationDuration = 1.0 * 12;
     CGFloat scale = [[UIScreen mainScreen] scale];
-    _imageView.image = UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, 0, numberOfFrames, scale);
+    static NSMutableDictionary *imgCache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        imgCache = [NSMutableDictionary dictionary];
+    });
+    
+    UIImage *img = imgCache[@(_activityIndicatorViewStyle)];
+    if (!img) {
+        img = UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, 0, numberOfFrames, scale);
+        imgCache[@(_activityIndicatorViewStyle)] = img;
+    }
+    
+    _imageView.image = img;
     [_imageView sizeToFit];
     
     CABasicAnimation* rotationAnimation;
