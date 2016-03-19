@@ -50,9 +50,6 @@ static UIApplication *_app;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _app = [[self alloc] init];
-        
-        // install a timer to keep runloop alive
-        [NSTimer scheduledTimerWithTimeInterval:3600 target:_app selector:@selector(dummy_runLoopKeepAlive) userInfo:nil repeats:YES];
     });
     return _app;
 }
@@ -61,9 +58,6 @@ static UIApplication *_app;
 {
     return _app != nil;
 }
-
-// dummy method to keep runloop alive
-- (void)dummy_runLoopKeepAlive{}
 
 - (id)init
 {
@@ -245,8 +239,6 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
     return nil;
 }
 
-- (void)appstartEvent{}
-
 - (void)runloopWillSleep:(NSRunLoop *)r
 {
     @autoreleasepool {
@@ -379,8 +371,6 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
         BKRenderingServiceRun();
         UIAndroidEventsServerResume();
         
-        NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
         NSDate *untilDate = [NSDate distantFuture];
         
         @try {
