@@ -16,7 +16,7 @@
 
 @property (nonatomic) BOOL visible;
 @property (nonatomic) CGRect floatCloseToTarget;
-@property (nonatomic, strong) id<UITopFloatViewDelegate> delegate;
+@property (nonatomic, weak) id<UITopFloatViewDelegate> delegate;
 
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated;
 - (NSArray *)testPositionOnBorderDirectionList;

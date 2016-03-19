@@ -17,7 +17,7 @@
 #define kMinimumPopoverWidth 320
 #define kMaximumPopoverWidth 600
 
-@interface UIPopoverController () <UITouchMask>
+@interface UIPopoverController () <UITopFloatViewDelegate>
 {
     UIPopoverFloatView *_floatView;
 }

@@ -10,10 +10,10 @@
 #import "UIPopoverFloatView.h"
 #import "UIPositionOnRect.h"
 
+@interface UIPopoverFloatView ()
+@property (nonatomic, weak) UIPopoverController *parent;
+@end
 @implementation UIPopoverFloatView
-{
-    UIPopoverController *_parent;
-}
 
 - (instancetype)initWithParent:(UIPopoverController *)parent withContainer:(UIView *)container
 {
