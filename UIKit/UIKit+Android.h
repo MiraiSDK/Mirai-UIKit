@@ -31,16 +31,6 @@ typedef NS_OPTIONS(NSUInteger, NSStringEnumerationOptions) {
 //- (void)enumerateLinesUsingBlock:(void (^)(NSString *line, BOOL *stop))block;
 @end
 
-typedef NS_OPTIONS(NSUInteger, NSAttributedStringEnumerationOptions) {
-    NSAttributedStringEnumerationReverse = (1UL << 1),
-    NSAttributedStringEnumerationLongestEffectiveRangeNotRequired = (1UL << 20)
-};
-@interface NSAttributedString (Android)
-- (void)enumerateAttributesInRange:(NSRange)enumerationRange options:(NSAttributedStringEnumerationOptions)opts usingBlock:(void (^)(NSDictionary *attrs, NSRange range, BOOL *stop))block;
-- (void)enumerateAttribute:(NSString *)attrName inRange:(NSRange)enumerationRange options:(NSAttributedStringEnumerationOptions)opts usingBlock:(void (^)(id value, NSRange range, BOOL *stop))block;
-
-@end
-
 @interface NSBlockOperation : NSOperation {
 @private
     id _private2;
