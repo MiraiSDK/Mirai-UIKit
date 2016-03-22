@@ -58,18 +58,21 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 @interface UIScrollView () <_UIScrollerDelegate>
 @end
 
-@interface _UIScrollViewGestureRecognizer : UIPanGestureRecognizer @end
+@interface _UIScrollViewGestureRecognizer : UIPanGestureRecognizer <UIGestureRecognizerDelegate> @end
 
 @implementation _UIScrollViewGestureRecognizer
 
-- (BOOL)canPreventGestureRecognizer:(UIGestureRecognizer *)preventedGestureRecognizer
+- (instancetype)initWithTarget:(id)target action:(SEL)action
 {
-    return [preventedGestureRecognizer isKindOfClass:[_UIScrollViewGestureRecognizer class]];
+    if (self = [super initWithTarget:target action:action]) {
+        self.delegate = self;
+    }
+    return self;
 }
 
-- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    return [preventingGestureRecognizer isKindOfClass:[_UIScrollViewGestureRecognizer class]];
+    return [otherGestureRecognizer isKindOfClass:[_UIScrollViewGestureRecognizer class]];
 }
 
 @end
@@ -722,6 +725,7 @@ static const float ForceNextPageVelocity = 180;
     // don't use paging mode in Twitterrific at the moment, I'm not suffeciently motivated to worry about it. :)
     
     if (gesture == _panGestureRecognizer) {
+        
         if (_panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
             [self _beginDragging];
             
