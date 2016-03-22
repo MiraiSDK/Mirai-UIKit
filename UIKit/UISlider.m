@@ -36,6 +36,7 @@
 @property BOOL hasDragThumbLastTouch;
 @property BOOL wasContinuousBeforeDrag;
 @property float valueBeforeBeginDrag;
+@property (nonatomic, assign) id privateDelegate;
 @property (nonatomic, strong) UIControl *subviewThumbContainer;
 @property (nonatomic, strong) UIImageView *subviewThumbImage;
 @property (nonatomic, strong) UIImageView *subviewMinimumTrackImage;
@@ -175,6 +176,9 @@
         self.valueBeforeBeginDrag = self.value;
         self.firstThumbTouchDownLocation = [touch locationInView:self];
     }];
+    if ([self.privateDelegate respondsToSelector:@selector(onStartDragging)]) {
+        [self.privateDelegate performSelector:@selector(onStartDragging)];
+    }
 }
 
 - (void)_onThumbDraged:(id)render withEvent:(UIEvent *)event
@@ -201,6 +205,9 @@
             }
         }
     }];
+    if ([self.privateDelegate respondsToSelector:@selector(onEndDragging)]) {
+        [self.privateDelegate performSelector:@selector(onEndDragging)];
+    }
 }
 
 - (float)_getValueOfCurrentDragTouch:(UITouch *)touch

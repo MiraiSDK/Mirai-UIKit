@@ -32,7 +32,6 @@
 #import "UITouch.h"
 #import "UIApplication.h"
 #import "UIControlAction.h"
-#import "UIGeometry.h"
 
 #import "UIGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
@@ -43,7 +42,6 @@
 
 @implementation UIControl
 {
-    NSMutableDictionary *_touchBeginLocationContainer;
     _UIControlGestureRecognizer *_controlGestureRecognizer;
 }
 @synthesize tracking=_tracking, touchInside=_touchInside, selected=_selected, enabled=_enabled, highlighted=_highlighted;
@@ -53,7 +51,6 @@
 {
     if ((self=[super initWithFrame:frame])) {
         _registeredActions = [[NSMutableArray alloc] init];
-        _touchBeginLocationContainer = [[NSMutableDictionary alloc] init];
         _controlGestureRecognizer = [[_UIControlGestureRecognizer alloc] initWIthControl:self];
         self.enabled = YES;
         self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
@@ -157,9 +154,6 @@
 
 - (void)_touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    for (UITouch *touch in touches) {
-        [self _setBeginLocation:[touch locationInView:self.window] forTouch:touch];
-    }
     UITouch *touch = [touches anyObject];
     _touchInside = YES;
     _tracking = [self beginTrackingWithTouch:touch withEvent:event];
@@ -207,16 +201,13 @@
     _touchInside = [self pointInside:[touch locationInView:self] withEvent:event];
 
     self.highlighted = NO;
-
-    if (_tracking && ![self _isTouchMoveTooMuchDistance:touch]) {
+    if (_tracking) {
         [self endTrackingWithTouch:touch withEvent:event];
         [self _sendActionsForControlEvents:((_touchInside)? UIControlEventTouchUpInside : UIControlEventTouchUpOutside) withEvent:event];
     }
 
     _tracking = NO;
     _touchInside = NO;
-    
-    [_touchBeginLocationContainer removeAllObjects];
 }
 
 - (void)_touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
@@ -230,37 +221,6 @@
 
     _touchInside = NO;
     _tracking = NO;
-    
-    [_touchBeginLocationContainer removeAllObjects];
-}
-
-- (BOOL)_isTouchMoveTooMuchDistance:(UITouch *)touch
-{
-    CGPoint beginLocation = [self _beginLocationForTouch:touch];
-    CGPoint currentLocation = [touch locationInView:self.window];
-    
-    CGFloat distance = MAX(ABS(beginLocation.x - currentLocation.x),
-                           ABS(beginLocation.y - currentLocation.y));
-    
-    return distance > 20;
-}
-
-- (void)_setBeginLocation:(CGPoint)beginLoction forTouch:(UITouch *)touch
-{
-    NSValue *key = [NSValue valueWithNonretainedObject:touch];
-    [_touchBeginLocationContainer setObject:[NSValue valueWithCGPoint:beginLoction]  forKey:key];
-}
-
-- (CGPoint)_beginLocationForTouch:(UITouch *)touch
-{
-    NSValue *key = [NSValue valueWithNonretainedObject:touch];
-    NSValue *value = [_touchBeginLocationContainer objectForKey:key];
-    
-    if (value) {
-        return [value CGPointValue];
-    } else {
-        return CGPointZero;
-    }
 }
 
 - (void)_stateDidChange

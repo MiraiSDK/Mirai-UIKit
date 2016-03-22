@@ -75,6 +75,7 @@
         url = [document URLByAppendingPathComponent:@"jobs.mp4"];
     }
     MPMoviePlayerController *mpc = [[MPMoviePlayerController alloc] initWithContentURL:url];
+    [mpc setControlStyle:MPMovieControlStyleFullscreen];
     self.player = mpc;
     mpc.view.frame = CGRectMake(0, 50, 640, 480);
     
