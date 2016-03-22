@@ -70,13 +70,13 @@
     }
     
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"jobs" withExtension:@"mp4"];
-    NSLog(@"url = %@", [NSBundle mainBundle]);
     if (!url) {
         NSURL *document = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
         url = [document URLByAppendingPathComponent:@"jobs.mp4"];
     }
     MPMoviePlayerController *mpc = [[MPMoviePlayerController alloc] initWithContentURL:url];
     self.player = mpc;
+    mpc.view.frame = CGRectMake(0, 50, 640, 480);
     
     [self.view addSubview:mpc.view];
     
