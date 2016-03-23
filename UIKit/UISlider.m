@@ -28,6 +28,7 @@
 #define DefaultMaximumTrackColor [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.0]
 
 #define DefaultThumbImageSize CGSizeMake(42, 42)
+#define DefaultThumbContainerMinimumSize CGSizeMake(42, 42)
 #define DefaultMinimumTrackSize CGSizeMake(5, 5)
 #define DefaultMaximumTrackSize CGSizeMake(5, 5)
 
@@ -243,15 +244,17 @@
 
 - (void)_resetSubviewSizeAndLocation
 {
+    CGRect thumbContainerFrame = self.subviewThumbContainer.frame;
+    
     [self _letYLocationAlignCenter:self.subviewThumbContainer
                    andSetXLocation:[self _getThumbXLocation]];
     [self _letYLocationAlignCenter:self.subviewMinimumTrackImage
                    andSetXLocation:0];
     [self _letYLocationAlignCenter:self.subviewMaximumTrackImage
-                   andSetXLocation:[self _getThumbRightLocation]];
+                   andSetXLocation:[self _getThumbRightLocation] - thumbContainerFrame.size.width/2];
     
-    CGFloat minimumWidth = self.subviewThumbContainer.frame.origin.x;
-    CGFloat maximumWidth = fmax(0, self.frame.size.width - [self _getThumbRightLocation]);
+    CGFloat minimumWidth = thumbContainerFrame.origin.x + thumbContainerFrame.size.width/2;
+    CGFloat maximumWidth = fmax(0, self.frame.size.width - [self _getThumbRightLocation] + thumbContainerFrame.size.width/2);
     
     [self _setWidth:minimumWidth forSubview:self.subviewMinimumTrackImage];
     [self _setWidth:maximumWidth forSubview:self.subviewMaximumTrackImage];
@@ -406,9 +409,12 @@
 
 - (void)_resetThumbContainerSizeByImage:(UIImage *)thumbImage
 {
-    CGSize size = thumbImage.size;
+    CGSize minimumSize = DefaultThumbContainerMinimumSize;
+    CGSize size = CGSizeMake(MAX(minimumSize.width, thumbImage.size.width),
+                             MAX(minimumSize.height, thumbImage.size.height));
     CGPoint origin = self.subviewThumbContainer.frame.origin;
     self.subviewThumbContainer.frame = CGRectMake(origin.x, origin.y, size.width, size.height);
+    self.subviewThumbImage.center = CGPointMake(size.width/2, size.height/2);
 }
 
 - (UIImage *)_getImageWithCurrentStateFromDictionary:(NSDictionary *)dictionary
