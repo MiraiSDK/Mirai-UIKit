@@ -57,6 +57,7 @@ static NSString *UIButtonContentTypeImage = @"UIButtonContentTypeImage";
 {
     switch (buttonType) {
         case UIButtonTypeRoundedRect:
+            return [[self alloc] init];
         case UIButtonTypeDetailDisclosure:
         case UIButtonTypeInfoLight:
         case UIButtonTypeInfoDark:

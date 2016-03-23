@@ -28,6 +28,7 @@
 #define DefaultMaximumTrackColor [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.0]
 
 #define DefaultThumbImageSize CGSizeMake(42, 42)
+#define DefaultThumbContainerMinimumSize CGSizeMake(42, 42)
 #define DefaultMinimumTrackSize CGSizeMake(5, 5)
 #define DefaultMaximumTrackSize CGSizeMake(5, 5)
 
@@ -36,6 +37,7 @@
 @property BOOL hasDragThumbLastTouch;
 @property BOOL wasContinuousBeforeDrag;
 @property float valueBeforeBeginDrag;
+@property (nonatomic, assign) id privateDelegate;
 @property (nonatomic, strong) UIControl *subviewThumbContainer;
 @property (nonatomic, strong) UIImageView *subviewThumbImage;
 @property (nonatomic, strong) UIImageView *subviewMinimumTrackImage;
@@ -175,6 +177,9 @@
         self.valueBeforeBeginDrag = self.value;
         self.firstThumbTouchDownLocation = [touch locationInView:self];
     }];
+    if ([self.privateDelegate respondsToSelector:@selector(onStartDragging)]) {
+        [self.privateDelegate performSelector:@selector(onStartDragging)];
+    }
 }
 
 - (void)_onThumbDraged:(id)render withEvent:(UIEvent *)event
@@ -201,6 +206,9 @@
             }
         }
     }];
+    if ([self.privateDelegate respondsToSelector:@selector(onEndDragging)]) {
+        [self.privateDelegate performSelector:@selector(onEndDragging)];
+    }
 }
 
 - (float)_getValueOfCurrentDragTouch:(UITouch *)touch
@@ -236,30 +244,30 @@
 
 - (void)_resetSubviewSizeAndLocation
 {
+    CGRect thumbContainerFrame = self.subviewThumbContainer.frame;
+    CGRect thumbImageFrame = self.subviewThumbImage.frame;
+    CGFloat gapSpace = (thumbContainerFrame.size.width - thumbImageFrame.size.width)/2;
+    CGFloat thumbImageX = [self _getThumbImageXLocation];
+    CGFloat thumbImageRight = thumbImageX + self.subviewThumbImage.frame.size.width;
+    
     [self _letYLocationAlignCenter:self.subviewThumbContainer
-                   andSetXLocation:[self _getThumbXLocation]];
+                   andSetXLocation:thumbImageX - gapSpace];
     [self _letYLocationAlignCenter:self.subviewMinimumTrackImage
                    andSetXLocation:0];
     [self _letYLocationAlignCenter:self.subviewMaximumTrackImage
-                   andSetXLocation:[self _getThumbRightLocation]];
+                   andSetXLocation:thumbImageRight];
     
-    CGFloat minimumWidth = self.subviewThumbContainer.frame.origin.x;
-    CGFloat maximumWidth = fmax(0, self.frame.size.width - [self _getThumbRightLocation]);
+    CGFloat minimumWidth = thumbImageX;
+    CGFloat maximumWidth = fmax(0, self.frame.size.width - thumbImageRight);
     
     [self _setWidth:minimumWidth forSubview:self.subviewMinimumTrackImage];
     [self _setWidth:maximumWidth forSubview:self.subviewMaximumTrackImage];
 }
 
-- (CGFloat)_getThumbXLocation
+- (CGFloat)_getThumbImageXLocation
 {
     CGFloat space = fmaxf(0, [self _getTrackCanMoveWidth]);
     return space*[self _getPercentOfValueLocation];
-}
-
-- (CGFloat)_getThumbRightLocation
-{
-    CGRect frame = self.subviewThumbContainer.frame;
-    return fminf(frame.origin.x + frame.size.width, self.frame.size.width);
 }
 
 - (void)_letYLocationAlignCenter:(UIView *)subview andSetXLocation:(CGFloat)xLocation
@@ -399,9 +407,12 @@
 
 - (void)_resetThumbContainerSizeByImage:(UIImage *)thumbImage
 {
-    CGSize size = thumbImage.size;
+    CGSize minimumSize = DefaultThumbContainerMinimumSize;
+    CGSize size = CGSizeMake(MAX(minimumSize.width, thumbImage.size.width),
+                             MAX(minimumSize.height, thumbImage.size.height));
     CGPoint origin = self.subviewThumbContainer.frame.origin;
     self.subviewThumbContainer.frame = CGRectMake(origin.x, origin.y, size.width, size.height);
+    self.subviewThumbImage.center = CGPointMake(size.width/2, size.height/2);
 }
 
 - (UIImage *)_getImageWithCurrentStateFromDictionary:(NSDictionary *)dictionary
@@ -530,12 +541,12 @@ static UIImage *DefaultMaximumTrack = nil;
 
 - (float)_getTrackCanMoveWidth
 {
-    return self.frame.size.width - self.subviewThumbContainer.frame.size.width;
+    return self.bounds.size.width - self.subviewThumbImage.bounds.size.width;
 }
 
 - (float)_getTrackTotalWidth
 {
-    return self.frame.size.width;
+    return self.bounds.size.width;
 }
 
 @end
