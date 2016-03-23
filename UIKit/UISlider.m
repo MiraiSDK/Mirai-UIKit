@@ -245,31 +245,29 @@
 - (void)_resetSubviewSizeAndLocation
 {
     CGRect thumbContainerFrame = self.subviewThumbContainer.frame;
+    CGRect thumbImageFrame = self.subviewThumbImage.frame;
+    CGFloat gapSpace = (thumbContainerFrame.size.width - thumbImageFrame.size.width)/2;
+    CGFloat thumbImageX = [self _getThumbImageXLocation];
+    CGFloat thumbImageRight = thumbImageX + self.subviewThumbImage.frame.size.width;
     
     [self _letYLocationAlignCenter:self.subviewThumbContainer
-                   andSetXLocation:[self _getThumbXLocation]];
+                   andSetXLocation:thumbImageX - gapSpace];
     [self _letYLocationAlignCenter:self.subviewMinimumTrackImage
                    andSetXLocation:0];
     [self _letYLocationAlignCenter:self.subviewMaximumTrackImage
-                   andSetXLocation:[self _getThumbRightLocation] - thumbContainerFrame.size.width/2];
+                   andSetXLocation:thumbImageRight];
     
-    CGFloat minimumWidth = thumbContainerFrame.origin.x + thumbContainerFrame.size.width/2;
-    CGFloat maximumWidth = fmax(0, self.frame.size.width - [self _getThumbRightLocation] + thumbContainerFrame.size.width/2);
+    CGFloat minimumWidth = thumbImageX;
+    CGFloat maximumWidth = fmax(0, self.frame.size.width - thumbImageRight);
     
     [self _setWidth:minimumWidth forSubview:self.subviewMinimumTrackImage];
     [self _setWidth:maximumWidth forSubview:self.subviewMaximumTrackImage];
 }
 
-- (CGFloat)_getThumbXLocation
+- (CGFloat)_getThumbImageXLocation
 {
     CGFloat space = fmaxf(0, [self _getTrackCanMoveWidth]);
     return space*[self _getPercentOfValueLocation];
-}
-
-- (CGFloat)_getThumbRightLocation
-{
-    CGRect frame = self.subviewThumbContainer.frame;
-    return fminf(frame.origin.x + frame.size.width, self.frame.size.width);
 }
 
 - (void)_letYLocationAlignCenter:(UIView *)subview andSetXLocation:(CGFloat)xLocation
@@ -543,12 +541,12 @@ static UIImage *DefaultMaximumTrack = nil;
 
 - (float)_getTrackCanMoveWidth
 {
-    return self.frame.size.width - self.subviewThumbContainer.frame.size.width;
+    return self.bounds.size.width - self.subviewThumbImage.bounds.size.width;
 }
 
 - (float)_getTrackTotalWidth
 {
-    return self.frame.size.width;
+    return self.bounds.size.width;
 }
 
 @end
