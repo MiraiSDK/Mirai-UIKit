@@ -15,6 +15,7 @@
 #import "UITouch.h"
 #import "UIImage.h"
 #import "UIGraphics.h"
+#import "UIPanGestureRecognizer.h"
 #import "math.h"
 
 #define TintState 0xFFFFFFFF
@@ -62,7 +63,7 @@
         [self _makeSubviewImage];
         [self _makeSubviewDictionary];
         [self _setDefaultView];
-        [self _registerDraggingThumbEvent];
+        [self _registerDraggingThumbGestureRecognizer];
         [self _setDefaultContinousValue];
     }
     return self;
@@ -149,19 +150,74 @@
 
 #pragma mark - dragging thumb, managememt and animation.
 
-- (void)_registerDraggingThumbEvent
+- (void)_registerDraggingThumbGestureRecognizer
 {
-    [self.subviewThumbContainer addTarget:self
-                                   action:@selector(_onThumbTouchDown:withEvent:)
-                         forControlEvents:UIControlEventTouchDown];
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_onDrag:)];
+    [self.subviewThumbContainer addGestureRecognizer:panGestureRecognizer];
+}
+
+- (void)_onDrag:(UIPanGestureRecognizer *)panGestureRecognizer
+{
+    CGPoint location = [panGestureRecognizer translationInView:self];
     
-    [self.subviewThumbContainer addTarget:self
-                                   action:@selector(_onThumbDraged:withEvent:)
-                         forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
+    switch (panGestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            [self _dragWhenBeginWithTouchLocation:location];
+            break;
+            
+        case UIGestureRecognizerStateChanged:
+            [self _dragWhenChangedWithTouchLocation:location];
+            break;
+            
+        case UIGestureRecognizerStateEnded:
+            [self _dragWhenEndedWithTouchLocation:location];
+            break;
+            
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+            //TODO resume the thumb to the location before dragged.
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)_dragWhenBeginWithTouchLocation:(CGPoint)location
+{
+    self.hasDragThumbLastTouch = NO;
+    self.wasContinuousBeforeDrag = self.continuous;
+    self.valueBeforeBeginDrag = self.value;
+    self.firstThumbTouchDownLocation = location;
     
-    [self.subviewThumbContainer addTarget:self
-                                   action:@selector(_onReleaseThumbDrag:widthEvent:)
-                         forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    if ([self.privateDelegate respondsToSelector:@selector(onStartDragging)]) {
+        [self.privateDelegate performSelector:@selector(onStartDragging)];
+    }
+}
+
+- (void)_dragWhenChangedWithTouchLocation:(CGPoint)location
+{
+    float value = [self _getValueOfCurrentDragWithLocation:location];
+    [self _setValueButNotTriggerValueChanged:value animated:NO];
+    self.hasDragThumbLastTouch = YES;
+    
+    if (self.wasContinuousBeforeDrag) {
+        [self _triggerValueChangedEvent];
+    }
+}
+
+- (void)_dragWhenEndedWithTouchLocation:(CGPoint)location
+{
+    if (self.hasDragThumbLastTouch) {
+        float value = [self _getValueOfCurrentDragWithLocation:location];
+        [self _setValueButNotTriggerValueChanged:value animated:NO];
+        if (value != self.valueBeforeBeginDrag) {
+            [self _triggerValueChangedEvent];
+        }
+    }
+    if ([self.privateDelegate respondsToSelector:@selector(onEndDragging)]) {
+        [self.privateDelegate performSelector:@selector(onEndDragging)];
+    }
 }
 
 - (void)_setDefaultContinousValue
@@ -169,51 +225,13 @@
     self.continuous = YES;
 }
 
-- (void)_onThumbTouchDown:(id)render withEvent:(UIEvent *)event
-{
-    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch *touch) {
-        self.hasDragThumbLastTouch = NO;
-        self.wasContinuousBeforeDrag = self.continuous;
-        self.valueBeforeBeginDrag = self.value;
-        self.firstThumbTouchDownLocation = [touch locationInView:self];
-    }];
-    if ([self.privateDelegate respondsToSelector:@selector(onStartDragging)]) {
-        [self.privateDelegate performSelector:@selector(onStartDragging)];
-    }
-}
-
-- (void)_onThumbDraged:(id)render withEvent:(UIEvent *)event
-{
-    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch *touch){
-        float value = [self _getValueOfCurrentDragTouch:touch];
-        [self _setValueButNotTriggerValueChanged:value animated:NO];
-        self.hasDragThumbLastTouch = YES;
-        
-        if (self.wasContinuousBeforeDrag) {
-            [self _triggerValueChangedEvent];
-        }
-    }];
-}
-
-- (void)_onReleaseThumbDrag:(id)render widthEvent:(UIEvent *)event
-{
-    [self _handleAllTouchEventsIfEnableWithEvent:event handle:^(UITouch * touch){
-        if (self.hasDragThumbLastTouch) {
-            float value = [self _getValueOfCurrentDragTouch:touch];
-            [self _setValueButNotTriggerValueChanged:value animated:NO];
-            if (value != self.valueBeforeBeginDrag) {
-                [self _triggerValueChangedEvent];
-            }
-        }
-    }];
-    if ([self.privateDelegate respondsToSelector:@selector(onEndDragging)]) {
-        [self.privateDelegate performSelector:@selector(onEndDragging)];
-    }
-}
-
 - (float)_getValueOfCurrentDragTouch:(UITouch *)touch
 {
-    CGPoint location = [touch locationInView:self];
+    return [self _getValueOfCurrentDragWithLocation:[touch locationInView:self]];
+}
+
+- (float)_getValueOfCurrentDragWithLocation:(CGPoint)location
+{
     float valueRange = self.maximumValue - self.minimumValue;
     float changedLocation = location.x - self.firstThumbTouchDownLocation.x;
     
