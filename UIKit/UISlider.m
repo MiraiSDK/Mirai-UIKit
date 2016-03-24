@@ -16,7 +16,6 @@
 #import "UIImage.h"
 #import "UIGraphics.h"
 #import "UIPanGestureRecognizer.h"
-#import "UIGestureRecognizerSubclass.h"
 #import "math.h"
 
 #define TintState 0xFFFFFFFF
