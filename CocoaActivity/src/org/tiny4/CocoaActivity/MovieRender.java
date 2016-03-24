@@ -19,6 +19,7 @@ implements SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnErrorListener 
 	private boolean needsUpdateSurface = false;
     private SurfaceTexture mSurface;
     private float[] mSTMatrix = new float[16];
+    private native void nativeOnFrameAvailable(SurfaceTexture surface);
 	
 	
 	public MovieRender (MediaPlayer player, int texID) {	
@@ -43,6 +44,7 @@ implements SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnErrorListener 
         //Log.i(TAG, "onFrameAvailable");
 		
         needsUpdateSurface = true;
+        nativeOnFrameAvailable(surface);
     }
  
  	public boolean onError(MediaPlayer mp, int what, int extra) {

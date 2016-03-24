@@ -19,9 +19,7 @@
 #define kCenterOnBorderScale 0.5
 
 @interface UIMenuBubbleView ()
-{
-    UIMenuController *_parentMenuController;
-}
+@property (nonatomic, weak) UIMenuController *parentMenuController;
 @end
 
 @implementation UIMenuBubbleView

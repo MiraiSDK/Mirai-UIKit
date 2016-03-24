@@ -180,12 +180,24 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     const NSInteger numberOfFrames = 12;
     const CFTimeInterval animationDuration = 1.0 * 12;
     CGFloat scale = [[UIScreen mainScreen] scale];
-    _imageView.image = UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, 0, numberOfFrames, scale);
+    static NSMutableDictionary *imgCache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        imgCache = [NSMutableDictionary dictionary];
+    });
+    
+    UIImage *img = imgCache[@(_activityIndicatorViewStyle)];
+    if (!img) {
+        img = UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, 0, numberOfFrames, scale);
+        imgCache[@(_activityIndicatorViewStyle)] = img;
+    }
+    
+    _imageView.image = img;
     [_imageView sizeToFit];
     
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = @(M_PI * 2.0 /* full rotation*/ * 1 * animationDuration);
+    rotationAnimation.toValue = @(M_PI * 2.0 /* full rotation*/ * 0.8 * animationDuration);
     rotationAnimation.duration = animationDuration;
     rotationAnimation.cumulative = YES;
     rotationAnimation.repeatCount = HUGE_VALF;

@@ -116,22 +116,22 @@ jobject Java_org_tiny4_JavaBridgeTools_JavaBridgeProxy_navtiveCallback(JNIEnv *e
 
 - (void)methodIndex:(NSUInteger)methodIndex target:(id)target action:(SEL)action
 {
-    __unsafe_unretained id unsafeTarget = target;
+    __weak id weakTarget = target;
     
     [self methodIndex:methodIndex callback:^(TNJavaBridgeCallbackContext *context) {
-        if (![unsafeTarget respondsToSelector:action]) {
+        if (![weakTarget respondsToSelector:action]) {
             NSLog(@"warning: target %@ can't responds to %@ on JavaBridgeProxy.",
-                  target, NSStringFromSelector(action));
+                  weakTarget, NSStringFromSelector(action));
             return;
         }
-        [unsafeTarget performSelector:action withObject:context];
+        [weakTarget performSelector:action withObject:context];
     }];
 }
 
 - (void)methodIndex:(NSUInteger)methodIndex callback:(void (^)(TNJavaBridgeCallbackContext *))callback
 {
     @synchronized(self) {
-        [_callbackList replaceObjectAtIndex:methodIndex withObject:callback];
+        [_callbackList replaceObjectAtIndex:methodIndex withObject:[callback copy]];
     }
 }
 

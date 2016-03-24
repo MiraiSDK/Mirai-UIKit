@@ -243,6 +243,10 @@
 - (void)_configureSubviews
 {
     _bubbleBodyView = [[UIView alloc] init];
+    //TODO: should add shadow
+    _bubbleBodyView.layer.borderWidth = 2;
+    _bubbleBodyView.layer.borderColor = [UIColor blackColor].CGColor;
+    
     _arrowBodyView = [[UIArrowBodyView alloc] init];
     
     [self addSubview:_bubbleBodyView];

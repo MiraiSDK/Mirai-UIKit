@@ -45,6 +45,7 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
     private boolean isTargetDirty = true;
     private boolean needsUpdateSurface = false;
     private native void nativeOnKeyboardShowHide(int shown, int height);
+    private native void nativeOnFrameAvailable(SurfaceTexture surface);
     
 
     public GLViewRender(Context context, int glTexID, int width, int height) {
@@ -147,6 +148,7 @@ public class GLViewRender extends Object implements SurfaceTexture.OnFrameAvaila
 
     synchronized public void onFrameAvailable(SurfaceTexture surface) {
         needsUpdateSurface = true;
+        nativeOnFrameAvailable(surface);
     }
 
     public void setSize(final int width, final int height) {

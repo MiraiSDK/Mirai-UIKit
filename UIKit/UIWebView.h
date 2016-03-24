@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, UIWebPaginationBreakingMode) {
 
 @interface UIWebView : UIView  <NSCoding, UIScrollViewDelegate> {
 @private
-    __unsafe_unretained id _delegate;
+    __weak id _delegate;
     NSURLRequest *_request;
     UIDataDetectorTypes _dataDetectorTypes;
     //WebView *_webView;
@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, UIWebPaginationBreakingMode) {
     } _delegateHas;
 }
 
-@property(nonatomic,assign) id<UIWebViewDelegate> delegate;
+@property(nonatomic,weak) id<UIWebViewDelegate> delegate;
 
 @property(nonatomic,readonly,retain) UIScrollView *scrollView;
 

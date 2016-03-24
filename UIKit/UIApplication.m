@@ -29,7 +29,7 @@
 #import "UIAndroidEventsServer.h"
 #import "UIScreenOrientationListener.h"
 
-@interface UIApplication ()
+@interface UIApplication () <RunLoopDelegate>
 
 @end
 
@@ -50,9 +50,6 @@ static UIApplication *_app;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _app = [[self alloc] init];
-        
-        // install a timer to keep runloop alive
-        [NSTimer scheduledTimerWithTimeInterval:3600 target:_app selector:@selector(dummy_runLoopKeepAlive) userInfo:nil repeats:YES];
     });
     return _app;
 }
@@ -61,9 +58,6 @@ static UIApplication *_app;
 {
     return _app != nil;
 }
-
-// dummy method to keep runloop alive
-- (void)dummy_runLoopKeepAlive{}
 
 - (id)init
 {
@@ -245,11 +239,120 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
     return nil;
 }
 
-- (void)appstartEvent{}
+- (void)runloopWillSleep:(NSRunLoop *)r
+{
+    @autoreleasepool {
+        [self updateUI];
+    }
+}
+- (void)runloopWillExit:(NSRunLoop *)r
+{
+    @autoreleasepool {
+        // send event
+        NSTimeInterval eventUsage = 0.0;
+        if (UIAndroidEventsServerHasEvents()) {
+            NSDate *evenStart = [NSDate date];
+            
+            do {
+                UIAndroidEventsGetEvent(_currentEvent);
+                [self sendEvent:_currentEvent];
+                [_currentEvent _cleanTouches];
+                
+            } while (UIAndroidEventsServerHasEvents());
+            
+            int32_t handled = 1;
+            
+            eventUsage = -[evenStart timeIntervalSinceNow];
+        }
+        
+        [self updateUI];
+    }
+}
+
+- (void)updateUI
+{
+    [BKLayerDisplayLock() lock];
+    BOOL hasReleaseLock = NO;
+    
+    // check supportedInterfaceOrientations changes
+    [UIScreenOrientationListener updateSupportedInterfaceOrientations:[self supportedInterfaceOrientations]];
+    
+    @autoreleasepool {
+        // commit?
+        NSDate *layouStart = [NSDate date];
+        UIWindow *keyWindow = _app.keyWindow;
+        
+        CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
+        
+        [pixelLayer _recursionLayoutAndDisplayIfNeeds];
+        
+        NSTimeInterval layoutUsage = -[layouStart timeIntervalSinceNow];
+        
+        //
+        // The CARenderer work flow
+        //
+        // begin frame
+        // 1. commit transaction
+        // 2. update model layer
+        //      set render:current frame time
+        //      update presentationLayer
+        //      apply animation to presentation layer
+        //      set render:next frame time
+        //      schedule rasterization layer
+        
+        // render
+        // 1. layout if needs
+        // 2. render presentation layer
+        
+        // end frame
+        // 1. reset updatedBounds
+        
+        //
+        // The BKRenderingService work flow
+        //
+        
+        NSDate *commit = [NSDate date];
+        
+        //Client Side
+        //  commitIfNeeds
+        [CATransaction commit];
+        NSTimeInterval commitUsage = -[commit timeIntervalSinceNow];
+        
+        if (BKRenderingServiceNeedNewRenderLayer()) {
+            NSDate *copyRender = [NSDate date];
+            //      copy renderTree
+            CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
+            NSTimeInterval copyUsage = -[copyRender timeIntervalSinceNow];
+            
+            //      send to server
+            BKRenderingServiceUploadRenderLayer(renderTree);
+        }
+        
+        
+        //
+        // Server Side
+        //  copy renderTree
+        //  begin frame
+        //      set current frame time
+        //      update renderTree
+        //      apply animation to render layer
+        //      set nextFrameTime
+        //
+        //  render
+        //  end frame
+//        NSTimeInterval usage = -[begin timeIntervalSinceNow];
+        //NSLog(@"runloop:%fs, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
+        
+        [BKLayerDisplayLock() unlock];
+        hasReleaseLock = YES;
+    }
+
+}
 
 #pragma mark - mainRunLoop
 - (void)_run
 {
+    [[NSRunLoop currentRunLoop] setDelegate:self];
     static BOOL didlaunch = NO;
     @autoreleasepool {
         _isRunning = YES;
@@ -268,136 +371,18 @@ void Java_org_tiny4_CocoaActivity_GLViewRender_nativeOnKeyboardShowHide(JNIEnv *
         BKRenderingServiceRun();
         UIAndroidEventsServerResume();
         
-        NSTimer *timer = [NSTimer timerWithTimeInterval:0 target:self selector:@selector(appstartEvent) userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-        BOOL hasReleaseLock = NO;
+        NSDate *untilDate = [NSDate distantFuture];
         
         @try {
-        do {
-            
-            @autoreleasepool {
-                [BKLayerDisplayLock() lock];
-                hasReleaseLock = NO;
-                
-                NSDate *begin = [NSDate date];
-                
-                //TODO: should use distantFuture to reduce cpu usage
-                // but use distantFuture has a bug:
-                //      runMode:beforeDate: will wait until first input source processed or beforeDate is reached. timer is not considered an input source
-                //      and performSelector:withObject:afterDelay: is a timer
-                //      so if we do any ui change in a timer or performSelector, that will not at screen until runloop return
-//                NSDate *untilDate = [NSDate distantFuture];
-                NSDate *untilDate = [NSDate date];
-                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
-
-                
-//                UIEvent *event = [self nextEventBeforeDate:untilDate inMode:NSDefaultRunLoopMode];
-                
-                // send event
-                NSTimeInterval eventUsage = 0.0;
-                if (UIAndroidEventsServerHasEvents()) {
-                    NSDate *evenStart = [NSDate date];
-                    
-                    do {
-                        UIAndroidEventsGetEvent(_currentEvent);
-                        [self sendEvent:_currentEvent];
-                        [_currentEvent _cleanTouches];
-                        
-                    } while (UIAndroidEventsServerHasEvents());
-                
-                    int32_t handled = 1;
-                    
-                    eventUsage = -[evenStart timeIntervalSinceNow];
-                }
-                
-                
-                // check supportedInterfaceOrientations changes
-                [UIScreenOrientationListener updateSupportedInterfaceOrientations:[self supportedInterfaceOrientations]];
-            
+            do {
                 @autoreleasepool {
-                    // commit?
-                    NSDate *layouStart = [NSDate date];
-                    UIWindow *keyWindow = _app.keyWindow;
-                    
-                    CALayer *pixelLayer = [[UIScreen mainScreen] _pixelLayer];
-                    
-                    [pixelLayer _recursionLayoutAndDisplayIfNeeds];
-                    
-                    NSTimeInterval layoutUsage = -[layouStart timeIntervalSinceNow];
-
-                    //
-                    // The CARenderer work flow
-                    //
-                    // begin frame
-                    // 1. commit transaction
-                    // 2. update model layer
-                    //      set render:current frame time
-                    //      update presentationLayer
-                    //      apply animation to presentation layer
-                    //      set render:next frame time
-                    //      schedule rasterization layer
-                    
-                    // render
-                    // 1. layout if needs
-                    // 2. render presentation layer
-                    
-                    // end frame
-                    // 1. reset updatedBounds
-                    
-                    //
-                    // The BKRenderingService work flow
-                    //
-                    
-                    NSDate *commit = [NSDate date];
-
-                    //Client Side
-                    //  commitIfNeeds
-                    [CATransaction commit];
-                    NSTimeInterval commitUsage = -[commit timeIntervalSinceNow];
-                    
-                    if (BKRenderingServiceNeedNewRenderLayer()) {
-                        NSDate *copyRender = [NSDate date];
-                        //      copy renderTree
-                        CALayer *renderTree = [pixelLayer copyRenderLayer:nil];
-                        NSTimeInterval copyUsage = -[copyRender timeIntervalSinceNow];
-                        
-                        //      send to server
-                        BKRenderingServiceUploadRenderLayer(renderTree);
-                    }
-                    
-
-                    //
-                    // Server Side
-                    //  copy renderTree
-                    //  begin frame
-                    //      set current frame time
-                    //      update renderTree
-                    //      apply animation to render layer
-                    //      set nextFrameTime
-                    //
-                    //  render
-                    //  end frame
-                    NSTimeInterval usage = -[begin timeIntervalSinceNow];
-                    //NSLog(@"runloop:%fs, event:%f layout:%f commit:%f copy:%f",usage,eventUsage,layoutUsage,commitUsage,copyUsage);
-                    
+                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:untilDate];
                 }
-                
-                [BKLayerDisplayLock() unlock];
-                hasReleaseLock = YES;
-            }
-            
-        } while (_isRunning);
-            
+            } while (_isRunning);
         }
         @catch (NSException *exception) {
             NSLog(@"exception:%@",exception);
             abort();
-        }
-        @finally {
-            if (!hasReleaseLock) {
-                [BKLayerDisplayLock() unlock];
-                hasReleaseLock = YES;
-            }
         }
 
     }
