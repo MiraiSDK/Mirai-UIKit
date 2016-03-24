@@ -109,8 +109,6 @@
 		4390B88E1A85EDA10082B0F1 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88B1A85EDA10082B0F1 /* Icon.png */; };
 		4390B88F1A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
 		4390B8901A85EDA10082B0F1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4390B88C1A85EDA10082B0F1 /* Icon@2x.png */; };
-		43EC7BE61C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */; };
-		43EC7BE71C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */; };
 		D20761961BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; };
 		D20761971BDE168300FA5B48 /* TNNextBookIssueTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */; };
 		D207619A1BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D20761991BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.m */; };
@@ -143,6 +141,10 @@
 		D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */; };
 		D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
 		D24BB0411AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */; };
+		D26257371C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D26257361C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m */; };
+		D26257381C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D26257361C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m */; };
+		D262573A1C9FDFD600AA54C8 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D26257391C9FDFD600AA54C8 /* MediaPlayer.framework */; };
+		D262573B1C9FDFD600AA54C8 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D26257391C9FDFD600AA54C8 /* MediaPlayer.framework */; };
 		D269FAD21B3AB45300A0AB7A /* TNSearchControllerTestMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = D269FAD11B3AB45300A0AB7A /* TNSearchControllerTestMenu.m */; };
 		D269FAD31B3AB45300A0AB7A /* TNSearchControllerTestMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = D269FAD11B3AB45300A0AB7A /* TNSearchControllerTestMenu.m */; };
 		D269FAD61B3AB4CE00A0AB7A /* TNSearchBarTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D269FAD51B3AB4CE00A0AB7A /* TNSearchBarTestViewController.m */; };
@@ -343,8 +345,6 @@
 		4390B88B1A85EDA10082B0F1 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		4390B88C1A85EDA10082B0F1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		4390B8951A85F17A0082B0F1 /* UIKit_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIKit_Icon.png; sourceTree = "<group>"; };
-		43EC7BE41C96B8C7000E1DA1 /* TNBezierPathTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNBezierPathTestViewController.h; sourceTree = "<group>"; };
-		43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNBezierPathTestViewController.m; sourceTree = "<group>"; };
 		D20761941BDE168300FA5B48 /* TNNextBookIssueTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNNextBookIssueTestViewController.h; sourceTree = "<group>"; };
 		D20761951BDE168300FA5B48 /* TNNextBookIssueTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNNextBookIssueTestViewController.m; sourceTree = "<group>"; };
 		D20761981BDE17F200FA5B48 /* TNInteractiveImageWidgetTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNInteractiveImageWidgetTestViewController.h; sourceTree = "<group>"; };
@@ -376,6 +376,9 @@
 		D243F09A1AC6F10F00CBD2D9 /* TNChangeValueSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNChangeValueSlider.m; sourceTree = "<group>"; };
 		D24BB03E1AD7AABF006BD749 /* TNMoreNavigationTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMoreNavigationTestViewController.h; sourceTree = "<group>"; };
 		D24BB03F1AD7AABF006BD749 /* TNMoreNavigationTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMoreNavigationTestViewController.m; sourceTree = "<group>"; };
+		D26257351C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNMediaPlayerTestViewController.h; sourceTree = "<group>"; };
+		D26257361C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNMediaPlayerTestViewController.m; sourceTree = "<group>"; };
+		D26257391C9FDFD600AA54C8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = Platforms/MacOSX.platform/Developer/SDKs/Android18.sdk/System/Library/Frameworks/MediaPlayer.framework; sourceTree = DEVELOPER_DIR; };
 		D269FAD01B3AB45300A0AB7A /* TNSearchControllerTestMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSearchControllerTestMenu.h; sourceTree = "<group>"; };
 		D269FAD11B3AB45300A0AB7A /* TNSearchControllerTestMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TNSearchControllerTestMenu.m; sourceTree = "<group>"; };
 		D269FAD41B3AB4CE00A0AB7A /* TNSearchBarTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNSearchBarTestViewController.h; sourceTree = "<group>"; };
@@ -469,6 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4390B87E1A8354B10082B0F1 /* CoreText.framework in Frameworks */,
+				D262573B1C9FDFD600AA54C8 /* MediaPlayer.framework in Frameworks */,
 				4390B87C1A8354A70082B0F1 /* CoreGraphics.framework in Frameworks */,
 				4390B87A1A8354A20082B0F1 /* QuartzCore.framework in Frameworks */,
 				437F25D41A736FA800FBE3E2 /* UIKit.framework in Frameworks */,
@@ -479,6 +483,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D262573A1C9FDFD600AA54C8 /* MediaPlayer.framework in Frameworks */,
 				437F25F41A736FB400FBE3E2 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -507,6 +512,7 @@
 		437F25D21A736FA800FBE3E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D26257391C9FDFD600AA54C8 /* MediaPlayer.framework */,
 				4390B87D1A8354B10082B0F1 /* CoreText.framework */,
 				4390B87B1A8354A70082B0F1 /* CoreGraphics.framework */,
 				4390B8791A8354A20082B0F1 /* QuartzCore.framework */,
@@ -525,6 +531,7 @@
 				437F25E61A736FA800FBE3E2 /* ViewController.m */,
 				4390B80A1A83515B0082B0F1 /* Basic classes */,
 				4390B80B1A8351920082B0F1 /* View Tests */,
+				D262572E1C9FDEE400AA54C8 /* MediaPlayer */,
 				D22A0BBD1BC00F26006BAE64 /* Touch Tests */,
 				4390B8441A8353200082B0F1 /* ViewController Tests */,
 				D2A5F4791AB07C5F0011AF7B /* Uitils */,
@@ -588,7 +595,6 @@
 		4390B80B1A8351920082B0F1 /* View Tests */ = {
 			isa = PBXGroup;
 			children = (
-				43EC7BE11C96B88E000E1DA1 /* UIBezierPath */,
 				D2C401781B846E1C0055BF2E /* UIGestureRecognizer */,
 				D22284AB1B7B132E003B5996 /* UIScrollViewInertance */,
 				D2A9FB981B1FF35300C88751 /* UIPopoverController */,
@@ -794,15 +800,6 @@
 			name = UIImageView;
 			sourceTree = "<group>";
 		};
-		43EC7BE11C96B88E000E1DA1 /* UIBezierPath */ = {
-			isa = PBXGroup;
-			children = (
-				43EC7BE41C96B8C7000E1DA1 /* TNBezierPathTestViewController.h */,
-				43EC7BE51C96B8C7000E1DA1 /* TNBezierPathTestViewController.m */,
-			);
-			name = UIBezierPath;
-			sourceTree = "<group>";
-		};
 		D20761911BDE163D00FA5B48 /* NextBook Issue Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -849,6 +846,15 @@
 				D22A0BC51BC00FA6006BAE64 /* TNMultiTouchTapCountTestViewController.m */,
 			);
 			name = "Touch Tests";
+			sourceTree = "<group>";
+		};
+		D262572E1C9FDEE400AA54C8 /* MediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				D26257351C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.h */,
+				D26257361C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m */,
+			);
+			name = MediaPlayer;
 			sourceTree = "<group>";
 		};
 		D269FACD1B3AB42000A0AB7A /* UISearchController */ = {
@@ -1239,7 +1245,6 @@
 				4390B81D1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
 				D243F09C1AC6F10F00CBD2D9 /* TNChangeValueSlider.m in Sources */,
 				D2A5F4831AB07C830011AF7B /* TNComponentCreator.m in Sources */,
-				43EC7BE71C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */,
 				D210A8DF1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */,
 				D2C401821B846F7E0055BF2E /* TNTouchShowMessage.m in Sources */,
 				D2A5F4811AB07C830011AF7B /* TNChangedColorButton.m in Sources */,
@@ -1269,6 +1274,7 @@
 				4390B82D1A8352990082B0F1 /* TNScrollTestViewController.m in Sources */,
 				4390B86F1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
 				D2A9FB951B1FED8100C88751 /* TNTopFloatTestViewController.m in Sources */,
+				D26257381C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m in Sources */,
 				4390B8381A8352C00082B0F1 /* TNTableViewTestController.m in Sources */,
 				D2B6977D1B2A79BF006D397C /* TNPopoverListenersViewController.m in Sources */,
 				D2B390F51BA7B8E1004A87DC /* TNSimultaneouselyGestureTestViewController.m in Sources */,
@@ -1354,6 +1360,7 @@
 				D210A8DE1AFA0E1100AB6F10 /* TNSplitViewControllerTestViewController.m in Sources */,
 				4390B8181A8352400082B0F1 /* TNLabelTestViewController.m in Sources */,
 				4390B86E1A8353B50082B0F1 /* TNMultiGestureTestViewController.m in Sources */,
+				D26257371C9FDF6900AA54C8 /* TNMediaPlayerTestViewController.m in Sources */,
 				D2C401851B8481F40055BF2E /* TNTouchConfirmSuperview.m in Sources */,
 				D2BD53BB1B11B6D30009D138 /* TNMenuNotificationTestViewController.m in Sources */,
 				D24BB0401AD7AABF006BD749 /* TNMoreNavigationTestViewController.m in Sources */,
@@ -1368,7 +1375,6 @@
 				D2A9FB9B1B1FF3AE00C88751 /* TNPopoverControllerTestViewController.m in Sources */,
 				D2239E301B0470D100810377 /* TNPrintSplitViewControllerDelegateMessage.m in Sources */,
 				4390B81C1A8352500082B0F1 /* TNButtonTestViewController.m in Sources */,
-				43EC7BE61C96B8C7000E1DA1 /* TNBezierPathTestViewController.m in Sources */,
 				D22A0BC21BC00F6A006BAE64 /* TNMultiTouchTestViewController.m in Sources */,
 				D2BB4E041B4B6F8E002E976A /* TNViewIneritedPrinter.m in Sources */,
 				D233DAFC1BC617CD00AD220E /* TNGestureCancelTestViewController.m in Sources */,
