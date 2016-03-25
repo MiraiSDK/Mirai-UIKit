@@ -69,6 +69,11 @@
     return self;
 }
 
+- (void)layoutSubviews
+{
+    [self _resetSubviewSizeAndLocation];
+}
+
 #pragma mark - setter and getter of value.
 
 - (void)_setDefaultValues
