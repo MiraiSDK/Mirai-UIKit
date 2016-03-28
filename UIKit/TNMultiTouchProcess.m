@@ -21,6 +21,7 @@
     NSInteger _currentPressFingersCount;
     BOOL _legacyAnyRecognizeProcesses;
     BOOL _isIgnoringInteractionEvents;
+    BOOL _needSendCancelEventsToAttachedView;
     
     TNGestureRecognizerSimultaneouslyRelationship *_effectRecognizersNode;
     
@@ -56,6 +57,14 @@
     return _window;
 }
 
+- (void)setCancelsTouchesInView:(BOOL)cancelsTouchesInView
+{
+    if (cancelsTouchesInView && !_cancelsTouchesInView) {
+        _needSendCancelEventsToAttachedView = YES;
+    }
+    _cancelsTouchesInView = cancelsTouchesInView;
+}
+
 - (void)sendEvent:(UIEvent *)event
 {
     NSSet *touches = [event touchesForWindow:_window];
@@ -87,6 +96,7 @@
     if (touchBegin) {
         [self _beginWithEvent:event touches:touches];
         _cancelsTouchesInView = NO;
+        _needSendCancelEventsToAttachedView = NO;
     }
     NSArray *recognizerProcesses = [_effectRecognizeProcessesList copy];
     
@@ -97,6 +107,14 @@
     for (TNGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
         [recognizeProcess sendToAttachedViewIfNeedWithEvent:event touches:touches];
     }
+    
+    if (_needSendCancelEventsToAttachedView) {
+        for (TNGestureRecognizeProcess *recognizeProcess in recognizerProcesses) {
+            [recognizeProcess sendCanceledEventToAttachedViewWithEvent:event];
+        }
+        _needSendCancelEventsToAttachedView = NO;
+    }
+    
     [self _handleNotTrackedTouches:touches event:event];
     
     if (touchEnd) {
