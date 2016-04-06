@@ -29,32 +29,41 @@
     return self;
 }
 
-- (void)addAnimation:(CAAnimation *)animation by:(UIViewAnimationGroup *)viewAnimationGroup
+- (CAAnimation *)setAnimation:(CAAnimation *)animation withKeyPath:(NSString *)keyPath
+                           by:(UIViewAnimationGroup *)viewAnimationGroup
 {
-    NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
-    NSMutableSet *animations = [_animationsDictionary objectForKey:key];
-    if (!animations) {
-        animations = [NSMutableSet set];
-        [_animationsDictionary setObject:animations forKey:key];
-        [_viewAnimationGroups addObject:viewAnimationGroup];
-    }
-    if (![animations containsObject:animation]) {
+    NSValue *animationGroupKey = [NSValue valueWithNonretainedObject:viewAnimationGroup];
+    NSMutableDictionary *animationsWithKeyPath = ({
+        NSMutableDictionary *dct = [_animationsDictionary objectForKey:animationGroupKey];
+        if (!dct) {
+            dct = [[NSMutableDictionary alloc] init];
+            [_animationsDictionary setObject:dct forKey:animationGroupKey];
+        }
+        dct;
+    });
+    CAAnimation *existAnimation = [animationsWithKeyPath objectForKey:keyPath];
+    
+    if (!existAnimation) {
         _animationsCount++;
-        [animations addObject:animation];
     }
+    [animationsWithKeyPath setObject:animation forKey:keyPath];
+    
+    return existAnimation;
 }
 
 - (void)removeAnimation:(CAAnimation *)animation by:(UIViewAnimationGroup *)viewAnimationGroup
 {
-    NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
-    NSMutableSet *animations = [_animationsDictionary objectForKey:key];
-    if (animations) {
-        if ([animations containsObject:animation]) {
-            [animations removeObject:animation];
+    NSValue *animationGroupKey = [NSValue valueWithNonretainedObject:viewAnimationGroup];
+    NSMutableDictionary *dictionaryWithKeyPath = [_animationsDictionary objectForKey:animationGroupKey];
+    if (dictionaryWithKeyPath) {
+        
+        for (NSString *keyPath in [dictionaryWithKeyPath allKeysForObject:animation]) {
+            [dictionaryWithKeyPath removeObjectForKey:keyPath];
             _animationsCount--;
         }
-        if (animations.count == 0) {
-            [_animationsDictionary removeObjectForKey:key];
+        
+        if (dictionaryWithKeyPath.count == 0) {
+            [_animationsDictionary removeObjectForKey:animationGroupKey];
             [_viewAnimationGroups removeObject:viewAnimationGroup];
         }
     }
@@ -62,11 +71,12 @@
 
 - (void)removeAllAnimationsOfViewAnimationGroup:(UIViewAnimationGroup *)viewAnimationGroup
 {
-    NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
-    NSMutableSet *animations = [_animationsDictionary objectForKey:key];
-    if (animations) {
-        _animationsCount -= animations.count;
-        [_animationsDictionary removeObjectForKey:key];
+    NSValue *animationGroupKey = [NSValue valueWithNonretainedObject:viewAnimationGroup];
+    NSMutableDictionary *dictionaryWithKeyPath = [_animationsDictionary objectForKey:animationGroupKey];
+    
+    if (dictionaryWithKeyPath) {
+        _animationsCount -= dictionaryWithKeyPath.count;
+        [_animationsDictionary removeObjectForKey:animationGroupKey];
         [_viewAnimationGroups removeObject:viewAnimationGroup];
     }
 }
@@ -74,8 +84,9 @@
 - (void)removeAllAnimationsAndNotifViewAnimationGroup
 {
     for (UIViewAnimationGroup *viewAnimationGroup in _viewAnimationGroups) {
-        NSValue *key = [NSValue valueWithNonretainedObject:viewAnimationGroup];
-        NSArray *removedAnimations = [_animationsDictionary objectForKey: key];
+        NSValue *animationGroupKey = [NSValue valueWithNonretainedObject:viewAnimationGroup];
+        NSMutableDictionary *dictionaryWithKeyPath = [_animationsDictionary objectForKey:animationGroupKey];
+        NSArray *removedAnimations = [self _deduplicateArray:[dictionaryWithKeyPath allValues]];
         [viewAnimationGroup viewRemoveFromSuper:_view withRemovedAnimations:removedAnimations];
     }
     [self removeAllAnimations];
@@ -91,6 +102,20 @@
 - (NSUInteger)animationsCount
 {
     return _animationsCount;
+}
+
+- (NSArray *)_deduplicateArray:(NSArray *)array
+{
+    NSMutableSet *testSet = [[NSMutableSet alloc] init];
+    NSMutableArray *targetArray = [[NSMutableArray alloc] init];
+    
+    for (id obj in array) {
+        if (![testSet containsObject:obj]) {
+            [testSet addObject:obj];
+            [targetArray addObject:obj];
+        }
+    }
+    return targetArray;
 }
 
 @end
