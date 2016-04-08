@@ -211,9 +211,14 @@ static CAMediaTimingFunction *CAMediaTimingFunctionFromUIViewAnimationCurve(UIVi
     {
         NSLog(@"[WARNING]animation begins from current state not supported");
     }
-    [[view _viewBindAnimation] addAnimation:animation by:self];
-    animation.fromValue = [layer valueForKey:keyPath];
-    return [self addAnimation:animation];
+    CAAnimation *existAnimation = [[view _viewBindAnimation] setAnimation:animation
+                                                              withKeyPath:keyPath by:self];
+    if (!existAnimation) {
+        animation.fromValue = [layer valueForKey:keyPath];
+        return [self addAnimation:animation];
+    } else {
+        return existAnimation;
+    }
 }
 
 - (void)setIgnoreInteractionEvents:(BOOL)ignoreInteractionEvents
